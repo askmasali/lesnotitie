@@ -220,7 +220,7 @@
 
 <!-- HEADER -->
 <header>
-  <span class="logo">📋 LesNotitie</span>
+  <span class="logo" onclick="switchView('dashboard')" style="cursor:pointer">📋 LesNotitie</span>
   <span class="year-badge" id="year-badge" onclick="modalYearSwitcher()" style="cursor:pointer" title="Schooljaar wisselen">2025-2026 ▾</span>
   <div id="auth-area" style="margin-left:12px">
     <button class="btn btn-primary btn-sm" onclick="window._signIn && window._signIn()" style="display:flex;align-items:center;gap:6px;font-size:11px">
@@ -229,6 +229,7 @@
     </button>
   </div>
   <div class="nav-tabs">
+    <button class="nav-tab" onclick="switchView('dashboard')">🏠 Ana Sayfa</button>
     <button class="nav-tab active" onclick="switchView('week')">Weekoverzicht</button>
     <button class="nav-tab" onclick="switchView('student-list')">Leerlingen</button>
     <button class="nav-tab" onclick="switchView('settings')">Instellingen</button>
@@ -260,7 +261,7 @@
 <!-- Firebase -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -407,6 +408,22 @@ window._switchYear = async function(yearKey) {
     updatedAt: new Date().toISOString(),
   });
   await loadYearFromFirebase(window._currentUser.uid, yearKey);
+};
+
+window._deleteYear = async function(yearKey) {
+  if (!window._currentUser) return;
+  try {
+    await deleteDoc(doc(db, "users", window._currentUser.uid, "years", yearKey));
+    window.state.availableYears = (window.state.availableYears||[]).filter(y=>y!==yearKey);
+    await setDoc(doc(db, "users", window._currentUser.uid), {
+      availableYears: window.state.availableYears,
+      activeYear: window.state.schoolYear,
+      email: window._currentUser.email,
+      updatedAt: new Date().toISOString(),
+    });
+    showToast(`🗑 ${yearKey} verwijderd`);
+    window._appRender();
+  } catch(e) { console.warn("Delete year error:", e); showToast("Fout bij verwijderen"); }
 };
 
 window._addYear = async function(yearKey, copyStudents) {
@@ -727,9 +744,8 @@ function render() {
 
 function renderNavTabs() {
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
-  const views = ['week','student-list','settings'];
-  const map = {'week':0,'student-list':1,'student-profile':1,'settings':2};
-  const idx = map[state.view] ?? 0;
+  const map = {'dashboard':0,'week':1,'student-list':2,'student-profile':2,'settings':3};
+  const idx = map[state.view] ?? 1;
   document.querySelectorAll('.nav-tab')[idx]?.classList.add('active');
 }
 
@@ -753,10 +769,11 @@ function renderSidebar() {
 
 function renderMain() {
   const m = document.getElementById('main-content');
-  if(state.view==='week')          { m.innerHTML = renderWeekView(); }
+  if(state.view==='dashboard')      { m.innerHTML = renderDashboard(); }
+  else if(state.view==='week')      { m.innerHTML = renderWeekView(); }
   else if(state.view==='student-list') { m.innerHTML = renderStudentList(); }
   else if(state.view==='student-profile') { m.innerHTML = renderStudentProfile(); }
-  else if(state.view==='settings') { m.innerHTML = renderSettings(); }
+  else if(state.view==='settings')  { m.innerHTML = renderSettings(); }
 }
 
 // ===================== WEEK VIEW =====================
@@ -845,7 +862,164 @@ function renderWeekView() {
     </div>`;
 }
 
-// ===================== STUDENT LIST =====================
+// ===================== DASHBOARD =====================
+function renderDashboard() {
+  const students = allStudents();
+  const classes = allClasses();
+  const totalStudents = students.length;
+  const totalClasses = classes.length;
+  const totalGroups = state.groups.length;
+  const nonHolidayWeeks = state.weeks.filter(w=>!w.isHoliday).length;
+
+  // This week
+  const today = new Date(); today.setHours(0,0,0,0);
+  const thisMonday = new Date(today); const dd=today.getDay(); thisMonday.setDate(today.getDate()+(dd===0?-6:1-dd));
+  const currentWeek = state.weeks.find((_,i)=>{
+    const base=new Date(state.startDate); const d=base.getDay(); base.setDate(base.getDate()+(d===0?-6:1-d));
+    const ws=new Date(base); ws.setDate(base.getDate()+i*7); ws.setHours(0,0,0,0);
+    const we=new Date(ws); we.setDate(ws.getDate()+6); we.setHours(23,59,59,0);
+    return today>=ws && today<=we;
+  }) || state.weeks.find(w=>w.id===state.selectedWeek);
+
+  // Per group stats
+  const groupStats = state.groups.map(g=>{
+    const gStudents = g.classes.flatMap(c=>c.students);
+    return { name:g.name, count:gStudents.length, classes:g.classes.map(c=>({name:c.name,school:c.school,count:c.students.length})) };
+  });
+
+  // Attendance stats for past weeks
+  const pastWeeks = state.weeks.filter(w=>{
+    const idx=state.weeks.findIndex(x=>x.id===w.id);
+    const base=new Date(state.startDate); const d=base.getDay(); base.setDate(base.getDate()+(d===0?-6:1-d));
+    const ws=new Date(base); ws.setDate(base.getDate()+idx*7); ws.setHours(0,0,0,0);
+    return ws<thisMonday && !w.isHoliday;
+  });
+  let totalEntries=0, absentCount=0, lateCount=0;
+  pastWeeks.forEach(w=>{
+    students.forEach(s=>{
+      const ev=getEval(w.id,s.id);
+      totalEntries++;
+      if(ev.aanwezig==='Afwezig') absentCount++;
+      if(ev.aanwezig==='Te laat') lateCount++;
+    });
+  });
+  const aanwPct = totalEntries>0 ? Math.round(((totalEntries-absentCount)/totalEntries)*100) : 100;
+
+  // Rating distribution for past weeks
+  const ratingCounts = {Uitstekend:0,Goed:0,Voldoende:0,Onvoldoende:0,Slecht:0};
+  const ratingCats = state.categories.filter(c=>c.type==='rating');
+  pastWeeks.forEach(w=>{
+    students.forEach(s=>{
+      const ev=getEval(w.id,s.id);
+      ratingCats.forEach(cat=>{
+        const v=ev[cat.id];
+        if(v && ratingCounts[v]!==undefined) ratingCounts[v]++;
+      });
+    });
+  });
+  const totalRatings = Object.values(ratingCounts).reduce((a,b)=>a+b,0);
+  const ratingBar = totalRatings>0 ? Object.entries(ratingCounts).map(([k,v])=>{
+    const colors={Uitstekend:'#34d399',Goed:'#60a5fa',Voldoende:'#fbbf24',Onvoldoende:'#fb923c',Slecht:'#f87171'};
+    const pct=(v/totalRatings*100).toFixed(1);
+    return `<div title="${k}: ${v} (${pct}%)" style="height:100%;width:${pct}%;background:${colors[k]};transition:width .3s"></div>`;
+  }).join('') : '<div style="width:100%;height:100%;background:var(--border);border-radius:8px"></div>';
+
+  // Group cards
+  const groupCards = groupStats.map(g=>`
+    <div class="card" style="padding:16px;cursor:pointer" onclick="switchView('settings')">
+      <div style="font-weight:800;font-size:15px;color:var(--accent1);margin-bottom:10px">📚 ${esc(g.name)}</div>
+      <div style="font-size:28px;font-weight:900;color:var(--text);margin-bottom:4px">${g.count}</div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:10px">leerlingen</div>
+      ${g.classes.map(c=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-top:1px solid var(--border)">
+        <div><span style="font-size:12px;font-weight:700">${esc(c.name)}</span><span style="font-size:10px;color:var(--text3);margin-left:6px">${esc(c.school)}</span></div>
+        <span class="badge badge-pink">${c.count}</span>
+      </div>`).join('')}
+    </div>`).join('');
+
+  // Quick search box
+  const searchBox = `
+    <div class="card" style="padding:16px;margin-bottom:0">
+      <div style="font-weight:800;font-size:14px;color:var(--text2);margin-bottom:10px">🔍 Leerling zoeken</div>
+      <input class="form-input" id="dash-search" placeholder="Naam typen..." oninput="dashSearch(this.value)" style="margin-bottom:8px">
+      <div id="dash-search-results"></div>
+    </div>`;
+
+  return `
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:20px">
+      <div class="card" style="padding:20px;text-align:center;background:linear-gradient(135deg,var(--accent1),var(--accent2))">
+        <div style="font-size:36px;font-weight:900;color:#fff">${totalStudents}</div>
+        <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,.85)">Leerlingen</div>
+      </div>
+      <div class="card" style="padding:20px;text-align:center">
+        <div style="font-size:36px;font-weight:900;color:var(--accent1)">${totalGroups}</div>
+        <div style="font-size:12px;font-weight:700;color:var(--text3)">Groepen</div>
+      </div>
+      <div class="card" style="padding:20px;text-align:center">
+        <div style="font-size:36px;font-weight:900;color:var(--accent2)">${totalClasses}</div>
+        <div style="font-size:12px;font-weight:700;color:var(--text3)">Klassen</div>
+      </div>
+      <div class="card" style="padding:20px;text-align:center">
+        <div style="font-size:36px;font-weight:900;color:var(--accent3)">${nonHolidayWeeks}</div>
+        <div style="font-size:12px;font-weight:700;color:var(--text3)">Lesweken</div>
+      </div>
+      <div class="card" style="padding:20px;text-align:center">
+        <div style="font-size:36px;font-weight:900;color:${aanwPct>=90?'#34d399':aanwPct>=75?'#fbbf24':'#f87171'}">${aanwPct}%</div>
+        <div style="font-size:12px;font-weight:700;color:var(--text3)">Aanwezigheid</div>
+      </div>
+      <div class="card" style="padding:20px;text-align:center;cursor:pointer" onclick="switchView('week')">
+        <div style="font-size:13px;font-weight:800;color:var(--accent1)">${currentWeek?currentWeek.label:'—'}</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:2px">${currentWeek?.dateStr||''}</div>
+        <div style="font-size:10px;font-weight:700;color:var(--text2);margin-top:6px">Huidige week →</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
+      <div class="card" style="padding:16px">
+        <div style="font-weight:800;font-size:14px;color:var(--text2);margin-bottom:12px">📊 Beoordeling verdeling (verleden)</div>
+        ${totalRatings>0 ? `
+          <div style="height:20px;border-radius:10px;overflow:hidden;display:flex;margin-bottom:10px">${ratingBar}</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            ${Object.entries(ratingCounts).map(([k,v])=>{
+              const colors={Uitstekend:'#34d399',Goed:'#60a5fa',Voldoende:'#fbbf24',Onvoldoende:'#fb923c',Slecht:'#f87171'};
+              return `<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:${colors[k]}22;color:${colors[k]}">${k}: ${v}</span>`;
+            }).join('')}
+          </div>` : '<div style="font-size:12px;color:var(--text3)">Nog geen gegevens</div>'}
+      </div>
+      <div class="card" style="padding:16px">
+        <div style="font-weight:800;font-size:14px;color:var(--text2);margin-bottom:8px">📅 Aanwezigheid (verleden)</div>
+        ${pastWeeks.length>0 ? `
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center">
+            <div><div style="font-size:22px;font-weight:900;color:#34d399">${totalEntries-absentCount-lateCount}</div><div style="font-size:10px;color:var(--text3)">Aanwezig</div></div>
+            <div><div style="font-size:22px;font-weight:900;color:#fbbf24">${lateCount}</div><div style="font-size:10px;color:var(--text3)">Te laat</div></div>
+            <div><div style="font-size:22px;font-weight:900;color:#f87171">${absentCount}</div><div style="font-size:10px;color:var(--text3)">Afwezig</div></div>
+          </div>` : '<div style="font-size:12px;color:var(--text3)">Nog geen gegevens</div>'}
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:14px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;align-content:start">
+        ${groupCards || '<div class="card" style="padding:20px;color:var(--text3);text-align:center">Nog geen groepen</div>'}
+      </div>
+      ${searchBox}
+    </div>`;
+}
+
+function dashSearch(q) {
+  const res = document.getElementById('dash-search-results');
+  if (!q.trim()) { res.innerHTML=''; return; }
+  const matches = allStudents().filter(s=>s.name.toLowerCase().includes(q.toLowerCase()));
+  if (!matches.length) { res.innerHTML='<div style="font-size:12px;color:var(--text3)">Geen resultaten</div>'; return; }
+  res.innerHTML = matches.slice(0,8).map(s=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-top:1px solid var(--border);cursor:pointer" onclick="openStudentProfile('${s.id}')">
+      <div>
+        <span style="font-size:13px;font-weight:700;color:var(--text)">${esc(s.name)}</span>
+        <span style="font-size:10px;color:var(--text3);margin-left:6px">${esc(s.className)} · ${esc(s.groupName)}</span>
+      </div>
+      <span style="font-size:11px;color:var(--accent1)">→</span>
+    </div>`).join('');
+}
+
+// ===================== STUDENT LIST (with search) =====================
 function renderStudentList() {
   if(state.groups.length===0) return `<div class="card" style="text-align:center;padding:60px">
     <div style="font-size:48px;margin-bottom:12px">👤</div>
@@ -853,24 +1027,80 @@ function renderStudentList() {
     <button class="btn btn-primary" onclick="switchView('settings')">Instellingen →</button>
   </div>`;
 
-  const students = allStudents();
+  const q = (document.getElementById('student-search-inp')?.value||'').toLowerCase();
+  const students = allStudents().filter(s=>!q||s.name.toLowerCase().includes(q));
+
   let rows = students.map(s=>`<tr>
     <td><span class="student-link" onclick="openStudentProfile('${s.id}')">${esc(s.name)}</span></td>
     <td style="font-size:11px;color:var(--text3)">${esc(s.className)}</td>
     <td style="font-size:11px;color:var(--text3)">${esc(s.groupName)}</td>
     <td style="font-size:11px;color:var(--text3)">${esc(s.school)}</td>
     <td><button class="btn btn-secondary btn-sm" onclick="openStudentProfile('${s.id}')">Profiel →</button></td>
-  </tr>`).join('') || `<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:30px">Geen leerlingen</td></tr>`;
+  </tr>`).join('') || `<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:30px">Geen resultaten</td></tr>`;
 
   return `<div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-      <div style="font-family:'Playfair Display',serif;font-size:22px">Alle leerlingen <span class="badge badge-purple">${students.length}</span></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+      <div style="font-family:'Playfair Display',serif;font-size:22px">Alle leerlingen <span class="badge badge-purple">${allStudents().length}</span></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input class="form-input" id="student-search-inp" placeholder="🔍 Zoeken..." oninput="renderMain()" style="width:180px;padding:6px 12px;font-size:12px">
+        <button class="btn btn-danger btn-sm" onclick="modalBulkDelete()">🗑 Toplu sil</button>
+      </div>
     </div>
     <div class="tbl-wrap"><table>
       <thead><tr><th>Naam</th><th>Klas</th><th>Groep</th><th>School</th><th></th></tr></thead>
       <tbody>${rows}</tbody>
     </table></div>
   </div>`;
+}
+
+function modalBulkDelete() {
+  const groupOpts = state.groups.map(g=>`
+    <div style="margin-bottom:12px">
+      <div style="font-weight:800;color:var(--text);margin-bottom:6px">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+          <input type="checkbox" id="bulk-g-${g.id}" onchange="toggleBulkGroup('${g.id}',this.checked)" style="accent-color:var(--accent1);width:15px;height:15px">
+          📚 ${esc(g.name)} <span style="font-size:10px;color:var(--text3)">(hele groep)</span>
+        </label>
+      </div>
+      ${g.classes.map(c=>`
+        <div style="margin-left:24px;margin-bottom:4px">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
+            <input type="checkbox" id="bulk-c-${c.id}" style="accent-color:var(--accent2);width:13px;height:13px">
+            🏫 ${esc(c.name)} <span style="font-size:10px;color:var(--text3)">${esc(c.school)} · ${c.students.length} leerlingen</span>
+          </label>
+        </div>`).join('')}
+    </div>`).join('');
+
+  openModal(`<div class="modal-title">🗑 Toplu silme</div>
+    <p style="font-size:12px;color:var(--text3);margin-bottom:16px">Silmek istediğin grupları veya sınıfları seç. Bu işlem geri alınamaz!</p>
+    ${groupOpts}
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+      <button class="btn btn-ghost" onclick="closeModal()">İptal</button>
+      <button class="btn btn-danger" onclick="doBulkDelete()">🗑 Seçilenleri Sil</button>
+    </div>`);
+}
+
+function toggleBulkGroup(gId, checked) {
+  const g = state.groups.find(x=>x.id===gId);
+  if (!g) return;
+  g.classes.forEach(c=>{ const el=document.getElementById(`bulk-c-${c.id}`); if(el) el.checked=checked; });
+}
+
+function doBulkDelete() {
+  const toDeleteGroups=[], toDeleteClasses=[];
+  state.groups.forEach(g=>{
+    if(document.getElementById(`bulk-g-${g.id}`)?.checked) { toDeleteGroups.push(g.id); return; }
+    g.classes.forEach(c=>{ if(document.getElementById(`bulk-c-${c.id}`)?.checked) toDeleteClasses.push(c.id); });
+  });
+  if (!toDeleteGroups.length && !toDeleteClasses.length) { showToast("Niets geselecteerd"); return; }
+  if (!confirm(`${toDeleteGroups.length} groep(en) en ${toDeleteClasses.length} klas(sen) verwijderen?`)) return;
+  // Delete full groups
+  state.groups = state.groups.filter(g=>!toDeleteGroups.includes(g.id));
+  // Delete specific classes
+  state.groups.forEach(g=>{ g.classes = g.classes.filter(c=>!toDeleteClasses.includes(c.id)); });
+  state.groups = state.groups.filter(g=>g.classes.length>0);
+  saveState(); closeModal(); render();
+  showToast("✅ Verwijderd!");
 }
 
 // ===================== STUDENT PROFILE =====================
@@ -1271,8 +1501,9 @@ function setSchoolYear(val) {
 function modalYearSwitcher() {
   const years = state.availableYears || [state.schoolYear];
   const yearList = years.map(y => `
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:10px;margin-bottom:6px;background:${y===state.schoolYear?'linear-gradient(135deg,var(--accent1),var(--accent2))':'var(--surface2)'};cursor:pointer" onclick="doSwitchYear('${y}')">
-      <span style="font-weight:800;color:${y===state.schoolYear?'#fff':'var(--text)'}">${y} ${y===state.schoolYear?'✓':''}</span>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:10px;margin-bottom:6px;background:${y===state.schoolYear?'linear-gradient(135deg,var(--accent1),var(--accent2))':'var(--surface2)'}">
+      <span style="font-weight:800;color:${y===state.schoolYear?'#fff':'var(--text)'};cursor:pointer;flex:1" onclick="doSwitchYear('${y}')">${y} ${y===state.schoolYear?'✓':''}</span>
+      ${y!==state.schoolYear?`<button onclick="doDeleteYear('${y}')" style="background:none;border:none;cursor:pointer;font-size:14px;color:#f87171;padding:0 4px" title="Sil">🗑</button>`:''}
     </div>`).join('');
 
   openModal(`<div class="modal-title">🗂 Schooljaar</div>
@@ -1291,6 +1522,14 @@ function modalYearSwitcher() {
       <button class="btn btn-primary" onclick="doAddYear()">Aanmaken</button>
     </div>`);
   setTimeout(()=>document.getElementById('m-newyear')?.focus(),80);
+}
+
+function doDeleteYear(yearKey) {
+  if (!confirm(`"${yearKey}" schooljaar verwijderen? Alle gegevens van dit jaar worden gewist!`)) return;
+  if (!window._currentUser) { showToast("⚠️ Eerst inloggen!"); return; }
+  if (!window._deleteYear) { showToast("⚠️ Functie niet beschikbaar"); return; }
+  closeModal();
+  window._deleteYear(yearKey);
 }
 
 function doSwitchYear(yearKey) {
