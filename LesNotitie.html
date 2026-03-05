@@ -282,7 +282,7 @@ let currentUser = null;
 let unsubscribeSnapshot = null;
 
 // Expose to global scope for non-module script
-window._firebase = { db, auth, provider, signInWithPopup, signOut, onAuthStateChanged, doc, setDoc, getDoc, onSnapshot };
+window._firebase = { db, auth, provider, signInWithPopup, signOut, onAuthStateChanged, doc, setDoc, getDoc };
 
 // Auth state listener
 onAuthStateChanged(auth, async (user) => {
