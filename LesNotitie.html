@@ -262,8 +262,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD8SO2m658hN308p9GJodODn6kRPuu5iFQ",
@@ -316,7 +314,7 @@ async function loadFromFirebase(uid) {
         }
         parsed.view = "week"; parsed.selectedStudent = null;
         Object.assign(window.state, parsed);
-        window.render();
+        window._appRender();
         showToast("☁️ Gegevens geladen!");
       }
     }
@@ -458,7 +456,7 @@ let state = loadState();
 window.state = state;
 window.generateWeeks = generateWeeks;
 window.formatDateRange = formatDateRange;
-window.render = function() { render(); };
+window._appRender = render; // use _appRender to avoid recursion
 
 function generateWeeks(startDate) {
   const holidays = { 9:"Herfstvakantie",17:"Kerstvakantie",18:"Kerstvakantie",25:"Krokusvakantie",32:"Paasvakantie",33:"Paasvakantie",44:"Zomervakantie" };
