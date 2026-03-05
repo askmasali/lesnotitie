@@ -416,18 +416,34 @@ window._addYear = async function(yearKey, copyStudents) {
   if (window.state.availableYears.includes(yearKey)) { showToast("Dit jaar bestaat al!"); return; }
   // Save current year
   await saveYearToFirebase(window._currentUser.uid, window.state.schoolYear);
-  // Create new year - optionally copy students (but not evaluations)
-  const newGroups = copyStudents ? JSON.parse(JSON.stringify(window.state.groups)) : [];
+  // Copy students if requested
+  const newGroups = copyStudents ? JSON.parse(JSON.stringify(window.state.groups.map(g=>({
+    ...g, classes: g.classes.map(c=>({...c, students: c.students.map(s=>({...s}))}))
+  })))) : [];
+  // Copy categories from current year
+  const newCategories = JSON.parse(JSON.stringify(window.state.categories));
+  // Copy weeks structure (labels + holidays) but recalc dates for new year
+  const newStartDate = yearKey.split('-')[0] + "-09-01";
+  const newWeeksBase = JSON.parse(JSON.stringify(window.state.weeks.map(w=>({
+    id: w.id, number: w.number, label: w.label, isHoliday: w.isHoliday, holidayName: w.holidayName, dateStr: ""
+  }))));
+  // Recalc dates for new start date
+  const base = new Date(newStartDate);
+  const day = base.getDay(); const diff = day===0?-6:1-day; base.setDate(base.getDate()+diff);
+  const newWeeks = newWeeksBase.map((w,i)=>{
+    const ws = new Date(base); ws.setDate(base.getDate()+i*7);
+    const we = new Date(ws); we.setDate(ws.getDate()+6);
+    return { ...w, dateStr: window.formatDateRange(ws, we) };
+  });
   const newYearData = {
-    startDate: yearKey.split('-')[0] + "-09-01",
-    selectedWeek: "w1",
+    startDate: newStartDate,
+    selectedWeek: newWeeks[0]?.id || "w1",
     selectedGroup: null,
     groups: newGroups,
     evaluations: {},
-    categories: window.state.categories,
-    weeks: null,
+    categories: newCategories,
+    weeks: newWeeks,
   };
-  newYearData.weeks = window.generateWeeks(newYearData.startDate);
   window.state.availableYears.push(yearKey);
   await saveYearToFirebase(window._currentUser.uid, yearKey, newYearData);
   await loadYearFromFirebase(window._currentUser.uid, yearKey);
