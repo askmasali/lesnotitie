@@ -1019,6 +1019,8 @@ function dashSearch(q) {
     </div>`).join('');
 }
 
+let studentSearchQuery = '';
+
 // ===================== STUDENT LIST (with search) =====================
 function renderStudentList() {
   if(state.groups.length===0) return `<div class="card" style="text-align:center;padding:60px">
@@ -1027,7 +1029,7 @@ function renderStudentList() {
     <button class="btn btn-primary" onclick="switchView('settings')">Instellingen →</button>
   </div>`;
 
-  const q = (document.getElementById('student-search-inp')?.value||'').toLowerCase();
+  const q = studentSearchQuery.toLowerCase();
   const students = allStudents().filter(s=>!q||s.name.toLowerCase().includes(q));
 
   let rows = students.map(s=>`<tr>
@@ -1042,15 +1044,29 @@ function renderStudentList() {
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
       <div style="font-family:'Playfair Display',serif;font-size:22px">Alle leerlingen <span class="badge badge-purple">${allStudents().length}</span></div>
       <div style="display:flex;gap:8px;align-items:center">
-        <input class="form-input" id="student-search-inp" placeholder="🔍 Zoeken..." oninput="renderMain()" style="width:180px;padding:6px 12px;font-size:12px">
+        <input class="form-input" id="student-search-inp" placeholder="🔍 Zoeken..." value="${esc(studentSearchQuery)}" oninput="studentSearchQuery=this.value;updateStudentTable()" style="width:180px;padding:6px 12px;font-size:12px">
         <button class="btn btn-danger btn-sm" onclick="modalBulkDelete()">🗑 Toplu sil</button>
       </div>
     </div>
     <div class="tbl-wrap"><table>
       <thead><tr><th>Naam</th><th>Klas</th><th>Groep</th><th>School</th><th></th></tr></thead>
-      <tbody>${rows}</tbody>
+      <tbody id="student-table-body">${rows}</tbody>
     </table></div>
   </div>`;
+}
+
+function updateStudentTable() {
+  const q = studentSearchQuery.toLowerCase();
+  const students = allStudents().filter(s=>!q||s.name.toLowerCase().includes(q));
+  const tbody = document.getElementById('student-table-body');
+  if (!tbody) return;
+  tbody.innerHTML = students.map(s=>`<tr>
+    <td><span class="student-link" onclick="openStudentProfile('${s.id}')">${esc(s.name)}</span></td>
+    <td style="font-size:11px;color:var(--text3)">${esc(s.className)}</td>
+    <td style="font-size:11px;color:var(--text3)">${esc(s.groupName)}</td>
+    <td style="font-size:11px;color:var(--text3)">${esc(s.school)}</td>
+    <td><button class="btn btn-secondary btn-sm" onclick="openStudentProfile('${s.id}')">Profiel →</button></td>
+  </tr>`).join('') || `<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:30px">Geen resultaten</td></tr>`;
 }
 
 function modalBulkDelete() {
@@ -1276,7 +1292,28 @@ function renderSettings() {
 
 // ===================== ACTIONS =====================
 function selectWeek(id) { state.selectedWeek=id; render(); }
-function switchView(v) { state.view=v; render(); }
+
+function getCurrentWeekId() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const base = new Date(state.startDate);
+  const d = base.getDay(); base.setDate(base.getDate()+(d===0?-6:1-d));
+  const found = state.weeks.find((_,i)=>{
+    const ws=new Date(base); ws.setDate(base.getDate()+i*7); ws.setHours(0,0,0,0);
+    const we=new Date(ws); we.setDate(ws.getDate()+6); we.setHours(23,59,59,0);
+    return today>=ws && today<=we;
+  });
+  return found?.id || null;
+}
+
+function switchView(v) {
+  state.view=v;
+  if(v==='week') {
+    const cur = getCurrentWeekId();
+    if(cur) state.selectedWeek = cur;
+  }
+  if(v==='student-list') studentSearchQuery='';
+  render();
+}
 function openStudentProfile(id) {
   const s = allStudents().find(x=>x.id===id);
   if(s) { state.selectedStudent=s; state.view='student-profile'; render(); }
@@ -1618,11 +1655,13 @@ function resetAll() {
 }
 
 // Init
-// Fix selectedWeek if it doesn't match any week id
 if (state.weeks && state.weeks.length > 0) {
   if (!state.weeks.find(w => w.id === state.selectedWeek)) {
     state.selectedWeek = state.weeks[0].id;
   }
+  // Jump to current week on load
+  const curWeek = getCurrentWeekId();
+  if (curWeek) state.selectedWeek = curWeek;
 }
 
 // Warn if not Chrome (Firebase login needs Chrome)
