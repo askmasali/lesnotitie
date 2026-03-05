@@ -221,7 +221,7 @@
 <!-- HEADER -->
 <header>
   <span class="logo">📋 LesNotitie</span>
-  <span class="year-badge" id="year-badge">2025-2026</span>
+  <span class="year-badge" id="year-badge" onclick="modalYearSwitcher()" style="cursor:pointer" title="Schooljaar wisselen">2025-2026 ▾</span>
   <div id="auth-area" style="margin-left:12px">
     <button class="btn btn-primary btn-sm" onclick="window._signIn && window._signIn()" style="display:flex;align-items:center;gap:6px;font-size:11px">
       <svg width="13" height="13" viewBox="0 0 24 24"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
@@ -291,7 +291,6 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     updateAuthUI(user);
     await loadFromFirebase(user.uid);
-    startRealtimeSync(user.uid);
   } else {
     updateAuthUI(null);
     if (unsubscribeSnapshot) { unsubscribeSnapshot(); unsubscribeSnapshot = null; }
@@ -300,11 +299,30 @@ onAuthStateChanged(auth, async (user) => {
 
 async function loadFromFirebase(uid) {
   try {
-    const snap = await getDoc(doc(db, "users", uid));
+    // Load the "meta" doc to get list of years and active year
+    const metaSnap = await getDoc(doc(db, "users", uid));
+    if (metaSnap.exists()) {
+      const meta = metaSnap.data();
+      // Load list of years
+      window.state.availableYears = meta.availableYears || [window.state.schoolYear];
+      // Load active year data
+      const yearKey = meta.activeYear || window.state.schoolYear;
+      await loadYearFromFirebase(uid, yearKey);
+    } else {
+      // First time - save current year
+      window.state.availableYears = [window.state.schoolYear];
+      await saveYearToFirebase(uid, window.state.schoolYear);
+    }
+  } catch(e) { console.warn("Firebase load error:", e); }
+}
+
+async function loadYearFromFirebase(uid, yearKey) {
+  try {
+    const snap = await getDoc(doc(db, "users", uid, "years", yearKey));
     if (snap.exists()) {
       const data = snap.data();
-      if (data.appState) {
-        const parsed = JSON.parse(data.appState);
+      if (data.yearState) {
+        const parsed = JSON.parse(data.yearState);
         if (!parsed.startDate) parsed.startDate = "2025-09-01";
         if (!parsed.weeks || parsed.weeks.length === 0) parsed.weeks = window.generateWeeks(parsed.startDate);
         else {
@@ -312,29 +330,107 @@ async function loadFromFirebase(uid) {
           const day = base.getDay(); const diff = day===0?-6:1-day; base.setDate(base.getDate()+diff);
           parsed.weeks = parsed.weeks.map((w,i)=>{ const ws=new Date(base); ws.setDate(base.getDate()+i*7); const we=new Date(ws); we.setDate(ws.getDate()+6); return{...w,dateStr:window.formatDateRange(ws,we)}; });
         }
-        parsed.view = "week"; parsed.selectedStudent = null;
-        Object.assign(window.state, parsed);
+        // Merge into state
+        window.state.schoolYear = yearKey;
+        window.state.startDate = parsed.startDate;
+        window.state.groups = parsed.groups || [];
+        window.state.evaluations = parsed.evaluations || {};
+        window.state.categories = parsed.categories || window.state.categories;
+        window.state.weeks = parsed.weeks;
+        window.state.selectedWeek = parsed.selectedWeek || window.state.weeks[0]?.id;
+        window.state.selectedGroup = parsed.selectedGroup || null;
+        window.state.view = "week";
+        window.state.selectedStudent = null;
+        const badge = document.getElementById('year-badge');
+        if (badge) badge.textContent = yearKey + ' ▾';
         window._appRender();
-        showToast("☁️ Gegevens geladen!");
+        showToast("☁️ " + yearKey + " yüklendi!");
       }
+    } else {
+      // New year - empty
+      window.state.schoolYear = yearKey;
+      window.state.groups = [];
+      window.state.evaluations = {};
+      window.state.weeks = window.generateWeeks(window.state.startDate);
+      window.state.selectedWeek = window.state.weeks[0]?.id;
+      window.state.view = "week";
+      const badge2 = document.getElementById('year-badge');
+      if (badge2) badge2.textContent = yearKey + ' ▾';
+      window._appRender();
+      showToast("☁️ Nieuw schooljaar: " + yearKey);
     }
-  } catch(e) { console.warn("Firebase load error:", e); }
+  } catch(e) { console.warn("Firebase year load error:", e); }
 }
 
-function startRealtimeSync(uid) {
-  if (unsubscribeSnapshot) unsubscribeSnapshot();
-  // We use manual save, not realtime listener, to avoid overwriting mid-edit
+async function saveYearToFirebase(uid, yearKey, yearData) {
+  if (!uid) return;
+  try {
+    const toSave = yearData || {
+      startDate: window.state.startDate,
+      selectedWeek: window.state.selectedWeek,
+      selectedGroup: window.state.selectedGroup,
+      groups: window.state.groups,
+      evaluations: window.state.evaluations,
+      categories: window.state.categories,
+      weeks: window.state.weeks,
+    };
+    await setDoc(doc(db, "users", uid, "years", yearKey), {
+      yearState: JSON.stringify(toSave),
+      updatedAt: new Date().toISOString(),
+    });
+    // Update meta
+    const years = window.state.availableYears || [yearKey];
+    if (!years.includes(yearKey)) years.push(yearKey);
+    await setDoc(doc(db, "users", uid), {
+      availableYears: years,
+      activeYear: yearKey,
+      email: window._currentUser?.email || "",
+      updatedAt: new Date().toISOString(),
+    });
+  } catch(e) { console.warn("Firebase year save error:", e); }
 }
 
 window._saveToFirebase = async function(stateData) {
   if (!window._currentUser) return;
-  try {
-    await setDoc(doc(db, "users", window._currentUser.uid), {
-      appState: JSON.stringify(stateData),
-      updatedAt: new Date().toISOString(),
-      email: window._currentUser.email,
-    });
-  } catch(e) { console.warn("Firebase save error:", e); }
+  await saveYearToFirebase(window._currentUser.uid, window.state.schoolYear, stateData);
+};
+
+window._switchYear = async function(yearKey) {
+  if (!window._currentUser) { showToast("⚠️ Eerst inloggen!"); return; }
+  // Save current year first
+  await saveYearToFirebase(window._currentUser.uid, window.state.schoolYear);
+  // Switch active year
+  await setDoc(doc(db, "users", window._currentUser.uid), {
+    availableYears: window.state.availableYears || [yearKey],
+    activeYear: yearKey,
+    email: window._currentUser.email,
+    updatedAt: new Date().toISOString(),
+  });
+  await loadYearFromFirebase(window._currentUser.uid, yearKey);
+};
+
+window._addYear = async function(yearKey, copyStudents) {
+  if (!window._currentUser) { showToast("⚠️ Eerst inloggen!"); return; }
+  if (!yearKey) return;
+  if (!window.state.availableYears) window.state.availableYears = [];
+  if (window.state.availableYears.includes(yearKey)) { showToast("Dit jaar bestaat al!"); return; }
+  // Save current year
+  await saveYearToFirebase(window._currentUser.uid, window.state.schoolYear);
+  // Create new year - optionally copy students (but not evaluations)
+  const newGroups = copyStudents ? JSON.parse(JSON.stringify(window.state.groups)) : [];
+  const newYearData = {
+    startDate: yearKey.split('-')[0] + "-09-01",
+    selectedWeek: "w1",
+    selectedGroup: null,
+    groups: newGroups,
+    evaluations: {},
+    categories: window.state.categories,
+    weeks: null,
+  };
+  newYearData.weeks = window.generateWeeks(newYearData.startDate);
+  window.state.availableYears.push(yearKey);
+  await saveYearToFirebase(window._currentUser.uid, yearKey, newYearData);
+  await loadYearFromFirebase(window._currentUser.uid, yearKey);
 };
 
 window._signIn = async function() {
@@ -383,7 +479,8 @@ const STORAGE_KEY = "lesnotitie_v1";
 
 const DEFAULT_STATE = {
   schoolYear: "2025-2026",
-  startDate: "2025-09-01", // first day of school year (Monday of week 1)
+  startDate: "2025-09-01",
+  availableYears: ["2025-2026"],
   view: "week",
   selectedWeek: "w1",
   selectedGroup: null,
@@ -509,7 +606,45 @@ function recalcWeekDates() {
 
 function uid() { return Math.random().toString(36).substr(2,9); }
 
-function getEval(wId, sId) { return state.evaluations[`${wId}_${sId}`] || {}; }
+function getWeekStartDate(wId) {
+  const w = state.weeks.find(x => x.id === wId);
+  if (!w || !w.dateStr) return null;
+  // dateStr format: "1 sep – 7 sep", parse start date
+  const base = state.startDate ? new Date(state.startDate) : new Date("2025-09-01");
+  const day = base.getDay(); const diff = day===0?-6:1-day; base.setDate(base.getDate()+diff);
+  const idx = state.weeks.findIndex(x => x.id === wId);
+  if (idx < 0) return null;
+  const ws = new Date(base); ws.setDate(base.getDate() + idx*7);
+  return ws;
+}
+
+function isWeekInPast(wId) {
+  const ws = getWeekStartDate(wId);
+  if (!ws) return false;
+  const today = new Date(); today.setHours(0,0,0,0);
+  // week is past if its Monday is before this week's Monday
+  const thisMonday = new Date(today);
+  const d = today.getDay(); const diff2 = d===0?-6:1-d;
+  thisMonday.setDate(today.getDate()+diff2);
+  return ws < thisMonday;
+}
+
+function getEval(wId, sId) {
+  const stored = state.evaluations[`${wId}_${sId}`] || {};
+  // If week is in the past and no data entered yet, auto-fill Goed defaults
+  if (isWeekInPast(wId)) {
+    const w = state.weeks.find(x => x.id === wId);
+    if (w && !w.isHoliday) {
+      const defaults = { aanwezig: "Aanwezig" };
+      state.categories.forEach(cat => {
+        if (cat.type === 'rating') defaults[cat.id] = "Goed";
+        else if (cat.type === 'boolean') defaults[cat.id] = true;
+      });
+      return { ...defaults, ...stored };
+    }
+  }
+  return stored;
+}
 function setEvalField(wId, sId, field, val) {
   const key = `${wId}_${sId}`;
   if(!state.evaluations[key]) state.evaluations[key]={aanwezig:"Aanwezig",opmerking:""};
@@ -1112,8 +1247,56 @@ function editWeekHolidayName(id, val) {
 // ===================== BACKUP / RESTORE =====================
 function setSchoolYear(val) {
   state.schoolYear = val.trim();
-  document.getElementById('year-badge').textContent = state.schoolYear;
+  const badge = document.getElementById('year-badge');
+  if (badge) badge.textContent = state.schoolYear + ' ▾';
   saveState();
+}
+
+function modalYearSwitcher() {
+  const years = state.availableYears || [state.schoolYear];
+  const yearList = years.map(y => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:10px;margin-bottom:6px;background:${y===state.schoolYear?'linear-gradient(135deg,var(--accent1),var(--accent2))':'var(--surface2)'};cursor:pointer" onclick="doSwitchYear('${y}')">
+      <span style="font-weight:800;color:${y===state.schoolYear?'#fff':'var(--text)'}">${y} ${y===state.schoolYear?'✓':''}</span>
+    </div>`).join('');
+
+  openModal(`<div class="modal-title">🗂 Schooljaar</div>
+    ${yearList}
+    <div style="border-top:1.5px solid var(--border);margin:14px 0"></div>
+    <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">Nieuw schooljaar toevoegen</div>
+    <div class="form-group">
+      <input class="form-input" id="m-newyear" placeholder="bijv. 2026-2027" autofocus>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+      <input type="checkbox" id="m-copystudents" style="accent-color:var(--accent1);width:15px;height:15px">
+      <label for="m-copystudents" style="font-size:12px;color:var(--text2);cursor:pointer">Leerlingen kopiëren naar nieuw jaar</label>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
+      <button class="btn btn-primary" onclick="doAddYear()">Aanmaken</button>
+    </div>`);
+  setTimeout(()=>document.getElementById('m-newyear')?.focus(),80);
+}
+
+function doSwitchYear(yearKey) {
+  closeModal();
+  if (yearKey === state.schoolYear) return;
+  if (window._switchYear) {
+    window._switchYear(yearKey);
+  } else {
+    showToast("⚠️ Eerst inloggen om van jaar te wisselen!");
+  }
+}
+
+function doAddYear() {
+  const yearKey = document.getElementById('m-newyear')?.value?.trim();
+  const copy = document.getElementById('m-copystudents')?.checked;
+  if (!yearKey || !/^\d{4}-\d{4}$/.test(yearKey)) { showToast("Format: 2026-2027"); return; }
+  closeModal();
+  if (window._addYear) {
+    window._addYear(yearKey, copy);
+  } else {
+    showToast("⚠️ Eerst inloggen!");
+  }
 }
 
 function setStartDate(val) {
