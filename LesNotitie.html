@@ -201,20 +201,36 @@
   <div class="theme-swatch" style="background:linear-gradient(135deg,#ec4899,#f97316)" title="Coral" onclick="applyTheme('coral')"></div>
   <div class="theme-swatch" style="background:linear-gradient(135deg,#65a30d,#d97706)" title="Forest" onclick="applyTheme('forest')"></div>
   <div class="theme-swatch" style="background:linear-gradient(135deg,#c2855a,#d4a574)" title="Rose Gold" onclick="applyTheme('rosegold')"></div>
-  <button onclick="applyTheme('lavender')" style="margin-left:6px;background:none;border:1.5px solid var(--border);border-radius:20px;padding:2px 10px;font-size:10px;font-weight:700;color:var(--text2);cursor:pointer" title="Standaard kleur herstellen">↺ Default</button>
+  <button onclick="resetToDefault()" style="margin-left:6px;background:none;border:1.5px solid var(--border);border-radius:20px;padding:2px 10px;font-size:10px;font-weight:700;color:var(--text2);cursor:pointer" title="Standaard kleur herstellen">↺ Default</button>
   <div class="custom-colors">
     <span class="theme-label" style="margin-left:8px">Eigen</span>
     <div class="color-pick-wrap">
       <label>Accent</label>
-      <input type="color" value="#c084fc" onchange="setCustomColor('accent1',this.value)">
+      <input type="color" id="pick-accent1" value="#c084fc" onchange="setCustomColor('accent1',this.value)">
     </div>
     <div class="color-pick-wrap">
       <label>Accent 2</label>
-      <input type="color" value="#f9a8d4" onchange="setCustomColor('accent2',this.value)">
+      <input type="color" id="pick-accent2" value="#f9a8d4" onchange="setCustomColor('accent2',this.value)">
+    </div>
+    <div class="color-pick-wrap">
+      <label>Accent 3</label>
+      <input type="color" id="pick-accent3" value="#fb923c" onchange="setCustomColor('accent3',this.value)">
     </div>
     <div class="color-pick-wrap">
       <label>Achtergrond</label>
-      <input type="color" value="#fdf6f0" onchange="setCustomColor('bg',this.value)">
+      <input type="color" id="pick-bg" value="#fdf6f0" onchange="setCustomColor('bg',this.value)">
+    </div>
+    <div class="color-pick-wrap">
+      <label>Kaart</label>
+      <input type="color" id="pick-surface" value="#ffffff" onchange="setCustomColor('surface',this.value)">
+    </div>
+    <div class="color-pick-wrap">
+      <label>Tekst</label>
+      <input type="color" id="pick-text" value="#3d2c3e" onchange="setCustomColor('text',this.value)">
+    </div>
+    <div class="color-pick-wrap">
+      <label>Rand</label>
+      <input type="color" id="pick-border" value="#f0dff5" onchange="setCustomColor('border',this.value)">
     </div>
   </div>
 </div>
@@ -747,28 +763,45 @@ function loadTheme() {
   } catch(e) {}
 }
 
+function syncColorPickers(t) {
+  const picks = {
+    'pick-accent1': t.accent1,
+    'pick-accent2': t.accent2,
+    'pick-accent3': t.accent3,
+    'pick-bg':      t.bg,
+    'pick-surface': t.surface,
+    'pick-text':    t.text,
+    'pick-border':  t.border,
+  };
+  Object.entries(picks).forEach(([id,val])=>{ const el=document.getElementById(id); if(el&&val) el.value=val; });
+}
+
 function applyTheme(name, save=true) {
   const t = themes[name];
   if(!t) return;
   Object.entries(t).forEach(([k,v])=>document.documentElement.style.setProperty(`--${k}`,v));
-  document.querySelectorAll('.theme-swatch').forEach((el,i)=>el.classList.remove('active'));
+  document.querySelectorAll('.theme-swatch').forEach(el=>el.classList.remove('active'));
   const idx = Object.keys(themes).indexOf(name);
   document.querySelectorAll('.theme-swatch')[idx]?.classList.add('active');
-  if (save) saveTheme(name, {});
+  syncColorPickers(t);
+  if(save) saveTheme(name, {});
+}
+
+function resetToDefault() {
+  applyTheme('lavender');
 }
 
 function setCustomColor(varName, val) {
   document.documentElement.style.setProperty(`--${varName}`, val);
   document.querySelectorAll('.theme-swatch').forEach(el=>el.classList.remove('active'));
-  // Save current custom colors
   try {
     const saved = localStorage.getItem(THEME_KEY);
     const t = saved ? JSON.parse(saved) : { theme: null, custom: {} };
     t.custom = t.custom || {};
     t.custom[varName] = val;
-    t.theme = null; // custom override, no preset
+    t.theme = null;
     localStorage.setItem(THEME_KEY, JSON.stringify(t));
-    if (window._saveThemeToFirebase) window._saveThemeToFirebase(t);
+    if(window._saveThemeToFirebase) window._saveThemeToFirebase(t);
   } catch(e) {}
 }
 
