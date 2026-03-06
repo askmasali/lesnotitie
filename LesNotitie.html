@@ -195,12 +195,13 @@
 <!-- THEME BAR -->
 <div class="theme-bar">
   <span class="theme-label">Thema</span>
-  <div class="theme-swatch active" style="background:linear-gradient(135deg,#c084fc,#f9a8d4)" title="Lavendel & Roze" onclick="applyTheme('lavender')"></div>
-  <div class="theme-swatch" style="background:linear-gradient(135deg,#fb923c,#fbbf24)" title="Zonsondergang" onclick="applyTheme('sunset')"></div>
-  <div class="theme-swatch" style="background:linear-gradient(135deg,#34d399,#6ee7b7)" title="Munt" onclick="applyTheme('mint')"></div>
-  <div class="theme-swatch" style="background:linear-gradient(135deg,#60a5fa,#a78bfa)" title="Oceaan" onclick="applyTheme('ocean')"></div>
-  <div class="theme-swatch" style="background:linear-gradient(135deg,#f472b6,#fb923c)" title="Koraal" onclick="applyTheme('coral')"></div>
-  <div class="theme-swatch" style="background:linear-gradient(135deg,#a3e635,#34d399)" title="Lente" onclick="applyTheme('spring')"></div>
+  <div class="theme-swatch active" style="background:linear-gradient(135deg,#c084fc,#f9a8d4)" title="Lavender" onclick="applyTheme('lavender')"></div>
+  <div class="theme-swatch" style="background:linear-gradient(135deg,#f97316,#fbbf24)" title="Sunset" onclick="applyTheme('sunset')"></div>
+  <div class="theme-swatch" style="background:linear-gradient(135deg,#3b82f6,#8b5cf6)" title="Ocean" onclick="applyTheme('ocean')"></div>
+  <div class="theme-swatch" style="background:linear-gradient(135deg,#ec4899,#f97316)" title="Coral" onclick="applyTheme('coral')"></div>
+  <div class="theme-swatch" style="background:linear-gradient(135deg,#65a30d,#d97706)" title="Forest" onclick="applyTheme('forest')"></div>
+  <div class="theme-swatch" style="background:linear-gradient(135deg,#c2855a,#d4a574)" title="Rose Gold" onclick="applyTheme('rosegold')"></div>
+  <button onclick="applyTheme('lavender')" style="margin-left:6px;background:none;border:1.5px solid var(--border);border-radius:20px;padding:2px 10px;font-size:10px;font-weight:700;color:var(--text2);cursor:pointer" title="Standaard kleur herstellen">↺ Default</button>
   <div class="custom-colors">
     <span class="theme-label" style="margin-left:8px">Eigen</span>
     <div class="color-pick-wrap">
@@ -717,12 +718,12 @@ function groupStudents(groupId) {
 
 // ===================== THEMES =====================
 const themes = {
-  lavender: { accent1:"#c084fc", accent2:"#f9a8d4", accent3:"#fb923c", bg:"#fdf6f0", surface:"#ffffff", surface2:"#fef3fb", border:"#f0dff5", cream:"#fef9ee", text:"#3d2c3e", text2:"#7a5c7e", text3:"#b89abc" },
-  sunset:   { accent1:"#fb923c", accent2:"#fbbf24", accent3:"#f87171", bg:"#fff8f0", surface:"#ffffff", surface2:"#fff3e0", border:"#fde8c8", cream:"#fffbf0", text:"#3d2010", text2:"#7a4c28", text3:"#b89a78" },
-  mint:     { accent1:"#34d399", accent2:"#6ee7b7", accent3:"#38bdf8", bg:"#f0fdf9", surface:"#ffffff", surface2:"#ecfdf5", border:"#d1fae5", cream:"#f0fdf9", text:"#134e2a", text2:"#166534", text3:"#6ee7b7" },
-  ocean:    { accent1:"#60a5fa", accent2:"#a78bfa", accent3:"#34d399", bg:"#f0f7ff", surface:"#ffffff", surface2:"#eff6ff", border:"#dbeafe", cream:"#f0f7ff", text:"#1e3a5f", text2:"#2563eb", text3:"#93c5fd" },
-  coral:    { accent1:"#f472b6", accent2:"#fb923c", accent3:"#fbbf24", bg:"#fff5f7", surface:"#ffffff", surface2:"#fdf2f8", border:"#fce7f3", cream:"#fff5f0", text:"#4a1942", text2:"#9d174d", text3:"#f9a8d4" },
-  spring:   { accent1:"#a3e635", accent2:"#34d399", accent3:"#fbbf24", bg:"#f7fff0", surface:"#ffffff", surface2:"#f0fdf4", border:"#dcfce7", cream:"#f7fff5", text:"#1a3d1a", text2:"#15803d", text3:"#86efac" },
+  lavender:  { accent1:"#c084fc", accent2:"#f9a8d4", accent3:"#fb923c", bg:"#fdf6f0", surface:"#ffffff", surface2:"#fef3fb", border:"#f0dff5", cream:"#fef9ee", text:"#3d2c3e", text2:"#7a5c7e", text3:"#b89abc" },
+  sunset:    { accent1:"#f97316", accent2:"#fbbf24", accent3:"#ef4444", bg:"#fffaf5", surface:"#ffffff", surface2:"#fff7ed", border:"#fed7aa", cream:"#fffbf0", text:"#431407", text2:"#9a3412", text3:"#fdba74" },
+  ocean:     { accent1:"#3b82f6", accent2:"#8b5cf6", accent3:"#06b6d4", bg:"#f0f7ff", surface:"#ffffff", surface2:"#eff6ff", border:"#bfdbfe", cream:"#f0f7ff", text:"#1e3a5f", text2:"#1d4ed8", text3:"#93c5fd" },
+  coral:     { accent1:"#ec4899", accent2:"#f97316", accent3:"#f59e0b", bg:"#fff5f7", surface:"#ffffff", surface2:"#fdf2f8", border:"#fbcfe8", cream:"#fff5f0", text:"#500724", text2:"#be185d", text3:"#f9a8d4" },
+  forest:    { accent1:"#65a30d", accent2:"#d97706", accent3:"#0d9488", bg:"#f7f9f3", surface:"#ffffff", surface2:"#f1f5e8", border:"#d9e8bb", cream:"#fafdf5", text:"#1a2e05", text2:"#3f6212", text3:"#a3c46a" },
+  rosegold:  { accent1:"#c2855a", accent2:"#d4a574", accent3:"#9f6b8a", bg:"#fdf8f5", surface:"#ffffff", surface2:"#fdf0e8", border:"#f0d5c0", cream:"#fdfaf7", text:"#3d1f0f", text2:"#7c3d20", text3:"#d4a57a" },
 };
 
 const THEME_KEY = "lesnotitie_theme";
