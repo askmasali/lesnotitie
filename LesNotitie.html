@@ -298,12 +298,30 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
+window._saveThemeToFirebase = async function(themeData) {
+  if (!window._currentUser) return;
+  try {
+    await setDoc(doc(db, "users", window._currentUser.uid), {
+      theme: JSON.stringify(themeData),
+      updatedAt: new Date().toISOString(),
+    }, { merge: true });
+  } catch(e) {}
+};
+
 async function loadFromFirebase(uid) {
   try {
-    // Load the "meta" doc to get list of years and active year
     const metaSnap = await getDoc(doc(db, "users", uid));
     if (metaSnap.exists()) {
       const meta = metaSnap.data();
+      // Load and apply saved theme
+      if (meta.theme) {
+        try {
+          const t = JSON.parse(meta.theme);
+          localStorage.setItem(THEME_KEY, meta.theme);
+          if (t.theme) applyTheme(t.theme, false);
+          if (t.custom) Object.entries(t.custom).forEach(([k,v])=>document.documentElement.style.setProperty(`--${k}`,v));
+        } catch(e) {}
+      }
       // Load list of years
       window.state.availableYears = meta.availableYears || [window.state.schoolYear];
       // Load active year data
@@ -707,17 +725,50 @@ const themes = {
   spring:   { accent1:"#a3e635", accent2:"#34d399", accent3:"#fbbf24", bg:"#f7fff0", surface:"#ffffff", surface2:"#f0fdf4", border:"#dcfce7", cream:"#f7fff5", text:"#1a3d1a", text2:"#15803d", text3:"#86efac" },
 };
 
-function applyTheme(name) {
+const THEME_KEY = "lesnotitie_theme";
+
+function saveTheme(themeName, customVars) {
+  try {
+    const t = { theme: themeName, custom: customVars || {} };
+    localStorage.setItem(THEME_KEY, JSON.stringify(t));
+    if (window._saveThemeToFirebase) window._saveThemeToFirebase(t);
+  } catch(e) {}
+}
+
+function loadTheme() {
+  try {
+    const saved = localStorage.getItem(THEME_KEY);
+    if (saved) {
+      const t = JSON.parse(saved);
+      if (t.theme) applyTheme(t.theme, false);
+      if (t.custom) Object.entries(t.custom).forEach(([k,v])=>document.documentElement.style.setProperty(`--${k}`,v));
+    }
+  } catch(e) {}
+}
+
+function applyTheme(name, save=true) {
   const t = themes[name];
   if(!t) return;
   Object.entries(t).forEach(([k,v])=>document.documentElement.style.setProperty(`--${k}`,v));
   document.querySelectorAll('.theme-swatch').forEach((el,i)=>el.classList.remove('active'));
   const idx = Object.keys(themes).indexOf(name);
   document.querySelectorAll('.theme-swatch')[idx]?.classList.add('active');
+  if (save) saveTheme(name, {});
 }
+
 function setCustomColor(varName, val) {
   document.documentElement.style.setProperty(`--${varName}`, val);
   document.querySelectorAll('.theme-swatch').forEach(el=>el.classList.remove('active'));
+  // Save current custom colors
+  try {
+    const saved = localStorage.getItem(THEME_KEY);
+    const t = saved ? JSON.parse(saved) : { theme: null, custom: {} };
+    t.custom = t.custom || {};
+    t.custom[varName] = val;
+    t.theme = null; // custom override, no preset
+    localStorage.setItem(THEME_KEY, JSON.stringify(t));
+    if (window._saveThemeToFirebase) window._saveThemeToFirebase(t);
+  } catch(e) {}
 }
 
 // ===================== TOAST =====================
@@ -1659,10 +1710,10 @@ if (state.weeks && state.weeks.length > 0) {
   if (!state.weeks.find(w => w.id === state.selectedWeek)) {
     state.selectedWeek = state.weeks[0].id;
   }
-  // Jump to current week on load
   const curWeek = getCurrentWeekId();
   if (curWeek) state.selectedWeek = curWeek;
 }
+loadTheme();
 
 // Warn if not Chrome (Firebase login needs Chrome)
 if (window.location.protocol === 'file:' && navigator.userAgent.indexOf('Chrome') === -1) {
