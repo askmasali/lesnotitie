@@ -9,27 +9,30 @@
 :root{
   --bg:#f2ede8;--surface:#fff;--surface2:#faf7f4;--border:#e3d9d0;
   --text:#231810;--text2:#7a5c4a;--text3:#b09480;
-  --green:#1e6b45;--green2:#d4eddf;--amber:#b86a1a;--amber2:#fdecd6;
-  --red:#b83232;--red2:#fde0e0;--blue:#1a4fb8;--blue2:#dce8fd;
+  --rose:#9e4f6e;--rose2:#f7e4ed;--rose3:#c97a97;
+  --green:#1e6b45;--green2:#d4eddf;
+  --red:#b83232;--red2:#fde0e0;
+  --amber:#b86a1a;--amber2:#fdecd6;
+  --blue:#1a4fb8;--blue2:#dce8fd;
   --shadow:0 2px 12px rgba(35,24,16,.07);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px}
 .app-header{background:var(--text);color:#fff;padding:28px 36px 24px;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px}
-.app-header h1{font-family:'Fraunces',serif;font-size:40px;font-weight:300;font-style:italic;letter-spacing:-1px;line-height:1}
+.app-header h1{font-family:'Fraunces',serif;font-size:40px;font-weight:600;letter-spacing:-1px;line-height:1;color:#e8c8d4}
 .app-header .sub{font-size:12px;opacity:.4;letter-spacing:1.5px;text-transform:uppercase;margin-top:5px}
-.login-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;padding:8px 18px;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s;white-space:nowrap}
-.login-btn:hover{background:rgba(255,255,255,.22)}
+.login-btn{background:var(--rose);border:none;color:#fff;padding:9px 20px;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s;white-space:nowrap}
+.login-btn:hover{background:var(--rose3)}
 .user-chip{display:flex;align-items:center;gap:8px;font-size:13px;opacity:.7}
 .balance-strip{background:var(--surface);border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap}
 .bal-cell{padding:18px 28px;border-right:1px solid var(--border);flex:1;min-width:110px}
 .bal-cell:last-child{border-right:none}
 .bal-num{font-family:'Fraunces',serif;font-size:44px;font-weight:600;line-height:1;letter-spacing:-1px;margin-bottom:4px}
-.c-green{color:var(--green)}.c-amber{color:var(--amber)}.c-red{color:var(--red)}.c-blue{color:var(--blue)}
+.c-green{color:var(--green)}.c-amber{color:var(--amber)}.c-red{color:var(--red)}.c-blue{color:var(--blue)}.c-rose{color:var(--rose)}
 .bal-lbl{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);font-weight:500}
 .progress-section{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 36px}
 .prog-bar-bg{height:8px;background:var(--border);border-radius:999px;overflow:hidden;margin-bottom:6px}
-.prog-bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--green),var(--amber));transition:width .6s}
+.prog-bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--green),#8fc45a,#e6c840,var(--amber),var(--rose),var(--red));transition:width .6s}
 .prog-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--text3)}
 .layout{max-width:1080px;margin:0 auto;padding:24px;display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start}
 @media(max-width:760px){.layout{grid-template-columns:1fr}.bal-cell{padding:12px 16px}.app-header h1{font-size:28px}}
@@ -55,6 +58,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .pill-amber{background:var(--amber2);color:var(--amber)}
 .pill-green{background:var(--green2);color:var(--green)}
 .pill-red{background:var(--red2);color:var(--red)}
+.pill-rose{background:var(--rose2);color:var(--rose)}
 .pill-muted{background:var(--border);color:var(--text3)}
 .entry-note{font-size:11px;color:var(--text3);grid-column:1/-1;padding:0 2px 3px;font-style:italic}
 .del-btn{background:none;border:none;cursor:pointer;color:var(--text3);font-size:13px;padding:2px 4px;border-radius:4px;transition:color .1s;line-height:1}
@@ -62,23 +66,24 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .form-grid{display:flex;flex-direction:column;gap:13px}
 .form-row{display:flex;gap:9px}
 .fg{display:flex;flex-direction:column;gap:5px;flex:1}
-.fg label{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.9px}
-.fg input,.fg textarea{border:1.5px solid var(--border);border-radius:9px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);background:#fff;outline:none;transition:border-color .15s;width:100%}
-.fg input:focus,.fg textarea:focus{border-color:var(--amber)}
+.fg label{font-size:11px;font-weight:600;color:var(--rose);text-transform:uppercase;letter-spacing:.9px}
+.fg input,.fg textarea{border:1.5px solid var(--border);border-radius:9px;padding:12px 15px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);background:#fff;outline:none;transition:border-color .2s;width:100%;min-height:48px}
+.fg input[type=date]{cursor:pointer;color-scheme:light}
+.fg input:focus,.fg textarea:focus{border-color:var(--rose);box-shadow:0 0 0 3px var(--rose2)}
 .fg textarea{resize:vertical;min-height:64px}
-.btn{border:none;border-radius:9px;padding:12px 16px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;width:100%}
-.btn-dark{background:var(--text);color:#fff}
-.btn-dark:hover{background:#3d2510}
+.btn{border:none;border-radius:9px;padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all .15s;width:100%}
+.btn-dark{background:var(--rose);color:#fff}
+.btn-dark:hover{background:var(--rose3)}
 .mini-table{width:100%;border-collapse:collapse;font-size:13px}
 .mini-table th{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text3);font-weight:600;padding:6px 10px;text-align:left;border-bottom:1px solid var(--border)}
 .mini-table td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
 .mini-table tr:last-child td{border-bottom:none}
 .mini-table .r{text-align:right;font-weight:700}
-.sync-bar{background:var(--blue2);border-bottom:1px solid #b8d0f8;padding:7px 36px;font-size:12px;color:#1a3d80;display:none;align-items:center;gap:8px}
+.sync-bar{background:var(--rose2);border-bottom:1px solid #e8b8cc;padding:7px 36px;font-size:12px;color:var(--rose);display:none;align-items:center;gap:8px}
 .sync-bar.show{display:flex}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--blue);animation:pulse 1.2s infinite}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--rose);animation:pulse 1.2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--text);color:#fff;padding:10px 22px;border-radius:99px;font-size:14px;font-weight:500;display:none;z-index:9999;white-space:nowrap}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--rose);color:#fff;padding:10px 22px;border-radius:99px;font-size:14px;font-weight:500;display:none;z-index:9999;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -392,8 +397,8 @@ function render(){
 
   document.getElementById('balance-strip').innerHTML=
     bCell(totalR,'c-green','Opgebouwd')+
-    bCell(used,'c-amber','Gebruikt')+
-    bCell(rest,rest>10?'c-green':rest>0?'c-amber':'c-red','Resterend')+
+    bCell(used,'c-rose','Gebruikt')+
+    bCell(rest,rest>10?'c-green':rest>5?'c-amber':'c-red','Resterend')+
     bCell('30/jr','','Per jaar');
 
   document.getElementById('prog-fill').style.width=pct+'%';
@@ -436,10 +441,17 @@ function render(){
   });
   document.getElementById('yr-table').innerHTML=ytHtml;
 
-  let rtHtml='<tr><th>Datum</th><th class="r">Totaal</th></tr>';
+  let rtHtml='<tr><th>Datum</th><th class="r">Dagen</th></tr>';
   let run=0;
-  rechten.forEach(r=>{run+=r.dagen;rtHtml+=`<tr><td>${r.datum}</td><td class="r c-green">+${r.dagen} → ${run}</td></tr>`;});
-  rtHtml+=`<tr style="border-top:2px solid var(--border)"><td><strong>Admin-saldo</strong></td><td class="r"><strong>${ADMIN_CAP}</strong></td></tr>`;
+  rechten.forEach(r=>{
+    run+=r.dagen;
+    rtHtml+=`<tr><td>${r.datum}</td><td class="r c-green">+${r.dagen} → ${run}</td></tr>`;
+  });
+  const nextOkt=new Date();
+  nextOkt.setMonth(9);nextOkt.setDate(1);
+  if(new Date()>new Date(new Date().getFullYear()+'-10-01'))nextOkt.setFullYear(nextOkt.getFullYear()+1);
+  const nextY=nextOkt.getFullYear();
+  rtHtml+=`<tr style="border-top:2px solid var(--border);opacity:.5"><td style="font-style:italic">1 okt ${nextY} (verwacht)</td><td class="r">+30 → ${run+30}</td></tr>`;
   document.getElementById('rights-table').innerHTML=rtHtml;
 }
 
