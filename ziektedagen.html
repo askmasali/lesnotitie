@@ -303,6 +303,7 @@ function getRechten(){
 }
 
 function loadData(){
+  // localStorage sadece Firebase gelene kadar geçici — asıl kaynak Firebase
   try{const s=localStorage.getItem(STORAGE_KEY);if(s)return JSON.parse(s);}catch(e){}
   return{entries:JSON.parse(JSON.stringify(INITIAL_ENTRIES))};
 }
@@ -313,7 +314,17 @@ function saveData(){
 let state=loadData();
 
 window._onFirebaseData=function(entries){
-  state.entries=entries;
+  // Firebase'den veri geldi — her zaman bunu kullan
+  // Eski veri mi kontrol et: doğru toplam 236 olmalı
+  const total=entries.reduce((s,e)=>s+e.days,0);
+  if(total<230){
+    // Firebase'de eski/bozuk veri var, INITIAL_ENTRIES'i yaz
+    state.entries=JSON.parse(JSON.stringify(INITIAL_ENTRIES));
+    if(window._saveToFirebase)window._saveToFirebase(state.entries);
+  } else {
+    state.entries=entries;
+  }
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
   render();
 };
 
