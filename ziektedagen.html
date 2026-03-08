@@ -331,23 +331,20 @@ const INITIAL_ENTRIES=[
 ];
 
 function getRechten(){
-  // Admin sistemi: her 1 Ekim +30 ekler
-  // 1 okt 2025 henüz işlenmedi → o satır 240'ta göster (ADMIN_CAP)
-  // 1 okt 2026'dan itibaren normal devam
-  const ADMIN_PROCESSED_UNTIL=2024; // son işlenen yıl
+  // In dienst 17 sep 2017 → eerste 30 dagen recht na 12 mnd = sept 2018
+  // Admin verwerkt dit als 1 okt 2018 = eerste toevoeging
+  // 1 okt 2017 telt NIET mee (nog geen 12 mnd gewerkt)
+  const FIRST_YEAR=2018; // eerste jaar met recht
+  const ADMIN_PROCESSED_UNTIL=2025; // laatste verwerkte jaar
   const r=[];
   let run=0;
   const now=new Date();
-  for(let y=2017;y<=2099;y++){
+  for(let y=FIRST_YEAR;y<=2099;y++){
     const d=new Date(y+'-10-01');
     if(d>now)break;
-    if(y<=ADMIN_PROCESSED_UNTIL){
-      run+=30;
-      r.push({datum:`1 okt ${y}`,dagen:30,totaal:run,pending:false});
-    } else {
-      // 2025 ve sonrası: admin henüz işlemedi, ADMIN_CAP'te dur
-      r.push({datum:`1 okt ${y}`,dagen:30,totaal:ADMIN_CAP,pending:true});
-    }
+    run+=30;
+    const isPending=y>ADMIN_PROCESSED_UNTIL;
+    r.push({datum:`1 okt ${y}`,dagen:30,totaal:Math.min(run,isPending?run-30:run+(isPending?0:0)),pending:false,run});
   }
   return r;
 }
@@ -488,18 +485,13 @@ function render(){
 
   let rtHtml='<tr><th>Datum</th><th class="r">Dagen</th></tr>';
   rechten.forEach(r=>{
-    if(r.pending){
-      rtHtml+=`<tr style="opacity:.55"><td>${r.datum} <span style="font-size:10px;color:var(--rose);font-style:italic">nog niet verwerkt</span></td><td class="r" style="color:var(--text3)">+${r.dagen} → ${r.totaal}</td></tr>`;
-    } else {
-      rtHtml+=`<tr><td>${r.datum}</td><td class="r c-green">+${r.dagen} → ${r.totaal}</td></tr>`;
-    }
+    rtHtml+=`<tr><td>${r.datum}</td><td class="r c-green">+${r.dagen} → ${r.run}</td></tr>`;
   });
-  // Volgende verwachte toevoeging
+  // Volgende verwachte
+  const lastRun=rechten.length?rechten[rechten.length-1].run:0;
   const now2=new Date();
-  const thisOkt=new Date(now2.getFullYear()+'-10-01');
-  const nextOktY=now2>thisOkt?now2.getFullYear()+1:now2.getFullYear();
-  const lastTotaal=rechten.length?rechten[rechten.length-1].totaal:ADMIN_CAP;
-  rtHtml+=`<tr style="border-top:2px solid var(--border);opacity:.4"><td style="font-style:italic">1 okt ${nextOktY} (verwacht)</td><td class="r">+30 → ${lastTotaal+30}</td></tr>`;
+  const nextOktY=now2>new Date(now2.getFullYear()+'-10-01')?now2.getFullYear()+1:now2.getFullYear();
+  rtHtml+=`<tr style="border-top:2px solid var(--border);opacity:.4"><td style="font-style:italic">1 okt ${nextOktY} (verwacht)</td><td class="r">+30 → ${lastRun+30}</td></tr>`;
   document.getElementById('rights-table').innerHTML=rtHtml;
 }
 
@@ -527,7 +519,9 @@ function toggleCal(which){
   if(el.classList.contains('open'))renderCal(which);
 }
 document.addEventListener('click',e=>{
-  if(!e.target.closest('.fg'))['start','end'].forEach(w=>document.getElementById('cal-'+w).classList.remove('open'));
+  if(!e.target.closest('.cal-input-wrap')&&!e.target.closest('.cal-popup')){
+    ['start','end'].forEach(w=>document.getElementById('cal-'+w).classList.remove('open'));
+  }
 });
 
 function renderCal(which){
