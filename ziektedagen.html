@@ -84,6 +84,25 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .dot{width:7px;height:7px;border-radius:50%;background:var(--rose);animation:pulse 1.2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--rose);color:#fff;padding:10px 22px;border-radius:99px;font-size:14px;font-weight:500;display:none;z-index:9999;white-space:nowrap}
+/* ── CUSTOM CALENDAR ── */
+.cal-input-wrap{position:relative}
+.cal-input-wrap input[type=text]{border:1.5px solid var(--border);border-radius:9px;padding:12px 15px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);background:#fff;outline:none;transition:border-color .2s,box-shadow .2s;width:100%;cursor:pointer;caret-color:transparent}
+.cal-input-wrap input[type=text]:focus{border-color:var(--rose);box-shadow:0 0 0 3px var(--rose2)}
+.cal-popup{display:none;position:absolute;z-index:999;top:calc(100% + 6px);left:0;right:0;background:#fff;border:1.5px solid var(--rose);border-radius:14px;box-shadow:0 8px 32px rgba(158,79,110,.18);padding:14px;min-width:280px}
+.cal-popup.open{display:block}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.cal-nav button{background:var(--rose2);border:none;color:var(--rose);border-radius:8px;width:32px;height:32px;font-size:16px;cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:center}
+.cal-nav button:hover{background:var(--rose3);color:#fff}
+.cal-month-lbl{font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:var(--text)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-dow{text-align:center;font-size:10px;font-weight:700;color:var(--rose);text-transform:uppercase;letter-spacing:.5px;padding:4px 0 6px}
+.cal-day{text-align:center;padding:7px 4px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;transition:background .12s,color .12s;color:var(--text)}
+.cal-day:hover{background:var(--rose2);color:var(--rose)}
+.cal-day.today{border:2px solid var(--rose);color:var(--rose);font-weight:700}
+.cal-day.selected{background:var(--rose);color:#fff;font-weight:700}
+.cal-day.other-month{color:var(--text3);opacity:.45}
+.cal-day.weekend{color:var(--text3)}
+.cal-day.empty{cursor:default}
 </style>
 </head>
 <body>
@@ -121,8 +140,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="card-head"><span class="card-title">Dag toevoegen</span></div>
       <div class="card-body">
         <div class="form-grid">
-          <div class="fg"><label>Startdatum</label><input type="date" id="f-start"></div>
-          <div class="fg"><label>Einddatum</label><input type="date" id="f-end"></div>
+          <div class="fg">
+            <label>Startdatum</label>
+            <div class="cal-input-wrap" id="wrap-start">
+              <input type="text" id="f-start-display" placeholder="Kies datum…" readonly onclick="toggleCal('start')">
+              <input type="hidden" id="f-start">
+            </div>
+            <div class="cal-popup" id="cal-start"></div>
+          </div>
+          <div class="fg">
+            <label>Einddatum</label>
+            <div class="cal-input-wrap" id="wrap-end">
+              <input type="text" id="f-end-display" placeholder="Zelfde als start…" readonly onclick="toggleCal('end')">
+              <input type="hidden" id="f-end">
+            </div>
+            <div class="cal-popup" id="cal-end"></div>
+          </div>
           <div class="fg">
             <label>Aantal dagen</label>
             <input type="number" id="f-days" min="1" placeholder="Automatisch berekend">
@@ -298,11 +331,23 @@ const INITIAL_ENTRIES=[
 ];
 
 function getRechten(){
-  const r=[];const now=new Date();
+  // Admin sistemi: her 1 Ekim +30 ekler
+  // 1 okt 2025 henüz işlenmedi → o satır 240'ta göster (ADMIN_CAP)
+  // 1 okt 2026'dan itibaren normal devam
+  const ADMIN_PROCESSED_UNTIL=2024; // son işlenen yıl
+  const r=[];
+  let run=0;
+  const now=new Date();
   for(let y=2017;y<=2099;y++){
     const d=new Date(y+'-10-01');
     if(d>now)break;
-    r.push({jaar:`${y}-${y+1}`,datum:`1 okt ${y}`,dagen:30});
+    if(y<=ADMIN_PROCESSED_UNTIL){
+      run+=30;
+      r.push({datum:`1 okt ${y}`,dagen:30,totaal:run,pending:false});
+    } else {
+      // 2025 ve sonrası: admin henüz işlemedi, ADMIN_CAP'te dur
+      r.push({datum:`1 okt ${y}`,dagen:30,totaal:ADMIN_CAP,pending:true});
+    }
   }
   return r;
 }
@@ -442,16 +487,19 @@ function render(){
   document.getElementById('yr-table').innerHTML=ytHtml;
 
   let rtHtml='<tr><th>Datum</th><th class="r">Dagen</th></tr>';
-  let run=0;
   rechten.forEach(r=>{
-    run+=r.dagen;
-    rtHtml+=`<tr><td>${r.datum}</td><td class="r c-green">+${r.dagen} → ${run}</td></tr>`;
+    if(r.pending){
+      rtHtml+=`<tr style="opacity:.55"><td>${r.datum} <span style="font-size:10px;color:var(--rose);font-style:italic">nog niet verwerkt</span></td><td class="r" style="color:var(--text3)">+${r.dagen} → ${r.totaal}</td></tr>`;
+    } else {
+      rtHtml+=`<tr><td>${r.datum}</td><td class="r c-green">+${r.dagen} → ${r.totaal}</td></tr>`;
+    }
   });
-  const nextOkt=new Date();
-  nextOkt.setMonth(9);nextOkt.setDate(1);
-  if(new Date()>new Date(new Date().getFullYear()+'-10-01'))nextOkt.setFullYear(nextOkt.getFullYear()+1);
-  const nextY=nextOkt.getFullYear();
-  rtHtml+=`<tr style="border-top:2px solid var(--border);opacity:.5"><td style="font-style:italic">1 okt ${nextY} (verwacht)</td><td class="r">+30 → ${run+30}</td></tr>`;
+  // Volgende verwachte toevoeging
+  const now2=new Date();
+  const thisOkt=new Date(now2.getFullYear()+'-10-01');
+  const nextOktY=now2>thisOkt?now2.getFullYear()+1:now2.getFullYear();
+  const lastTotaal=rechten.length?rechten[rechten.length-1].totaal:ADMIN_CAP;
+  rtHtml+=`<tr style="border-top:2px solid var(--border);opacity:.4"><td style="font-style:italic">1 okt ${nextOktY} (verwacht)</td><td class="r">+30 → ${lastTotaal+30}</td></tr>`;
   document.getElementById('rights-table').innerHTML=rtHtml;
 }
 
@@ -466,12 +514,99 @@ function toast(msg){
 }
 window._toast=toast;
 
+// ── CUSTOM CALENDAR ──
+const calState={start:{y:new Date().getFullYear(),m:new Date().getMonth()},end:{y:new Date().getFullYear(),m:new Date().getMonth()}};
+const DAYS=['Ma','Di','Wo','Do','Vr','Za','Zo'];
+const MONTHS=['Januari','Februari','Maart','April','Mei','Juni','Juli','Augustus','September','Oktober','November','December'];
+
+function toggleCal(which){
+  const other=which==='start'?'end':'start';
+  document.getElementById('cal-'+other).classList.remove('open');
+  const el=document.getElementById('cal-'+which);
+  el.classList.toggle('open');
+  if(el.classList.contains('open'))renderCal(which);
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.fg'))['start','end'].forEach(w=>document.getElementById('cal-'+w).classList.remove('open'));
+});
+
+function renderCal(which){
+  const s=calState[which];
+  const el=document.getElementById('cal-'+which);
+  const today=new Date();today.setHours(0,0,0,0);
+  const selVal=document.getElementById('f-'+which).value;
+  const selDate=selVal?new Date(selVal):null;if(selDate)selDate.setHours(0,0,0,0);
+  const first=new Date(s.y,s.m,1);
+  // Monday-first: 0=Mon..6=Sun
+  let startDow=(first.getDay()+6)%7;
+  const daysInMonth=new Date(s.y,s.m+1,0).getDate();
+  let html=`<div class="cal-nav">
+    <button onclick="calMove('${which}',-1)">‹</button>
+    <span class="cal-month-lbl">${MONTHS[s.m]} ${s.y}</span>
+    <button onclick="calMove('${which}',1)">›</button>
+  </div><div class="cal-grid">`;
+  DAYS.forEach(d=>html+=`<div class="cal-dow">${d}</div>`);
+  // prev month days
+  const prevDays=new Date(s.y,s.m,0).getDate();
+  for(let i=startDow-1;i>=0;i--)html+=`<div class="cal-day other-month empty">${prevDays-i}</div>`;
+  for(let d=1;d<=daysInMonth;d++){
+    const date=new Date(s.y,s.m,d);date.setHours(0,0,0,0);
+    const dow=(date.getDay()+6)%7;
+    const isToday=date.getTime()===today.getTime();
+    const isSel=selDate&&date.getTime()===selDate.getTime();
+    const isWeekend=dow>=5;
+    let cls='cal-day';
+    if(isToday)cls+=' today';
+    if(isSel)cls+=' selected';
+    if(isWeekend&&!isSel)cls+=' weekend';
+    html+=`<div class="${cls}" onclick="pickDay('${which}',${s.y},${s.m},${d})">${d}</div>`;
+  }
+  // next month filler
+  const total=startDow+daysInMonth;const remainder=total%7;
+  if(remainder>0)for(let d=1;d<=7-remainder;d++)html+=`<div class="cal-day other-month empty">${d}</div>`;
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+function calMove(which,dir){
+  calState[which].m+=dir;
+  if(calState[which].m>11){calState[which].m=0;calState[which].y++;}
+  if(calState[which].m<0){calState[which].m=11;calState[which].y--;}
+  renderCal(which);
+}
+
+function pickDay(which,y,m,d){
+  const iso=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+  const disp=`${String(d).padStart(2,'0')}.${String(m+1).padStart(2,'0')}.${y}`;
+  document.getElementById('f-'+which).value=iso;
+  document.getElementById('f-'+which+'-display').value=disp;
+  document.getElementById('cal-'+which).classList.remove('open');
+  // If start picked and end is empty or before start, set end = start
+  if(which==='start'){
+    const endVal=document.getElementById('f-end').value;
+    if(!endVal||endVal<iso){
+      document.getElementById('f-end').value=iso;
+      document.getElementById('f-end-display').value=disp;
+      calState.end={y,m};
+    }
+  }
+  autoDays();
+}
+
+function autoDays(){
+  const s=document.getElementById('f-start').value,e=document.getElementById('f-end').value;
+  if(s&&e&&e>=s)document.getElementById('f-days').value=calcWD(s,e);
+}
+
 document.addEventListener('DOMContentLoaded',()=>{
-  const today=new Date().toISOString().split('T')[0];
-  document.getElementById('f-start').value=today;
-  document.getElementById('f-end').value=today;
-  document.getElementById('f-start').addEventListener('change',autoDays);
-  document.getElementById('f-end').addEventListener('change',autoDays);
+  // Set today as default in display
+  const today=new Date();
+  const iso=today.toISOString().split('T')[0];
+  const disp=`${String(today.getDate()).padStart(2,'0')}.${String(today.getMonth()+1).padStart(2,'0')}.${today.getFullYear()}`;
+  document.getElementById('f-start').value=iso;
+  document.getElementById('f-start-display').value=disp;
+  document.getElementById('f-end').value=iso;
+  document.getElementById('f-end-display').value=disp;
 });
 render();
 </script>
