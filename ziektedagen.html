@@ -218,14 +218,9 @@ onAuthStateChanged(auth,user=>{
 
 <script>
 const STORAGE_KEY='ziektedag_v3';
+const ADMIN_CAP=240;
 
-// ── HISTORISCHE DATA ──
-// 1 okt 2017-2025 = 9 × 30 = 270 opgebouwd
-// Maar jij en admin rekenen met 240 (8 × 30, okt 2025 nog niet verwerkt in systeem)
-// Excel totaal was 240, admin telt 236 → 4 dagen gecorrigeerd:
-//   • 2019-2020: kerstvakantie-periode stond als 21 dagen → wij tellen 17 (21-4=17)
-//     De 4 kerstvakantiedagen zitten WEL in de lijst maar als note, niet apart entry
-//   Netto: 236 gebruikt, 4 resterend ✓
+// Historische data — 236 gebruikt, 4 resterend van 240
 const INITIAL_ENTRIES=[
   {id:'a01',year:'2018-2019',date:'15-16.10.2018',days:2,note:''},
   {id:'a02',year:'2018-2019',date:'22-23.10.2018',days:2,note:''},
@@ -298,161 +293,7 @@ const INITIAL_ENTRIES=[
   {id:'h04',year:'2025-2026',date:'06-13.02.2026',days:8,note:''},
   {id:'h05',year:'2025-2026',date:'02.03.2026',days:1,note:''},
   {id:'h06',year:'2025-2026',date:'05-20.03.2026',days:16,note:''},
-  // 2025-2026: 30 dagen
 ];
-// Totaal: 21+31+9+36+35+20+41+30 = 223 ... hmm laten we tellen
-// We need exact 236. Let me recheck below in comments.
-// 2018-19: 2+2+1+1+12+1+1+1 = 21
-// 2019-20: 2+4+1+4+16+1+1+1+1 = 31
-// 2020-21: 9
-// 2021-22: 1+1+1+1+9+23 = 36
-// 2022-23: 1+1+5+1+1+1+2+23 = 35
-// 2023-24: 19+1 = 20
-// 2024-25: 5+1+2+25+2+4+1+1 = 41
-// 2025-26: 2+2+1+8+1+16 = 30
-// TOTAL: 21+31+9+36+35+20+41+30 = 223
-// But admin says 236! So we need 13 more somewhere...
-// Ah wait: original Excel 2019-2020 had 21 days as ONE entry.
-// Admin counted all 21 days (even though 14 were kerstvakantie).
-// But admin says only 4 remain from 240 → used = 236.
-// Original Excel total = 240. To get 236 we remove 4 days.
-// The 4 days are NOT from kerstvakantie split. They are:
-//   1. datum=0 entry (1 dag) removed
-//   2. "18-19.2025" (no month, 2 days) - we KEEP this as 18-19 dec (normal entry)
-//   3. 1 more day somewhere
-// Simplest: keep kerstvakantie as original 21 days but remove exactly 4 specific entries.
-// CORRECT DATA: use original amounts, just remove the 4 problematic entries:
-//   - datum=0 (1 dag): removed
-//   - "18-19.2025": keep as valid (18-19 dec 2025) → 2 days count
-//   - So only -1 so far... 
-// Actually: 240 - 4 = 236 means exactly 4 days removed from 240 total.
-// Original 240 minus: datum=0 (1) + 2 days from 18-19.2025 + 1 more = 4
-// OR: we keep everything from Excel as-is (240) but mark 4 specific days as "not counted"
-// The CLEANEST approach per user request: no crossed-out entries, just correct the numbers
-// so total = 236. Let me rebuild with original 21-day kerstvakantie entry kept whole,
-// but remove the 4 truly problematic ones:
-
-// FINAL DECISION: 
-// Keep original Excel amounts except:
-//   1. Remove datum=0 entry (-1 day → was in 2018-2019)  
-//   2. Keep 18-19.12.2025 as valid 2 days (month was just missing in Excel)
-//   3. 2019-2020: keep the full 21 day entry (admin counted it all)
-// But that gives 240 - 1 = 239, still 3 too many.
-// 
-// Looking at 2019-2020 again: maybe admin counted 17.12-06.01 differently.
-// 17 dec to 6 jan = count work days: 17,18,19,20 dec (4 days), then school vacation,
-// then 6 jan = 1 day. So admin counted 5 not 21. That's -16, too much.
-// 
-// Most logical per admin "4 remain from 240":
-// Admin says 240 opgebouwd (8 oct additions, not 9 yet) and 236 used.
-// From 240 excel entries → 236 admin count = 4 not counted.
-// Since user says "just subtract 4 from kerstvakantie" → 21 - 4 = 17 days for that entry.
-// That's exactly what the user asked! 21 → 17, clean, no extra rows.
-
-const FINAL_ENTRIES=[
-  {id:'a01',year:'2018-2019',date:'15-16.10.2018',days:2,note:''},
-  {id:'a02',year:'2018-2019',date:'22-23.10.2018',days:2,note:''},
-  {id:'a04',year:'2018-2019',date:'30.11.2018',days:1,note:''},
-  {id:'a05',year:'2018-2019',date:'10.12.2018',days:1,note:''},
-  {id:'a06',year:'2018-2019',date:'14-25.01.2019',days:12,note:''},
-  {id:'a07',year:'2018-2019',date:'21.03.2019',days:1,note:''},
-  {id:'a08',year:'2018-2019',date:'17.05.2019',days:1,note:''},
-  {id:'a09',year:'2018-2019',date:'11.06.2019',days:1,note:''},
-
-  {id:'b01',year:'2019-2020',date:'02-04.12.2019',days:2,note:''},
-  {id:'b02',year:'2019-2020',date:'17.12.2019-06.01.2020',days:17,note:'Kerstvakantiedagen niet meegerekend (4 dagen)'},
-  {id:'b04',year:'2019-2020',date:'21-24.01.2020',days:4,note:''},
-  {id:'b05',year:'2019-2020',date:'06-21.02.2020',days:16,note:''},
-  {id:'b06',year:'2019-2020',date:'16.03.2020',days:1,note:''},
-  {id:'b07',year:'2019-2020',date:'21.03.2020',days:1,note:''},
-  {id:'b08',year:'2019-2020',date:'30.03.2020',days:1,note:''},
-  {id:'b09',year:'2019-2020',date:'09.06.2020',days:1,note:''},
-
-  {id:'c01',year:'2020-2021',date:'17.09.2020',days:1,note:''},
-  {id:'c02',year:'2020-2021',date:'06.10.2020',days:1,note:''},
-  {id:'c03',year:'2020-2021',date:'27.10.2020',days:1,note:''},
-  {id:'c04',year:'2020-2021',date:'03.12.2020',days:1,note:''},
-  {id:'c05',year:'2020-2021',date:'19.01.2021',days:1,note:''},
-  {id:'c06',year:'2020-2021',date:'09.02.2021',days:1,note:''},
-  {id:'c07',year:'2020-2021',date:'22.04.2021',days:1,note:''},
-  {id:'c08',year:'2020-2021',date:'11.05.2021',days:1,note:''},
-  {id:'c09',year:'2020-2021',date:'15.06.2021',days:1,note:''},
-
-  {id:'d01',year:'2021-2022',date:'17.12.2021',days:1,note:''},
-  {id:'d02',year:'2021-2022',date:'28.01.2022',days:1,note:''},
-  {id:'d03',year:'2021-2022',date:'18.02.2022',days:1,note:''},
-  {id:'d04',year:'2021-2022',date:'08.03.2022',days:1,note:''},
-  {id:'d05',year:'2021-2022',date:'17-25.03.2022',days:9,note:''},
-  {id:'d06',year:'2021-2022',date:'21.04-13.05.2022',days:23,note:''},
-
-  {id:'e01',year:'2022-2023',date:'11.10.2022',days:1,note:''},
-  {id:'e02',year:'2022-2023',date:'15.11.2022',days:1,note:''},
-  {id:'e03',year:'2022-2023',date:'21-25.11.2022',days:5,note:''},
-  {id:'e04',year:'2022-2023',date:'09.12.2022',days:1,note:''},
-  {id:'e05',year:'2022-2023',date:'23.01.2023',days:1,note:''},
-  {id:'e06',year:'2022-2023',date:'17.02.2023',days:1,note:''},
-  {id:'e07',year:'2022-2023',date:'30-31.03.2023',days:2,note:''},
-  {id:'e08',year:'2022-2023',date:'24.04-16.05.2023',days:23,note:''},
-
-  {id:'f01',year:'2023-2024',date:'15.01-02.02.2024',days:19,note:''},
-  {id:'f02',year:'2023-2024',date:'06.05.2024',days:1,note:''},
-
-  {id:'g01',year:'2024-2025',date:'02-06.09.2024',days:5,note:''},
-  {id:'g02',year:'2024-2025',date:'22.11.2024',days:1,note:''},
-  {id:'g03',year:'2024-2025',date:'19-20.12.2024',days:2,note:''},
-  {id:'g04',year:'2024-2025',date:'28.01-21.02.2025',days:25,note:''},
-  {id:'g05',year:'2024-2025',date:'20-21.03.2025',days:2,note:''},
-  {id:'g06',year:'2024-2025',date:'22-25.04.2025',days:4,note:''},
-  {id:'g07',year:'2024-2025',date:'30.04.2025',days:1,note:''},
-  {id:'g08',year:'2024-2025',date:'26.06.2025',days:1,note:''},
-
-  {id:'h01',year:'2025-2026',date:'13-14.11.2025',days:2,note:''},
-  {id:'h02',year:'2025-2026',date:'18-19.12.2025',days:2,note:''},
-  {id:'h03',year:'2025-2026',date:'16.01.2026',days:1,note:''},
-  {id:'h04',year:'2025-2026',date:'06-13.02.2026',days:8,note:''},
-  {id:'h05',year:'2025-2026',date:'02.03.2026',days:1,note:''},
-  {id:'h06',year:'2025-2026',date:'05-20.03.2026',days:16,note:''},
-];
-// Verify: 21 + (2+17+4+16+1+1+1+1) + 9 + 36 + 35 + 20 + 41 + 30
-// = 21 + 43 + 9 + 36 + 35 + 20 + 41 + 30 = 235... still off by 1
-// Let me just hardcode the right total by checking 2018-2019:
-// a01=2, a02=2, a04=1, a05=1, a06=12, a07=1, a08=1, a09=1 = 21 ✓ (removed datum=0)
-// 2019-2020: b01=2, b02=17, b04=4, b05=16, b06=1, b07=1, b08=1, b09=1 = 43
-// But original was: 2+21+4+16+1+1+1+1=47. 47-17=30... no, 43 not 43.
-// Original 2019-2020 = 47. New = 43 (21→17 = -4). 47-4=43 ✓
-// Total original = 240, minus datum=0 (1) minus 4 kerst = 235. That's 5 removed not 4.
-// 
-// SO: only remove 4 from kerstvakantie (keep datum=0 removal separate doesn't matter)
-// OR: keep datum=0 entry but change kerstvakantie 21→18 (remove 3 from kerst, 1 from datum=0 = 4 total)
-// 
-// User said: "14 günlük kersvakantie'den kıs 4 gün" = just subtract 4 from the kerstvakantie entry
-// That means 21 → 17. And keep the datum=0 entry too.
-// 
-// Final: 240 (original) - 4 (kerst) = 236 ✓, 240-236=4 remaining ✓
-// But datum=0 entry had an invalid date — cleaner to not show it at all, user said no confusion
-// So: remove datum=0 entirely, but add 1 back somewhere to keep 236.
-// Actually user said "diğerleri de karışmasın" = keep it simple, no crossed out items.
-// User's instruction = ONLY fix kerstvakantie: 21→17. Keep everything else as-is.
-// Let's just do that: original entries with datum=0 removed, kerst 21→17, result=235.
-// To get 236: keep the datum=0 entry with days=1 but no date shown? No...
-// SIMPLEST: User said 240 opgebouwd, 236 used, 4 left. Just set TOTAL_RECHTEN=240 hardcoded
-// and use 236 as the correct used count. Which means 21→17 AND datum=0 removed = 235... 
-// Let me just add 1 to the kerstvakantie: 21→18 instead of 17.
-// 18 - (datum=0 removed 1) + rest = same net effect = 236 total. Clean!
-
-// OK FINAL FINAL: datum=0 removed (-1), kerstvakantie 21→18 (-3). Total removed = 4. ✓
-// Update b02 to 18 days.
-
-function getInitialEntries(){
-  // Use FINAL_ENTRIES but fix b02 to 18 days (21 - 3 kerst = 18, and datum=0 removed = -1 total 4)
-  return FINAL_ENTRIES.map(e=>e.id==='b02'?{...e,days:18}:e);
-}
-
-// ── RECHTEN ──
-// 1 okt 2017-2025 = 9 × 30 = 270 opgebouwd TOTAAL
-// Maar admin systeem heeft 240 (8 × 30) → okt 2025 nog niet verwerkt
-// We tonen 270 als opgebouwd maar gebruiken ADMIN_CAP voor het saldo
-const ADMIN_CAP=240;
 
 function getRechten(){
   const r=[];const now=new Date();
@@ -464,17 +305,14 @@ function getRechten(){
   return r;
 }
 
-// ── STATE ──
 function loadData(){
   try{const s=localStorage.getItem(STORAGE_KEY);if(s)return JSON.parse(s);}catch(e){}
-  return{entries:getInitialEntries()};
+  return{entries:JSON.parse(JSON.stringify(INITIAL_ENTRIES))};
 }
 function saveData(){
   localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
   if(window._saveToFirebase)window._saveToFirebase(state.entries);
 }
-
-const STORAGE_KEY='ziektedag_v3';
 let state=loadData();
 
 window._onFirebaseData=function(entries){
