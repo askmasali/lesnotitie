@@ -454,29 +454,36 @@ function render(){
   document.getElementById('prog-left').textContent=`${used} van ${totalR} gebruikt (${pct}%)`;
   document.getElementById('prog-right').textContent=rest>=0?`${rest} dag${rest===1?'':'en'} resterend`:`${Math.abs(rest)} dagen te veel`;
 
+  // Tüm yıllar 2017-2018'den bugüne — 1 Eylül'de yeni yıl oluşur
+  const now4=new Date();
+  const curYrS=now4.getMonth()>=8?now4.getFullYear():now4.getFullYear()-1;
+  const allHistYears=[];
+  for(let y=curYrS;y>=2017;y--)allHistYears.push(`${y}-${y+1}`);
+  const openYr=allHistYears[0];
+
   let html='';
-  getYears().forEach(yr=>{
+  allHistYears.forEach(yr=>{
     const entries=state.entries.filter(e=>e.year===yr);
     const yrUsed=entries.reduce((s,e)=>s+e.days,0);
     const sid='yr_'+yr.replace('-','_');
-    // Meest recente jaar open, de rest dicht
-    const isOpen=yr===getYears()[0];
+    const isOpen=yr===openYr;
+    const pillCls=yrUsed>30?'pill-red':yrUsed>20?'pill-amber':yrUsed>0?'pill-green':'pill-muted';
     html+=`<div class="yr-block">
       <div class="yr-head" onclick="toggleYr('${sid}')">
         <span class="yr-head-lbl">📅 ${yr}</span>
         <span style="display:flex;align-items:center;gap:6px">
-          <span class="pill ${yrUsed>30?'pill-red':yrUsed>20?'pill-amber':'pill-green'}">${yrUsed}d</span>
+          <span class="pill ${pillCls}">${yrUsed}d</span>
           <span class="yr-arrow ${isOpen?'open':''}" id="arr_${sid}">▶</span>
         </span>
       </div>
       <div class="yr-entries ${isOpen?'open':''}" id="${sid}">
-        ${entries.map(e=>`
+        ${entries.length?entries.map(e=>`
           <div class="entry-row">
             <span class="entry-date">${esc(e.date)}</span>
             <span class="pill pill-amber">${e.days}d</span>
             <button class="del-btn" onclick="delEntry('${e.id}')">✕</button>
             ${e.note?`<span class="entry-note">💬 ${esc(e.note)}</span>`:''}
-          </div>`).join('')}
+          </div>`).join(''):'<div style="padding:6px 12px;font-size:13px;color:var(--text3)">Geen ziektedagen dit jaar</div>'}
       </div>
     </div>`;
   });
@@ -484,16 +491,19 @@ function render(){
   document.getElementById('hist-badge').textContent=`${state.entries.length} items · ${used} dagen`;
 
   let ytHtml='<tr><th>Schooljaar</th><th class="r">Gebruikt</th><th>Status</th></tr>';
-  const allYears=getYears();
-  if(!allYears.includes('2017-2018'))allYears.push('2017-2018');
-  // getYears() geeft al reverse gesorteerd terug, maar na push moeten we opnieuw sorteren
-  allYears.sort((a,b)=>b.localeCompare(a));
-  allYears.forEach(yr=>{
+  // Tüm yılları 2017-2018'den bugüne kadar oluştur
+  const now3=new Date();
+  const curYrStart=now3.getMonth()>=8?now3.getFullYear():now3.getFullYear()-1;
+  const allSchoolYears=[];
+  for(let y=curYrStart;y>=2017;y--){
+    allSchoolYears.push(`${y}-${y+1}`);
+  }
+  allSchoolYears.forEach(yr=>{
     const d=state.entries.filter(e=>e.year===yr).reduce((s,e)=>s+e.days,0);
     const is1718=yr==='2017-2018';
     ytHtml+=`<tr><td>${yr}</td><td class="r">${d}</td><td>${is1718
       ?`<span class="pill pill-muted" style="font-size:10px">Eerste jaar</span>`
-      :`<span class="pill ${d>30?'pill-red':d>20?'pill-amber':'pill-green'}">${d}/30</span>`
+      :`<span class="pill ${d>30?'pill-red':d>20?'pill-amber':d>0?'pill-green':'pill-muted'}">${d}/30</span>`
     }</td></tr>`;
   });
   document.getElementById('yr-table').innerHTML=ytHtml;
