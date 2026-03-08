@@ -88,7 +88,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .cal-input-wrap{position:relative}
 .cal-input-wrap input[type=text]{border:1.5px solid var(--border);border-radius:9px;padding:12px 15px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);background:#fff;outline:none;transition:border-color .2s,box-shadow .2s;width:100%;cursor:pointer;caret-color:transparent}
 .cal-input-wrap input[type=text]:focus{border-color:var(--rose);box-shadow:0 0 0 3px var(--rose2)}
-.cal-popup{display:none;position:absolute;z-index:999;top:calc(100% + 6px);left:0;right:0;background:#fff;border:1.5px solid var(--rose);border-radius:14px;box-shadow:0 8px 32px rgba(158,79,110,.18);padding:12px;}
+.cal-popup{display:none;position:fixed;z-index:9999;background:#fff;border:1.5px solid var(--rose);border-radius:12px;box-shadow:0 6px 24px rgba(158,79,110,.2);padding:10px;width:260px}
 .cal-popup.open{display:block}
 .cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .cal-nav button{background:var(--rose2);border:none;color:var(--rose);border-radius:7px;width:28px;height:28px;font-size:15px;cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:center}
@@ -515,8 +515,16 @@ function toggleCal(which){
   const other=which==='start'?'end':'start';
   document.getElementById('cal-'+other).classList.remove('open');
   const el=document.getElementById('cal-'+which);
-  el.classList.toggle('open');
-  if(el.classList.contains('open'))renderCal(which);
+  const wasOpen=el.classList.contains('open');
+  el.classList.remove('open');
+  if(wasOpen)return;
+  // Pozisyonu input'un altına fixed olarak ayarla
+  const inp=document.getElementById('f-'+which+'-display');
+  const rect=inp.getBoundingClientRect();
+  el.style.top=(rect.bottom+6)+'px';
+  el.style.left=rect.left+'px';
+  el.classList.add('open');
+  renderCal(which);
 }
 document.addEventListener('click',e=>{
   if(!e.target.closest('.cal-input-wrap')&&!e.target.closest('.cal-popup')){
