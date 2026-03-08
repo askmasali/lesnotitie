@@ -63,9 +63,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .form-row{display:flex;gap:9px}
 .fg{display:flex;flex-direction:column;gap:4px;flex:1}
 .fg label{font-size:10px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.9px}
-.fg input,.fg textarea{border:1.5px solid var(--border);border-radius:9px;padding:8px 11px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:#fff;outline:none;transition:border-color .15s;width:100%}
+.fg input,.fg textarea{border:1.5px solid var(--border);border-radius:9px;padding:10px 13px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);background:#fff;outline:none;transition:border-color .15s;width:100%}
 .fg input:focus,.fg textarea:focus{border-color:var(--amber)}
-.fg textarea{resize:vertical;min-height:52px}
+.fg textarea{resize:vertical;min-height:60px}
 .btn{border:none;border-radius:9px;padding:10px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;width:100%}
 .btn-dark{background:var(--text);color:#fff}
 .btn-dark:hover{background:#3d2510}
@@ -322,13 +322,21 @@ window._onFirebaseData=function(entries){
 
 // ── HELPERS ──
 function usedTotal(){return state.entries.reduce((s,e)=>s+e.days,0);}
-function getYears(){return[...new Set(state.entries.map(e=>e.year))].sort();}
+// Yıllar ters sıra — en yeni en üstte
+function getYears(){return[...new Set(state.entries.map(e=>e.year))].sort().reverse();}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function calcWD(s,e){let n=0;const d=new Date(s),en=new Date(e);while(d<=en){const w=d.getDay();if(w&&w!==6)n++;d.setDate(d.getDate()+1);}return n;}
 function autoDays(){
   const s=document.getElementById('f-start').value,e=document.getElementById('f-end').value;
   if(s&&e&&e>=s)document.getElementById('f-days').value=calcWD(s,e);
+}
+
+// Tarihten sıralama için ilk tarihi çıkar (DD.MM.YYYY formatından)
+function parseSortDate(dateStr){
+  const m=dateStr.match(/(\d{2})\.(\d{2})\.(\d{4})/);
+  if(m)return new Date(`${m[3]}-${m[2]}-${m[1]}`);
+  return new Date(0);
 }
 
 function signIn(){if(window._signIn)window._signIn();}
@@ -345,7 +353,13 @@ function addEntry(){
   const dateStr=start===end?fmt(start):`${fmt(start)}-${fmt(end)}`;
   const d=new Date(start);const m=d.getMonth()+1;const y=d.getFullYear();
   const year=m>=9?`${y}-${y+1}`:`${y-1}-${y}`;
-  state.entries.push({id:uid(),year,date:dateStr,days,note});
+  state.entries.push({id:uid(),year,date:dateStr,days,note,startIso:start});
+  // Tarihe göre sırala
+  state.entries.sort((a,b)=>{
+    const da=a.startIso?new Date(a.startIso):parseSortDate(a.date);
+    const db=b.startIso?new Date(b.startIso):parseSortDate(b.date);
+    return da-db;
+  });
   saveData();render();
   toast(`✅ ${days} dag${days>1?'en':''} toegevoegd`);
   const today=new Date().toISOString().split('T')[0];
@@ -363,7 +377,7 @@ function delEntry(id){
 
 function render(){
   const rechten=getRechten();
-  const totalR=ADMIN_CAP; // use admin cap (240) for balance display
+  const totalR=ADMIN_CAP;
   const used=usedTotal();
   const rest=totalR-used;
   const pct=Math.min(100,Math.round(used/totalR*100));
@@ -383,15 +397,17 @@ function render(){
     const entries=state.entries.filter(e=>e.year===yr);
     const yrUsed=entries.reduce((s,e)=>s+e.days,0);
     const sid='yr_'+yr.replace('-','_');
+    // Meest recente jaar open, de rest dicht
+    const isOpen=yr===getYears()[0];
     html+=`<div class="yr-block">
       <div class="yr-head" onclick="toggleYr('${sid}')">
         <span class="yr-head-lbl">📅 ${yr}</span>
         <span style="display:flex;align-items:center;gap:6px">
           <span class="pill ${yrUsed>30?'pill-red':yrUsed>20?'pill-amber':'pill-green'}">${yrUsed}d</span>
-          <span class="yr-arrow open" id="arr_${sid}">▶</span>
+          <span class="yr-arrow ${isOpen?'open':''}" id="arr_${sid}">▶</span>
         </span>
       </div>
-      <div class="yr-entries open" id="${sid}">
+      <div class="yr-entries ${isOpen?'open':''}" id="${sid}">
         ${entries.map(e=>`
           <div class="entry-row">
             <span class="entry-date">${esc(e.date)}</span>
