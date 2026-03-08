@@ -39,7 +39,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
 .card+.card{margin-top:18px}
 .card-head{padding:15px 22px 13px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.card-title{font-family:'Fraunces',serif;font-size:20px;font-weight:300;font-style:italic}
+.card-title{font-family:'Fraunces',serif;font-size:20px;font-weight:600;}
 .card-badge{font-size:12px;color:var(--text3)}
 .card-body{padding:18px 22px}
 .yr-block{margin-bottom:14px}
@@ -133,6 +133,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <span class="card-badge" id="hist-badge"></span>
       </div>
       <div class="card-body" id="hist-body"></div>
+    </div>
+    <div class="card" style="margin-top:18px">
+      <div class="card-head">
+        <span class="card-title">Loopbaan overzicht</span>
+        <button onclick="addLoopbaanRow()" style="background:var(--rose2);border:none;color:var(--rose);border-radius:8px;padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer">+ Toevoegen</button>
+      </div>
+      <div style="padding:8px 12px" id="loopbaan-body"></div>
     </div>
   </div>
   <div>
@@ -477,9 +484,17 @@ function render(){
   document.getElementById('hist-badge').textContent=`${state.entries.length} items · ${used} dagen`;
 
   let ytHtml='<tr><th>Schooljaar</th><th class="r">Gebruikt</th><th>Status</th></tr>';
-  getYears().forEach(yr=>{
+  const allYears=getYears();
+  if(!allYears.includes('2017-2018'))allYears.push('2017-2018');
+  // getYears() geeft al reverse gesorteerd terug, maar na push moeten we opnieuw sorteren
+  allYears.sort((a,b)=>b.localeCompare(a));
+  allYears.forEach(yr=>{
     const d=state.entries.filter(e=>e.year===yr).reduce((s,e)=>s+e.days,0);
-    ytHtml+=`<tr><td>${yr}</td><td class="r">${d}</td><td><span class="pill ${d>30?'pill-red':d>20?'pill-amber':'pill-green'}">${d}/30</span></td></tr>`;
+    const is1718=yr==='2017-2018';
+    ytHtml+=`<tr><td>${yr}</td><td class="r">${d}</td><td>${is1718
+      ?`<span class="pill pill-muted" style="font-size:10px">Eerste jaar</span>`
+      :`<span class="pill ${d>30?'pill-red':d>20?'pill-amber':'pill-green'}">${d}/30</span>`
+    }</td></tr>`;
   });
   document.getElementById('yr-table').innerHTML=ytHtml;
 
@@ -610,7 +625,93 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('f-end').value=iso;
   document.getElementById('f-end-display').value=disp;
 });
+
+// ── LOOPBAAN DATA ──
+const LB_KEY='loopbaan_v2';
+const LOOPBAAN_DEFAULT=[
+  {id:'lb01',jaar:'2025-2026',school:'Atheneum Tichelrij',type:'SO',note:'Tijdelijk'},
+  {id:'lb02',jaar:'2025-2026',school:'Atheneum Speelhof',type:'SO',note:'Tijdelijk'},
+  {id:'lb04',jaar:'2024-2025',school:'GO! SBSO Zonnegroen Zoutleeuw',type:'BuSO',note:'Vastbenoemd 22/22'},
+  {id:'lb05',jaar:'2023-2024',school:'GO! SBSO Zonnegroen Zoutleeuw',type:'BuSO',note:'Vastbenoemd 12/22'},
+  {id:'lb06',jaar:'2023-2024',school:'GO! SBSO Sibbo Tongeren',type:'BuSO',note:'Vastbenoemd 12/22'},
+  {id:'lb07',jaar:'2022-2023',school:'GO! SBSO Zonnegroen Zoutleeuw',type:'BuSO',note:'Vastbenoemd 17/22'},
+  {id:'lb08',jaar:'2022-2023',school:'GO! SBSO Sibbo Tongeren',type:'BuSO',note:'Vastbenoemd 5/22'},
+  {id:'lb09',jaar:'2021-2022',school:'GO! SBSO Zonnegroen Zoutleeuw',type:'BuSO',note:'Vastbenoemd 19/22'},
+  {id:'lb10',jaar:'2021-2022',school:'GO! SBSO Sibbo Tongeren',type:'BuSO',note:'Vastbenoemd 3/22 · vanaf 1 juli 2021'},
+  {id:'lb11',jaar:'2020-2021',school:'GO! SBSO Zonnegroen Zoutleeuw',type:'BuSO',note:'Tijdelijk vacant → Vastbenoemd'},
+  {id:'lb12',jaar:'2020-2021',school:'GBS Leefdaal',type:'BO',note:'Tijdelijk'},
+  {id:'lb13',jaar:'2019-2020',school:'GO! SBSO Zonnegroen Zoutleeuw',type:'BuSO',note:'Tijdelijk vacant'},
+  {id:'lb14',jaar:'2019-2020',school:'GO! IBSO Woudlucht',type:'BuSO',note:'Tijdelijk vacant'},
+  {id:'lb15',jaar:'2019-2020',school:'De Wijnpers Provinciaal',type:'SO',note:'Tijdelijk vacant'},
+  {id:'lb16',jaar:'2019-2020',school:'GBS Haacht',type:'BO',note:'Tijdelijk'},
+  {id:'lb17',jaar:'2018-2019',school:'Horteco Vilvoorde',type:'SO',note:'Tijdelijk vacant'},
+  {id:'lb18',jaar:'2018-2019',school:'GO! Technisch Atheneum Tongeren',type:'SO',note:'Tijdelijk vacant'},
+  {id:'lb19',jaar:'2018-2019',school:'GO! Middenschool Borgloon',type:'SO',note:'Tijdelijk vacant'},
+  {id:'lb20',jaar:'2018-2019',school:'GO! BS De Muziekladder',type:'BO',note:'Tijdelijk vacant'},
+  {id:'lb21',jaar:'2017-2018',school:'GO! Technisch Atheneum Hasselt',type:'SO',note:'Tijdelijk · eerste jaar'},
+];
+
+function loadLoopbaan(){
+  try{const s=localStorage.getItem(LB_KEY);if(s)return JSON.parse(s);}catch(e){}
+  return JSON.parse(JSON.stringify(LOOPBAAN_DEFAULT));
+}
+function saveLoopbaan(){localStorage.setItem(LB_KEY,JSON.stringify(lbState));}
+let lbState=loadLoopbaan();
+
+const TYPE_COLORS={BuSO:'pill-rose',SO:'pill-muted',BO:'pill-amber',Tijdelijk:'pill-green'};
+
+function renderLoopbaan(){
+  const years=[...new Set(lbState.map(r=>r.jaar))].sort().reverse();
+  let html='<table class="mini-table"><tr><th>Schooljaar</th><th>School</th><th>Type</th><th style="width:52px"></th></tr>';
+  years.forEach(yr=>{
+    const rows=lbState.filter(r=>r.jaar===yr);
+    rows.forEach((r,i)=>{
+      html+=`<tr style="${i===0?'border-top:1px solid var(--border)':''}">
+        <td style="color:var(--text3);font-size:12px;white-space:nowrap">${i===0?`<strong style="color:var(--text)">${yr}</strong>`:'&nbsp;'}</td>
+        <td>
+          <div style="font-size:13px;font-weight:500">${esc(r.school)}</div>
+          ${r.note?`<div style="font-size:11px;color:var(--text3)">${esc(r.note)}</div>`:''}
+        </td>
+        <td><span class="pill ${TYPE_COLORS[r.type]||'pill-muted'}">${esc(r.type)}</span></td>
+        <td style="white-space:nowrap">
+          <button onclick="editLb('${r.id}')" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:13px;padding:2px 4px;border-radius:4px;transition:color .1s" onmouseover="this.style.color='var(--rose)'" onmouseout="this.style.color='var(--text3)'" title="Bewerken">✏️</button>
+          <button onclick="delLb('${r.id}')" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:13px;padding:2px 4px;border-radius:4px;transition:color .1s" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text3)'" title="Verwijderen">✕</button>
+        </td>
+      </tr>`;
+    });
+  });
+  html+='</table>';
+  document.getElementById('loopbaan-body').innerHTML=html;
+}
+
+function delLb(id){
+  if(!confirm('Verwijderen?'))return;
+  lbState=lbState.filter(r=>r.id!==id);
+  saveLoopbaan();renderLoopbaan();
+}
+
+function editLb(id){
+  const r=lbState.find(x=>x.id===id);if(!r)return;
+  const newJaar=prompt('Schooljaar:',r.jaar);if(newJaar===null)return;
+  const newSchool=prompt('School:',r.school);if(newSchool===null)return;
+  const newType=prompt('Type (SO / BO / BuSO / Tijdelijk):',r.type);if(newType===null)return;
+  const newNote=prompt('Opmerking:',r.note);if(newNote===null)return;
+  r.jaar=newJaar.trim();r.school=newSchool.trim();r.type=newType.trim();r.note=newNote.trim();
+  lbState.sort((a,b)=>b.jaar.localeCompare(a.jaar));
+  saveLoopbaan();renderLoopbaan();
+}
+
+function addLoopbaanRow(){
+  const jaar=prompt('Schooljaar (bv. 2025-2026):','');if(!jaar)return;
+  const school=prompt('School:','');if(!school)return;
+  const type=prompt('Type (SO / BO / BuSO / Tijdelijk):','SO');if(type===null)return;
+  const note=prompt('Opmerking (optioneel):','');
+  lbState.push({id:'lb'+Date.now(),jaar:jaar.trim(),school:school.trim(),type:type.trim(),note:(note||'').trim()});
+  lbState.sort((a,b)=>b.jaar.localeCompare(a.jaar));
+  saveLoopbaan();renderLoopbaan();
+}
+
 render();
-</script>
+renderLoopbaan();</script>
 </body>
 </html>
