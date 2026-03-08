@@ -88,19 +88,19 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .cal-input-wrap{position:relative}
 .cal-input-wrap input[type=text]{border:1.5px solid var(--border);border-radius:9px;padding:12px 15px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);background:#fff;outline:none;transition:border-color .2s,box-shadow .2s;width:100%;cursor:pointer;caret-color:transparent}
 .cal-input-wrap input[type=text]:focus{border-color:var(--rose);box-shadow:0 0 0 3px var(--rose2)}
-.cal-popup{display:none;position:absolute;z-index:999;top:calc(100% + 6px);left:0;right:0;background:#fff;border:1.5px solid var(--rose);border-radius:14px;box-shadow:0 8px 32px rgba(158,79,110,.18);padding:14px;min-width:280px}
+.cal-popup{display:none;position:absolute;z-index:999;top:calc(100% + 6px);left:0;right:0;background:#fff;border:1.5px solid var(--rose);border-radius:14px;box-shadow:0 8px 32px rgba(158,79,110,.18);padding:12px;}
 .cal-popup.open{display:block}
-.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.cal-nav button{background:var(--rose2);border:none;color:var(--rose);border-radius:8px;width:32px;height:32px;font-size:16px;cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:center}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cal-nav button{background:var(--rose2);border:none;color:var(--rose);border-radius:7px;width:28px;height:28px;font-size:15px;cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:center}
 .cal-nav button:hover{background:var(--rose3);color:#fff}
-.cal-month-lbl{font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:var(--text)}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
-.cal-dow{text-align:center;font-size:10px;font-weight:700;color:var(--rose);text-transform:uppercase;letter-spacing:.5px;padding:4px 0 6px}
-.cal-day{text-align:center;padding:7px 4px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;transition:background .12s,color .12s;color:var(--text)}
+.cal-month-lbl{font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--text)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.cal-dow{text-align:center;font-size:9px;font-weight:700;color:var(--rose);text-transform:uppercase;letter-spacing:.3px;padding:3px 0 5px}
+.cal-day{text-align:center;padding:5px 2px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;transition:background .12s,color .12s;color:var(--text)}
 .cal-day:hover{background:var(--rose2);color:var(--rose)}
 .cal-day.today{border:2px solid var(--rose);color:var(--rose);font-weight:700}
 .cal-day.selected{background:var(--rose);color:#fff;font-weight:700}
-.cal-day.other-month{color:var(--text3);opacity:.45}
+.cal-day.other-month{color:var(--text3);opacity:.35}
 .cal-day.weekend{color:var(--text3)}
 .cal-day.empty{cursor:default}
 </style>
