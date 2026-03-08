@@ -106,7 +106,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div class="card">
       <div class="card-head">
         <span class="card-title">Geschiedenis</span>
-        <span class="card-badge" id="hist-badge"></span>
+        <span style="display:flex;align-items:center;gap:8px">
+          <span class="card-badge" id="hist-badge"></span>
+          <button onclick="resetData()" style="background:var(--red2);border:none;color:var(--red);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer">↺ Herstel</button>
+        </span>
       </div>
       <div class="card-body" id="hist-body"></div>
     </div>
@@ -367,6 +370,13 @@ function addEntry(){
   document.getElementById('f-end').value=today;
   document.getElementById('f-days').value='';
   document.getElementById('f-note').value='';
+}
+
+function resetData(){
+  if(!confirm('Originele data herstellen? Alle handmatig toegevoegde items gaan verloren.'))return;
+  state.entries=JSON.parse(JSON.stringify(INITIAL_ENTRIES));
+  saveData();render();
+  toast('✅ Originele data hersteld — 236 gebruikt, 4 resterend');
 }
 
 function delEntry(id){
