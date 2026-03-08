@@ -558,9 +558,9 @@ function renderCal(which){
   let startDow=(first.getDay()+6)%7;
   const daysInMonth=new Date(s.y,s.m+1,0).getDate();
   let html=`<div class="cal-nav">
-    <button onclick="calMove('${which}',-1)">‹</button>
+    <button onclick="calMove('${which}',-1,event)">‹</button>
     <span class="cal-month-lbl">${MONTHS[s.m]} ${s.y}</span>
-    <button onclick="calMove('${which}',1)">›</button>
+    <button onclick="calMove('${which}',1,event)">›</button>
   </div><div class="cal-grid">`;
   DAYS.forEach(d=>html+=`<div class="cal-dow">${d}</div>`);
   // prev month days
@@ -585,7 +585,8 @@ function renderCal(which){
   el.innerHTML=html;
 }
 
-function calMove(which,dir){
+function calMove(which,dir,e){
+  e.stopPropagation();
   calState[which].m+=dir;
   if(calState[which].m>11){calState[which].m=0;calState[which].y++;}
   if(calState[which].m<0){calState[which].m=11;calState[which].y--;}
