@@ -50,12 +50,12 @@ header{background:var(--surface);border-bottom:2px solid var(--border);padding:0
 .s-neg{background:linear-gradient(135deg,#fef2f2,#fee2e2);border-color:#fca5a5;}
 
 /* TABLE */
-.tbl-wrap{overflow-x:auto;border-radius:8px;border:1.5px solid var(--border);}
+.tbl-wrap{overflow-x:auto;border-radius:8px;border:1.5px solid var(--border);background:#fff;}
 table{width:100%;border-collapse:collapse;font-size:12px;}
 th{padding:11px 14px;text-align:left;font-size:12px;font-weight:800;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;background:var(--cream);border-bottom:1.5px solid var(--border);white-space:nowrap;}
-td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:middle;font-size:13px;}
+td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:middle;font-size:13px;color:var(--text);background:#fff;}
 tr:last-child td{border-bottom:none;}
-tr:hover td{background:#fdf4ff;}
+tr:hover td{background:#fdf4ff !important;}
 .ain{color:#16a34a;font-weight:800;}
 .aout{color:#dc2626;font-weight:800;}
 .adebt{color:#ea580c;font-weight:800;}
@@ -496,10 +496,10 @@ function vInkomsten() {
     <thead><tr><th>Datum</th><th>Categorie</th><th>Beschrijving</th><th>IBAN info</th><th>Bedrag</th><th></th></tr></thead>
     <tbody>${items.length===0?`<tr><td colspan="6" style="text-align:center;color:var(--text3);padding:28px">Geen inkomsten gevonden</td></tr>`:
       items.map(x=>`<tr>
-        <td style="color:var(--text3);white-space:nowrap">${fmtD(x.date)}</td>
+        <td style="color:#555;font-weight:600;white-space:nowrap">${fmtD(x.date)}</td>
         <td><span class="cat-badge cat-${x.category}">${catI(x.category,true)} ${catL(x.category,true)}</span></td>
         <td style="max-width:180px">${esc(x.description)}</td>
-        <td style="font-size:10px;color:var(--text3);">${x.ibanVan?`Van: ${esc(x.ibanVan)}<br>`:''}${x.ibanAan?`Naar: ${esc(x.ibanAan)}`:''}</td>
+        <td style="font-size:11px;color:#444;font-weight:600;">${x.ibanVan?`<span style="color:#888">Van:</span> ${esc(x.ibanVan)}<br>`:''}${x.ibanAan?`<span style="color:#888">Naar:</span> ${esc(x.ibanAan)}`:''}</td>
         <td class="ain" style="white-space:nowrap">${fmt(x.amount)}</td>
         <td><div style="display:flex;gap:3px">
           <button class="btn btn-secondary btn-sm btn-icon" onclick="mEditIncome('${x.id}')">✏️</button>
@@ -531,10 +531,10 @@ function vUitgaven() {
     <thead><tr><th>Datum</th><th>Categorie</th><th>Beschrijving</th><th>IBAN info</th><th>Bedrag</th><th></th></tr></thead>
     <tbody>${items.length===0?`<tr><td colspan="6" style="text-align:center;color:var(--text3);padding:28px">Geen uitgaven gevonden</td></tr>`:
       items.map(x=>`<tr>
-        <td style="color:var(--text3);white-space:nowrap">${fmtD(x.date)}</td>
+        <td style="color:#555;font-weight:600;white-space:nowrap">${fmtD(x.date)}</td>
         <td><span class="cat-badge cat-${x.category}">${catI(x.category,false)} ${catL(x.category,false)}</span></td>
         <td style="max-width:180px">${esc(x.description)}</td>
-        <td style="font-size:10px;color:var(--text3);">${x.ibanVan?`Van: ${esc(x.ibanVan)}<br>`:''}${x.ibanAan?`Aan: ${esc(x.ibanAan)}`:''}</td>
+        <td style="font-size:11px;color:#444;font-weight:600;">${x.ibanVan?`<span style="color:#888">Van:</span> ${esc(x.ibanVan)}<br>`:''}${x.ibanAan?`<span style="color:#888">Aan:</span> ${esc(x.ibanAan)}`:''}</td>
         <td class="aout" style="white-space:nowrap">${fmt(x.amount)}</td>
         <td><div style="display:flex;gap:3px">
           <button class="btn btn-secondary btn-sm btn-icon" onclick="mEditExpense('${x.id}')">✏️</button>
@@ -637,16 +637,18 @@ function drawCharts() {
 
   const donutOpts = (total) => ({
     plugins:{
-      legend:{position:'bottom',labels:{font:{family:'Nunito',size:11},padding:10}},
+      legend:{position:'bottom',labels:{font:{family:'Nunito',size:12},padding:12}},
       datalabels:{
-        display: ctx => ctx.dataset.data[ctx.dataIndex] > 0,
+        display: ctx => (ctx.dataset.data[ctx.dataIndex]/total*100) >= 4,
         color:'#fff',
-        font:{family:'Nunito',size:11,weight:'bold'},
+        font:{family:'Nunito',size:12,weight:'bold'},
         formatter:(val,ctx)=>{
           const pct=(val/total*100).toFixed(0);
-          return pct>='5' ? pct+'%' : '';
+          const eur='€'+val.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+          return eur+'\n'+pct+'%';
         },
-        textStrokeColor:'rgba(0,0,0,.18)',textStrokeWidth:2,
+        textStrokeColor:'rgba(0,0,0,.25)',textStrokeWidth:3,
+        textAlign:'center',
       }
     },
     responsive:true,maintainAspectRatio:true
