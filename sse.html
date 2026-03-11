@@ -4,1274 +4,952 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SSE Financiën</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-  :root {
-    --bg: #fdf6f0; --surface: #ffffff; --surface2: #fef3fb;
-    --border: #f0dff5; --border2: #fde8d8;
-    --text: #3d2c3e; --text2: #7a5c7e; --text3: #b89abc;
-    --accent1: #c084fc; --accent2: #f9a8d4; --accent3: #fb923c;
-    --cream: #fef9ee;
-    --shadow: 0 2px 16px rgba(192,132,252,0.10);
-    --shadow2: 0 4px 24px rgba(192,132,252,0.18);
-    --radius: 14px; --radius-sm: 8px;
-    --green: #22c55e; --red: #ef4444; --orange: #f97316; --blue: #3b82f6;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+:root {
+  --bg:#fdf6f0; --surface:#fff; --surface2:#fef3fb; --border:#f0dff5;
+  --text:#3d2c3e; --text2:#7a5c7e; --text3:#b89abc;
+  --accent1:#c084fc; --accent2:#f9a8d4;
+  --cream:#fef9ee; --radius:14px;
+  --shadow:0 2px 16px rgba(192,132,252,.10);
+  --shadow2:0 4px 24px rgba(192,132,252,.20);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
 
-  /* HEADER */
-  header { background: var(--surface); border-bottom: 2px solid var(--border); padding: 0 24px; display: flex; align-items: center; gap: 12px; height: 58px; box-shadow: var(--shadow); }
-  .logo { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; background: linear-gradient(135deg, var(--accent1), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; cursor: pointer; }
-  .year-select { background: linear-gradient(135deg, var(--accent1), var(--accent2)); color: #fff; border: none; padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer; outline: none; }
-  .nav-tabs { display: flex; gap: 4px; margin-left: auto; }
-  .nav-tab { padding: 6px 16px; border-radius: 20px; cursor: pointer; font-weight: 700; font-size: 12px; border: 2px solid transparent; background: transparent; color: var(--text2); transition: all .15s; font-family: 'Nunito', sans-serif; }
-  .nav-tab.active { background: linear-gradient(135deg, var(--accent1), var(--accent2)); color: #fff; box-shadow: 0 2px 10px rgba(192,132,252,.3); }
-  .nav-tab:hover:not(.active) { background: var(--surface2); border-color: var(--border); }
-  #auth-area { margin-left: 12px; }
+/* DATE INPUT - native picker styled */
+input[type="date"]{
+  font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;
+  color:var(--text);cursor:pointer;
+}
+input[type="date"]::-webkit-calendar-picker-indicator{
+  background:linear-gradient(135deg,var(--accent1),var(--accent2));
+  border-radius:4px;padding:3px;cursor:pointer;opacity:1;
+}
 
-  /* LAYOUT */
-  .main { max-width: 1200px; margin: 0 auto; padding: 24px; }
+/* HEADER */
+header{background:var(--surface);border-bottom:2px solid var(--border);padding:0 20px;display:flex;align-items:center;gap:10px;height:56px;box-shadow:var(--shadow);flex-wrap:nowrap;}
+.logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;background:linear-gradient(135deg,var(--accent1),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap;}
+.year-sel{background:linear-gradient(135deg,var(--accent1),var(--accent2));color:#fff;border:none;padding:3px 12px;border-radius:20px;font-size:11px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;}
+.nav-tabs{display:flex;gap:3px;margin-left:auto;}
+.nav-tab{padding:5px 13px;border-radius:20px;cursor:pointer;font-weight:700;font-size:11px;border:1.5px solid transparent;background:transparent;color:var(--text2);transition:all .15s;font-family:'Nunito',sans-serif;white-space:nowrap;}
+.nav-tab.active{background:linear-gradient(135deg,var(--accent1),var(--accent2));color:#fff;}
+.nav-tab:hover:not(.active){background:var(--surface2);border-color:var(--border);}
 
-  /* CARD */
-  .card { background: var(--surface); border-radius: var(--radius); border: 1.5px solid var(--border); padding: 20px; margin-bottom: 18px; box-shadow: var(--shadow); }
-  .card-title { font-family: 'Playfair Display', serif; font-size: 18px; margin-bottom: 16px; }
-  .section-label { font-size: 10px; font-weight: 900; color: var(--text3); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
+/* LAYOUT */
+.main{max-width:1200px;margin:0 auto;padding:20px;}
 
-  /* STATS GRID */
-  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin-bottom: 20px; }
-  .stat-card { border-radius: var(--radius); border: 1.5px solid var(--border); padding: 18px; text-align: center; background: var(--surface); box-shadow: var(--shadow); }
-  .stat-val { font-size: 26px; font-weight: 900; }
-  .stat-label { font-size: 10px; font-weight: 700; color: var(--text3); margin-top: 4px; text-transform: uppercase; letter-spacing: .8px; }
-  .stat-card.income { background: linear-gradient(135deg, #f0fdf4, #dcfce7); border-color: #86efac; }
-  .stat-card.expense { background: linear-gradient(135deg, #fef2f2, #fee2e2); border-color: #fca5a5; }
-  .stat-card.debt { background: linear-gradient(135deg, #fff7ed, #ffedd5); border-color: #fdba74; }
-  .stat-card.balance-pos { background: linear-gradient(135deg, var(--accent1), var(--accent2)); border-color: transparent; }
-  .stat-card.balance-pos .stat-val, .stat-card.balance-pos .stat-label { color: #fff; }
-  .stat-card.balance-neg { background: linear-gradient(135deg, #fef2f2, #fee2e2); border-color: #fca5a5; }
+/* CARDS */
+.card{background:var(--surface);border-radius:var(--radius);border:1.5px solid var(--border);padding:18px;margin-bottom:16px;box-shadow:var(--shadow);}
+.sec-label{font-size:10px;font-weight:900;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;}
 
-  /* TABLE */
-  .tbl-wrap { overflow-x: auto; border-radius: var(--radius-sm); border: 1.5px solid var(--border); }
-  table { width: 100%; border-collapse: collapse; font-size: 12px; }
-  th { padding: 10px 12px; text-align: left; font-size: 10px; font-weight: 800; color: var(--text2); text-transform: uppercase; letter-spacing: .8px; background: var(--cream); border-bottom: 1.5px solid var(--border); white-space: nowrap; }
-  td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: #fdf4ff; }
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:16px;}
+.stat{border-radius:var(--radius);border:1.5px solid var(--border);padding:16px;text-align:center;}
+.stat-val{font-size:24px;font-weight:900;}
+.stat-label{font-size:10px;font-weight:700;color:var(--text3);margin-top:3px;text-transform:uppercase;letter-spacing:.7px;}
+.s-in{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-color:#86efac;}
+.s-out{background:linear-gradient(135deg,#fef2f2,#fee2e2);border-color:#fca5a5;}
+.s-debt{background:linear-gradient(135deg,#fff7ed,#ffedd5);border-color:#fdba74;}
+.s-pos{background:linear-gradient(135deg,var(--accent1),var(--accent2));border-color:transparent;}
+.s-pos .stat-val,.s-pos .stat-label{color:#fff;}
+.s-neg{background:linear-gradient(135deg,#fef2f2,#fee2e2);border-color:#fca5a5;}
 
-  /* CATEGORY BADGES */
-  .cat-badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; }
-  .cat-baguage { background: #f0fdf4; color: #166534; }
-  .cat-erasmus { background: #dbeafe; color: #1e40af; }
-  .cat-lening { background: #fff7ed; color: #9a3412; }
-  .cat-donatie { background: #fdf4ff; color: #7e22ce; }
-  .cat-kira { background: #fef9c3; color: #854d0e; }
-  .cat-bank { background: #f1f5f9; color: #475569; }
-  .cat-materiaal { background: #fce7f3; color: #be185d; }
-  .cat-overig { background: #f8fafc; color: #64748b; }
+/* TABLE */
+.tbl-wrap{overflow-x:auto;border-radius:8px;border:1.5px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{padding:9px 11px;text-align:left;font-size:10px;font-weight:800;color:var(--text2);text-transform:uppercase;letter-spacing:.7px;background:var(--cream);border-bottom:1.5px solid var(--border);white-space:nowrap;}
+td{padding:8px 11px;border-bottom:1px solid var(--border);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#fdf4ff;}
+.ain{color:#16a34a;font-weight:800;}
+.aout{color:#dc2626;font-weight:800;}
+.adebt{color:#ea580c;font-weight:800;}
 
-  /* STATUS BADGES */
-  .status-badge { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 10px; font-weight: 700; }
-  .status-betaald { background: #f0fdf4; color: #166534; border: 1px solid #86efac; }
-  .status-open { background: #fef2f2; color: #991b1b; border: 1px solid #fca5a5; }
-  .status-gedeeltelijk { background: #fefce8; color: #854d0e; border: 1px solid #fde047; }
+/* BADGES */
+.cat-badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:10px;font-weight:700;}
+.cat-erasmus{background:#dbeafe;color:#1e40af;}
+.cat-donatie{background:#fdf4ff;color:#7e22ce;}
+.cat-lening{background:#fff7ed;color:#9a3412;}
+.cat-lidgeld{background:#f0fdf4;color:#166534;}
+.cat-subsidie{background:#fef9c3;color:#854d0e;}
+.cat-overig_in,.cat-overig_uit,.cat-overig{background:#f8fafc;color:#64748b;}
+.cat-kira{background:#fef9c3;color:#854d0e;}
+.cat-bank{background:#f1f5f9;color:#475569;}
+.cat-materiaal{background:#fce7f3;color:#be185d;}
+.cat-activiteit{background:#ede9fe;color:#6d28d9;}
+.cat-admin{background:#f0f9ff;color:#0369a1;}
+.cat-terugbetaling{background:#fef2f2;color:#991b1b;}
 
-  /* AMOUNT */
-  .amount-in { color: #16a34a; font-weight: 800; }
-  .amount-out { color: #dc2626; font-weight: 800; }
-  .amount-debt { color: #ea580c; font-weight: 800; }
+/* BUTTONS */
+.btn{padding:7px 15px;border-radius:20px;border:none;cursor:pointer;font-weight:700;font-size:12px;transition:all .15s;font-family:'Nunito',sans-serif;}
+.btn-primary{background:linear-gradient(135deg,var(--accent1),var(--accent2));color:#fff;box-shadow:0 2px 8px rgba(192,132,252,.25);}
+.btn-primary:hover{transform:translateY(-1px);}
+.btn-secondary{background:var(--surface2);color:var(--text2);border:1.5px solid var(--border);}
+.btn-secondary:hover{background:var(--border);}
+.btn-danger{background:#fef2f2;color:#991b1b;border:1.5px solid #fca5a5;}
+.btn-success{background:#f0fdf4;color:#166534;border:1.5px solid #86efac;}
+.btn-ghost{background:transparent;color:var(--text2);}
+.btn-sm{padding:4px 10px;font-size:10px;}
+.btn-icon{padding:4px 7px;border-radius:7px;}
 
-  /* BUTTONS */
-  .btn { padding: 7px 16px; border-radius: 20px; border: none; cursor: pointer; font-weight: 700; font-size: 12px; transition: all .15s; font-family: 'Nunito', sans-serif; }
-  .btn-primary { background: linear-gradient(135deg, var(--accent1), var(--accent2)); color: #fff; box-shadow: 0 2px 10px rgba(192,132,252,.25); }
-  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(192,132,252,.4); }
-  .btn-secondary { background: var(--surface2); color: var(--text2); border: 1.5px solid var(--border); }
-  .btn-secondary:hover { background: var(--border); }
-  .btn-danger { background: #fef2f2; color: #991b1b; border: 1.5px solid #fca5a5; }
-  .btn-success { background: #f0fdf4; color: #166534; border: 1.5px solid #86efac; }
-  .btn-sm { padding: 4px 10px; font-size: 10px; }
-  .btn-ghost { background: transparent; color: var(--text2); }
-  .btn-icon { padding: 4px 8px; border-radius: 8px; font-size: 13px; }
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(61,44,62,.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:1000;}
+.modal-box{background:var(--surface);border-radius:18px;border:2px solid var(--border);padding:24px;width:95%;max-width:480px;box-shadow:var(--shadow2);animation:pop .18s ease;max-height:90vh;overflow-y:auto;}
+@keyframes pop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-title{font-size:16px;font-weight:800;margin-bottom:18px;}
+.form-group{margin-bottom:12px;}
+.form-label{display:block;font-size:10px;font-weight:700;color:var(--text2);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;}
+.form-input,.form-select,.form-textarea{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:8px 11px;font-size:13px;font-family:'Nunito',sans-serif;color:var(--text);background:var(--cream);outline:none;transition:border .15s;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent1);}
+.form-textarea{resize:vertical;min-height:54px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.iban-btns{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap;}
 
-  /* MODAL */
-  .modal-overlay { position: fixed; inset: 0; background: rgba(61,44,62,.45); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 1000; }
-  .modal-box { background: var(--surface); border-radius: 20px; border: 2px solid var(--border); padding: 28px; min-width: 340px; max-width: 500px; width: 95%; box-shadow: var(--shadow2); animation: pop .2s ease; }
-  @keyframes pop { from { transform: scale(.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-  .modal-title { font-size: 17px; font-weight: 800; margin-bottom: 20px; }
-  .form-group { margin-bottom: 14px; }
-  .form-label { display: block; font-size: 11px; font-weight: 700; color: var(--text2); margin-bottom: 5px; text-transform: uppercase; letter-spacing: .5px; }
-  .form-input, .form-select, .form-textarea { width: 100%; border: 1.5px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 13px; font-family: 'Nunito', sans-serif; color: var(--text); background: var(--cream); outline: none; }
-  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--accent1); }
-  .form-textarea { resize: vertical; min-height: 60px; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+/* TOAST */
+.toast{position:fixed;bottom:22px;right:22px;background:linear-gradient(135deg,var(--accent1),var(--accent2));color:#fff;border-radius:12px;padding:11px 18px;font-weight:700;font-size:13px;z-index:2000;box-shadow:0 6px 20px rgba(192,132,252,.4);animation:slideup .2s ease;}
+@keyframes slideup{from{transform:translateY(16px);opacity:0}to{transform:translateY(0);opacity:1}}
 
-  /* TOAST */
-  .toast { position: fixed; bottom: 24px; right: 24px; background: linear-gradient(135deg, var(--accent1), var(--accent2)); color: #fff; border-radius: 12px; padding: 12px 20px; font-weight: 700; font-size: 13px; z-index: 2000; box-shadow: 0 8px 24px rgba(192,132,252,.35); animation: slideup .25s ease; }
-  @keyframes slideup { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+/* FILTER */
+.filter-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.chip{padding:4px 13px;border-radius:20px;border:1.5px solid var(--border);background:var(--surface);font-size:11px;font-weight:700;color:var(--text2);cursor:pointer;transition:all .12s;font-family:'Nunito',sans-serif;}
+.chip.active{background:linear-gradient(135deg,var(--accent1),var(--accent2));color:#fff;border-color:transparent;}
+.chip:hover:not(.active){background:var(--surface2);}
 
-  /* FILTER BAR */
-  .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
-  .filter-chip { padding: 4px 14px; border-radius: 20px; border: 1.5px solid var(--border); background: var(--surface); font-size: 11px; font-weight: 700; color: var(--text2); cursor: pointer; transition: all .12s; font-family: 'Nunito', sans-serif; }
-  .filter-chip.active { background: linear-gradient(135deg, var(--accent1), var(--accent2)); color: #fff; border-color: transparent; }
-  .filter-chip:hover:not(.active) { background: var(--surface2); }
+/* DEBT PROGRESS */
+.dprog{height:7px;background:var(--border);border-radius:4px;overflow:hidden;margin-top:5px;}
+.dprog-fill{height:100%;background:linear-gradient(90deg,#22c55e,#86efac);border-radius:4px;transition:width .3s;}
 
-  /* DEBT PROGRESS */
-  .debt-progress { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin-top: 6px; }
-  .debt-progress-fill { height: 100%; background: linear-gradient(90deg, var(--green), #86efac); border-radius: 4px; transition: width .3s; }
+/* CHART */
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.chart-box{background:var(--surface);border-radius:var(--radius);border:1.5px solid var(--border);padding:16px;box-shadow:var(--shadow);}
+.chart-title{font-size:11px;font-weight:800;color:var(--text2);margin-bottom:4px;text-transform:uppercase;letter-spacing:.7px;}
+.chart-desc{font-size:10px;color:var(--text3);margin-bottom:10px;}
+canvas{max-height:200px;}
 
-  /* CHART CONTAINER */
-  .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 20px; }
-  .chart-box { background: var(--surface); border-radius: var(--radius); border: 1.5px solid var(--border); padding: 18px; box-shadow: var(--shadow); }
-  .chart-title { font-size: 12px; font-weight: 800; color: var(--text2); margin-bottom: 12px; text-transform: uppercase; letter-spacing: .8px; }
-  canvas { max-height: 220px; }
-
-  /* PDF PRINT */
-  @media print {
-    header, .filter-bar, .btn, .nav-tabs, #auth-area { display: none !important; }
-    .main { padding: 10px; }
-    .card { page-break-inside: avoid; }
-  }
-
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-  @media(max-width: 600px) { .form-row { grid-template-columns: 1fr; } .chart-grid { grid-template-columns: 1fr; } }
-
-  </style>
+@media(max-width:640px){.form-row{grid-template-columns:1fr;}.chart-grid{grid-template-columns:1fr;}.nav-tab{padding:4px 8px;font-size:10px;}}
+@media print{header,.btn,.filter-bar,#auth-area{display:none!important;}.main{padding:8px;}}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+</style>
 </head>
 <body>
 
 <header>
   <span class="logo">💰 SSE Financiën</span>
-  <select class="year-select" id="year-select" onchange="switchYear(this.value)"></select>
-  <div id="auth-area">
-    <button class="btn btn-primary btn-sm" onclick="window._signIn && window._signIn()">
-      <svg width="13" height="13" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:4px"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-      Google ile giriş yap
-    </button>
-  </div>
+  <select class="year-sel" id="year-sel" onchange="setYear(this.value)"></select>
+  <div id="auth-area"></div>
   <div class="nav-tabs">
-    <button class="nav-tab active" onclick="switchView('overzicht')">📊 Overzicht</button>
-    <button class="nav-tab" onclick="switchView('inkomsten')">💚 Inkomsten</button>
-    <button class="nav-tab" onclick="switchView('uitgaven')">💸 Uitgaven</button>
-    <button class="nav-tab" onclick="switchView('schulden')">🔴 Schulden</button>
-    <button class="nav-tab" onclick="switchView('grafieken')">📈 Grafieken</button>
+    <button class="nav-tab" onclick="go('overzicht')">📊 Overzicht</button>
+    <button class="nav-tab" onclick="go('inkomsten')">💚 Inkomsten</button>
+    <button class="nav-tab" onclick="go('uitgaven')">💸 Uitgaven</button>
+    <button class="nav-tab" onclick="go('schulden')">🔴 Schulden</button>
+    <button class="nav-tab" onclick="go('grafieken')">📈 Grafieken</button>
   </div>
 </header>
 
-<div class="main" id="main-content"></div>
+<div class="main" id="app"></div>
+<div id="modal-root"></div>
+<div id="toast-el" style="display:none" class="toast"></div>
 
-<!-- MODAL -->
-<div class="modal-overlay" id="modal" style="display:none">
-  <div class="modal-box" id="modal-box"></div>
-</div>
-<div class="toast" id="toast" style="display:none"></div>
-
-<!-- Firebase -->
 <script type="module">
+// ── FIREBASE ──────────────────────────────────────────────────
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyD0SO2m658hN3O8p9GJodODn6kRPuu5iFQ",
-  authDomain: "lesnotitie.firebaseapp.com",
-  projectId: "lesnotitie",
-  storageBucket: "lesnotitie.firebasestorage.app",
-  messagingSenderId: "295926362823",
-  appId: "1:295926362823:web:4704194a0d80544ad7c4e2"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const FB = { apiKey:"AIzaSyD0SO2m658hN3O8p9GJodODn6kRPuu5iFQ", authDomain:"lesnotitie.firebaseapp.com", projectId:"lesnotitie", storageBucket:"lesnotitie.firebasestorage.app", messagingSenderId:"295926362823", appId:"1:295926362823:web:4704194a0d80544ad7c4e2" };
+const app = initializeApp(FB);
+const db  = getFirestore(app);
 const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
+const prov = new GoogleAuthProvider();
 
-onAuthStateChanged(auth, async (user) => {
-  window._currentUser = user;
-  updateAuthUI(user);
-  if (user) {
-    await loadData(user.uid);
+let currentUser = null;
+
+onAuthStateChanged(auth, async u => {
+  currentUser = u;
+  renderAuthUI();
+  if (u) {
+    await fbLoad(u.uid);
   }
 });
 
-window._signIn = async () => { try { await signInWithPopup(auth, provider); } catch(e) {} };
-window._signOut = async () => {
-  if (!confirm("Uitloggen?")) return;
-  await signOut(auth);
-  window._currentUser = null;
-  updateAuthUI(null);
-  showToast("Uitgelogd");
-};
-
-window._saveData = async function() {
-  if (!window._currentUser) return;
+async function fbSave() {
+  if (!currentUser) return;
   try {
-    await setDoc(doc(db, "sse_finance", window._currentUser.uid), {
-      data: JSON.stringify(window.finState),
-      updatedAt: new Date().toISOString()
-    });
-  } catch(e) { console.warn("Save error:", e); }
-};
-
-async function loadData(uid) {
-  try {
-    const snap = await getDoc(doc(db, "sse_finance", uid));
-    if (snap.exists()) {
-      const parsed = JSON.parse(snap.data().data);
-      // Replace arrays fully instead of merging
-      if (parsed.incomes) window.finState.incomes = parsed.incomes;
-      if (parsed.expenses) window.finState.expenses = parsed.expenses;
-      if (parsed.debts) window.finState.debts = parsed.debts;
-      if (parsed.years) window.finState.years = parsed.years;
-      if (parsed.currentYear) window.finState.currentYear = parsed.currentYear;
-      generateHuurSchulden(); // ensure auto debts still present
-      populateYearSelect();
-      render();
-      showToast("☁️ Cloud data geladen!");
-    }
-  } catch(e) { console.warn("Load error:", e); }
+    await setDoc(doc(db,'sse_finance',currentUser.uid), { data: JSON.stringify(S), ts: Date.now() });
+  } catch(e){ console.warn('fbSave error',e); }
 }
 
-function updateAuthUI(user) {
+async function fbLoad(uid) {
+  try {
+    const snap = await getDoc(doc(db,'sse_finance',uid));
+    if (snap.exists()) {
+      const p = JSON.parse(snap.data().data);
+      if (p.incomes)  S.incomes  = p.incomes;
+      if (p.expenses) S.expenses = p.expenses;
+      if (p.debts)    S.debts    = p.debts;
+      if (p.years)    S.years    = p.years;
+      if (p.year)     S.year     = p.year;
+      ensureAutoDebts();
+      buildYearSel();
+      render();
+      toast('☁️ Cloud data geladen!');
+    }
+  } catch(e){ console.warn('fbLoad error',e); }
+}
+
+function renderAuthUI() {
   const el = document.getElementById('auth-area');
   if (!el) return;
-  if (user) {
-    el.innerHTML = `<div style="display:flex;align-items:center;gap:8px">
-      <img src="${user.photoURL||''}" style="width:26px;height:26px;border-radius:50%;border:2px solid var(--accent1)" onerror="this.style.display='none'">
-      <span style="font-size:11px;font-weight:700;color:var(--text2);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${user.displayName||user.email}</span>
-      <button class="btn btn-secondary btn-sm" onclick="window._signOut()">Uitloggen</button>
+  if (currentUser) {
+    el.innerHTML = `<div style="display:flex;align-items:center;gap:7px">
+      <img src="${currentUser.photoURL||''}" style="width:24px;height:24px;border-radius:50%;border:2px solid var(--accent1)" onerror="this.style.display='none'">
+      <span style="font-size:11px;font-weight:700;color:var(--text2);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${currentUser.displayName||currentUser.email}</span>
+      <button class="btn btn-secondary btn-sm" onclick="window._out()">Uitloggen</button>
     </div>`;
   } else {
-    el.innerHTML = `<button class="btn btn-primary btn-sm" onclick="window._signIn()">
-      <svg width="13" height="13" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:4px"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+    el.innerHTML = `<button class="btn btn-primary btn-sm" onclick="window._in()">
+      <svg width="12" height="12" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:3px"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
       Google ile giriş yap
     </button>`;
   }
 }
+window._in  = () => signInWithPopup(auth, prov).catch(()=>{});
+window._out = async () => { if(!confirm('Uitloggen?'))return; await signOut(auth); currentUser=null; renderAuthUI(); };
+window.fbSave = fbSave;
+window.fbLoad = fbLoad;
+
 </script>
-
 <script>
-// ===================== STATE =====================
-const INCOME_CATS = [
-  { id: 'erasmus', label: 'Erasmus+', icon: '🇪🇺' },
-  { id: 'donatie', label: 'Donatie/Bağış', icon: '🎁' },
-  { id: 'lening', label: 'Lening (borç)', icon: '🔄' },
-  { id: 'lidgeld', label: 'Lidgeld', icon: '👥' },
-  { id: 'subsidie', label: 'Subsidie', icon: '🏛️' },
-  { id: 'overig_in', label: 'Overig', icon: '➕' },
+// ── STATE ──────────────────────────────────────────────────────
+const IBAN_DERNEK  = 'BE68 7390 3074 2634';
+const IBAN_MUSTAFA = 'BE10 7350 7584 5904';
+
+const MAANDEN = ['Januari','Februari','Maart','April','Mei','Juni','Juli','Augustus','September','Oktober','November','December'];
+const MSHORT  = ['Jan','Feb','Maa','Apr','Mei','Jun','Jul','Aug','Sep','Okt','Nov','Dec'];
+
+const ICAT = [
+  {id:'erasmus',  label:'Erasmus+',      icon:'🇪🇺'},
+  {id:'donatie',  label:'Donatie/Bağış', icon:'🎁'},
+  {id:'lening',   label:'Lening (borç)', icon:'🔄'},
+  {id:'lidgeld',  label:'Lidgeld',       icon:'👥'},
+  {id:'subsidie', label:'Subsidie',      icon:'🏛️'},
+  {id:'overig_in',label:'Overig',        icon:'➕'},
 ];
-const EXPENSE_CATS = [
-  { id: 'kira', label: 'Huur/Kira', icon: '🏠' },
-  { id: 'bank', label: 'Bankkosten', icon: '🏦' },
-  { id: 'materiaal', label: 'Materiaal', icon: '📦' },
-  { id: 'activiteit', label: 'Activiteit', icon: '🎯' },
-  { id: 'admin', label: 'Administratie', icon: '📋' },
-  { id: 'terugbetaling', label: 'Lening terugbetaling', icon: '💳' },
-  { id: 'overig_uit', label: 'Overig', icon: '➖' },
+const ECAT = [
+  {id:'kira',          label:'Huur/Kira',         icon:'🏠'},
+  {id:'bank',          label:'Bankkosten',         icon:'🏦'},
+  {id:'materiaal',     label:'Materiaal',          icon:'📦'},
+  {id:'activiteit',    label:'Activiteit',         icon:'🎯'},
+  {id:'admin',         label:'Administratie',      icon:'📋'},
+  {id:'terugbetaling', label:'Lening terugbetal.', icon:'💳'},
+  {id:'overig_uit',    label:'Overig',             icon:'➖'},
 ];
 
-const MONTHS = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
-const MONTHS_FULL = ['Januari','Februari','Maart','April','Mei','Juni','Juli','Augustus','September','Oktober','November','December'];
+let S = { year: new Date().getFullYear(), years:[new Date().getFullYear()], incomes:[], expenses:[], debts:[] };
+let view = 'overzicht';
+let fMonth = 'all', fCat = 'all';
 
-window.finState = {
-  currentYear: new Date().getFullYear(),
-  years: [new Date().getFullYear()],
-  incomes: [],   // { id, date, amount, category, description, year }
-  expenses: [],  // { id, date, amount, category, description, year }
-  debts: [],     // { id, name, total, paid, category, description, dueDate, year }
-};
-
-let currentView = 'overzicht';
-let filterMonth = 'all';
-let filterCat = 'all';
-
-function uid() { return Math.random().toString(36).substr(2, 9); }
-
-function saveState() {
-  try {
-    const json = JSON.stringify(window.finState);
-    localStorage.setItem('sse_finance_v1', json);
-  } catch(e) { console.warn('localStorage save failed:', e); }
-  // Firebase save (async, non-blocking)
-  try {
-    if (window._saveData) window._saveData();
-  } catch(e) { console.warn('Firebase save failed:', e); }
+// ── PERSIST ───────────────────────────────────────────────────
+function save() {
+  try { localStorage.setItem('sse_v2', JSON.stringify(S)); } catch(e){}
+  if(window.fbSave) window.fbSave();
 }
 
 function loadLocal() {
   try {
-    const saved = localStorage.getItem('sse_finance_v1');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      // Merge carefully - arrays should replace, not merge
-      if (parsed.incomes) window.finState.incomes = parsed.incomes;
-      if (parsed.expenses) window.finState.expenses = parsed.expenses;
-      if (parsed.debts) window.finState.debts = parsed.debts;
-      if (parsed.years) window.finState.years = parsed.years;
-      if (parsed.currentYear) window.finState.currentYear = parsed.currentYear;
-      console.log('Local loaded: incomes:', window.finState.incomes.length,
-        'expenses:', window.finState.expenses.length, 'debts:', window.finState.debts.length);
+    const raw = localStorage.getItem('sse_v2');
+    if (!raw) return;
+    const p = JSON.parse(raw);
+    if (p.incomes)  S.incomes  = p.incomes;
+    if (p.expenses) S.expenses = p.expenses;
+    if (p.debts)    S.debts    = p.debts;
+    if (p.years)    S.years    = p.years;
+    if (p.year)     S.year     = p.year;
+  } catch(e){}
+}
+
+// ── AUTO DEBTS ────────────────────────────────────────────────
+function ensureAutoDebts() {
+  const now  = new Date();
+  let changed = false;
+
+  // Monthly huur Jan 2026 → now
+  for (let y = 2026; y <= now.getFullYear(); y++) {
+    const mEnd = (y === now.getFullYear()) ? now.getMonth() : 11;
+    for (let m = 0; m <= mEnd; m++) {
+      const name = `Mustafa Turk — Huur ${MAANDEN[m]} ${y}`;
+      if (!S.debts.find(d => d.name === name)) {
+        S.debts.push({ id:uid(), name, total:500, paid:0,
+          dueDate:`${y}-${String(m+1).padStart(2,'0')}-02`,
+          note:'Automatisch — maandelijkse huur Zavelputstraat 18', year:y });
+        changed = true;
+      }
     }
-  } catch(e) { console.warn('loadLocal error:', e); }
+  }
+
+  // One-time vaste schulden
+  const vaste = [
+    { name:'KBC Business PRO — jaarlijkse kost 2026', total:51,     dueDate:'2026-03-05', note:`Bankkosten jaarlijks. Van: ${IBAN_MUSTAFA} → Naar: ${IBAN_DERNEK}`, year:2026 },
+    { name:'FOD Justitie — registratiekosten VZW',    total:173.76, dueDate:'2026-01-02', note:'Neerlegging statuten + publicatie Belgisch Staatsblad. Registratie Smart Skills Education VZW', year:2026 },
+  ];
+  vaste.forEach(v => {
+    if (!S.debts.find(d => d.name === v.name)) {
+      S.debts.push({ id:uid(), paid:0, ...v });
+      changed = true;
+    }
+  });
+
+  if (changed) save();
 }
 
-function esc(s) {
-  if (!s && s !== 0) return '';
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+// ── HELPERS ──────────────────────────────────────────────────
+function uid() { return Math.random().toString(36).slice(2,10); }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmt(n){ return '€\u00a0' + parseFloat(n||0).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.'); }
+function fmtD(iso){ if(!iso)return''; const[y,m,d]=iso.split('-'); return `${d}/${m}/${y}`; }
+function todayISO(){ return new Date().toISOString().slice(0,10); }
+function catL(id,inc){ return (inc?ICAT:ECAT).find(c=>c.id===id)?.label||id; }
+function catI(id,inc){ return (inc?ICAT:ECAT).find(c=>c.id===id)?.icon||'📌'; }
+function sumOf(arr){ return arr.reduce((s,x)=>s+parseFloat(x.amount||0),0); }
+function getYr(x){ return x.year||(x.date?new Date(x.date).getFullYear():S.year); }
 
-function fmt(n) {
-  return '€ ' + parseFloat(n || 0).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-}
-
-function fmtDate(d) {
-  if (!d) return '';
-  const dt = new Date(d + 'T12:00:00'); // avoid timezone shift
-  const day = String(dt.getDate()).padStart(2,'0');
-  const month = String(dt.getMonth()+1).padStart(2,'0');
-  return `${day}/${month}/${dt.getFullYear()}`;
-}
-
-// ===================== YEAR =====================
-function populateYearSelect() {
-  const sel = document.getElementById('year-select');
+// ── YEAR SELECT ───────────────────────────────────────────────
+function buildYearSel() {
+  const sel = document.getElementById('year-sel');
   if (!sel) return;
-  const years = [...new Set([...window.finState.years, window.finState.currentYear])].sort((a,b) => b-a);
-  sel.innerHTML = years.map(y => `<option value="${y}" ${y==window.finState.currentYear?'selected':''}>${y}</option>`).join('');
+  const yrs = [...new Set([...S.years, S.year])].sort((a,b)=>b-a);
+  sel.innerHTML = yrs.map(y=>`<option value="${y}" ${y==S.year?'selected':''}>${y}</option>`).join('');
 }
+window.setYear = (y) => { S.year=parseInt(y); if(!S.years.includes(parseInt(y)))S.years.push(parseInt(y)); save(); render(); };
+window.addYear = () => {
+  const y=parseInt(prompt('Nieuw jaar (bijv. 2027):'));
+  if(!y||isNaN(y))return;
+  if(!S.years.includes(y))S.years.push(y);
+  S.year=y; save(); buildYearSel(); render(); toast(`✅ ${y} toegevoegd`);
+};
 
-function switchYear(y) {
-  window.finState.currentYear = parseInt(y);
-  if (!window.finState.years.includes(parseInt(y))) window.finState.years.push(parseInt(y));
-  saveState();
+// ── NAVIGATION ────────────────────────────────────────────────
+window.go = (v) => {
+  view=v; fMonth='all'; fCat='all';
+  try { localStorage.setItem('sse_view',v); } catch(e){}
   render();
+};
+
+function render() {
+  // nav tabs
+  document.querySelectorAll('.nav-tab').forEach((t,i)=>{
+    t.classList.toggle('active',['overzicht','inkomsten','uitgaven','schulden','grafieken'][i]===view);
+  });
+  // destroy charts
+  if(typeof Chart!=='undefined') Object.values(Chart.instances||{}).forEach(c=>{try{c.destroy();}catch(e){}});
+  // render view
+  const app = document.getElementById('app');
+  if (view==='overzicht')   app.innerHTML = vOverzicht();
+  else if(view==='inkomsten') app.innerHTML = vInkomsten();
+  else if(view==='uitgaven')  app.innerHTML = vUitgaven();
+  else if(view==='schulden')  app.innerHTML = vSchulden();
+  else if(view==='grafieken'){ app.innerHTML = vGrafieken(); setTimeout(drawCharts,60); }
 }
 
-function addYear() {
-  const y = parseInt(prompt('Nieuw jaar toevoegen (bijv. 2027):'));
-  if (!y || isNaN(y)) return;
-  if (!window.finState.years.includes(y)) window.finState.years.push(y);
-  window.finState.currentYear = y;
-  saveState();
-  populateYearSelect();
-  render();
-  showToast(`✅ ${y} toegevoegd`);
-}
-
-// ===================== FILTERS =====================
-function getFiltered(arr) {
+// ── FILTER HELPERS ────────────────────────────────────────────
+function filtered(arr) {
   return arr.filter(x => {
-    const yr = x.year || new Date(x.date).getFullYear();
-    if (yr != window.finState.currentYear) return false;
-    if (filterMonth !== 'all') {
-      const m = new Date(x.date).getMonth();
-      if (m != filterMonth) return false;
-    }
-    if (filterCat !== 'all' && x.category !== filterCat) return false;
+    if (getYr(x) != S.year) return false;
+    if (fMonth !== 'all' && new Date(x.date).getMonth() != fMonth) return false;
+    if (fCat   !== 'all' && x.category !== fCat) return false;
     return true;
   });
 }
 
-function totalOf(arr) {
-  return arr.reduce((s, x) => s + parseFloat(x.amount || 0), 0);
+function filterBar(type) {
+  const cats = type==='income'?ICAT:ECAT;
+  return `<div class="filter-bar">
+    <span class="chip ${fMonth==='all'?'active':''}" onclick="fMonth='all';render()">Alle maanden</span>
+    ${MAANDEN.map((m,i)=>`<span class="chip ${fMonth==i?'active':''}" onclick="fMonth=${i};render()">${m.slice(0,3)}</span>`).join('')}
+  </div>
+  <div class="filter-bar">
+    <span class="chip ${fCat==='all'?'active':''}" onclick="fCat='all';render()">Alle</span>
+    ${cats.map(c=>`<span class="chip ${fCat===c.id?'active':''}" onclick="fCat='${c.id}';render()">${c.icon} ${c.label}</span>`).join('')}
+  </div>`;
 }
 
+// ── VIEWS ──────────────────────────────────────────────────────
+function vOverzicht() {
+  const yr = S.year;
+  const inc = S.incomes.filter(x=>getYr(x)==yr);
+  const exp = S.expenses.filter(x=>getYr(x)==yr);
+  const tIn = sumOf(inc), tOut = sumOf(exp);
+  const tDebt = S.debts.reduce((s,d)=>s+Math.max(0,parseFloat(d.total||0)-parseFloat(d.paid||0)),0);
+  const bal = tIn - tOut;
 
-// Date helpers for modals
-function todayDMY() {
-  const d = new Date();
-  return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') + '/' + d.getFullYear();
-}
-function isoToDmy(iso) {
-  if (!iso) return '';
-  const parts = iso.split('-');
-  if (parts.length === 3) return parts[2] + '/' + parts[1] + '/' + parts[0];
-  return iso;
-}
+  const mData = MAANDEN.map((_,i)=>({
+    mIn:  inc.filter(x=>new Date(x.date).getMonth()===i).reduce((s,x)=>s+parseFloat(x.amount||0),0),
+    mOut: exp.filter(x=>new Date(x.date).getMonth()===i).reduce((s,x)=>s+parseFloat(x.amount||0),0),
+  }));
 
-// ===================== RENDER =====================
-// Destroy all Chart.js instances before re-rendering to avoid canvas reuse errors
-function destroyCharts() {
-  Object.values(Chart.instances || {}).forEach(c => { try { c.destroy(); } catch(e) {} });
-}
+  const recent = [...inc.map(x=>({...x,t:'in'})),...exp.map(x=>({...x,t:'out'}))]
+    .sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,10);
 
-function render() {
-  destroyCharts();
-  renderNavTabs();
-  const m = document.getElementById('main-content');
-  if (currentView === 'overzicht') m.innerHTML = renderOverzicht();
-  else if (currentView === 'inkomsten') m.innerHTML = renderInkomsten();
-  else if (currentView === 'uitgaven') m.innerHTML = renderUitgaven();
-  else if (currentView === 'schulden') m.innerHTML = renderSchulden();
-  else if (currentView === 'grafieken') { m.innerHTML = renderGrafieken(); setTimeout(renderCharts, 50); }
-}
-
-function renderNavTabs() {
-  const views = ['overzicht','inkomsten','uitgaven','schulden','grafieken'];
-  document.querySelectorAll('.nav-tab').forEach((t,i) => {
-    t.classList.toggle('active', views[i] === currentView);
-  });
-}
-
-function switchView(v) {
-  currentView = v;
-  filterMonth = 'all';
-  filterCat = 'all';
-  try { localStorage.setItem('sse_view', v); } catch(e) {}
-  render();
-}
-
-// ===================== OVERZICHT =====================
-function renderOverzicht() {
-  const yr = window.finState.currentYear;
-  const incomes = window.finState.incomes.filter(x => (x.year||new Date(x.date).getFullYear()) == yr);
-  const expenses = window.finState.expenses.filter(x => (x.year||new Date(x.date).getFullYear()) == yr);
-  const totalIn = totalOf(incomes);
-  const totalOut = totalOf(expenses);
-  const totalDebt = window.finState.debts.reduce((s,d) => s + Math.max(0, parseFloat(d.total||0) - parseFloat(d.paid||0)), 0);
-  const balance = totalIn - totalOut;
-
-  const monthData = MONTHS.map((m, i) => {
-    const mIn = incomes.filter(x => new Date(x.date).getMonth() === i).reduce((s,x) => s+parseFloat(x.amount||0), 0);
-    const mOut = expenses.filter(x => new Date(x.date).getMonth() === i).reduce((s,x) => s+parseFloat(x.amount||0), 0);
-    return { m, mIn, mOut, sal: mIn - mOut };
-  });
-
-  const all = [
-    ...incomes.map(x => ({...x, type:'in'})),
-    ...expenses.map(x => ({...x, type:'out'}))
-  ].sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 10);
-
-  const incByCat = INCOME_CATS.map(c => ({
-    ...c, total: incomes.filter(x=>x.category===c.id).reduce((s,x)=>s+parseFloat(x.amount||0),0)
-  })).filter(c=>c.total>0);
-
-  const expByCat = EXPENSE_CATS.map(c => ({
-    ...c, total: expenses.filter(x=>x.category===c.id).reduce((s,x)=>s+parseFloat(x.amount||0),0)
-  })).filter(c=>c.total>0);
-
-  const openDebts = window.finState.debts.filter(d => parseFloat(d.paid||0) < parseFloat(d.total||0));
+  const incByCat = ICAT.map(c=>({...c,tot:inc.filter(x=>x.category===c.id).reduce((s,x)=>s+parseFloat(x.amount||0),0)})).filter(c=>c.tot>0);
+  const expByCat = ECAT.map(c=>({...c,tot:exp.filter(x=>x.category===c.id).reduce((s,x)=>s+parseFloat(x.amount||0),0)})).filter(c=>c.tot>0);
+  const openDebts = S.debts.filter(d=>parseFloat(d.paid||0)<parseFloat(d.total||0));
 
   return `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px">
-      <div style="font-family:'Playfair Display',serif;font-size:24px">📊 Overzicht ${yr}</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn btn-secondary btn-sm" onclick="addYear()">+ Jaar</button>
-        <button class="btn btn-secondary btn-sm" onclick="exportPDF()">📄 PDF afdrukken</button>
-        <button class="btn btn-secondary btn-sm" onclick="exportCSV()">📊 CSV exporteren</button>
-      </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+    <div style="font-family:'Playfair Display',serif;font-size:22px">📊 Overzicht ${yr}</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="btn btn-secondary btn-sm" onclick="addYear()">+ Jaar</button>
+      <button class="btn btn-secondary btn-sm" onclick="window.print()">📄 PDF</button>
+      <button class="btn btn-secondary btn-sm" onclick="doCSV()">📊 CSV</button>
     </div>
-
-    <div class="stats-grid">
-      <div class="stat-card income">
-        <div class="stat-val" style="color:#16a34a">${fmt(totalIn)}</div>
-        <div class="stat-label">💚 Totaal Inkomsten</div>
-      </div>
-      <div class="stat-card expense">
-        <div class="stat-val" style="color:#dc2626">${fmt(totalOut)}</div>
-        <div class="stat-label">💸 Totaal Uitgaven</div>
-      </div>
-      <div class="stat-card debt">
-        <div class="stat-val" style="color:#ea580c">${fmt(totalDebt)}</div>
-        <div class="stat-label">🔴 Open Schulden</div>
-      </div>
-      <div class="stat-card ${balance >= 0 ? 'balance-pos' : 'balance-neg'}">
-        <div class="stat-val">${fmt(balance)}</div>
-        <div class="stat-label">${balance >= 0 ? '✅ Netto Saldo' : '⚠️ Negatief Saldo'}</div>
-      </div>
-    </div>
-
-    <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:18px;margin-bottom:18px">
-      <div class="card" style="margin-bottom:0">
-        <div class="section-label">📅 Maandoverzicht ${yr}</div>
-        <div class="tbl-wrap"><table>
-          <thead><tr><th>Maand</th><th>Inkomsten</th><th>Uitgaven</th><th>Saldo</th></tr></thead>
-          <tbody>
-            ${monthData.map((d,i) => {
-              if (d.mIn === 0 && d.mOut === 0) return '<tr><td style="color:var(--text3);font-size:11px">' + MONTHS_FULL[i] + '</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td></tr>';
-              return '<tr><td style="font-weight:700">' + MONTHS_FULL[i] + '</td><td class="amount-in">' + fmt(d.mIn) + '</td><td class="amount-out">' + fmt(d.mOut) + '</td><td class="' + (d.sal>=0?'amount-in':'amount-out') + '" style="font-weight:800">' + fmt(d.sal) + '</td></tr>';
-            }).join('')}
-            <tr style="background:var(--cream);font-weight:900;border-top:2px solid var(--border)">
-              <td>TOTAAL</td>
-              <td class="amount-in">${fmt(totalIn)}</td>
-              <td class="amount-out">${fmt(totalOut)}</td>
-              <td class="${balance>=0?'amount-in':'amount-out'}">${fmt(balance)}</td>
-            </tr>
-          </tbody>
-        </table></div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:14px">
-        <div class="card" style="margin-bottom:0">
-          <div class="section-label">🕐 Recente transacties</div>
-          ${all.length === 0 ? '<p style="color:var(--text3);font-size:12px">Nog geen transacties</p>' :
-            all.map(x => '<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)"><div style="flex:1;min-width:0"><div style="font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + esc(x.description||getCatLabel(x.category, x.type==="in")) + '</div><div style="font-size:9px;color:var(--text3)">' + fmtDate(x.date) + ' · ' + getCatIcon(x.category, x.type==="in") + ' ' + getCatLabel(x.category, x.type==="in") + '</div></div><span class="' + (x.type==="in"?'amount-in':'amount-out') + '" style="font-size:12px;font-weight:800;margin-left:8px;white-space:nowrap">' + (x.type==="in"?'+':'-') + fmt(x.amount) + '</span></div>').join('')}
-        </div>
-        ${openDebts.length > 0 ? '<div class="card" style="margin-bottom:0;background:linear-gradient(135deg,#fff7ed,#ffedd5);border-color:#fdba74"><div class="section-label" style="color:#9a3412">🔴 Openstaande schulden</div>' + openDebts.slice(0,4).map(d => { const rem = Math.max(0, parseFloat(d.total||0)-parseFloat(d.paid||0)); return '<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #fde68a;font-size:12px"><span style="font-weight:700">' + esc(d.name) + '</span><span style="color:#ea580c;font-weight:800">' + fmt(rem) + '</span></div>'; }).join('') + (openDebts.length > 4 ? '<div style="font-size:10px;color:#9a3412;margin-top:6px">+' + (openDebts.length-4) + ' meer</div>' : '') + '</div>' : ''}
-      </div>
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px">
-      <div class="card" style="margin-bottom:0">
-        <div class="section-label">💚 Inkomsten per categorie</div>
-        ${incByCat.length === 0 ? '<p style="color:var(--text3);font-size:12px">Nog geen inkomsten</p>' :
-          incByCat.map(c => '<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border)"><span style="font-size:12px;font-weight:700">' + c.icon + ' ' + c.label + '</span><span class="amount-in">' + fmt(c.total) + '</span></div>').join('')}
-      </div>
-      <div class="card" style="margin-bottom:0">
-        <div class="section-label">💸 Uitgaven per categorie</div>
-        ${expByCat.length === 0 ? '<p style="color:var(--text3);font-size:12px">Nog geen uitgaven</p>' :
-          expByCat.map(c => '<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border)"><span style="font-size:12px;font-weight:700">' + c.icon + ' ' + c.label + '</span><span class="amount-out">' + fmt(c.total) + '</span></div>').join('')}
-      </div>
-    </div>
-
-    <div class="card" style="background:linear-gradient(135deg,#f5e6ff,#fff0fa)">
-      <div style="font-size:13px;font-weight:800;color:var(--accent1);margin-bottom:4px">⚡ Snelle acties</div>
-      <div style="font-size:11px;color:var(--text3);margin-bottom:10px">Voeg snel transacties of schulden toe. Schuld-knoppen voegen een "te betalen" post toe zodat je kunt bijhouden of het betaald is.</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn btn-primary btn-sm" onclick="switchView('inkomsten')">💚 + Inkomst</button>
-        <button class="btn btn-primary btn-sm" onclick="switchView('uitgaven')">💸 + Uitgave</button>
-        <button class="btn btn-primary btn-sm" onclick="switchView('schulden')">🔴 + Schuld</button>
-
-      </div>
-    </div>`;
-}
-
-function quickAdd(type) {
-  const yr = window.finState.currentYear;
-  const addDebt = (name, total, dueDate, note) => {
-    if (window.finState.debts.some(d => d.name === name)) {
-      showToast('⚠️ Al aanwezig: ' + name.slice(0,30) + '...'); return;
-    }
-    window.finState.debts.push({ id: uid(), name, total, paid: 0, dueDate, note, year: yr });
-    saveState(); switchView('schulden');
-  };
-  if (type === 'huur') {
-    switchView('schulden');
-    showToast('🏠 Huur staat al automatisch in Schulden!');
-  } else if (type === 'bank') {
-    addDebt('KBC Business PRO — jaarlijkse kost 2026', 51, '2026-03-05',
-      'KBC bankkosten jaarlijks. Ontvangen 05/03/2026');
-    showToast('🏦 KBC 51€ toegevoegd als schuld!');
-  } else if (type === 'kbc178') {
-    addDebt('KBC — rekening aanvraagkosten 2026', 178, '2026-01-02',
-      'Eenmalige aanvraagkost KBC Business PRO bij oprichting VZW');
-    showToast('💳 KBC 178€ toegevoegd als schuld!');
-  } else if (type === 'fod') {
-    addDebt('FOD Justitie — registratiekosten VZW', 173.76, '2026-01-02',
-      'Neerlegging statuten + publicatie Belgisch Staatsblad');
-    showToast('🏛️ FOD Justitie toegevoegd als schuld!');
-  }
-}
-
-// ===================== INKOMSTEN =====================
-function renderInkomsten() {
-  const items = getFiltered(window.finState.incomes);
-  const total = totalOf(items);
-
-  return `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-      <div style="font-family:'Playfair Display',serif;font-size:22px">💚 Inkomsten ${window.finState.currentYear}</div>
-      <button class="btn btn-primary" onclick="modalAddIncome()">+ Inkomst toevoegen</button>
-    </div>
-    ${renderFilterBar('income')}
-    <div class="card" style="margin-bottom:16px;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-color:#86efac">
-      <div style="font-size:28px;font-weight:900;color:#16a34a">${fmt(total)}</div>
-      <div style="font-size:11px;font-weight:700;color:#16a34a;text-transform:uppercase;letter-spacing:.8px">Totaal inkomsten (gefilterd)</div>
-    </div>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Datum</th><th>Categorie</th><th>Beschrijving</th><th>Bedrag</th><th></th></tr></thead>
+  </div>
+  <div class="stats-grid">
+    <div class="stat s-in"><div class="stat-val" style="color:#16a34a">${fmt(tIn)}</div><div class="stat-label">💚 Inkomsten</div></div>
+    <div class="stat s-out"><div class="stat-val" style="color:#dc2626">${fmt(tOut)}</div><div class="stat-label">💸 Uitgaven</div></div>
+    <div class="stat s-debt"><div class="stat-val" style="color:#ea580c">${fmt(tDebt)}</div><div class="stat-label">🔴 Open Schulden</div></div>
+    <div class="stat ${bal>=0?'s-pos':'s-neg'}"><div class="stat-val">${fmt(bal)}</div><div class="stat-label">${bal>=0?'✅ Netto Saldo':'⚠️ Negatief'}</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-bottom:16px">
+    <div class="card" style="margin-bottom:0">
+      <div class="sec-label">📅 Maandoverzicht ${yr}</div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Maand</th><th>Inkomsten</th><th>Uitgaven</th><th>Saldo</th></tr></thead>
         <tbody>
-          ${items.length === 0 ? `<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:30px">Geen inkomsten gevonden</td></tr>` :
-            items.sort((a,b) => new Date(b.date)-new Date(a.date)).map(x => `<tr>
-              <td style="color:var(--text3);white-space:nowrap">${fmtDate(x.date)}</td>
-              <td><span class="cat-badge cat-${x.category}">${getCatIcon(x.category,true)} ${getCatLabel(x.category,true)}</span></td>
-              <td style="max-width:220px">
-                <div>${esc(x.description)}</div>
-                ${(x.ibanVan||x.ibanAan) ? `<div style="font-size:9px;color:var(--text3);margin-top:2px">${x.ibanVan?'Van: '+x.ibanVan:''}${x.ibanVan&&x.ibanAan?' → ':''}${x.ibanAan?'Naar: '+x.ibanAan:''}</div>` : ''}
-              </td>
-              <td class="amount-in" style="white-space:nowrap">${fmt(x.amount)}</td>
-              <td>
-                <div style="display:flex;gap:4px">
-                  <button class="btn btn-secondary btn-sm btn-icon" onclick="modalEditIncome('${x.id}')">✏️</button>
-                  <button class="btn btn-danger btn-sm btn-icon" onclick="deleteIncome('${x.id}')">🗑</button>
-                </div>
-              </td>
-            </tr>`).join('')}
+          ${mData.map((d,i)=>{
+            if(!d.mIn&&!d.mOut) return `<tr><td style="color:var(--text3);font-size:11px">${MAANDEN[i]}</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">—</td></tr>`;
+            const s=d.mIn-d.mOut;
+            return `<tr><td style="font-weight:700">${MAANDEN[i]}</td><td class="ain">${fmt(d.mIn)}</td><td class="aout">${fmt(d.mOut)}</td><td class="${s>=0?'ain':'aout'}">${fmt(s)}</td></tr>`;
+          }).join('')}
+          <tr style="background:var(--cream);font-weight:900"><td>TOTAAL</td><td class="ain">${fmt(tIn)}</td><td class="aout">${fmt(tOut)}</td><td class="${bal>=0?'ain':'aout'}">${fmt(bal)}</td></tr>
         </tbody>
-      </table>
-    </div>`;
-}
-
-// ===================== UITGAVEN =====================
-function renderUitgaven() {
-  const items = getFiltered(window.finState.expenses);
-  const total = totalOf(items);
-
-  return `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-      <div style="font-family:'Playfair Display',serif;font-size:22px">💸 Uitgaven ${window.finState.currentYear}</div>
-      <button class="btn btn-primary" onclick="modalAddExpense()">+ Uitgave toevoegen</button>
+      </table></div>
     </div>
-    ${renderFilterBar('expense')}
-    <div class="card" style="margin-bottom:16px;background:linear-gradient(135deg,#fef2f2,#fee2e2);border-color:#fca5a5">
-      <div style="font-size:28px;font-weight:900;color:#dc2626">${fmt(total)}</div>
-      <div style="font-size:11px;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:.8px">Totaal uitgaven (gefilterd)</div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="card" style="margin-bottom:0;flex:1">
+        <div class="sec-label">🕐 Recente transacties</div>
+        ${recent.length===0?'<p style="color:var(--text3);font-size:12px">Nog geen transacties</p>':
+          recent.map(x=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border)">
+            <div style="flex:1;min-width:0"><div style="font-size:11px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(x.description||catL(x.category,x.t==='in'))}</div>
+            <div style="font-size:9px;color:var(--text3)">${fmtD(x.date)} · ${catI(x.category,x.t==='in')} ${catL(x.category,x.t==='in')}</div></div>
+            <span class="${x.t==='in'?'ain':'aout'}" style="font-size:12px;font-weight:800;margin-left:8px;white-space:nowrap">${x.t==='in'?'+':'-'}${fmt(x.amount)}</span>
+          </div>`).join('')}
+      </div>
+      ${openDebts.length>0?`<div class="card" style="margin-bottom:0;background:linear-gradient(135deg,#fff7ed,#ffedd5);border-color:#fdba74">
+        <div class="sec-label" style="color:#9a3412">🔴 Open schulden</div>
+        ${openDebts.slice(0,4).map(d=>{const r=Math.max(0,parseFloat(d.total||0)-parseFloat(d.paid||0));return`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #fde68a;font-size:11px"><span style="font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:170px">${esc(d.name)}</span><span style="color:#ea580c;font-weight:800;white-space:nowrap;margin-left:6px">${fmt(r)}</span></div>`;}).join('')}
+        ${openDebts.length>4?`<div style="font-size:10px;color:#9a3412;margin-top:5px">+${openDebts.length-4} meer</div>`:''}
+      </div>`:''}
     </div>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Datum</th><th>Categorie</th><th>Beschrijving</th><th>Bedrag</th><th></th></tr></thead>
-        <tbody>
-          ${items.length === 0 ? `<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:30px">Geen uitgaven gevonden</td></tr>` :
-            items.sort((a,b) => new Date(b.date)-new Date(a.date)).map(x => `<tr>
-              <td style="color:var(--text3);white-space:nowrap">${fmtDate(x.date)}</td>
-              <td><span class="cat-badge cat-${x.category}">${getCatIcon(x.category,false)} ${getCatLabel(x.category,false)}</span></td>
-              <td style="max-width:220px">
-                <div>${esc(x.description)}</div>
-                ${(x.ibanVan||x.ibanAan) ? `<div style="font-size:9px;color:var(--text3);margin-top:2px">${x.ibanVan?'Van: '+x.ibanVan:''}${x.ibanVan&&x.ibanAan?' → ':''}${x.ibanAan?'Aan: '+x.ibanAan:''}</div>` : ''}
-              </td>
-              <td class="amount-out" style="white-space:nowrap">${fmt(x.amount)}</td>
-              <td>
-                <div style="display:flex;gap:4px">
-                  <button class="btn btn-secondary btn-sm btn-icon" onclick="modalEditExpense('${x.id}')">✏️</button>
-                  <button class="btn btn-danger btn-sm btn-icon" onclick="deleteExpense('${x.id}')">🗑</button>
-                </div>
-              </td>
-            </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>`;
-}
-
-// ===================== SCHULDEN =====================
-function renderSchulden() {
-  const debts = window.finState.debts;
-  const totalDebt = debts.reduce((s,d) => s + Math.max(0, parseFloat(d.total||0) - parseFloat(d.paid||0)), 0);
-  const paid = debts.filter(d => parseFloat(d.paid||0) >= parseFloat(d.total||0))
-    .sort((a,b) => new Date(b.dueDate||'2099') - new Date(a.dueDate||'2099'));
-  const open = debts.filter(d => parseFloat(d.paid||0) < parseFloat(d.total||0))
-    .sort((a,b) => new Date(b.dueDate||'2099') - new Date(a.dueDate||'2099'));
-
-  return `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-      <div style="font-family:'Playfair Display',serif;font-size:22px">🔴 Schulden & Te betalen</div>
-      <button class="btn btn-primary" onclick="modalAddDebt()">+ Schuld toevoegen</button>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+    <div class="card" style="margin-bottom:0">
+      <div class="sec-label">💚 Inkomsten per categorie</div>
+      ${incByCat.length===0?'<p style="color:var(--text3);font-size:12px">Nog geen inkomsten</p>':
+        incByCat.map(c=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px"><span style="font-weight:700">${c.icon} ${c.label}</span><span class="ain">${fmt(c.tot)}</span></div>`).join('')}
     </div>
-
-    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
-      <div class="stat-card debt">
-        <div class="stat-val" style="color:#ea580c">${fmt(totalDebt)}</div>
-        <div class="stat-label">🔴 Nog te betalen</div>
-      </div>
-      <div class="stat-card" style="background:linear-gradient(135deg,#fef2f2,#fee2e2);border-color:#fca5a5">
-        <div class="stat-val" style="color:#dc2626">${open.length}</div>
-        <div class="stat-label">⚠️ Open schulden</div>
-      </div>
-      <div class="stat-card" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-color:#86efac">
-        <div class="stat-val" style="color:#16a34a">${paid.length}</div>
-        <div class="stat-label">✅ Afbetaald</div>
-      </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="sec-label">💸 Uitgaven per categorie</div>
+      ${expByCat.length===0?'<p style="color:var(--text3);font-size:12px">Nog geen uitgaven</p>':
+        expByCat.map(c=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px"><span style="font-weight:700">${c.icon} ${c.label}</span><span class="aout">${fmt(c.tot)}</span></div>`).join('')}
     </div>
-
-    ${open.length > 0 ? `
-      <div class="card">
-        <div class="section-label">⚠️ Openstaande schulden</div>
-        ${open.map(d => renderDebtCard(d)).join('')}
-      </div>` : ''}
-
-    ${paid.length > 0 ? `
-      <div class="card">
-        <div class="section-label">✅ Afbetaalde schulden</div>
-        ${paid.map(d => renderDebtCard(d)).join('')}
-      </div>` : ''}
-
-    ${debts.length === 0 ? `<div class="card" style="text-align:center;padding:40px;color:var(--text3)">Nog geen schulden ingevoerd</div>` : ''}`;
-}
-
-function renderDebtCard(d) {
-  const total = parseFloat(d.total || 0);
-  const paid = parseFloat(d.paid || 0);
-  const remaining = Math.max(0, total - paid);
-  const pct = total > 0 ? Math.min(100, (paid/total)*100) : 0;
-  const isFullyPaid = remaining <= 0;
-
-  return `<div style="padding:14px;border:1.5px solid var(--border);border-radius:10px;margin-bottom:10px;background:${isFullyPaid?'#f0fdf4':'#fff'}">
-    <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:8px">
-      <div style="flex:1">
-        <div style="font-weight:800;font-size:14px">${esc(d.name)}</div>
-        ${d.note ? `<div style="font-size:11px;color:var(--text2);margin-top:2px">📝 ${esc(d.note)}</div>` : ''}
-        <div style="display:flex;gap:12px;margin-top:4px;flex-wrap:wrap">
-          <span style="font-size:10px;color:var(--text3)">💰 Totaal: <b>${fmt(total)}</b></span>
-          <span style="font-size:10px;color:#16a34a">✅ Betaald: <b>${fmt(paid)}</b></span>
-          <span style="font-size:10px;color:#ea580c">🔴 Resterend: <b>${fmt(remaining)}</b></span>
-          ${d.dueDate ? `<span style="font-size:10px;color:var(--text3)">📅 Vervaldag: <b>${fmtDate(d.dueDate)}</b></span>` : ''}
-        </div>
-      </div>
-      <div style="text-align:right;margin-left:12px">
-        <div style="font-size:22px;font-weight:900;color:${isFullyPaid?'#16a34a':'#ea580c'}">${fmt(remaining)}</div>
-        <div style="font-size:10px;color:var(--text3)">nog te betalen</div>
-      </div>
-    </div>
-    <div class="debt-progress">
-      <div class="debt-progress-fill" style="width:${pct}%"></div>
-    </div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
-      <span style="font-size:10px;color:var(--text3);font-weight:700">${pct.toFixed(0)}% betaald</span>
-      <div style="display:flex;gap:6px">
-        ${!isFullyPaid ? `<button class="btn btn-success btn-sm" onclick="modalPayDebt('${d.id}')">💳 Betaling registreren</button>` : '<span style="font-size:11px;color:#16a34a;font-weight:700">✅ Volledig betaald</span>'}
-        <button class="btn btn-secondary btn-sm btn-icon" onclick="modalEditDebt('${d.id}')">✏️</button>
-        <button class="btn btn-danger btn-sm btn-icon" onclick="deleteDebt('${d.id}')">🗑</button>
-      </div>
+  </div>
+  <div class="card" style="background:linear-gradient(135deg,#f5e6ff,#fff0fa)">
+    <div style="font-size:13px;font-weight:800;color:var(--accent1);margin-bottom:8px">⚡ Snelle acties</div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <button class="btn btn-primary btn-sm" onclick="go('inkomsten')">💚 + Inkomst</button>
+      <button class="btn btn-primary btn-sm" onclick="go('uitgaven')">💸 + Uitgave</button>
+      <button class="btn btn-primary btn-sm" onclick="go('schulden')">🔴 + Schuld</button>
     </div>
   </div>`;
 }
 
-// ===================== GRAFIEKEN =====================
-function renderGrafieken() {
-  const yr = window.finState.currentYear;
-  const incomes = window.finState.incomes.filter(x => (x.year||new Date(x.date).getFullYear()) == yr);
-  const expenses = window.finState.expenses.filter(x => (x.year||new Date(x.date).getFullYear()) == yr);
-  const totalIn = totalOf(incomes);
-  const totalOut = totalOf(expenses);
-  const balance = totalIn - totalOut;
-
+function vInkomsten() {
+  const items = filtered(S.incomes).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const total = sumOf(items);
   return `
-    <div style="font-family:'Playfair Display',serif;font-size:22px;margin-bottom:8px">📈 Grafieken ${yr}</div>
-    <p style="font-size:12px;color:var(--text3);margin-bottom:20px">Alle grafieken tonen gegevens van het jaar <b>${yr}</b>. Totaal inkomsten: <span style="color:#16a34a;font-weight:800">${fmt(totalIn)}</span> | Uitgaven: <span style="color:#dc2626;font-weight:800">${fmt(totalOut)}</span> | Saldo: <span style="color:${balance>=0?'#16a34a':'#dc2626'};font-weight:800">${fmt(balance)}</span></p>
-    <div class="chart-grid">
-      <div class="chart-box">
-        <div class="chart-title">🥧 Inkomsten per categorie</div>
-        <p style="font-size:10px;color:var(--text3);margin-bottom:8px">Welke bronnen leveren het meeste op? (Erasmus, bağış, lening...)</p>
-        <canvas id="chart-income-cat"></canvas>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+    <div style="font-family:'Playfair Display',serif;font-size:22px">💚 Inkomsten ${S.year}</div>
+    <button class="btn btn-primary" onclick="mAddIncome()">+ Inkomst toevoegen</button>
+  </div>
+  ${filterBar('income')}
+  <div class="card" style="margin-bottom:14px;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-color:#86efac">
+    <div style="font-size:26px;font-weight:900;color:#16a34a">${fmt(total)}</div>
+    <div style="font-size:10px;font-weight:700;color:#16a34a;text-transform:uppercase">Totaal inkomsten (gefilterd)</div>
+  </div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Datum</th><th>Categorie</th><th>Beschrijving</th><th>IBAN info</th><th>Bedrag</th><th></th></tr></thead>
+    <tbody>${items.length===0?`<tr><td colspan="6" style="text-align:center;color:var(--text3);padding:28px">Geen inkomsten gevonden</td></tr>`:
+      items.map(x=>`<tr>
+        <td style="color:var(--text3);white-space:nowrap">${fmtD(x.date)}</td>
+        <td><span class="cat-badge cat-${x.category}">${catI(x.category,true)} ${catL(x.category,true)}</span></td>
+        <td style="max-width:180px">${esc(x.description)}</td>
+        <td style="font-size:10px;color:var(--text3);">${x.ibanVan?`Van: ${esc(x.ibanVan)}<br>`:''}${x.ibanAan?`Naar: ${esc(x.ibanAan)}`:''}</td>
+        <td class="ain" style="white-space:nowrap">${fmt(x.amount)}</td>
+        <td><div style="display:flex;gap:3px">
+          <button class="btn btn-secondary btn-sm btn-icon" onclick="mEditIncome('${x.id}')">✏️</button>
+          <button class="btn btn-danger btn-sm btn-icon" onclick="delIncome('${x.id}')">🗑</button>
+        </div></td>
+      </tr>`).join('')}
+    </tbody>
+  </table></div>`;
+}
+
+function vUitgaven() {
+  const items = filtered(S.expenses).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const total = sumOf(items);
+  return `
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+    <div style="font-family:'Playfair Display',serif;font-size:22px">💸 Uitgaven ${S.year}</div>
+    <button class="btn btn-primary" onclick="mAddExpense()">+ Uitgave toevoegen</button>
+  </div>
+  ${filterBar('expense')}
+  <div class="card" style="margin-bottom:14px;background:linear-gradient(135deg,#fef2f2,#fee2e2);border-color:#fca5a5">
+    <div style="font-size:26px;font-weight:900;color:#dc2626">${fmt(total)}</div>
+    <div style="font-size:10px;font-weight:700;color:#dc2626;text-transform:uppercase">Totaal uitgaven (gefilterd)</div>
+  </div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Datum</th><th>Categorie</th><th>Beschrijving</th><th>IBAN info</th><th>Bedrag</th><th></th></tr></thead>
+    <tbody>${items.length===0?`<tr><td colspan="6" style="text-align:center;color:var(--text3);padding:28px">Geen uitgaven gevonden</td></tr>`:
+      items.map(x=>`<tr>
+        <td style="color:var(--text3);white-space:nowrap">${fmtD(x.date)}</td>
+        <td><span class="cat-badge cat-${x.category}">${catI(x.category,false)} ${catL(x.category,false)}</span></td>
+        <td style="max-width:180px">${esc(x.description)}</td>
+        <td style="font-size:10px;color:var(--text3);">${x.ibanVan?`Van: ${esc(x.ibanVan)}<br>`:''}${x.ibanAan?`Aan: ${esc(x.ibanAan)}`:''}</td>
+        <td class="aout" style="white-space:nowrap">${fmt(x.amount)}</td>
+        <td><div style="display:flex;gap:3px">
+          <button class="btn btn-secondary btn-sm btn-icon" onclick="mEditExpense('${x.id}')">✏️</button>
+          <button class="btn btn-danger btn-sm btn-icon" onclick="delExpense('${x.id}')">🗑</button>
+        </div></td>
+      </tr>`).join('')}
+    </tbody>
+  </table></div>`;
+}
+
+function vSchulden() {
+  const all = [...S.debts].sort((a,b)=>new Date(b.dueDate||'2099')-new Date(a.dueDate||'2099'));
+  const open = all.filter(d=>parseFloat(d.paid||0)<parseFloat(d.total||0));
+  const paid = all.filter(d=>parseFloat(d.paid||0)>=parseFloat(d.total||0));
+  const tDebt = open.reduce((s,d)=>s+Math.max(0,parseFloat(d.total||0)-parseFloat(d.paid||0)),0);
+
+  function debtCard(d) {
+    const tot=parseFloat(d.total||0), p=parseFloat(d.paid||0);
+    const rem=Math.max(0,tot-p), pct=tot>0?Math.min(100,p/tot*100):0;
+    const done=rem<=0;
+    return `<div style="padding:13px;border:1.5px solid var(--border);border-radius:10px;margin-bottom:9px;background:${done?'#f0fdf4':'#fff'}">
+      <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:7px">
+        <div style="flex:1">
+          <div style="font-weight:800;font-size:13px">${esc(d.name)}</div>
+          ${d.note?`<div style="font-size:10px;color:var(--text2);margin-top:2px">📝 ${esc(d.note)}</div>`:''}
+          <div style="display:flex;gap:10px;margin-top:4px;flex-wrap:wrap">
+            <span style="font-size:10px;color:var(--text3)">💰 Totaal: <b>${fmt(tot)}</b></span>
+            <span style="font-size:10px;color:#16a34a">✅ Betaald: <b>${fmt(p)}</b></span>
+            <span style="font-size:10px;color:#ea580c">🔴 Resterend: <b>${fmt(rem)}</b></span>
+            ${d.dueDate?`<span style="font-size:10px;color:var(--text3)">📅 Vervaldag: <b>${fmtD(d.dueDate)}</b></span>`:''}
+          </div>
+        </div>
+        <div style="text-align:right;margin-left:10px">
+          <div style="font-size:20px;font-weight:900;color:${done?'#16a34a':'#ea580c'}">${fmt(rem)}</div>
+          <div style="font-size:9px;color:var(--text3)">nog te betalen</div>
+        </div>
       </div>
-      <div class="chart-box">
-        <div class="chart-title">🥧 Uitgaven per categorie</div>
-        <p style="font-size:10px;color:var(--text3);margin-bottom:8px">Waar gaat het meeste geld naartoe? (huur, bank, materiaal...)</p>
-        <canvas id="chart-expense-cat"></canvas>
-      </div>
-      <div class="chart-box">
-        <div class="chart-title">📊 Inkomsten vs Uitgaven per maand</div>
-        <p style="font-size:10px;color:var(--text3);margin-bottom:8px">Vergelijking per maand — groen = inkomsten, rood = uitgaven</p>
-        <canvas id="chart-monthly"></canvas>
-      </div>
-      <div class="chart-box">
-        <div class="chart-title">📈 Cumulatief saldo</div>
-        <p style="font-size:10px;color:var(--text3);margin-bottom:8px">Hoe evolueert je saldo over het jaar? Stijgend = positief!</p>
-        <canvas id="chart-cumulative"></canvas>
+      <div class="dprog"><div class="dprog-fill" style="width:${pct}%"></div></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:7px">
+        <span style="font-size:10px;color:var(--text3);font-weight:700">${pct.toFixed(0)}% betaald</span>
+        <div style="display:flex;gap:5px">
+          ${!done?`<button class="btn btn-success btn-sm" onclick="mPayDebt('${d.id}')">💳 Betaling registreren</button>`:'<span style="font-size:11px;color:#16a34a;font-weight:700">✅ Volledig betaald</span>'}
+          <button class="btn btn-secondary btn-sm btn-icon" onclick="mEditDebt('${d.id}')">✏️</button>
+          <button class="btn btn-danger btn-sm btn-icon" onclick="delDebt('${d.id}')">🗑</button>
+        </div>
       </div>
     </div>`;
+  }
+
+  return `
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+    <div style="font-family:'Playfair Display',serif;font-size:22px">🔴 Schulden & Te betalen</div>
+    <button class="btn btn-primary" onclick="mAddDebt()">+ Schuld toevoegen</button>
+  </div>
+  <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+    <div class="stat s-debt"><div class="stat-val" style="color:#ea580c">${fmt(tDebt)}</div><div class="stat-label">🔴 Nog te betalen</div></div>
+    <div class="stat s-out"><div class="stat-val" style="color:#dc2626">${open.length}</div><div class="stat-label">⚠️ Open schulden</div></div>
+    <div class="stat s-in"><div class="stat-val" style="color:#16a34a">${paid.length}</div><div class="stat-label">✅ Afbetaald</div></div>
+  </div>
+  ${open.length>0?`<div class="card"><div class="sec-label">⚠️ Openstaande schulden</div>${open.map(debtCard).join('')}</div>`:''}
+  ${paid.length>0?`<div class="card"><div class="sec-label">✅ Afbetaalde schulden</div>${paid.map(debtCard).join('')}</div>`:''}
+  ${all.length===0?`<div class="card" style="text-align:center;padding:36px;color:var(--text3)">Nog geen schulden ingevoerd</div>`:''}`;
 }
 
-function renderCharts() {
-  const yr = window.finState.currentYear;
-  const incomes = window.finState.incomes.filter(x => (x.year||new Date(x.date).getFullYear()) == yr);
-  const expenses = window.finState.expenses.filter(x => (x.year||new Date(x.date).getFullYear()) == yr);
-
-  // Income by category
-  const incByCat = {};
-  INCOME_CATS.forEach(c => incByCat[c.id] = 0);
-  incomes.forEach(x => { incByCat[x.category] = (incByCat[x.category]||0) + parseFloat(x.amount||0); });
-  const incCatData = INCOME_CATS.filter(c => incByCat[c.id] > 0);
-
-  new Chart(document.getElementById('chart-income-cat'), {
-    type: 'doughnut',
-    data: {
-      labels: incCatData.map(c => c.icon + ' ' + c.label),
-      datasets: [{ data: incCatData.map(c => incByCat[c.id]),
-        backgroundColor: ['#86efac','#93c5fd','#fde68a','#c4b5fd','#fed7aa','#a5f3fc'],
-        borderWidth: 2, borderColor: '#fff' }]
-    },
-    options: { plugins: { legend: { position: 'bottom', labels: { font: { family: 'Nunito', size: 11 } } } }, responsive: true, maintainAspectRatio: true }
-  });
-
-  // Expense by category
-  const expByCat = {};
-  EXPENSE_CATS.forEach(c => expByCat[c.id] = 0);
-  expenses.forEach(x => { expByCat[x.category] = (expByCat[x.category]||0) + parseFloat(x.amount||0); });
-  const expCatData = EXPENSE_CATS.filter(c => expByCat[c.id] > 0);
-
-  new Chart(document.getElementById('chart-expense-cat'), {
-    type: 'doughnut',
-    data: {
-      labels: expCatData.map(c => c.icon + ' ' + c.label),
-      datasets: [{ data: expCatData.map(c => expByCat[c.id]),
-        backgroundColor: ['#fca5a5','#fdba74','#fde047','#f9a8d4','#a5b4fc','#6ee7b7'],
-        borderWidth: 2, borderColor: '#fff' }]
-    },
-    options: { plugins: { legend: { position: 'bottom', labels: { font: { family: 'Nunito', size: 11 } } } }, responsive: true, maintainAspectRatio: true }
-  });
-
-  // Monthly bar
-  const monthIn = MONTHS.map((_,i) => incomes.filter(x => new Date(x.date).getMonth()===i).reduce((s,x)=>s+parseFloat(x.amount||0),0));
-  const monthOut = MONTHS.map((_,i) => expenses.filter(x => new Date(x.date).getMonth()===i).reduce((s,x)=>s+parseFloat(x.amount||0),0));
-
-  new Chart(document.getElementById('chart-monthly'), {
-    type: 'bar',
-    data: {
-      labels: MONTHS_FULL.map(m => m.slice(0,3)),
-      datasets: [
-        { label: 'Inkomsten', data: monthIn, backgroundColor: '#86efac', borderRadius: 6 },
-        { label: 'Uitgaven', data: monthOut, backgroundColor: '#fca5a5', borderRadius: 6 }
-      ]
-    },
-    options: { plugins: { legend: { labels: { font: { family: 'Nunito' } } } }, responsive: true, maintainAspectRatio: true, scales: { x: { grid: { display: false } } } }
-  });
-
-  // Cumulative
-  let cumulative = 0;
-  const cumulData = MONTHS.map((_,i) => {
-    cumulative += monthIn[i] - monthOut[i];
-    return cumulative;
-  });
-
-  new Chart(document.getElementById('chart-cumulative'), {
-    type: 'line',
-    data: {
-      labels: MONTHS_FULL.map(m => m.slice(0,3)),
-      datasets: [{ label: 'Cumulatief saldo', data: cumulData,
-        borderColor: '#c084fc', backgroundColor: 'rgba(192,132,252,0.1)',
-        fill: true, tension: 0.4, pointBackgroundColor: '#c084fc', pointRadius: 4 }]
-    },
-    options: {
-      plugins: { legend: { labels: { font: { family: 'Nunito' } } } },
-      responsive: true, maintainAspectRatio: true,
-      scales: {
-        y: { grid: { color: '#f0dff5' } },
-        x: { grid: { display: false } }
-      }
-    }
-  });
+function vGrafieken() {
+  const yr=S.year;
+  const inc=S.incomes.filter(x=>getYr(x)==yr), exp=S.expenses.filter(x=>getYr(x)==yr);
+  const tIn=sumOf(inc),tOut=sumOf(exp),bal=tIn-tOut;
+  return `
+  <div style="font-family:'Playfair Display',serif;font-size:22px;margin-bottom:6px">📈 Grafieken ${yr}</div>
+  <p style="font-size:12px;color:var(--text3);margin-bottom:18px">Jaar <b>${yr}</b> — Inkomsten: <span style="color:#16a34a;font-weight:800">${fmt(tIn)}</span> | Uitgaven: <span style="color:#dc2626;font-weight:800">${fmt(tOut)}</span> | Saldo: <span style="color:${bal>=0?'#16a34a':'#dc2626'};font-weight:800">${fmt(bal)}</span></p>
+  <div class="chart-grid">
+    <div class="chart-box"><div class="chart-title">🥧 Inkomsten per categorie</div><div class="chart-desc">Welke bronnen leveren het meeste op?</div><canvas id="ch1"></canvas></div>
+    <div class="chart-box"><div class="chart-title">🥧 Uitgaven per categorie</div><div class="chart-desc">Waar gaat het meeste geld naartoe?</div><canvas id="ch2"></canvas></div>
+    <div class="chart-box"><div class="chart-title">📊 Inkomsten vs Uitgaven per maand</div><div class="chart-desc">Groen = inkomsten, rood = uitgaven</div><canvas id="ch3"></canvas></div>
+    <div class="chart-box"><div class="chart-title">📈 Cumulatief saldo</div><div class="chart-desc">Hoe evolueert je saldo over het jaar?</div><canvas id="ch4"></canvas></div>
+  </div>`;
 }
 
-// ===================== FILTER BAR =====================
-function renderFilterBar(type) {
-  const monthChips = `<button class="filter-chip ${filterMonth==='all'?'active':''}" onclick="filterMonth='all';render()">Alle maanden</button>
-    ${MONTHS_FULL.map((m,i)=>`<button class="filter-chip ${filterMonth==i?'active':''}" onclick="filterMonth=${i};render()">${m.slice(0,3)}</button>`).join('')}`;
+function drawCharts() {
+  const yr=S.year;
+  const inc=S.incomes.filter(x=>getYr(x)==yr), exp=S.expenses.filter(x=>getYr(x)==yr);
+  const colors=['#86efac','#93c5fd','#fde68a','#c4b5fd','#fed7aa','#a5f3fc'];
+  const colors2=['#fca5a5','#fdba74','#fde047','#f9a8d4','#a5b4fc','#6ee7b7'];
 
-  const cats = type === 'income' ? INCOME_CATS : EXPENSE_CATS;
-  const catChips = `<button class="filter-chip ${filterCat==='all'?'active':''}" onclick="filterCat='all';render()">Alle</button>
-    ${cats.map(c=>`<button class="filter-chip ${filterCat===c.id?'active':''}" onclick="filterCat='${c.id}';render()">${c.icon} ${c.label}</button>`).join('')}`;
+  const incByCat=ICAT.map((c,i)=>({label:c.icon+' '+c.label,val:inc.filter(x=>x.category===c.id).reduce((s,x)=>s+parseFloat(x.amount||0),0),col:colors[i]})).filter(c=>c.val>0);
+  const expByCat=ECAT.map((c,i)=>({label:c.icon+' '+c.label,val:exp.filter(x=>x.category===c.id).reduce((s,x)=>s+parseFloat(x.amount||0),0),col:colors2[i]})).filter(c=>c.val>0);
+  const mIn=MAANDEN.map((_,i)=>inc.filter(x=>new Date(x.date).getMonth()===i).reduce((s,x)=>s+parseFloat(x.amount||0),0));
+  const mOut=MAANDEN.map((_,i)=>exp.filter(x=>new Date(x.date).getMonth()===i).reduce((s,x)=>s+parseFloat(x.amount||0),0));
+  let cum=0; const cumData=MAANDEN.map((_,i)=>{cum+=mIn[i]-mOut[i];return cum;});
 
-  return `<div class="filter-bar">${monthChips}</div><div class="filter-bar">${catChips}</div>`;
+  const opts={plugins:{legend:{position:'bottom',labels:{font:{family:'Nunito',size:11}}}},responsive:true,maintainAspectRatio:true};
+
+  if(incByCat.length) new Chart(document.getElementById('ch1'),{type:'doughnut',data:{labels:incByCat.map(c=>c.label),datasets:[{data:incByCat.map(c=>c.val),backgroundColor:incByCat.map(c=>c.col),borderWidth:2,borderColor:'#fff'}]},options:opts});
+  if(expByCat.length) new Chart(document.getElementById('ch2'),{type:'doughnut',data:{labels:expByCat.map(c=>c.label),datasets:[{data:expByCat.map(c=>c.val),backgroundColor:expByCat.map(c=>c.col),borderWidth:2,borderColor:'#fff'}]},options:opts});
+  new Chart(document.getElementById('ch3'),{type:'bar',data:{labels:MSHORT,datasets:[{label:'Inkomsten',data:mIn,backgroundColor:'#86efac',borderRadius:5},{label:'Uitgaven',data:mOut,backgroundColor:'#fca5a5',borderRadius:5}]},options:{...opts,scales:{x:{grid:{display:false}}}}});
+  new Chart(document.getElementById('ch4'),{type:'line',data:{labels:MSHORT,datasets:[{label:'Cumulatief saldo',data:cumData,borderColor:'#c084fc',backgroundColor:'rgba(192,132,252,.1)',fill:true,tension:.4,pointBackgroundColor:'#c084fc',pointRadius:4}]},options:{...opts,scales:{y:{grid:{color:'#f0dff5'}},x:{grid:{display:false}}}}});
 }
 
-// ===================== MODALS =====================
-function modalAddIncome() {
-  const today = new Date().toISOString().slice(0,10);
-  openModal(`<div class="modal-title">💚 Inkomst toevoegen</div>
+// ── MODAL SYSTEM ──────────────────────────────────────────────
+function showModal(html) {
+  const root = document.getElementById('modal-root');
+  root.innerHTML = `<div class="modal-overlay" id="modal-overlay"><div class="modal-box">${html}</div></div>`;
+}
+function closeModal() {
+  document.getElementById('modal-root').innerHTML = '';
+}
+window.closeModal = closeModal;
+
+// IBAN buttons HTML
+function ibanBtns(inputId) {
+  return `<div class="iban-btns">
+    <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('${inputId}').value='${IBAN_MUSTAFA}'">👤 Mustafa</button>
+    <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('${inputId}').value='${IBAN_DERNEK}'">🏢 Dernek</button>
+    <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('${inputId}').value=''">✕</button>
+  </div>`;
+}
+
+// ── INCOME MODAL ──────────────────────────────────────────────
+window.mAddIncome = () => showModal(`
+  <div class="modal-title">💚 Inkomst toevoegen</div>
+  <div class="form-row">
+    <div class="form-group"><label class="form-label">Datum</label>
+      <input class="form-input" type="date" id="fi-date" value="${todayISO()}"></div>
+    <div class="form-group"><label class="form-label">Bedrag (€)</label>
+      <input class="form-input" type="number" id="fi-amount" placeholder="0.00" min="0" step="0.01"></div>
+  </div>
+  <div class="form-group"><label class="form-label">Categorie</label>
+    <select class="form-select" id="fi-cat">${ICAT.map(c=>`<option value="${c.id}">${c.icon} ${c.label}</option>`).join('')}</select></div>
+  <div class="form-group"><label class="form-label">Beschrijving</label>
+    <input class="form-input" id="fi-desc" placeholder="Omschrijving..."></div>
+  <div class="form-group"><label class="form-label">Van IBAN (betaler)</label>
+    <input class="form-input" id="fi-van" placeholder="IBAN van betaler">
+    ${ibanBtns('fi-van')}</div>
+  <div class="form-group"><label class="form-label">Naar IBAN (ontvanger)</label>
+    <input class="form-input" id="fi-aan" value="${IBAN_DERNEK}">
+    ${ibanBtns('fi-aan')}</div>
+  <div class="form-group"><label class="form-label">Notitie</label>
+    <textarea class="form-textarea" id="fi-note" placeholder="Extra info..."></textarea></div>
+  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px">
+    <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
+    <button class="btn btn-primary" onclick="doAddIncome()">✅ Toevoegen</button>
+  </div>`);
+
+window.doAddIncome = () => {
+  const amount = parseFloat(document.getElementById('fi-amount').value);
+  if (!amount || amount <= 0) { toast('⚠️ Bedrag invullen!'); return; }
+  S.incomes.push({
+    id: uid(),
+    date: document.getElementById('fi-date').value || todayISO(),
+    amount,
+    category: document.getElementById('fi-cat').value,
+    description: document.getElementById('fi-desc').value.trim(),
+    ibanVan: document.getElementById('fi-van').value.trim(),
+    ibanAan: document.getElementById('fi-aan').value.trim(),
+    note: document.getElementById('fi-note').value.trim(),
+    year: S.year
+  });
+  save(); closeModal(); render(); toast('✅ Inkomst toegevoegd!');
+};
+
+window.mEditIncome = (id) => {
+  const x = S.incomes.find(i=>i.id===id); if(!x) return;
+  showModal(`
+    <div class="modal-title">✏️ Inkomst bewerken</div>
     <div class="form-row">
-      <div class="form-group"><label class="form-label">Datum</label><input class="form-input" type="text" data-date="1" id="m-date" placeholder="DD/MM/YYYY" value="${todayDMY()}"></div>
-      <div class="form-group"><label class="form-label">Bedrag (€)</label><input class="form-input" type="number" id="m-amount" placeholder="0.00" min="0" step="0.01"></div>
+      <div class="form-group"><label class="form-label">Datum</label>
+        <input class="form-input" type="date" id="fi-date" value="${x.date}"></div>
+      <div class="form-group"><label class="form-label">Bedrag (€)</label>
+        <input class="form-input" type="number" id="fi-amount" value="${x.amount}" min="0" step="0.01"></div>
     </div>
     <div class="form-group"><label class="form-label">Categorie</label>
-      <select class="form-select" id="m-cat">
-        ${INCOME_CATS.map(c=>`<option value="${c.id}">${c.icon} ${c.label}</option>`).join('')}
-      </select></div>
-    <div class="form-group"><label class="form-label">Beschrijving</label><input class="form-input" id="m-desc" placeholder="Omschrijving..."></div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Van IBAN (betaler)</label>
-        <input class="form-input" id="m-iban-van" placeholder="IBAN van betaler">
-        <div style="display:flex;gap:4px;margin-top:4px">
-          <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('m-iban-van').value='BE10 7350 7584 5904'">👤 Mustafa</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('m-iban-van').value='BE68 7390 3074 2634'">🏢 Dernek</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('m-iban-van').value=''">✕ Wis</button>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Naar IBAN (ontvanger)</label>
-        <input class="form-input" id="m-iban-aan" placeholder="bijv. BE68 7390 3074 2634" value="BE68 7390 3074 2634">
-        <div style="display:flex;gap:4px;margin-top:4px">
-          <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('m-iban-aan').value='BE10 7350 7584 5904'">👤 Mustafa</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('m-iban-aan').value='BE68 7390 3074 2634'">🏢 Dernek</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('m-iban-aan').value=''">✕ Wis</button>
-        </div>
-      </div>
-    </div>
-    <div class="form-group"><label class="form-label">Notitie (optioneel)</label><textarea class="form-textarea" id="m-note" placeholder="Extra info..."></textarea></div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
-      <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
-      <button class="btn btn-primary" onclick="doAddIncome()">Toevoegen</button>
-    </div>`);
-  setTimeout(()=>document.getElementById('m-amount')?.focus(), 80);
-}
-
-function doAddIncome() {
-  const date = getDateVal('m-date');
-  const amount = parseFloat(document.getElementById('m-amount').value);
-  const category = document.getElementById('m-cat').value;
-  const description = document.getElementById('m-desc').value.trim();
-  const note = document.getElementById('m-note').value.trim();
-  const finalDate = date || new Date().toISOString().slice(0,10);
-  if (!amount || amount <= 0) { showToast("⚠️ Bedrag invullen!"); return; }
-  const ibanVan = document.getElementById('m-iban-van')?.value.trim() || '';
-  const ibanAan = document.getElementById('m-iban-aan')?.value.trim() || '';
-  window.finState.incomes.push({ id: uid(), date: finalDate, amount, category, description, note, ibanVan, ibanAan, year: window.finState.currentYear });
-  saveState(); closeModal(); render(); showToast("✅ Inkomst toegevoegd!");
-}
-
-function modalEditIncome(id) {
-  const x = window.finState.incomes.find(i => i.id === id);
-  if (!x) return;
-  openModal(`<div class="modal-title">✏️ Inkomst bewerken</div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Datum</label><input class="form-input" type="text" data-date="1" id="m-date" placeholder="DD/MM/YYYY" value="${isoToDmy(x.date)}"></div>
-      <div class="form-group"><label class="form-label">Bedrag (€)</label><input class="form-input" type="number" id="m-amount" value="${x.amount}" min="0" step="0.01"></div>
-    </div>
-    <div class="form-group"><label class="form-label">Categorie</label>
-      <select class="form-select" id="m-cat">
-        ${INCOME_CATS.map(c=>`<option value="${c.id}" ${c.id===x.category?'selected':''}>${c.icon} ${c.label}</option>`).join('')}
-      </select></div>
-    <div class="form-group"><label class="form-label">Beschrijving</label><input class="form-input" id="m-desc" value="${esc(x.description)}"></div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Van IBAN</label><input class="form-input" id="m-iban-van" value="${esc(x.ibanVan||'')}"></div>
-      <div class="form-group"><label class="form-label">Naar IBAN</label><input class="form-input" id="m-iban-aan" value="${esc(x.ibanAan||'BE68 7390 3074 2634')}"></div>
-    </div>
-    <div class="form-group"><label class="form-label">Notitie</label><textarea class="form-textarea" id="m-note">${esc(x.note||'')}</textarea></div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
-      <button class="btn btn-danger" onclick="deleteIncome('${id}');closeModal()">🗑 Verwijderen</button>
+      <select class="form-select" id="fi-cat">${ICAT.map(c=>`<option value="${c.id}" ${c.id===x.category?'selected':''}>${c.icon} ${c.label}</option>`).join('')}</select></div>
+    <div class="form-group"><label class="form-label">Beschrijving</label>
+      <input class="form-input" id="fi-desc" value="${esc(x.description)}"></div>
+    <div class="form-group"><label class="form-label">Van IBAN</label>
+      <input class="form-input" id="fi-van" value="${esc(x.ibanVan||'')}">
+      ${ibanBtns('fi-van')}</div>
+    <div class="form-group"><label class="form-label">Naar IBAN</label>
+      <input class="form-input" id="fi-aan" value="${esc(x.ibanAan||IBAN_DERNEK)}">
+      ${ibanBtns('fi-aan')}</div>
+    <div class="form-group"><label class="form-label">Notitie</label>
+      <textarea class="form-textarea" id="fi-note">${esc(x.note||'')}</textarea></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px">
+      <button class="btn btn-danger" onclick="delIncome('${id}')">🗑 Verwijderen</button>
       <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
       <button class="btn btn-primary" onclick="doEditIncome('${id}')">Opslaan</button>
     </div>`);
-}
+};
 
-function doEditIncome(id) {
-  const idx = window.finState.incomes.findIndex(i => i.id === id);
-  if (idx < 0) return;
-  window.finState.incomes[idx] = { ...window.finState.incomes[idx],
-    date: getDateVal('m-date'),
-    amount: parseFloat(document.getElementById('m-amount').value),
-    category: document.getElementById('m-cat').value,
-    description: document.getElementById('m-desc').value.trim(),
-    note: document.getElementById('m-note').value.trim(),
-    ibanVan: document.getElementById('m-iban-van')?.value.trim() || '',
-    ibanAan: document.getElementById('m-iban-aan')?.value.trim() || ''
+window.doEditIncome = (id) => {
+  const idx = S.incomes.findIndex(i=>i.id===id); if(idx<0) return;
+  S.incomes[idx] = { ...S.incomes[idx],
+    date: document.getElementById('fi-date').value || todayISO(),
+    amount: parseFloat(document.getElementById('fi-amount').value),
+    category: document.getElementById('fi-cat').value,
+    description: document.getElementById('fi-desc').value.trim(),
+    ibanVan: document.getElementById('fi-van').value.trim(),
+    ibanAan: document.getElementById('fi-aan').value.trim(),
+    note: document.getElementById('fi-note').value.trim(),
   };
-  saveState(); closeModal(); render(); showToast("✅ Bijgewerkt!");
-}
+  save(); closeModal(); render(); toast('✅ Bijgewerkt!');
+};
 
-function deleteIncome(id) {
-  window.finState.incomes = window.finState.incomes.filter(i => i.id !== id);
-  saveState(); render(); showToast("🗑 Verwijderd");
-}
+window.delIncome = (id) => {
+  if(!confirm('Verwijderen?')) return;
+  S.incomes = S.incomes.filter(i=>i.id!==id);
+  save(); render(); toast('🗑 Verwijderd');
+};
 
-function modalAddExpense() {
-  const today = new Date().toISOString().slice(0,10);
-  openModal(`<div class="modal-title">💸 Uitgave toevoegen</div>
+// ── EXPENSE MODAL ─────────────────────────────────────────────
+window.mAddExpense = () => showModal(`
+  <div class="modal-title">💸 Uitgave toevoegen</div>
+  <div class="form-row">
+    <div class="form-group"><label class="form-label">Datum</label>
+      <input class="form-input" type="date" id="fe-date" value="${todayISO()}"></div>
+    <div class="form-group"><label class="form-label">Bedrag (€)</label>
+      <input class="form-input" type="number" id="fe-amount" placeholder="0.00" min="0" step="0.01"></div>
+  </div>
+  <div class="form-group"><label class="form-label">Categorie</label>
+    <select class="form-select" id="fe-cat">${ECAT.map(c=>`<option value="${c.id}">${c.icon} ${c.label}</option>`).join('')}</select></div>
+  <div class="form-group"><label class="form-label">Beschrijving</label>
+    <input class="form-input" id="fe-desc" placeholder="Omschrijving..."></div>
+  <div class="form-group"><label class="form-label">Van IBAN (betaler)</label>
+    <input class="form-input" id="fe-van" value="${IBAN_DERNEK}">
+    ${ibanBtns('fe-van')}</div>
+  <div class="form-group"><label class="form-label">Aan / Naam ontvanger</label>
+    <input class="form-input" id="fe-aan" placeholder="Naam of IBAN ontvanger">
+    ${ibanBtns('fe-aan')}</div>
+  <div class="form-group"><label class="form-label">Notitie</label>
+    <textarea class="form-textarea" id="fe-note" placeholder="Extra info..."></textarea></div>
+  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px">
+    <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
+    <button class="btn btn-primary" onclick="doAddExpense()">✅ Toevoegen</button>
+  </div>`);
+
+window.doAddExpense = () => {
+  const amount = parseFloat(document.getElementById('fe-amount').value);
+  if (!amount || amount <= 0) { toast('⚠️ Bedrag invullen!'); return; }
+  S.expenses.push({
+    id: uid(),
+    date: document.getElementById('fe-date').value || todayISO(),
+    amount,
+    category: document.getElementById('fe-cat').value,
+    description: document.getElementById('fe-desc').value.trim(),
+    ibanVan: document.getElementById('fe-van').value.trim(),
+    ibanAan: document.getElementById('fe-aan').value.trim(),
+    note: document.getElementById('fe-note').value.trim(),
+    year: S.year
+  });
+  save(); closeModal(); render(); toast('✅ Uitgave toegevoegd!');
+};
+
+window.mEditExpense = (id) => {
+  const x = S.expenses.find(i=>i.id===id); if(!x) return;
+  showModal(`
+    <div class="modal-title">✏️ Uitgave bewerken</div>
     <div class="form-row">
-      <div class="form-group"><label class="form-label">Datum</label><input class="form-input" type="text" data-date="1" id="m-date" placeholder="DD/MM/YYYY" value="${todayDMY()}"></div>
-      <div class="form-group"><label class="form-label">Bedrag (€)</label><input class="form-input" type="number" id="m-amount" placeholder="0.00" min="0" step="0.01"></div>
+      <div class="form-group"><label class="form-label">Datum</label>
+        <input class="form-input" type="date" id="fe-date" value="${x.date}"></div>
+      <div class="form-group"><label class="form-label">Bedrag (€)</label>
+        <input class="form-input" type="number" id="fe-amount" value="${x.amount}" min="0" step="0.01"></div>
     </div>
     <div class="form-group"><label class="form-label">Categorie</label>
-      <select class="form-select" id="m-cat">
-        ${EXPENSE_CATS.map(c=>`<option value="${c.id}">${c.icon} ${c.label}</option>`).join('')}
-      </select></div>
-    <div class="form-group"><label class="form-label">Beschrijving</label><input class="form-input" id="m-desc" placeholder="Omschrijving..."></div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Van IBAN (betaler)</label>
-        <input class="form-input" id="m-iban-van" placeholder="bijv. BE68 7390 3074 2634" value="BE68 7390 3074 2634">
-        <div style="display:flex;gap:4px;margin-top:4px">
-          <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('m-iban-van').value='BE10 7350 7584 5904'">👤 Mustafa</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('m-iban-van').value='BE68 7390 3074 2634'">🏢 Dernek</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('m-iban-van').value=''">✕ Wis</button>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Aan / Naam ontvanger</label>
-        <input class="form-input" id="m-iban-aan" placeholder="Naam of IBAN ontvanger">
-        <div style="display:flex;gap:4px;margin-top:4px">
-          <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('m-iban-aan').value='BE10 7350 7584 5904'">👤 Mustafa</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('m-iban-aan').value='BE68 7390 3074 2634'">🏢 Dernek</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('m-iban-aan').value=''">✕ Wis</button>
-        </div>
-      </div>
-    </div>
-    <div class="form-group"><label class="form-label">Notitie (optioneel)</label><textarea class="form-textarea" id="m-note" placeholder="Extra info..."></textarea></div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
-      <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
-      <button class="btn btn-primary" onclick="doAddExpense()">Toevoegen</button>
-    </div>`);
-  setTimeout(()=>document.getElementById('m-amount')?.focus(), 80);
-}
-
-function doAddExpense() {
-  const date = getDateVal('m-date');
-  const amount = parseFloat(document.getElementById('m-amount').value);
-  const category = document.getElementById('m-cat').value;
-  const description = document.getElementById('m-desc').value.trim();
-  const note = document.getElementById('m-note').value.trim();
-  const finalDate = date || new Date().toISOString().slice(0,10);
-  if (!amount || amount <= 0) { showToast("⚠️ Bedrag invullen!"); return; }
-  const ibanVan = document.getElementById('m-iban-van')?.value.trim() || '';
-  const ibanAan = document.getElementById('m-iban-aan')?.value.trim() || '';
-  window.finState.expenses.push({ id: uid(), date: finalDate, amount, category, description, note, ibanVan, ibanAan, year: window.finState.currentYear });
-  saveState(); closeModal(); render(); showToast("✅ Uitgave toegevoegd!");
-}
-
-function modalEditExpense(id) {
-  const x = window.finState.expenses.find(i => i.id === id);
-  if (!x) return;
-  openModal(`<div class="modal-title">✏️ Uitgave bewerken</div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Datum</label><input class="form-input" type="text" data-date="1" id="m-date" placeholder="DD/MM/YYYY" value="${isoToDmy(x.date)}"></div>
-      <div class="form-group"><label class="form-label">Bedrag (€)</label><input class="form-input" type="number" id="m-amount" value="${x.amount}" min="0" step="0.01"></div>
-    </div>
-    <div class="form-group"><label class="form-label">Categorie</label>
-      <select class="form-select" id="m-cat">
-        ${EXPENSE_CATS.map(c=>`<option value="${c.id}" ${c.id===x.category?'selected':''}>${c.icon} ${c.label}</option>`).join('')}
-      </select></div>
-    <div class="form-group"><label class="form-label">Beschrijving</label><input class="form-input" id="m-desc" value="${esc(x.description)}"></div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Van IBAN (betaler)</label><input class="form-input" id="m-iban-van" value="${esc(x.ibanVan||'BE68 7390 3074 2634')}"></div>
-      <div class="form-group"><label class="form-label">Aan / Naam ontvanger</label><input class="form-input" id="m-iban-aan" value="${esc(x.ibanAan||'')}"></div>
-    </div>
-    <div class="form-group"><label class="form-label">Notitie</label><textarea class="form-textarea" id="m-note">${esc(x.note||'')}</textarea></div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
-      <button class="btn btn-danger" onclick="deleteExpense('${id}');closeModal()">🗑 Verwijderen</button>
+      <select class="form-select" id="fe-cat">${ECAT.map(c=>`<option value="${c.id}" ${c.id===x.category?'selected':''}>${c.icon} ${c.label}</option>`).join('')}</select></div>
+    <div class="form-group"><label class="form-label">Beschrijving</label>
+      <input class="form-input" id="fe-desc" value="${esc(x.description)}"></div>
+    <div class="form-group"><label class="form-label">Van IBAN</label>
+      <input class="form-input" id="fe-van" value="${esc(x.ibanVan||IBAN_DERNEK)}">
+      ${ibanBtns('fe-van')}</div>
+    <div class="form-group"><label class="form-label">Aan / Naam ontvanger</label>
+      <input class="form-input" id="fe-aan" value="${esc(x.ibanAan||'')}">
+      ${ibanBtns('fe-aan')}</div>
+    <div class="form-group"><label class="form-label">Notitie</label>
+      <textarea class="form-textarea" id="fe-note">${esc(x.note||'')}</textarea></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px">
+      <button class="btn btn-danger" onclick="delExpense('${id}')">🗑 Verwijderen</button>
       <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
       <button class="btn btn-primary" onclick="doEditExpense('${id}')">Opslaan</button>
     </div>`);
-}
+};
 
-function doEditExpense(id) {
-  const idx = window.finState.expenses.findIndex(i => i.id === id);
-  if (idx < 0) return;
-  window.finState.expenses[idx] = { ...window.finState.expenses[idx],
-    date: getDateVal('m-date'),
-    amount: parseFloat(document.getElementById('m-amount').value),
-    category: document.getElementById('m-cat').value,
-    description: document.getElementById('m-desc').value.trim(),
-    note: document.getElementById('m-note').value.trim(),
-    ibanVan: document.getElementById('m-iban-van')?.value.trim() || '',
-    ibanAan: document.getElementById('m-iban-aan')?.value.trim() || ''
+window.doEditExpense = (id) => {
+  const idx = S.expenses.findIndex(i=>i.id===id); if(idx<0) return;
+  S.expenses[idx] = { ...S.expenses[idx],
+    date: document.getElementById('fe-date').value || todayISO(),
+    amount: parseFloat(document.getElementById('fe-amount').value),
+    category: document.getElementById('fe-cat').value,
+    description: document.getElementById('fe-desc').value.trim(),
+    ibanVan: document.getElementById('fe-van').value.trim(),
+    ibanAan: document.getElementById('fe-aan').value.trim(),
+    note: document.getElementById('fe-note').value.trim(),
   };
-  saveState(); closeModal(); render(); showToast("✅ Bijgewerkt!");
-}
+  save(); closeModal(); render(); toast('✅ Bijgewerkt!');
+};
 
-function deleteExpense(id) {
-  window.finState.expenses = window.finState.expenses.filter(i => i.id !== id);
-  saveState(); render(); showToast("🗑 Verwijderd");
-}
+window.delExpense = (id) => {
+  if(!confirm('Verwijderen?')) return;
+  S.expenses = S.expenses.filter(i=>i.id!==id);
+  save(); render(); toast('🗑 Verwijderd');
+};
 
-// SCHULDEN MODALS
-function modalAddDebt() {
-  const today = new Date().toISOString().slice(0,10);
-  openModal(`<div class="modal-title">🔴 Schuld toevoegen</div>
-    <div class="form-group"><label class="form-label">Naam / Omschrijving</label><input class="form-input" id="m-name" placeholder="bijv. KBC aanvraagkosten 178€" autofocus></div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Totaal bedrag (€)</label><input class="form-input" type="number" id="m-total" placeholder="0.00" min="0" step="0.01"></div>
-      <div class="form-group"><label class="form-label">Al betaald (€)</label><input class="form-input" type="number" id="m-paid" placeholder="0.00" min="0" step="0.01" value="0"></div>
-    </div>
-    <div class="form-group"><label class="form-label">Vervaldatum (optioneel)</label><input class="form-input" type="text" data-date="1" id="m-due" placeholder="DD/MM/YYYY"></div>
-    <div class="form-group"><label class="form-label">Notitie</label><textarea class="form-textarea" id="m-note" placeholder="Extra info..."></textarea></div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
-      <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
-      <button class="btn btn-primary" onclick="doAddDebt()">Toevoegen</button>
-    </div>`);
-  setTimeout(()=>document.getElementById('m-name')?.focus(), 80);
-}
+// ── DEBT MODALS ───────────────────────────────────────────────
+window.mAddDebt = () => showModal(`
+  <div class="modal-title">🔴 Schuld toevoegen</div>
+  <div class="form-group"><label class="form-label">Naam / Omschrijving</label>
+    <input class="form-input" id="fd-name" placeholder="bijv. KBC jaarlijkse kost"></div>
+  <div class="form-row">
+    <div class="form-group"><label class="form-label">Totaal bedrag (€)</label>
+      <input class="form-input" type="number" id="fd-total" placeholder="0.00" min="0" step="0.01"></div>
+    <div class="form-group"><label class="form-label">Al betaald (€)</label>
+      <input class="form-input" type="number" id="fd-paid" value="0" min="0" step="0.01"></div>
+  </div>
+  <div class="form-group"><label class="form-label">Vervaldag (optioneel)</label>
+    <input class="form-input" type="date" id="fd-due"></div>
+  <div class="form-group"><label class="form-label">Notitie</label>
+    <textarea class="form-textarea" id="fd-note" placeholder="Extra info..."></textarea></div>
+  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px">
+    <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
+    <button class="btn btn-primary" onclick="doAddDebt()">✅ Toevoegen</button>
+  </div>`);
 
-function doAddDebt() {
-  const name = document.getElementById('m-name').value.trim();
-  const total = parseFloat(document.getElementById('m-total').value) || 0;
-  const paid = parseFloat(document.getElementById('m-paid').value) || 0;
-  const dueDate = document.getElementById('m-due').value;
-  const note = document.getElementById('m-note').value.trim();
-  if (!name || total <= 0) { showToast("⚠️ Naam en bedrag invullen!"); return; }
-  window.finState.debts.push({ id: uid(), name, total, paid, dueDate, note, year: window.finState.currentYear });
-  saveState(); closeModal(); render(); showToast("✅ Schuld toegevoegd!");
-}
+window.doAddDebt = () => {
+  const name = document.getElementById('fd-name').value.trim();
+  const total = parseFloat(document.getElementById('fd-total').value)||0;
+  if (!name || total<=0) { toast('⚠️ Naam en bedrag invullen!'); return; }
+  S.debts.push({ id:uid(), name, total,
+    paid: parseFloat(document.getElementById('fd-paid').value)||0,
+    dueDate: document.getElementById('fd-due').value,
+    note: document.getElementById('fd-note').value.trim(),
+    year: S.year
+  });
+  save(); closeModal(); render(); toast('✅ Schuld toegevoegd!');
+};
 
-function modalPayDebt(id) {
-  const d = window.finState.debts.find(x => x.id === id);
-  if (!d) return;
-  const remaining = parseFloat(d.total||0) - parseFloat(d.paid||0);
-  openModal(`<div class="modal-title">💳 Betaling registreren</div>
-    <div style="margin-bottom:14px;padding:10px;background:var(--cream);border-radius:8px">
-      <div style="font-weight:700">${esc(d.name)}</div>
-      <div style="color:var(--text3);font-size:12px">Nog te betalen: ${fmt(remaining)}</div>
+window.mPayDebt = (id) => {
+  const d = S.debts.find(x=>x.id===id); if(!d) return;
+  const rem = Math.max(0, parseFloat(d.total||0)-parseFloat(d.paid||0));
+  showModal(`
+    <div class="modal-title">💳 Betaling registreren</div>
+    <div style="padding:10px;background:var(--cream);border-radius:8px;margin-bottom:14px">
+      <div style="font-weight:800">${esc(d.name)}</div>
+      <div style="color:var(--text3);font-size:12px">Nog te betalen: ${fmt(rem)}</div>
     </div>
     <div class="form-group"><label class="form-label">Betaald bedrag (€)</label>
-      <input class="form-input" type="number" id="m-pay" placeholder="0.00" min="0" step="0.01" value="${remaining.toFixed(2)}" autofocus></div>
+      <input class="form-input" type="number" id="fp-amount" value="${rem.toFixed(2)}" min="0" step="0.01"></div>
     <div class="form-group"><label class="form-label">Datum</label>
-      <input class="form-input" type="text" data-date="1" id="m-date" placeholder="DD/MM/YYYY" value="${todayDMY()}"></div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+      <input class="form-input" type="date" id="fp-date" value="${todayISO()}"></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px">
       <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
       <button class="btn btn-success" onclick="doPayDebt('${id}')">✅ Betaling registreren</button>
     </div>`);
-}
+};
 
-function doPayDebt(id) {
-  const amount = parseFloat(document.getElementById('m-pay').value) || 0;
-  const date = getDateVal('m-date');
-  if (amount <= 0) return;
-  const idx = window.finState.debts.findIndex(x => x.id === id);
-  if (idx < 0) return;
-  window.finState.debts[idx].paid = (parseFloat(window.finState.debts[idx].paid||0) + amount);
+window.doPayDebt = (id) => {
+  const amount = parseFloat(document.getElementById('fp-amount').value)||0;
+  const date = document.getElementById('fp-date').value || todayISO();
+  if (amount<=0) return;
+  const idx = S.debts.findIndex(x=>x.id===id); if(idx<0) return;
+  S.debts[idx].paid = (parseFloat(S.debts[idx].paid||0)+amount);
   // Also add as expense
-  window.finState.expenses.push({ id: uid(), date, amount, category: 'terugbetaling', description: 'Betaling: ' + window.finState.debts[idx].name, year: window.finState.currentYear });
-  saveState(); closeModal(); render(); showToast(`✅ ${fmt(amount)} betaling geregistreerd!`);
-}
+  S.expenses.push({ id:uid(), date, amount, category:'terugbetaling',
+    description:'Betaling: '+S.debts[idx].name, ibanVan:IBAN_DERNEK, ibanAan:'', note:'', year:S.year });
+  save(); closeModal(); render(); toast(`✅ ${fmt(amount)} betaling geregistreerd!`);
+};
 
-function modalEditDebt(id) {
-  const d = window.finState.debts.find(x => x.id === id);
-  if (!d) return;
-  openModal(`<div class="modal-title">✏️ Schuld bewerken</div>
-    <div class="form-group"><label class="form-label">Naam</label><input class="form-input" id="m-name" value="${esc(d.name)}" autofocus></div>
+window.mEditDebt = (id) => {
+  const d = S.debts.find(x=>x.id===id); if(!d) return;
+  showModal(`
+    <div class="modal-title">✏️ Schuld bewerken</div>
+    <div class="form-group"><label class="form-label">Naam</label>
+      <input class="form-input" id="fd-name" value="${esc(d.name)}"></div>
     <div class="form-row">
-      <div class="form-group"><label class="form-label">Totaal (€)</label><input class="form-input" type="number" id="m-total" value="${d.total}" min="0" step="0.01"></div>
-      <div class="form-group"><label class="form-label">Al betaald (€)</label><input class="form-input" type="number" id="m-paid" value="${d.paid||0}" min="0" step="0.01"></div>
+      <div class="form-group"><label class="form-label">Totaal (€)</label>
+        <input class="form-input" type="number" id="fd-total" value="${d.total}" min="0" step="0.01"></div>
+      <div class="form-group"><label class="form-label">Al betaald (€)</label>
+        <input class="form-input" type="number" id="fd-paid" value="${d.paid||0}" min="0" step="0.01"></div>
     </div>
-    <div class="form-group"><label class="form-label">Vervaldatum</label><input class="form-input" type="text" data-date="1" id="m-due" placeholder="DD/MM/YYYY" value="${isoToDmy(d.dueDate)}"></div>
-    <div class="form-group"><label class="form-label">Notitie</label><textarea class="form-textarea" id="m-note">${esc(d.note||'')}</textarea></div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
-      <button class="btn btn-danger" onclick="deleteDebt('${id}');closeModal()">🗑</button>
+    <div class="form-group"><label class="form-label">Vervaldag</label>
+      <input class="form-input" type="date" id="fd-due" value="${d.dueDate||''}"></div>
+    <div class="form-group"><label class="form-label">Notitie</label>
+      <textarea class="form-textarea" id="fd-note">${esc(d.note||'')}</textarea></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px">
+      <button class="btn btn-danger" onclick="delDebt('${id}')">🗑</button>
       <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
       <button class="btn btn-primary" onclick="doEditDebt('${id}')">Opslaan</button>
     </div>`);
-}
+};
 
-function doEditDebt(id) {
-  const idx = window.finState.debts.findIndex(x => x.id === id);
-  if (idx < 0) return;
-  window.finState.debts[idx] = { ...window.finState.debts[idx],
-    name: document.getElementById('m-name').value.trim(),
-    total: parseFloat(document.getElementById('m-total').value) || 0,
-    paid: parseFloat(document.getElementById('m-paid').value) || 0,
-    dueDate: getDateVal('m-due'),
-    note: document.getElementById('m-note').value.trim()
+window.doEditDebt = (id) => {
+  const idx = S.debts.findIndex(x=>x.id===id); if(idx<0) return;
+  S.debts[idx] = { ...S.debts[idx],
+    name: document.getElementById('fd-name').value.trim(),
+    total: parseFloat(document.getElementById('fd-total').value)||0,
+    paid: parseFloat(document.getElementById('fd-paid').value)||0,
+    dueDate: document.getElementById('fd-due').value,
+    note: document.getElementById('fd-note').value.trim(),
   };
-  saveState(); closeModal(); render(); showToast("✅ Bijgewerkt!");
+  save(); closeModal(); render(); toast('✅ Bijgewerkt!');
+};
+
+window.delDebt = (id) => {
+  if(!confirm('Verwijderen?')) return;
+  S.debts = S.debts.filter(x=>x.id!==id);
+  save(); render(); toast('🗑 Verwijderd');
+};
+
+// ── EXPORT ────────────────────────────────────────────────────
+window.doCSV = () => {
+  const yr=S.year;
+  const rows=[['Type','Datum','Categorie','Beschrijving','Bedrag','Van IBAN','Aan IBAN']];
+  S.incomes.filter(x=>getYr(x)==yr).forEach(x=>rows.push(['Inkomst',x.date,catL(x.category,true),x.description,x.amount,x.ibanVan||'',x.ibanAan||'']));
+  S.expenses.filter(x=>getYr(x)==yr).forEach(x=>rows.push(['Uitgave',x.date,catL(x.category,false),x.description,'-'+x.amount,x.ibanVan||'',x.ibanAan||'']));
+  const csv=rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download=`SSE_${yr}.csv`;a.click();
+  toast('📊 CSV gedownload!');
+};
+
+// ── TOAST ────────────────────────────────────────────────────
+function toast(msg) {
+  const el=document.getElementById('toast-el');
+  el.textContent=msg; el.style.display='block';
+  clearTimeout(window._t); window._t=setTimeout(()=>el.style.display='none',2600);
 }
 
-function deleteDebt(id) {
-  window.finState.debts = window.finState.debts.filter(x => x.id !== id);
-  saveState(); render(); showToast("🗑 Verwijderd");
-}
-
-// ===================== EXPORT =====================
-function exportPDF() { window.print(); }
-
-function exportCSV() {
-  const yr = window.finState.currentYear;
-  const rows = [['Type','Datum','Categorie','Beschrijving','Bedrag']];
-  window.finState.incomes.filter(x=>(x.year||new Date(x.date).getFullYear())==yr)
-    .forEach(x => rows.push(['Inkomst', x.date, getCatLabel(x.category,true), x.description, x.amount]));
-  window.finState.expenses.filter(x=>(x.year||new Date(x.date).getFullYear())==yr)
-    .forEach(x => rows.push(['Uitgave', x.date, getCatLabel(x.category,false), x.description, '-'+x.amount]));
-  const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
-  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-  a.download = `SSE_financien_${yr}.csv`; a.click();
-  showToast("📊 CSV gedownload!");
-}
-
-// ===================== UTIL =====================
-function openModal(html) { document.getElementById('modal-box').innerHTML=html; document.getElementById('modal').style.display='flex'; }
-function closeModal() { document.getElementById('modal').style.display='none'; }
-function showToast(msg) {
-  const t=document.getElementById('toast'); t.textContent=msg; t.style.display='block';
-  clearTimeout(window._toast); window._toast=setTimeout(()=>t.style.display='none',2500);
-}
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeModal();
-  if (e.key === 'Enter' && document.getElementById('modal').style.display !== 'none') {
-    const btn = document.querySelector('#modal-box .btn-primary');
-    if (btn) btn.click();
-  }
-});
-
-// ===================== DATE PICKERS =====================
-function initDatePickers() {
-  // Simple: format date inputs as DD/MM/YYYY text
-  document.querySelectorAll('input[data-date]').forEach(el => {
-    el.addEventListener('input', function() {
-      // auto-insert slashes
-      let v = this.value.replace(/\D/g,'');
-      if (v.length > 2) v = v.slice(0,2) + '/' + v.slice(2);
-      if (v.length > 5) v = v.slice(0,5) + '/' + v.slice(5,9);
-      this.value = v;
-    });
-  });
-}
-
-// Get date as YYYY-MM-DD from a DD/MM/YYYY text input
-function getDateVal(id) {
-  const el = document.getElementById(id);
-  if (!el) return new Date().toISOString().slice(0,10);
-  const v = el.value.trim();
-  if (!v) return new Date().toISOString().slice(0,10);
-  // DD/MM/YYYY
-  const parts = v.split('/');
-  if (parts.length === 3 && parts[2].length >= 4) {
-    return parts[2] + '-' + parts[1].padStart(2,'0') + '-' + parts[0].padStart(2,'0');
-  }
-  // YYYY-MM-DD fallback
-  if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
-  return new Date().toISOString().slice(0,10);
-}
-
-// ===================== AUTO HUUR SCHULDEN =====================
-function generateHuurSchulden() {
-  const now = new Date();
-  const startYear = 2026;
-  const MAANDEN_NL = ['Januari','Februari','Maart','April','Mei','Juni',
-                       'Juli','Augustus','September','Oktober','November','December'];
-  let generated = 0;
-
-  // Monthly huur
-  for (let y = startYear; y <= now.getFullYear(); y++) {
-    const mStart = 0;
-    const mEnd = (y === now.getFullYear()) ? now.getMonth() : 11;
-    for (let m = mStart; m <= mEnd; m++) {
-      const maandNaam = MAANDEN_NL[m] + ' ' + y;
-      const debtName = 'Mustafa Turk - Huur ' + maandNaam;
-      if (!window.finState.debts.some(d => d.name === debtName)) {
-        const dueDay = String(y) + '-' + String(m+1).padStart(2,'0') + '-02';
-        window.finState.debts.push({
-          id: uid(), name: debtName, total: 500, paid: 0,
-          dueDate: dueDay,
-          note: 'Automatisch — maandelijkse huur Zavelputstraat 18',
-          year: y
-        });
-        generated++;
-      }
-    }
-  }
-
-  // One-time vaste schulden (if not already present)
-  const vaste = [
-    { name: 'KBC Business PRO — jaarlijkse kost 2026', total: 51, dueDate: '2026-03-05',
-      note: 'KBC bankkosten jaarlijks. Vervaldag 05/03/2026. Van: BE10 7350 7584 5904 → Naar: BE68 7390 3074 2634 (dernek)', year: 2026 },
-    { name: 'FOD Justitie — registratiekosten VZW', total: 173.76, dueDate: '2026-01-02',
-      note: 'Neerlegging statuten + publicatie Belgisch Staatsblad. Registratie Smart Skills Education VZW', year: 2026 },
-  ];
-  vaste.forEach(v => {
-    if (!window.finState.debts.some(d => d.name === v.name)) {
-      window.finState.debts.push({ id: uid(), paid: 0, ...v });
-      generated++;
-    }
-  });
-
-  if (generated > 0) {
-    saveState();
-  }
-}
-
-// ===================== INIT =====================
+// ── INIT ──────────────────────────────────────────────────────
 loadLocal();
-generateHuurSchulden();
-populateYearSelect();
-// Restore last active tab
-try {
-  const savedView = localStorage.getItem('sse_view');
-  if (savedView) currentView = savedView;
-} catch(e) {}
+ensureAutoDebts();
+buildYearSel();
+try { const v=localStorage.getItem('sse_view'); if(v) view=v; } catch(e){}
 render();
 
-// Date pickers: simple text input, no library needed
 </script>
 </body>
 </html>
