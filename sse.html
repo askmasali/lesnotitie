@@ -885,7 +885,7 @@ function modalAddIncome() {
 }
 
 function doAddIncome() {
-  const date = document.getElementById('m-date').value;
+  const date = getDateVal('m-date');
   const amount = parseFloat(document.getElementById('m-amount').value);
   const category = document.getElementById('m-cat').value;
   const description = document.getElementById('m-desc').value.trim();
@@ -926,7 +926,7 @@ function doEditIncome(id) {
   const idx = window.finState.incomes.findIndex(i => i.id === id);
   if (idx < 0) return;
   window.finState.incomes[idx] = { ...window.finState.incomes[idx],
-    date: document.getElementById('m-date').value,
+    date: getDateVal('m-date'),
     amount: parseFloat(document.getElementById('m-amount').value),
     category: document.getElementById('m-cat').value,
     description: document.getElementById('m-desc').value.trim(),
@@ -967,7 +967,7 @@ function modalAddExpense() {
 }
 
 function doAddExpense() {
-  const date = document.getElementById('m-date').value;
+  const date = getDateVal('m-date');
   const amount = parseFloat(document.getElementById('m-amount').value);
   const category = document.getElementById('m-cat').value;
   const description = document.getElementById('m-desc').value.trim();
@@ -1008,7 +1008,7 @@ function doEditExpense(id) {
   const idx = window.finState.expenses.findIndex(i => i.id === id);
   if (idx < 0) return;
   window.finState.expenses[idx] = { ...window.finState.expenses[idx],
-    date: document.getElementById('m-date').value,
+    date: getDateVal('m-date'),
     amount: parseFloat(document.getElementById('m-amount').value),
     category: document.getElementById('m-cat').value,
     description: document.getElementById('m-desc').value.trim(),
@@ -1074,7 +1074,7 @@ function modalPayDebt(id) {
 
 function doPayDebt(id) {
   const amount = parseFloat(document.getElementById('m-pay').value) || 0;
-  const date = document.getElementById('m-date').value;
+  const date = getDateVal('m-date');
   if (amount <= 0) return;
   const idx = window.finState.debts.findIndex(x => x.id === id);
   if (idx < 0) return;
@@ -1109,7 +1109,7 @@ function doEditDebt(id) {
     name: document.getElementById('m-name').value.trim(),
     total: parseFloat(document.getElementById('m-total').value) || 0,
     paid: parseFloat(document.getElementById('m-paid').value) || 0,
-    dueDate: document.getElementById('m-due').value,
+    dueDate: getDateVal('m-due'),
     note: document.getElementById('m-note').value.trim()
   };
   saveState(); closeModal(); render(); showToast("✅ Bijgewerkt!");
@@ -1155,23 +1155,54 @@ document.addEventListener('keydown', e => {
 
 // ===================== DATE PICKERS =====================
 function initDatePickers() {
-  // Initialize all date inputs with flatpickr
   document.querySelectorAll('input[type="date"]').forEach(el => {
     if (el._flatpickr) el._flatpickr.destroy();
+    // Convert existing YYYY-MM-DD value to show DD/MM/YYYY
+    const existingVal = el.value;
     flatpickr(el, {
       locale: "nl",
-      dateFormat: "Y-m-d",
+      dateFormat: "d/m/Y",        // display to user: 11/03/2026
+      altInput: false,
       allowInput: true,
-      disableMobile: false,
-      theme: "airbnb",
-      animate: true,
+      disableMobile: true,
       monthSelectorType: "dropdown",
+      defaultDate: existingVal || null,
       onReady(_, __, fp) {
-        fp.calendarContainer && fp.calendarContainer.setAttribute('style',
-          'z-index:9999!important');
+        if (fp.calendarContainer) fp.calendarContainer.style.zIndex = '9999';
+      },
+      onChange(selectedDates, dateStr, fp) {
+        // Store YYYY-MM-DD in a hidden sibling for JS to read
+        const hidden = fp.element.nextElementSibling;
+        if (hidden && hidden.classList.contains('fp-hidden-date')) {
+          hidden.value = selectedDates[0] ? selectedDates[0].toISOString().slice(0,10) : '';
+        }
       }
     });
+    // Add hidden input after date field to store ISO value
+    if (!el.nextElementSibling || !el.nextElementSibling.classList.contains('fp-hidden-date')) {
+      const hidden = document.createElement('input');
+      hidden.type = 'hidden';
+      hidden.className = 'fp-hidden-date';
+      hidden.value = existingVal || '';
+      el.parentNode.insertBefore(hidden, el.nextSibling);
+    }
   });
+}
+
+// Helper: get date value from flatpickr input (returns YYYY-MM-DD)
+function getDateVal(id) {
+  const el = document.getElementById(id);
+  if (!el) return '';
+  // Try hidden sibling first
+  const hidden = el.nextElementSibling;
+  if (hidden && hidden.classList.contains('fp-hidden-date') && hidden.value) return hidden.value;
+  // Fallback: try to parse DD/MM/YYYY
+  const v = el.value;
+  if (!v) return '';
+  if (v.match(/^\d{4}-\d{2}-\d{2}$/)) return v; // already ISO
+  const parts = v.split('/');
+  if (parts.length === 3) return `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
+  return v;
 }
 
 // Observe modal changes to init pickers when modal opens
