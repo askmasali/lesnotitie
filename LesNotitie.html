@@ -129,7 +129,7 @@
 
   /* MODAL */
   .modal-overlay { position:fixed; inset:0; background:rgba(61,44,62,.45); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; z-index:1000; }
-  .modal-box { background:var(--surface); border-radius:20px; border:2px solid var(--border); padding:28px; min-width:320px; max-width:460px; width:90%; box-shadow:var(--shadow2); animation:pop .2s ease; }
+  .modal-box { background:var(--surface); border-radius:20px; border:2px solid var(--border); padding:28px; min-width:320px; max-width:460px; width:90%; box-shadow:var(--shadow2); animation:pop .2s ease; transition: max-width .15s, width .15s; }
   @keyframes pop { from { transform:scale(.9); opacity:0; } to { transform:scale(1); opacity:1; } }
   .modal-title { font-size:17px; font-weight:800; margin-bottom:20px; color:var(--text); }
   .form-group { margin-bottom:14px; }
@@ -545,265 +545,269 @@ function showToast(msg) {
 // ===================== JAARPLAN DATA =====================
 const JAARPLAN = {
 "1":[
-{"week_num":1,"month":"september","wk":1,"thema":"Geloofsleer","les":"Islam, iman, ihsan — Leestekst: Vreemde man (Hadies Djibriel) — Wat betekent Islam?","is_vacation":false},
-{"week_num":2,"month":"september","wk":2,"thema":"Geloofsleer","les":"Wat betekent iman? Wat betekent ihsan?","is_vacation":false},
-{"week_num":3,"month":"september","wk":3,"thema":"Geloofsleer","les":"De verantwoordelijke moslim en zijn plichten. Amantoe en de betekenis","is_vacation":false},
-{"week_num":4,"month":"september","wk":4,"thema":"Geloofsleer","les":"Het geloof in Allah — De mens is een verstandig en gelovig wezen","is_vacation":false},
-{"week_num":5,"month":"oktober","wk":1,"thema":"Geloofsleer","les":"Allah bestaat en Hij is één — Allah is schepper van alles","is_vacation":false},
-{"week_num":6,"month":"oktober","wk":2,"thema":"Geloofsleer","les":"Niets of niemand is aan Allah gelijkwaardig — Allah hoort, weet en ziet alles","is_vacation":false},
-{"week_num":7,"month":"oktober","wk":3,"thema":"Geloofsleer","les":"Allah is almachtig over alle dingen — Allah is met ons","is_vacation":false},
-{"week_num":8,"month":"oktober","wk":4,"thema":"Geloofsleer","les":"Ik werk, ik vertrouw op de hulp van Allah en heb succes — Soera al Ihclas","is_vacation":false},
-{"week_num":9,"month":"november","wk":1,"thema":"Herfstvakantie","les":"29 oktober – 4 november","is_vacation":true},
-{"week_num":10,"month":"november","wk":2,"thema":"Geloofsleer","les":"Het geloof in de engelen en in de boeken — De wereld van de schepselen","is_vacation":false},
-{"week_num":11,"month":"november","wk":3,"thema":"Geloofsleer","les":"Het geloof in boeken","is_vacation":false},
-{"week_num":12,"month":"november","wk":4,"thema":"Aanbidding","les":"Reinheid en aanbidding in de Islam — Kleine en grote rituele wassing","is_vacation":false},
-{"week_num":13,"month":"december","wk":1,"thema":"Aanbidding","les":"Aanbidding in de Islam","is_vacation":false},
-{"week_num":14,"month":"december","wk":2,"thema":"Aanbidding","les":"De maand Ramadan en het vasten — Wat betekent het vasten","is_vacation":false},
-{"week_num":15,"month":"december","wk":3,"thema":"Evaluatie","les":"Herhalen en evaluatie","is_vacation":false},
-{"week_num":16,"month":"december","wk":4,"thema":"Kerstvakantie","les":"24 december – 6 januari","is_vacation":true},
-{"week_num":17,"month":"januari","wk":1,"thema":"Kerstvakantie","les":"24 december – 6 januari","is_vacation":true},
-{"week_num":18,"month":"januari","wk":2,"thema":"Aanbidding","les":"Ramadan: begrippen i.v.m. het vasten — Waarop moeten we letten?","is_vacation":false},
-{"week_num":19,"month":"januari","wk":3,"thema":"Aanbidding","les":"Wat maakt je vasten ongeldig? — Voordelen van het vasten","is_vacation":false},
-{"week_num":20,"month":"januari","wk":4,"thema":"Aanbidding","les":"Vreugde van het Ramadanfeest — Soera Ma'oen","is_vacation":false},
-{"week_num":21,"month":"februari","wk":1,"thema":"Mohammed (s.a.w.)","les":"Het leven van de Profeet Mohammed (s.a.w.) — Zijn geboorte","is_vacation":false},
-{"week_num":22,"month":"februari","wk":2,"thema":"Mohammed (s.a.w.)","les":"Zijn kinderjaren","is_vacation":false},
-{"week_num":23,"month":"februari","wk":3,"thema":"Krokusvakantie","les":"04 – 10 maart","is_vacation":true},
-{"week_num":24,"month":"februari","wk":4,"thema":"Mohammed (s.a.w.)","les":"Zijn huwelijk","is_vacation":false},
-{"week_num":25,"month":"maart","wk":1,"thema":"Mohammed (s.a.w.)","les":"Zijn profeetschap","is_vacation":false},
-{"week_num":26,"month":"maart","wk":2,"thema":"Mohammed (s.a.w.)","les":"Als profeet en mens — Mohammed als mens en als profeet","is_vacation":false},
-{"week_num":27,"month":"maart","wk":3,"thema":"Mohammed (s.a.w.)","les":"Mohammed is de verklaarder van de Koran — een waarschuwer — barmhartig","is_vacation":false},
-{"week_num":28,"month":"maart","wk":4,"thema":"Koran","les":"Koran en hadies — Koran","is_vacation":false},
-{"week_num":29,"month":"april","wk":1,"thema":"Paasvakantie","les":"8 – 21 april","is_vacation":true},
-{"week_num":30,"month":"april","wk":2,"thema":"Paasvakantie","les":"8 – 21 april","is_vacation":true},
-{"week_num":31,"month":"april","wk":3,"thema":"Koran","les":"Soenna en hadies","is_vacation":false},
-{"week_num":32,"month":"april","wk":4,"thema":"Koran","les":"Soera, aya en doe'a","is_vacation":false},
-{"week_num":33,"month":"mei","wk":1,"thema":"Koran","les":"Verhaal","is_vacation":false},
-{"week_num":34,"month":"mei","wk":2,"thema":"Gedragsvorming/Achlaq","les":"Liefde, vriendschap en broederschap — Waarom is liefhebben een behoefte?","is_vacation":false},
-{"week_num":35,"month":"mei","wk":3,"thema":"Achlaq","les":"Liefde is een geschenk voor ons van Allah","is_vacation":false},
-{"week_num":36,"month":"mei","wk":4,"thema":"Achlaq","les":"Allah houdt van Zijn schepsel","is_vacation":false},
-{"week_num":37,"month":"juni","wk":1,"thema":"Achlaq","les":"De basis van vriendschap en broederschap is liefde","is_vacation":false},
-{"week_num":38,"month":"juni","wk":2,"thema":"Achlaq","les":"De islamitische godsdienst raadt aan om te leven als broeders","is_vacation":false},
-{"week_num":39,"month":"juni","wk":3,"thema":"Achlaq","les":"Zorg dragen voor andere schepselen","is_vacation":false},
-{"week_num":40,"month":"juni","wk":4,"thema":"Evaluatie","les":"Herhalen en evaluatie","is_vacation":false}
+{"wn":1,"mn":"sep","wk":1,"thema":"Geloofsleer","les":"Islam, iman, ihsan1.1. Leestekst: Vreemde man (Hadies Djibriel)1.2. Wat betekent Islam?","vac":false,"skip":false,"ln":1},
+{"wn":2,"mn":"sep","wk":2,"thema":"Geloofsleer","les":"1.3. Wat betekent iman?1.4. Wat betekent ihsan?","vac":false,"skip":false,"ln":2},
+{"wn":3,"mn":"sep","wk":2,"thema":"Geloofsleer","les":"2.5. Niets of niemand is aan Allah gelijkwaardig2.6. Allah hoort, weet en ziet alles","vac":false,"skip":false,"ln":3},
+{"wn":4,"mn":"sep","wk":3,"thema":"Geloofsleer","les":"1.5. De verantwoordelijke moslim en zijn plichten.1.6. Amantoe en de betekenis","vac":false,"skip":false,"ln":4},
+{"wn":5,"mn":"sep","wk":3,"thema":"Geloofsleer","les":"2.7. Allah is almachtig over alle dingen2.8. Allah is met ons","vac":false,"skip":false,"ln":5},
+{"wn":6,"mn":"sep","wk":4,"thema":"Geloofsleer","les":"2. Het geloof in Allah2.1. De mens is een verstandig en gelovig wezen2.2. Er is een zeker evenwicht en overeenstemming in het heelal","vac":false,"skip":false,"ln":6},
+{"wn":7,"mn":"sep","wk":4,"thema":"Geloofsleer","les":"2.9. Ik werk,ik vertrouw op de hulp van Allah en heb succes2.10. Soera al Ihclas en de betekenis","vac":false,"skip":false,"ln":7},
+{"wn":8,"mn":"nov","wk":1,"thema":"Herfsvakantie","les":"29 october – 4 november","vac":true,"skip":false,"ln":0},
+{"wn":9,"mn":"nov","wk":2,"thema":"Geloofsleer","les":"3. Het geloof in de engelen en in de boeken3.1. De wereld van de schepsel3.2. Het geloof in de engelen","vac":false,"skip":false,"ln":8},
+{"wn":10,"mn":"nov","wk":3,"thema":"Geloofsleer","les":"3.3. Het geloof in boeken","vac":false,"skip":false,"ln":9},
+{"wn":11,"mn":"nov","wk":4,"thema":"Aanbidding","les":"4. Reinheid en aanbidding in de Islam4.1. Reinheid4.1.1. Kleine rituele wassing (abdest)4.1.2. Grote rituele wassing (ghoesl)4.1.3. Tayammoem","vac":false,"skip":false,"ln":10},
+{"wn":12,"mn":"dec","wk":1,"thema":"Aanbidding","les":"4.2. Aanbidding in de Islam","vac":false,"skip":false,"ln":11},
+{"wn":13,"mn":"dec","wk":2,"thema":"Aanbidding","les":"5.2 De maand Ramadan en het vasten5.1. De maand Ramadan en haar belang5.2. Wat betekent het vasten","vac":false,"skip":false,"ln":12},
+{"wn":14,"mn":"dec","wk":3,"thema":"Evaluatie","les":"Herhalen en evaluatie","vac":false,"skip":true,"ln":0},
+{"wn":15,"mn":"dec","wk":4,"thema":"Kerstvakantie","les":"24 december – 6 januari","vac":true,"skip":false,"ln":0},
+{"wn":16,"mn":"jan","wk":1,"thema":"Kerstvakantie","les":"24 december – 6 januari","vac":true,"skip":false,"ln":0},
+{"wn":17,"mn":"jan","wk":2,"thema":"Aanbidding","les":"5.3. De maand Ramadan en belangrijke begrippen i.v.m. het vasten5.4. Waarop moeten we letten als we vasten?","vac":false,"skip":false,"ln":13},
+{"wn":18,"mn":"jan","wk":3,"thema":"Aanbidding","les":"5.5. Wat maakt je vasten ongeldig?5.6. Voordelen van het vasten voor de mens en de maatschappij","vac":false,"skip":false,"ln":14},
+{"wn":19,"mn":"jan","wk":4,"thema":"Aanbidding","les":"5.7. Vreugde van de Ramadanfeest5.8. Soera Ma’oen en de betekenis","vac":false,"skip":false,"ln":15},
+{"wn":20,"mn":"feb","wk":1,"thema":"Mohammed (s.a.w.)","les":"6.1. Het leven van de Profeet Mohammed (s.a.w.)6.1.1. Zijn geboorte","vac":false,"skip":false,"ln":16},
+{"wn":21,"mn":"feb","wk":2,"thema":"Mohammed (s.a.w.)","les":"6.1.2. Zijn kinderjaren","vac":false,"skip":false,"ln":17},
+{"wn":22,"mn":"feb","wk":3,"thema":"Krokusvakantie","les":"04 – 10 maart","vac":true,"skip":false,"ln":0},
+{"wn":23,"mn":"feb","wk":4,"thema":"Mohammed (s.a.w.)","les":"6.1.3. Zijn huwelijk","vac":false,"skip":false,"ln":18},
+{"wn":24,"mn":"maa","wk":1,"thema":"Mohammed (s.a.w.)","les":"6.1.4. Zijn profeetschap","vac":false,"skip":false,"ln":19},
+{"wn":25,"mn":"maa","wk":2,"thema":"Mohammed (s.a.w.)","les":"6.2. Als een profeet en een mens; profeet Mohammed (s.a.w.)6.2.1. Mohammed (s.a.w.) als mens6.2.2. Mohammed (s.a.w.) als profeet","vac":false,"skip":false,"ln":20},
+{"wn":26,"mn":"maa","wk":3,"thema":"Mohammed (s.a.w.)","les":"6.2.3. Mohammed (s.a.w.) is de verklaarder van de Koran6.2.4. Mohammed (s.a.w.) is een waarschuwer6.2.5. Mohammed (s.a.w.) is barmhartig voor de mensheid","vac":false,"skip":false,"ln":21},
+{"wn":27,"mn":"maa","wk":4,"thema":"Koran","les":"7. Koran en hadies7.1. Koran","vac":false,"skip":false,"ln":22},
+{"wn":28,"mn":"apr","wk":1,"thema":"Paasvakantie","les":"8– 21 april","vac":true,"skip":false,"ln":0},
+{"wn":29,"mn":"apr","wk":2,"thema":"Paasvakantie","les":"8– 21 april","vac":true,"skip":false,"ln":0},
+{"wn":30,"mn":"apr","wk":3,"thema":"Koran","les":"7.2. Soenna en hadies","vac":false,"skip":false,"ln":23},
+{"wn":31,"mn":"apr","wk":4,"thema":"Koran","les":"7.3. Soera, aya en doe’a","vac":false,"skip":false,"ln":24},
+{"wn":32,"mn":"mei","wk":1,"thema":"Koran","les":"7.4. Verhaal","vac":false,"skip":false,"ln":25},
+{"wn":33,"mn":"mei","wk":2,"thema":"Gedragsvorming/Achlaq","les":"8. Liefde, vriendschap en broederschap8.1. Waarom is liefhebben en geliefd zijn een behoefte?","vac":false,"skip":false,"ln":26},
+{"wn":34,"mn":"mei","wk":3,"thema":"Achlaq","les":"8.2. Liefde is een geschenk voor ons van Allah (s.w.t.)","vac":false,"skip":false,"ln":27},
+{"wn":35,"mn":"mei","wk":4,"thema":"Achlaq","les":"8.3. Allah (s.w.t.) houdt van Zijn schepsel","vac":false,"skip":false,"ln":28},
+{"wn":36,"mn":"jun","wk":1,"thema":"Achlaq","les":"8.4. De basis van vriendschap en broederschap is liefde","vac":false,"skip":false,"ln":29},
+{"wn":37,"mn":"jun","wk":2,"thema":"Achlaq","les":"8.5. De islamitische godsdienst raadt aan om te leven als broeders","vac":false,"skip":false,"ln":30},
+{"wn":38,"mn":"jun","wk":3,"thema":"Achlaq","les":"8.6. Zorg dragen voor andere schepsel","vac":false,"skip":false,"ln":31},
+{"wn":39,"mn":"jun","wk":4,"thema":"Evaluatie","les":"Herhalen en evaluatie","vac":false,"skip":true,"ln":0},
 ],
 "2":[
-{"week_num":1,"month":"september","wk":1,"thema":"Geloofsleer","les":"Noodlot en voorbestemming (Qada en Qadar) — Allah heeft alles naar een bepaalde maat geschapen","is_vacation":false},
-{"week_num":2,"month":"september","wk":2,"thema":"Geloofsleer","les":"Al qadar en de wetten in het heelal — Fysische, biologische en maatschappelijke wetten","is_vacation":false},
-{"week_num":3,"month":"september","wk":3,"thema":"Geloofsleer","les":"Menselijke wilsuiting en de voorbeschikking — Vrijheid en verantwoordelijkheid","is_vacation":false},
-{"week_num":4,"month":"september","wk":4,"thema":"Geloofsleer","les":"Vertrouwen in Allah (tawakkoel)","is_vacation":false},
-{"week_num":5,"month":"oktober","wk":1,"thema":"Geloofsleer","les":"Geloven in de profeten — Namen van profeten in de Koran","is_vacation":false},
-{"week_num":6,"month":"oktober","wk":2,"thema":"Geloofsleer","les":"Geloven in de achira — De dag des oordeels en de wederopstanding","is_vacation":false},
-{"week_num":7,"month":"oktober","wk":3,"thema":"Aanbidding","les":"Verschillende vormen van aanbidding — Mensen hebben behoefte om te delen","is_vacation":false},
-{"week_num":8,"month":"oktober","wk":4,"thema":"Aanbidding","les":"Almoes (zakaat) geven — Wie moet zekaat betalen? Aan wie?","is_vacation":false},
-{"week_num":9,"month":"november","wk":1,"thema":"Herfstvakantie","les":"30 oktober – 5 november","is_vacation":true},
-{"week_num":10,"month":"november","wk":2,"thema":"Aanbidding","les":"Sadaqa als maatschappelijke steun","is_vacation":false},
-{"week_num":11,"month":"november","wk":3,"thema":"Aanbidding","les":"Hulporganisaties","is_vacation":false},
-{"week_num":12,"month":"november","wk":4,"thema":"Aanbidding","les":"Wat is de bedevaart en waarom wordt het verricht?","is_vacation":false},
-{"week_num":13,"month":"december","wk":1,"thema":"Mohammed (s.a.w.)","les":"Medina al Moenawwara — De verlichte stad","is_vacation":false},
-{"week_num":14,"month":"december","wk":2,"thema":"Mohammed (s.a.w.)","les":"Emigratie naar Medina — De angstaanjagende beslissing — In de grot","is_vacation":false},
-{"week_num":15,"month":"december","wk":3,"thema":"Evaluatie","les":"Herhalen en evaluatie","is_vacation":false},
-{"week_num":16,"month":"december","wk":4,"thema":"Kerstvakantie","les":"25 december – 7 januari","is_vacation":true},
-{"week_num":17,"month":"januari","wk":1,"thema":"Kerstvakantie","les":"25 december – 7 januari","is_vacation":true},
-{"week_num":18,"month":"januari","wk":2,"thema":"Mohammed (s.a.w.)","les":"De verwelkoming van Mohammed (s.a.w.)","is_vacation":false},
-{"week_num":19,"month":"januari","wk":3,"thema":"Mohammed (s.a.w.)","les":"Zaken gedaan in het eerste jaar van de emigratie — Broederschap in de Islam","is_vacation":false},
-{"week_num":20,"month":"januari","wk":4,"thema":"Mohammed (s.a.w.)","les":"De overeenkomst met de verschillende godsdienstleiders","is_vacation":false},
-{"week_num":21,"month":"februari","wk":1,"thema":"Mohammed (s.a.w.)","les":"De slag bij Badr (624)","is_vacation":false},
-{"week_num":22,"month":"februari","wk":2,"thema":"Mohammed (s.a.w.)","les":"De slag bij Oehoed (625)","is_vacation":false},
-{"week_num":23,"month":"februari","wk":3,"thema":"Krokusvakantie","les":"12 – 18 februari","is_vacation":true},
-{"week_num":24,"month":"februari","wk":4,"thema":"Mohammed (s.a.w.)","les":"Vredesverdrag van Hoedaybiya","is_vacation":false},
-{"week_num":25,"month":"maart","wk":1,"thema":"Mohammed (s.a.w.)","les":"De verovering van Mekka (630)","is_vacation":false},
-{"week_num":26,"month":"maart","wk":2,"thema":"Mohammed (s.a.w.)","les":"De afscheidsbedevaart en het overlijden van onze Profeet","is_vacation":false},
-{"week_num":27,"month":"maart","wk":3,"thema":"Mohammed (s.a.w.)","les":"Voorbeeldig gedrag van Profeet Mohammed (s.a.w.)","is_vacation":false},
-{"week_num":28,"month":"maart","wk":4,"thema":"Mohammed (s.a.w.)","les":"Voorbeeldig gedrag (achlaq) — Betrouwbaar, barmhartig, evenwaardig, moedig","is_vacation":false},
-{"week_num":29,"month":"april","wk":1,"thema":"Paasvakantie","les":"1 – 15 april","is_vacation":true},
-{"week_num":30,"month":"april","wk":2,"thema":"Paasvakantie","les":"1 – 15 april","is_vacation":true},
-{"week_num":31,"month":"april","wk":3,"thema":"Mohammed (s.a.w.)","les":"Mohammed: belofte nakomen, verdraagzaam, hechtte belang aan kennis","is_vacation":false},
-{"week_num":32,"month":"april","wk":4,"thema":"Geloofsleer","les":"Rechten en plichten van een moslim — Respect — Vrees voor Allah","is_vacation":false},
-{"week_num":33,"month":"mei","wk":1,"thema":"Gedragsvorming/Achlaq","les":"Goede achlaq — Op welke manier levert de godsdienst een bijdrage","is_vacation":false},
-{"week_num":34,"month":"mei","wk":2,"thema":"Achlaq","les":"Bepaalde gedragingen die door de Islam geprezen worden","is_vacation":false},
-{"week_num":35,"month":"mei","wk":3,"thema":"Geloofsleer","les":"Godsdiensten en universele raadgevingen — Waarom is geloven belangrijk?","is_vacation":false},
-{"week_num":36,"month":"mei","wk":4,"thema":"Geloofsleer","les":"Laten we de verschillende levensbeschouwingen even nader bekijken","is_vacation":false},
-{"week_num":37,"month":"juni","wk":1,"thema":"Geloofsleer","les":"Gelijkenissen tussen de Islam en de andere godsdiensten","is_vacation":false},
-{"week_num":38,"month":"juni","wk":2,"thema":"Geloofsleer","les":"Goed gedrag tegenover dieren — Het leefmilieu","is_vacation":false},
-{"week_num":39,"month":"juni","wk":3,"thema":"Geloofsleer","les":"Verdraagzaam zijn tegenover andere godsdiensten","is_vacation":false},
-{"week_num":40,"month":"juni","wk":4,"thema":"Evaluatie","les":"Herhalen en evaluatie","is_vacation":false}
+{"wn":1,"mn":"sep","wk":1,"thema":"Geloofsleer","les":"1. Noodlot en voorbestemming (Qada en Qadar)1.1. Allah (s.w.t.) heeft alles naar een bepaalde maat geschapen","vac":false,"skip":false,"ln":1},
+{"wn":2,"mn":"sep","wk":2,"thema":"Geloofsleer","les":"1.2. Al qadar (voorbestemming) en de wetten in het heelal1.2.1. Fysische wetten1.2.2. Biologische wetten1.2.3. Maatschappelijke","vac":false,"skip":false,"ln":2},
+{"wn":3,"mn":"sep","wk":2,"thema":"Geloofsleer","les":"2.2. Geloven in de achira2.2.1. De dag des oordeels en de wederopstanding2.2.2. Het hiernamaals: beloning of bestraffing voor onze daden in de wereld2.2.3. De invloed van het geloven in het hiernamaals op ons gedrag","vac":false,"skip":false,"ln":3},
+{"wn":4,"mn":"sep","wk":3,"thema":"Geloofsleer","les":"1.3. Menselijke wilsuiting en de voorbeschikking1.3.1. Vrijheid en de verantwoordelijkheid van de mens1.3.2. Inzet van de mens: werk en “rizq”1.3.3. Einde van het wereldse leven: overlijden en levensduur","vac":false,"skip":false,"ln":4},
+{"wn":5,"mn":"sep","wk":3,"thema":"Aanbidding","les":"3. Verschillende vormen van aanbidding3.1. Mensen hebben behoefte om met elkaar te delen en elkaar te helpen","vac":false,"skip":false,"ln":5},
+{"wn":6,"mn":"sep","wk":4,"thema":"Geloofsleer","les":"1.4. Vertrouwen in Allah (s.w.t.) (tawakkoel)","vac":false,"skip":false,"ln":6},
+{"wn":7,"mn":"sep","wk":4,"thema":"Aanbidding","les":"3.2. Almoes (zakaat) geven als een onderdeel van vrijgevigheid3.2.1. Wie moet zekaat betalen?3.2.2. Waarvan kan men zekaat betalen?3.2.3. Aan wie en op welke wijze moet men zekaat betalen?","vac":false,"skip":false,"ln":7},
+{"wn":8,"mn":"nov","wk":1,"thema":"Herfsvakantie","les":"30 october – 5 november","vac":true,"skip":false,"ln":0},
+{"wn":9,"mn":"nov","wk":2,"thema":"Aanbidding","les":"3.3. Sadaqa als maatschappelijke steun","vac":false,"skip":false,"ln":8},
+{"wn":10,"mn":"nov","wk":3,"thema":"Aanbidding","les":"3.4. Hulporganisaties","vac":false,"skip":false,"ln":9},
+{"wn":11,"mn":"nov","wk":4,"thema":"Aanbidding","les":"3.5. Wat is de bedevaart en waarom wordt het verricht?","vac":false,"skip":false,"ln":10},
+{"wn":12,"mn":"dec","wk":1,"thema":"Mohammed (s.a.w.)","les":"Medina al Moenawwara4.1. Medina: de verlichte stad","vac":false,"skip":false,"ln":11},
+{"wn":13,"mn":"dec","wk":2,"thema":"Mohammed (s.a.w.)","les":"4.2 Emigratie naar Medina4.2.1. Emigratie4.2.2. De angstaanjagende beslissing4.2.3. Maatregelen van Mohammed (s.a.w.)4.2.4. In de grot","vac":false,"skip":false,"ln":12},
+{"wn":14,"mn":"dec","wk":3,"thema":"Evaluatie","les":"Herhalen en evaluatie","vac":false,"skip":true,"ln":0},
+{"wn":15,"mn":"dec","wk":4,"thema":"Kerstvakantie","les":"25 december – 7 januari","vac":true,"skip":false,"ln":0},
+{"wn":16,"mn":"jan","wk":1,"thema":"Kerstvakantie","les":"25 december – 7 januari","vac":true,"skip":false,"ln":0},
+{"wn":17,"mn":"jan","wk":2,"thema":"Mohammed (s.a.w.)","les":"4.3. De verwelkoming van Mohammed (s.a.w.)","vac":false,"skip":false,"ln":13},
+{"wn":18,"mn":"jan","wk":3,"thema":"Mohammed (s.a.w.)","les":"4.4. Zaken die gedaan werden in het eerste jaar van de emigratie4.4.1. De broederschap in de Islam","vac":false,"skip":false,"ln":14},
+{"wn":19,"mn":"jan","wk":4,"thema":"Mohammed (s.a.w.)","les":"4.5. De overeenkomst die Mohammed (s.a.w.) sloot met de verschillende godsdienstleiders","vac":false,"skip":false,"ln":15},
+{"wn":20,"mn":"feb","wk":1,"thema":"Mohammed (s.a.w.)","les":"4.6. De slag bij Badr (624)","vac":false,"skip":false,"ln":16},
+{"wn":21,"mn":"feb","wk":2,"thema":"Mohammed (s.a.w.)","les":"4.7. De slag bij Oehoed (625)","vac":false,"skip":false,"ln":17},
+{"wn":22,"mn":"feb","wk":3,"thema":"Krokusvakantie","les":"12 – 18 februari","vac":true,"skip":false,"ln":0},
+{"wn":23,"mn":"feb","wk":4,"thema":"Mohammed (s.a.w.)","les":"4.8. Vredesverdrag van Hoedaybiya","vac":false,"skip":false,"ln":18},
+{"wn":24,"mn":"maa","wk":1,"thema":"Mohammed (s.a.w.)","les":"4.9. De verovering van Mekka (630)","vac":false,"skip":false,"ln":19},
+{"wn":25,"mn":"maa","wk":2,"thema":"Mohammed (s.a.w.)","les":"4.10. De afscheidsbedevaart en het overlijden van onze Profeet","vac":false,"skip":false,"ln":20},
+{"wn":26,"mn":"maa","wk":3,"thema":"Mohammed (s.a.w.)","les":"5. Voorbeeldige gedrag van Profeet Mohammed (s.a.w.)5.1. Mohammed (s.a.w.) werd als een voorbeeldfiguur gestuurd naar de mensen","vac":false,"skip":false,"ln":21},
+{"wn":27,"mn":"maa","wk":4,"thema":"Mohammed (s.a.w.)","les":"5.2. Voorbeeldige gedrag (achlaq) van de Profeet (s.a.w.)5.2.1. Mohammed (s.a.w.) was een betrouwbare man5.2.2. Mohammed (s.a.w.) was barmhartig en vergevensgezind5.2.3. Mohammed (s.a.w.) behandelde iedereen als evenwaardig5.2.4. Mohammed (s.a.w.) was een moedig man5.2.5. Mohammed (s.a.w.) spoorde rechtvaardig gedrag aan5.2.6. Mohammed (s.a.w.) was geduldig","vac":false,"skip":false,"ln":22},
+{"wn":28,"mn":"apr","wk":1,"thema":"Paasvakantie","les":"1 – 15 april","vac":true,"skip":false,"ln":0},
+{"wn":29,"mn":"apr","wk":2,"thema":"Paasvakantie","les":"1 – 15 april","vac":true,"skip":false,"ln":0},
+{"wn":30,"mn":"apr","wk":3,"thema":"Mohammed (s.a.w.)","les":"5.2.7. Mohammed (s.a.w.) kwam zijn belofte altijd na 5.2.8. Mohammed (s.a.w.) was verdraagzaam (tolerant)5.2.9. Mohammed (s.a.w.) hechtte belang aan kennis en onderwijs5.2.10. Mohammed (s.a.w.) benutte zijn tijd op de best mogelijke wijze5.2.11. Mohammed (s.a.w.) vroeg steeds advies aan zijn vrienden5.2.12. Mohammed (s.a.w.) hield van de dieren en de natuur","vac":false,"skip":false,"ln":23},
+{"wn":31,"mn":"apr","wk":4,"thema":"Geloofsleer","les":"Rechten en plichten van een moslim6.1. Respect6.2. Vrees voor Allah (s.w.t.)6.2.1. Hoe zich gedragen tegenover Allah (s.w.t.)6.3. Onze plichten tegenover Allah (s.w.t.), de Profeet (s.a.w.) en de Koran6.3.1. Plichten tegenover Allah (s.w.t.)6.3.2. Plichten tegenover profeten6.3.3. Plichten tegenover Koran6.4. respect tegenover ouders","vac":false,"skip":false,"ln":24},
+{"wn":32,"mn":"mei","wk":1,"thema":"Gedragsvorming/Achlaq","les":"Goede achlaq7.1. Op welke manier levert de godsdienst een bijdrage aan mijn goede achlaq?","vac":false,"skip":false,"ln":25},
+{"wn":33,"mn":"mei","wk":2,"thema":"Achlaq","les":"7.2. Bepaalde gedragingen die door de Islam geprezen worden7.2.1. Eerlijkheid 7.2.2. Anderen financieel steunen (infaq)7.2.3. Het beschermen van het in bewaring gegeven goederen7.2.4. Rechtvaardigheid zijn7.2.5. Broederschap7.2.6. Verdraagzaamheid en vergiffenis7.2.7. Bescheidenheid (tawadoe)7.2.8. Manieren hebben7.2.9. Vriendelijk zijn tegenover mensen7.2.10. Verspilling vermijden","vac":false,"skip":false,"ln":26},
+{"wn":34,"mn":"mei","wk":3,"thema":"Geloofsleer","les":"8. Godsdiensten en universele raadgevingen8.1. Waarom is godsdienst universeel?8.2. Waarom bestaat er meer dan een godsdienst?","vac":false,"skip":false,"ln":27},
+{"wn":35,"mn":"mei","wk":4,"thema":"Geloofsleer","les":"8.3. Laten we de verschillende levensbeschouwingen even bekijken8.3.1. Hindoeïsme en Boeddhisme 8.3.2. Het Jodendom8.3.3. Het Christendom8.3.4. De Islam","vac":false,"skip":false,"ln":28},
+{"wn":36,"mn":"jun","wk":1,"thema":"Geloofsleer","les":"8.4. Gelijkenissen tussen de Islam en de andere godsdiensten8.4.1. Eerlijkheid8.4.2. Hygiëne8.4.3. Godheid en behulpzaamheid8.4.4. Respect tegenover ouderen en liefde tegenover jongeren","vac":false,"skip":false,"ln":29},
+{"wn":37,"mn":"jun","wk":2,"thema":"Geloofsleer","les":"8.4.5. Goed gedrag tegenover dieren8.4.6. Het leefmilieu beschermen8.4.7. Afstand nemen van schadelijke gewoonten8.4.8. Anderen geen schade aanbrengen","vac":false,"skip":false,"ln":30},
+{"wn":38,"mn":"jun","wk":3,"thema":"Geloofsleer","les":"8.5. Verdraagzaam zijn tegenover andere godsdiensten","vac":false,"skip":false,"ln":31},
+{"wn":39,"mn":"jun","wk":4,"thema":"Evaluatie","les":"Herhalen en evaluatie","vac":false,"skip":true,"ln":0},
 ],
 "3":[
-{"week_num":1,"month":"september","wk":1,"thema":"Het geloof","les":"Mens en religie — De positie van de mens","is_vacation":false},
-{"week_num":2,"month":"september","wk":2,"thema":"Het geloof","les":"De natuur van de mens en het geloof — De positie en het belang van godsdienst","is_vacation":false},
-{"week_num":3,"month":"september","wk":3,"thema":"Het geloof","les":"De verschillende vormen van geloven — Monotheïsme, Polytheïsme, Atheïsme","is_vacation":false},
-{"week_num":4,"month":"september","wk":4,"thema":"Het geloof","les":"De profeten in de Koran — Het profeetschap","is_vacation":false},
-{"week_num":5,"month":"oktober","wk":1,"thema":"Het geloof","les":"De nood aan profeten — De opdracht van profeten","is_vacation":false},
-{"week_num":6,"month":"oktober","wk":2,"thema":"Het geloof","les":"Waarom komen profetenverhalen voor in de Koran? — Kenmerken","is_vacation":false},
-{"week_num":7,"month":"oktober","wk":3,"thema":"Het geloof","les":"De eigenschappen van 25 profeten vermeld in de Koran","is_vacation":false},
-{"week_num":8,"month":"oktober","wk":4,"thema":"Het geloof","les":"Reinheid en aanbidding — Het begrip 'aanbidding'","is_vacation":false},
-{"week_num":9,"month":"november","wk":1,"thema":"Herfstvakantie","les":"30 oktober – 5 november","is_vacation":true},
-{"week_num":10,"month":"november","wk":2,"thema":"De aanbidding","les":"Waarom aanbidden wij Allah?","is_vacation":false},
-{"week_num":11,"month":"november","wk":3,"thema":"De aanbidding","les":"De inhoud van het begrip 'aanbidding'","is_vacation":false},
-{"week_num":12,"month":"november","wk":4,"thema":"De aanbidding","les":"De relatie tussen aanbidding en reinheid — De reinheid","is_vacation":false},
-{"week_num":13,"month":"december","wk":1,"thema":"Mohammed (s.a.w.)","les":"Het levensverhaal — De geboorte, kindertijd en jeugd van Mohammed","is_vacation":false},
-{"week_num":14,"month":"december","wk":2,"thema":"Mohammed (s.a.w.)","les":"De eerste openbaring — De hidjra (verhuizing)","is_vacation":false},
-{"week_num":15,"month":"december","wk":3,"thema":"Evaluatie","les":"Herhalen en evaluatie","is_vacation":false},
-{"week_num":16,"month":"december","wk":4,"thema":"Kerstvakantie","les":"25 december – 7 januari","is_vacation":true},
-{"week_num":17,"month":"januari","wk":1,"thema":"Kerstvakantie","les":"25 december – 7 januari","is_vacation":true},
-{"week_num":18,"month":"januari","wk":2,"thema":"Mohammed (s.a.w.)","les":"Activiteiten gericht op een vredevolle samenleving","is_vacation":false},
-{"week_num":19,"month":"januari","wk":3,"thema":"Mohammed (s.a.w.)","les":"Inspanningen rond de verspreiding van de Islam","is_vacation":false},
-{"week_num":20,"month":"januari","wk":4,"thema":"Mohammed (s.a.w.)","les":"Universele principes in de 'Afscheidspreek'","is_vacation":false},
-{"week_num":21,"month":"februari","wk":1,"thema":"Mohammed (s.a.w.)","les":"Het overlijden van profeet Mohammed (s.a.w.)","is_vacation":false},
-{"week_num":22,"month":"februari","wk":2,"thema":"De openbaring","les":"De Koran en de inhoud — De Koran is de hoofdbron van de Islam","is_vacation":false},
-{"week_num":23,"month":"februari","wk":3,"thema":"Krokusvakantie","les":"12 – 18 februari","is_vacation":true},
-{"week_num":24,"month":"februari","wk":4,"thema":"De openbaring","les":"De geschiedenis van de Koran — Begrippen in verband met de Koran","is_vacation":false},
-{"week_num":25,"month":"maart","wk":1,"thema":"De openbaring","les":"De basisonderwerpen van de Koran — Boodschappen in Nederlandse uitdrukkingen","is_vacation":false},
-{"week_num":26,"month":"maart","wk":2,"thema":"De moraal en de waarden","les":"De waarden en het gezin — Wat betekent 'de waarde'?","is_vacation":false},
-{"week_num":27,"month":"maart","wk":3,"thema":"De moraal/waarden","les":"De invloed van de godsdienst op morele waarden — Islamitische waarden","is_vacation":false},
-{"week_num":28,"month":"maart","wk":4,"thema":"De moraal/waarden","les":"De invloed van de Islamitische waarden op ons gedrag","is_vacation":false},
-{"week_num":29,"month":"april","wk":1,"thema":"Paasvakantie","les":"1 – 15 april","is_vacation":true},
-{"week_num":30,"month":"april","wk":2,"thema":"Paasvakantie","les":"1 – 15 april","is_vacation":true},
-{"week_num":31,"month":"april","wk":3,"thema":"De moraal/waarden","les":"Relatie tussen de waarden en het gezin","is_vacation":false},
-{"week_num":32,"month":"april","wk":4,"thema":"De moraal/waarden","les":"Aanbevelingen van de Koran en de profeet in verband met het gezin","is_vacation":false},
-{"week_num":33,"month":"mei","wk":1,"thema":"Hadies en soenna","les":"Het belang van soenna in de Islam — De definitie van hadies","is_vacation":false},
-{"week_num":34,"month":"mei","wk":2,"thema":"Hadies en soenna","les":"De opbouw van hadies — Eigenschappen van hadies overleveraars","is_vacation":false},
-{"week_num":35,"month":"mei","wk":3,"thema":"Hadies en soenna","les":"De soorten hadies — Het belang van hadies","is_vacation":false},
-{"week_num":36,"month":"mei","wk":4,"thema":"Hadies en soenna","les":"De meest beroemde hadies boeken — De definitie van soenna","is_vacation":false},
-{"week_num":37,"month":"juni","wk":1,"thema":"De feestdagen","les":"De Islamitische jaarkalender en de feestdagen — De kalender","is_vacation":false},
-{"week_num":38,"month":"juni","wk":2,"thema":"De feestdagen","les":"De feestdagen van de Islam — Belangrijke dagen en nachten","is_vacation":false},
-{"week_num":39,"month":"juni","wk":3,"thema":"De feestdagen","les":"De islamitische jaarkalender met data — Christelijke en joodse kalender","is_vacation":false},
-{"week_num":40,"month":"juni","wk":4,"thema":"Evaluatie","les":"Herhalen en evaluatie","is_vacation":false}
+{"wn":1,"mn":"sep","wk":1,"thema":"Het geloof","les":"1. Mens en religie1.1. De positie van de mens","vac":false,"skip":false,"ln":1},
+{"wn":2,"mn":"sep","wk":2,"thema":"Het geloof","les":"1.2. De natuur van de mens en het geloof1.3. De positie en het belang van de godsdienst in het mensenleven","vac":false,"skip":false,"ln":2},
+{"wn":3,"mn":"sep","wk":2,"thema":"Het geloof","les":"2.4. Waarom komen profetenverhalen voor in de Koran?2.5. De kenmerken van profetenverhalen in de Koran","vac":false,"skip":false,"ln":3},
+{"wn":4,"mn":"sep","wk":3,"thema":"Het geloof","les":"1.4. De verschillende vormen van geloven1.4.1. Monotheïsme 1.4.2. Polytheïsme1.4.3. Gnosticisme1.4.4. Agnosticisme1.4.5. Atheïsme","vac":false,"skip":false,"ln":4},
+{"wn":5,"mn":"sep","wk":3,"thema":"Het geloof","les":"2.6. De eigenschappen van 25 profeten vermeld in de Koran2.6.1. Adem (a.s.) - Mohammed (s.a.w.)","vac":false,"skip":false,"ln":5},
+{"wn":6,"mn":"sep","wk":4,"thema":"Het geloof","les":"2. De profeten in de Koran2.1. Het profeetschap","vac":false,"skip":false,"ln":6},
+{"wn":7,"mn":"sep","wk":4,"thema":"Het geloof","les":"3. Reinheid en aanbidding3.1. Het begrip “aanbidding”","vac":false,"skip":false,"ln":7},
+{"wn":8,"mn":"nov","wk":1,"thema":"Herfsvakantie","les":"30 october – 5 november","vac":true,"skip":false,"ln":0},
+{"wn":9,"mn":"nov","wk":2,"thema":"De aanbidding","les":"3.2. Waarom aanbidding wij Allah (s.w.t.)?","vac":false,"skip":false,"ln":8},
+{"wn":10,"mn":"nov","wk":3,"thema":"De aanbidding","les":"3.3. De inhoud van het begrip “aanbidding”","vac":false,"skip":false,"ln":9},
+{"wn":11,"mn":"nov","wk":4,"thema":"De aanbidding","les":"3.4. De relatie tussen aanbidding en reinheid3.5. De reinheid","vac":false,"skip":false,"ln":10},
+{"wn":12,"mn":"dec","wk":1,"thema":"Mohammed (s.a.w.)","les":"Het levensverhaal van profeet Mohammed (s.a.w.)4.1. De geboorte, de kindertijd en de jeugd van profeet Mohammed (s.a.w.)","vac":false,"skip":false,"ln":11},
+{"wn":13,"mn":"dec","wk":2,"thema":"Mohammed (s.a.w.)","les":"4.2. De eerste openbaring aan profeet Mohammed (s.a.w.)4.3. De hidjra (verhuizing) van profeet Mohammed (s.a.w.)","vac":false,"skip":false,"ln":12},
+{"wn":14,"mn":"dec","wk":3,"thema":"Evaluatie","les":"Herhalen en evaluatie","vac":false,"skip":true,"ln":0},
+{"wn":15,"mn":"dec","wk":4,"thema":"Kerstvakantie","les":"25 december – 7 januari","vac":true,"skip":false,"ln":0},
+{"wn":16,"mn":"jan","wk":1,"thema":"Kerstvakantie","les":"25 december – 7 januari","vac":true,"skip":false,"ln":0},
+{"wn":17,"mn":"jan","wk":2,"thema":"Mohammed (s.a.w.)","les":"4.4. De activiteiten van profeet Mohammed (s.a.w.) gericht op een vredevolle samenleven","vac":false,"skip":false,"ln":13},
+{"wn":18,"mn":"jan","wk":3,"thema":"Mohammed (s.a.w.)","les":"4.5. De inspanningen van profeet Mohammed (s.a.w.) rond de verspreiding van de Islam","vac":false,"skip":false,"ln":14},
+{"wn":19,"mn":"jan","wk":4,"thema":"Mohammed (s.a.w.)","les":"4.6. Universele principes in de “Afscheidspreek” van profeet Mohammed (s.a.w.)","vac":false,"skip":false,"ln":15},
+{"wn":20,"mn":"feb","wk":1,"thema":"Mohammed (s.a.w.)","les":"4.7. Het overlijden van profeet Mohammed (s.a.w.)","vac":false,"skip":false,"ln":16},
+{"wn":21,"mn":"feb","wk":2,"thema":"De openbaring(al-Wahy)","les":"De Koran en de inhoud5.1. De Koran is de hoofdbron van de Islamitische godsdienst","vac":false,"skip":false,"ln":17},
+{"wn":22,"mn":"feb","wk":3,"thema":"Krokusvakantie","les":"12 – 18 februari","vac":true,"skip":false,"ln":0},
+{"wn":23,"mn":"feb","wk":4,"thema":"De openbaring","les":"5.2. De geschiedenis van de Koran5.3. Enkele begrippen in verband met de Koran","vac":false,"skip":false,"ln":18},
+{"wn":24,"mn":"maa","wk":1,"thema":"De openbaring","les":"5.4. De basisonderwerpen van de Koran5.5. De boodschappen van de Koran in Nederlandse uitdrukkingen","vac":false,"skip":false,"ln":19},
+{"wn":25,"mn":"maa","wk":2,"thema":"De moraal en de waarden","les":"De waarden en het gezin6.1. Wat betekent “de waarde”?","vac":false,"skip":false,"ln":20},
+{"wn":26,"mn":"maa","wk":3,"thema":"De moraal/waarden","les":"6.2. De invloed van de godsdienst op morele waarden6.3. De Islamitische waarden","vac":false,"skip":false,"ln":21},
+{"wn":27,"mn":"maa","wk":4,"thema":"De moraal/waarden","les":"6.4. De invloed van de Islamitische waarden op ons gedrag","vac":false,"skip":false,"ln":22},
+{"wn":28,"mn":"apr","wk":1,"thema":"Paasvakantie","les":"1 – 15 april","vac":true,"skip":false,"ln":0},
+{"wn":29,"mn":"apr","wk":2,"thema":"Paasvakantie","les":"1 – 15 april","vac":true,"skip":false,"ln":0},
+{"wn":30,"mn":"apr","wk":3,"thema":"De moraal/waarden","les":"6.5. Relatie tussen de waarden en het gezin","vac":false,"skip":false,"ln":23},
+{"wn":31,"mn":"apr","wk":4,"thema":"De moraal/waarden","les":"6.6. Aanbevelingen van de Koran en de profeet Mohammed (s.a.w.) in verband met het gezin","vac":false,"skip":false,"ln":24},
+{"wn":32,"mn":"mei","wk":1,"thema":"Hadis ve soenna","les":"Het belang van soenna in de Islam7.1. De definitie van hadis","vac":false,"skip":false,"ln":25},
+{"wn":33,"mn":"mei","wk":2,"thema":"Hadis ve soenna","les":"7.2. De opbouw van hadis7.3. De eigenschappen van de hadis overleveraars en de zeven sahaba die meer dan duizend hadis overgeleverd hebben","vac":false,"skip":false,"ln":26},
+{"wn":34,"mn":"mei","wk":3,"thema":"Hadis ve soenna","les":"7.4. De soorten hadis7.5. Het belang van hadis","vac":false,"skip":false,"ln":27},
+{"wn":35,"mn":"mei","wk":4,"thema":"Hadis ve soenna","les":"7.6. De meest beroemde hadis boeken (Koetoeboes-Sitta)7.7. De definitie van soenna","vac":false,"skip":false,"ln":28},
+{"wn":36,"mn":"jun","wk":1,"thema":"De feestdagen van de Islam","les":"De Islamitische jaarkalender en de feestdagen8.1. De kalender8.2. De Islamitische jaarkalender","vac":false,"skip":false,"ln":29},
+{"wn":37,"mn":"jun","wk":2,"thema":"De feestdagen van de Islam","les":"8.3. De feestdagen van de Islam8.4. De belangrijke dagen en nachten in de Islam","vac":false,"skip":false,"ln":30},
+{"wn":38,"mn":"jun","wk":3,"thema":"De feestdagen van de Islam","les":"8.5. De islamitische jaarkalender met belangrijke data8.6. De christelijke en joodse kalender met belangrijke data","vac":false,"skip":false,"ln":31},
+{"wn":39,"mn":"jun","wk":4,"thema":"Evaluatie","les":"Herhalen en evaluatie","vac":false,"skip":true,"ln":0},
 ],
 "4":[
-{"week_num":1,"month":"september","wk":1,"thema":"Het geloof in Allah","les":"Het geloof in Allah — Bewijzen over de uniciteit van Allah","is_vacation":false},
-{"week_num":2,"month":"september","wk":2,"thema":"Het geloof in Allah","les":"Allah is de schepper van universum — Allah is de levensgevende","is_vacation":false},
-{"week_num":3,"month":"september","wk":3,"thema":"Het geloof in Allah","les":"Allah is alziende — Relatie tussen Allah en de mens","is_vacation":false},
-{"week_num":4,"month":"september","wk":4,"thema":"Het geloof in Allah","les":"Islamitische geloofsleer","is_vacation":false},
-{"week_num":5,"month":"oktober","wk":1,"thema":"De aanbidding","les":"Soorten ibada in Islam — Verband tussen iman en ibada","is_vacation":false},
-{"week_num":6,"month":"oktober","wk":2,"thema":"De aanbidding","les":"Belangrijkste vormen van ibada — Oprechte handelingen","is_vacation":false},
-{"week_num":7,"month":"oktober","wk":3,"thema":"De aanbidding","les":"Fundamentele aspecten bij ibada — Leestekst: Ali en zijn persoonlijkheid","is_vacation":false},
-{"week_num":8,"month":"oktober","wk":4,"thema":"Mohammed (s.a.w.)","les":"Mohammed volgens de Koran — Mohammed is een mens","is_vacation":false},
-{"week_num":9,"month":"november","wk":1,"thema":"Herfstvakantie","les":"30 oktober – 5 november","is_vacation":true},
-{"week_num":10,"month":"november","wk":2,"thema":"Mohammed (s.a.w.)","les":"Mohammed is een profeet — Mohammed is de laatste profeet","is_vacation":false},
-{"week_num":11,"month":"november","wk":3,"thema":"Mohammed (s.a.w.)","les":"Mohammed is de uitlegger van de Koran — een waarschuwer voor de mensheid","is_vacation":false},
-{"week_num":12,"month":"november","wk":4,"thema":"Mohammed (s.a.w.)","les":"Mohammed is barmhartig — de aanvuller van etnische waarden","is_vacation":false},
-{"week_num":13,"month":"december","wk":1,"thema":"De openbaring en het verstand","les":"Koran en interpretatie — Fundamentele doelstellingen van de Koran","is_vacation":false},
-{"week_num":14,"month":"december","wk":2,"thema":"De openbaring en het verstand","les":"Het reciteren van de Koran — Het begrijpen en interpreteren","is_vacation":false},
-{"week_num":15,"month":"december","wk":3,"thema":"Evaluatie","les":"Herhalen en evaluatie","is_vacation":false},
-{"week_num":16,"month":"december","wk":4,"thema":"Kerstvakantie","les":"25 december – 7 januari","is_vacation":true},
-{"week_num":17,"month":"januari","wk":1,"thema":"Kerstvakantie","les":"25 december – 7 januari","is_vacation":true},
-{"week_num":18,"month":"januari","wk":2,"thema":"De moraal en de waarden","les":"Rechten en vrijheden — Terminologie: recht en vrijheid","is_vacation":false},
-{"week_num":19,"month":"januari","wk":3,"thema":"De moraal en de waarden","les":"Gebruik van rechten en vrijheden — Suprematie van het recht","is_vacation":false},
-{"week_num":20,"month":"januari","wk":4,"thema":"De moraal en de waarden","les":"Schenden van burgerrechten is een grote zonde — Leestekst: Omar en rechtvaardigheid","is_vacation":false},
-{"week_num":21,"month":"februari","wk":1,"thema":"Eredienst","les":"De sociale rol van de moskee — De moskee, het hart van de stad","is_vacation":false},
-{"week_num":22,"month":"februari","wk":2,"thema":"Eredienst","les":"De moskee en de eenheid van de moslims — De gemeenschappelijke gebeden","is_vacation":false},
-{"week_num":23,"month":"februari","wk":3,"thema":"Krokusvakantie","les":"12 – 18 februari","is_vacation":true},
-{"week_num":24,"month":"februari","wk":4,"thema":"Eredienst","les":"De moskee: opvoeding en onderwijs — Indeling van de moskee","is_vacation":false},
-{"week_num":25,"month":"maart","wk":1,"thema":"Eredienst","les":"Belangrijke leefregels in de moskee — Voorbeeld van een multifunctionele moskee","is_vacation":false},
-{"week_num":26,"month":"maart","wk":2,"thema":"Ethiek in de Islam","les":"Sabr in de Islam — As-Sabr: de betekenis in Islam","is_vacation":false},
-{"week_num":27,"month":"maart","wk":3,"thema":"Ethiek in de Islam","les":"Verschillende niveaus van sabr — Leren geduldig zijn","is_vacation":false},
-{"week_num":28,"month":"maart","wk":4,"thema":"Ethiek in de Islam","les":"De goddelijke beloning voor hen die geduldig zijn — Het verhaal van Ayyoeb","is_vacation":false},
-{"week_num":29,"month":"april","wk":1,"thema":"Paasvakantie","les":"1 – 15 april","is_vacation":true},
-{"week_num":30,"month":"april","wk":2,"thema":"Paasvakantie","les":"1 – 15 april","is_vacation":true},
-{"week_num":31,"month":"april","wk":3,"thema":"Ethiek in de Islam","les":"Schaamte en fatsoen in de Islam — Schaamte versus verlegenheid","is_vacation":false},
-{"week_num":32,"month":"april","wk":4,"thema":"Ethiek in de Islam","les":"Haya in de Islam — Domeinen van haya","is_vacation":false},
-{"week_num":33,"month":"mei","wk":1,"thema":"Geloof, cultuur en beschaving","les":"Islam en wetenschap — Verband tussen geloof en wetenschap","is_vacation":false},
-{"week_num":34,"month":"mei","wk":2,"thema":"Geloof, cultuur en beschaving","les":"Islam promoot het gebruik van het verstand en de wetenschap","is_vacation":false},
-{"week_num":35,"month":"mei","wk":3,"thema":"Geloof, cultuur en beschaving","les":"Onderwijsinstanties in de Islamitische beschaving — Bijdrage van moslims","is_vacation":false},
-{"week_num":36,"month":"mei","wk":4,"thema":"Gedragsvorming","les":"Slechte gewoontes volgens de Islam — Roken","is_vacation":false},
-{"week_num":37,"month":"juni","wk":1,"thema":"Gedragsvorming","les":"Alcohol drinken — Drugs en andere verdovende middelen","is_vacation":false},
-{"week_num":38,"month":"juni","wk":2,"thema":"Gedragsvorming","les":"Gokken — Hoe begint men aan slechte gewoontes","is_vacation":false},
-{"week_num":39,"month":"juni","wk":3,"thema":"Gedragsvorming","les":"Hoe kan men zich beschermen tegen slechte gewoontes","is_vacation":false},
-{"week_num":40,"month":"juni","wk":4,"thema":"Evaluatie","les":"Herhalen en evaluatie","is_vacation":false}
+{"wn":1,"mn":"sep","wk":1,"thema":"Het geloof in Allah","les":"1. Het geloof in Allah (s.w.t.)1.1. Bewijzen over de uniciteit van Allah (s.w.t.)","vac":false,"skip":false,"ln":1},
+{"wn":2,"mn":"sep","wk":2,"thema":"Het geloof in Allah","les":"1.2. Allah (s.w.t.) is de schepper van universum1.3. Allah (s.w.t.) is de levensgevende","vac":false,"skip":false,"ln":2},
+{"wn":3,"mn":"sep","wk":2,"thema":"De aanbidding","les":"2.2. Belangrijkste vormen van ibada?2.3. Oprechte handelingen","vac":false,"skip":false,"ln":3},
+{"wn":4,"mn":"sep","wk":3,"thema":"Het geloof in Allah","les":"1.4. Allah (s.w.t.) is alziende1.5. Relatie tussen Allah (s.w.t.) en de mens","vac":false,"skip":false,"ln":4},
+{"wn":5,"mn":"sep","wk":3,"thema":"De aanbidding","les":"2.4. Fundamentele aspecten bij ibada2.5. Leestekst: Ali (r.anh) en zijn persoonlijkheid","vac":false,"skip":false,"ln":5},
+{"wn":6,"mn":"sep","wk":4,"thema":"Het geloof in Allah","les":"1.6. Islamitische geloofsleer","vac":false,"skip":false,"ln":6},
+{"wn":7,"mn":"sep","wk":4,"thema":"Mohammed (s.a.w.)","les":"3. Mohammed (s.a.w.) volgens de Koran3.1. Mohammed (s.a.w.) is een mens","vac":false,"skip":false,"ln":7},
+{"wn":8,"mn":"nov","wk":1,"thema":"Herfsvakantie","les":"30 october – 5 november","vac":true,"skip":false,"ln":0},
+{"wn":9,"mn":"nov","wk":2,"thema":"Mohammed (s.a.w.)","les":"3.2. Mohammed (s.a.w.) is een profeet3.3. Mohammed (s.a.w.) is de laatste profeet","vac":false,"skip":false,"ln":8},
+{"wn":10,"mn":"nov","wk":3,"thema":"Mohammed (s.a.w.)","les":"3.4. Mohammed (s.a.w.) is de uitlegger van de Koran3.5. Mohammed (s.a.w.) is een waarschuwer voor de hele mensheid","vac":false,"skip":false,"ln":9},
+{"wn":11,"mn":"nov","wk":4,"thema":"Mohammed (s.a.w.)","les":"3.6. Mohammed (s.a.w.) is barmhartig voor de mensheid3.7. Mohammed (s.a.w.) is de aanvuller van etnische waarden","vac":false,"skip":false,"ln":10},
+{"wn":12,"mn":"dec","wk":1,"thema":"De openbaring en het verstand","les":"Koran en interpretatie4.1. Fundamentele doelstellingen van de Koran","vac":false,"skip":false,"ln":11},
+{"wn":13,"mn":"dec","wk":2,"thema":"De openbaring en het verstand","les":"4.2. Het reciteren van de Koran4.3. Het begrijpen en interpreteren van de Koran","vac":false,"skip":false,"ln":12},
+{"wn":14,"mn":"dec","wk":3,"thema":"Evaluatie","les":"Herhalen en evaluatie","vac":false,"skip":true,"ln":0},
+{"wn":15,"mn":"dec","wk":4,"thema":"Kerstvakantie","les":"25 december – 7 januari","vac":true,"skip":false,"ln":0},
+{"wn":16,"mn":"jan","wk":1,"thema":"Kerstvakantie","les":"25 december – 7 januari","vac":true,"skip":false,"ln":0},
+{"wn":17,"mn":"jan","wk":2,"thema":"De moraal en de waarden","les":"Rechten en vrijheden5.1. Terminologie: recht en vrijheid5.2. Bepaalde rechten en vrijheden","vac":false,"skip":false,"ln":13},
+{"wn":18,"mn":"jan","wk":3,"thema":"De moraal en de waarden","les":"5.3. Gebruik van rechten en vrijheden5.4. Suprematie van het recht","vac":false,"skip":false,"ln":14},
+{"wn":19,"mn":"jan","wk":4,"thema":"De moraal en de waarden","les":"5.5. Schenden van burgerrechten is een grote zonde5.6. Leestekst: Omar (r.anh) en zijn rechtvaardigheid","vac":false,"skip":false,"ln":15},
+{"wn":20,"mn":"feb","wk":1,"thema":"Eredienst","les":"De sociale rol van de moskee6.1. De moskee, het hart van de stad","vac":false,"skip":false,"ln":16},
+{"wn":21,"mn":"feb","wk":2,"thema":"Eredienst","les":"6.2. De moskee en de eenheid van de moslims: de gemeenschappelijke gebeden","vac":false,"skip":false,"ln":17},
+{"wn":22,"mn":"feb","wk":3,"thema":"Krokusvakantie","les":"12 – 18 februari","vac":true,"skip":false,"ln":0},
+{"wn":23,"mn":"feb","wk":4,"thema":"Eredienst","les":"6.3. De moskee: de opvoeding en het onderwijs6.4. Indeling van de moskee","vac":false,"skip":false,"ln":18},
+{"wn":24,"mn":"maa","wk":1,"thema":"Eredienst","les":"6.5. Belangrijke leefregels in de moskee6.6. Voorbeeld van een multifunctionele moskee","vac":false,"skip":false,"ln":19},
+{"wn":25,"mn":"maa","wk":2,"thema":"Ethiek in de Islam","les":"Sabr in de Islam7.1. As-Sabr: de betekenis in Islam","vac":false,"skip":false,"ln":20},
+{"wn":26,"mn":"maa","wk":3,"thema":"Ethiek in de Islam","les":"7.2. Verschillende niveaus van sabr7.3. Leren geduldig zijn","vac":false,"skip":false,"ln":21},
+{"wn":27,"mn":"maa","wk":4,"thema":"Ethiek in de Islam","les":"7.4. De goddelijke beloning voor hen die geduldig zijn7.5. Leestekst: het verhaal van Ayyoeb (a.s.)","vac":false,"skip":false,"ln":22},
+{"wn":28,"mn":"apr","wk":1,"thema":"Paasvakantie","les":"1 – 15 april","vac":true,"skip":false,"ln":0},
+{"wn":29,"mn":"apr","wk":2,"thema":"Paasvakantie","les":"1 – 15 april","vac":true,"skip":false,"ln":0},
+{"wn":30,"mn":"apr","wk":3,"thema":"Ethiek in de Islam","les":"Schaamte en fatsoen in de Islam8.1. Schaamte versuz verlegenheid","vac":false,"skip":false,"ln":23},
+{"wn":31,"mn":"apr","wk":4,"thema":"Ethiek in de Islam","les":"8.2. Haya in de Islam8.3. Domeinen van haya","vac":false,"skip":false,"ln":24},
+{"wn":32,"mn":"mei","wk":1,"thema":"Geloof, cultuur en beschaving","les":"Islam en wetenschap9.1. Verband tussen geloof en wetenschap9.2. Bronnen van kennis in de Islam","vac":false,"skip":false,"ln":25},
+{"wn":33,"mn":"mei","wk":2,"thema":"Geloof, cultuur en beschaving","les":"9.3. Islam promoot het gebruik van het verstand en de wetenschap9.4. Islam steunt wetenschappelijk onderzoek","vac":false,"skip":false,"ln":26},
+{"wn":34,"mn":"mei","wk":3,"thema":"Geloof, cultuur en beschaving","les":"9.5. Onderwijsinstanties in de Islamitische beschaving9.6. Bijdrage van moslims aan wetenschap","vac":false,"skip":false,"ln":27},
+{"wn":35,"mn":"mei","wk":4,"thema":"Gedragsvorming","les":"10. Slechte gewoontes volgens de Islam10.1. Roken","vac":false,"skip":false,"ln":28},
+{"wn":36,"mn":"jun","wk":1,"thema":"Gedragsvorming","les":"10.2. Alcohol drinken10.3. Drugs en andere verdovende middelen","vac":false,"skip":false,"ln":29},
+{"wn":37,"mn":"jun","wk":2,"thema":"Gedragsvorming","les":"10.4. Gokken10.5. Hoe begint men aan de slechte gewoontes","vac":false,"skip":false,"ln":30},
+{"wn":38,"mn":"jun","wk":3,"thema":"Gedragsvorming","les":"10.6. Hoe kan men zich beschermen tegen de slechte gewoontes10.7. Respecteren van de rechten van andere mensen","vac":false,"skip":false,"ln":31},
+{"wn":39,"mn":"jun","wk":4,"thema":"Evaluatie","les":"Herhalen en evaluatie","vac":false,"skip":true,"ln":0},
 ],
 "5":[
-{"week_num":1,"month":"september","wk":1,"thema":"Geloofsleer","les":"De mens en zijn voorbeschikking — Het begrip voorbeschikking","is_vacation":false},
-{"week_num":2,"month":"september","wk":2,"thema":"Geloofsleer","les":"De wil (Al-irada) — Het verantwoordelijkheidsgevoel","is_vacation":false},
-{"week_num":3,"month":"september","wk":3,"thema":"Geloofsleer","les":"Bepaalde situaties betreffende voorbeschikking — Leven en dood, rizq, rampen","is_vacation":false},
-{"week_num":4,"month":"september","wk":4,"thema":"Geloofsleer","les":"Gezondheid — Succes en falen — At-tawakkoel — Goed en kwaad","is_vacation":false},
-{"week_num":5,"month":"oktober","wk":1,"thema":"De aanbidding","les":"Doea of smeekbede — Inleiding — Enkele hadies i.v.m. doea","is_vacation":false},
-{"week_num":6,"month":"oktober","wk":2,"thema":"De aanbidding","les":"Doea in de Koran — Soorten doea's — Reden voor verrichting","is_vacation":false},
-{"week_num":7,"month":"oktober","wk":3,"thema":"De aanbidding","les":"Voordelen van doea — Aandachtspunten tijdens doea","is_vacation":false},
-{"week_num":8,"month":"oktober","wk":4,"thema":"De aanbidding","les":"Doe's op aanbevolen tijdstippen — Doe's van profeten in de Koran","is_vacation":false},
-{"week_num":9,"month":"november","wk":1,"thema":"Herfstvakantie","les":"30 oktober – 5 november","is_vacation":true},
-{"week_num":10,"month":"november","wk":2,"thema":"De aanbidding","les":"Voordelen van aanbidding — Ibada of aanbidding","is_vacation":false},
-{"week_num":11,"month":"november","wk":3,"thema":"De aanbidding","les":"Persoonlijke voordelen van de aanbidding — Versterkt band met Allah","is_vacation":false},
-{"week_num":12,"month":"november","wk":4,"thema":"De aanbidding","les":"Sociale voordelen van de aanbidding — Stimuleren van broederschap","is_vacation":false},
-{"week_num":13,"month":"december","wk":1,"thema":"Mohammed (s.a.w.)","les":"Voorbeeldig gedrag — Betrouwbaarheid en barmhartigheid van Mohammed","is_vacation":false},
-{"week_num":14,"month":"december","wk":2,"thema":"Mohammed (s.a.w.)","les":"Rechtvaardigheid — Het vergemakkelijken van zaken — Tolerantie","is_vacation":false},
-{"week_num":15,"month":"december","wk":3,"thema":"Evaluatie","les":"Herhalen en evaluatie","is_vacation":false},
-{"week_num":16,"month":"december","wk":4,"thema":"Kerstvakantie","les":"25 december – 7 januari","is_vacation":true},
-{"week_num":17,"month":"januari","wk":1,"thema":"Kerstvakantie","les":"25 december – 7 januari","is_vacation":true},
-{"week_num":18,"month":"januari","wk":2,"thema":"Mohammed (s.a.w.)","les":"Het geduld van Mohammed — Liefde voor Ahloe'l beyt","is_vacation":false},
-{"week_num":19,"month":"januari","wk":3,"thema":"Openbaring en verstand","les":"De Koran en zijn interpretatie — Het geloof en de interpretaties","is_vacation":false},
-{"week_num":20,"month":"januari","wk":4,"thema":"Openbaring en verstand","les":"Verschillende opvattingen bij Islamitische denkwijze — Fiqh en soefisme","is_vacation":false},
-{"week_num":21,"month":"februari","wk":1,"thema":"De moraal en de waarden","les":"Islam en vrede — Leven in vrede is een behoefte","is_vacation":false},
-{"week_num":22,"month":"februari","wk":2,"thema":"De moraal en de waarden","les":"Help verlenen aan mensen — Mohammed is een boodschapper van vrede","is_vacation":false},
-{"week_num":23,"month":"februari","wk":3,"thema":"Krokusvakantie","les":"12 – 18 februari","is_vacation":true},
-{"week_num":24,"month":"februari","wk":4,"thema":"Islamgeschiedenis","les":"De rechtgeleide kaliefen — De eerste kalief Aboe Bakr","is_vacation":false},
-{"week_num":25,"month":"maart","wk":1,"thema":"Islamgeschiedenis","les":"Aboe Bakr — Zijn periode in Medina — Zijn kalifaatperiode","is_vacation":false},
-{"week_num":26,"month":"maart","wk":2,"thema":"Islamgeschiedenis","les":"Het overlijden en persoonlijkheid van Aboe Bakr","is_vacation":false},
-{"week_num":27,"month":"maart","wk":3,"thema":"Islamgeschiedenis","les":"De tweede kalief Omar — Zijn persoonlijkheid en bekeringen","is_vacation":false},
-{"week_num":28,"month":"maart","wk":4,"thema":"Islamgeschiedenis","les":"Bijdragen van Omar aan de Islam","is_vacation":false},
-{"week_num":29,"month":"april","wk":1,"thema":"Paasvakantie","les":"1 – 15 april","is_vacation":true},
-{"week_num":30,"month":"april","wk":2,"thema":"Paasvakantie","les":"1 – 15 april","is_vacation":true},
-{"week_num":31,"month":"april","wk":3,"thema":"Islamgeschiedenis","les":"De derde kalief Oesman — Zijn persoonlijkheid","is_vacation":false},
-{"week_num":32,"month":"april","wk":4,"thema":"Islamgeschiedenis","les":"Bijdragen van Oesman aan de Islam","is_vacation":false},
-{"week_num":33,"month":"mei","wk":1,"thema":"Islamgeschiedenis","les":"De vierde kalief Ali — De neef en de schoonzoon van Mohammed","is_vacation":false},
-{"week_num":34,"month":"mei","wk":2,"thema":"Islamgeschiedenis","les":"Zijn kalifaatschap — De dood van kalief Ali","is_vacation":false},
-{"week_num":35,"month":"mei","wk":3,"thema":"Religie, cultuur en beschaving","les":"Islam en esthetica — Evenwicht en harmonie in het leven","is_vacation":false},
-{"week_num":36,"month":"mei","wk":4,"thema":"Religie, cultuur en beschaving","les":"De Koran en schoonheid — Mohammed en schoonheid","is_vacation":false},
-{"week_num":37,"month":"juni","wk":1,"thema":"Religie, cultuur en beschaving","les":"Schoonheid in het leven — in woorden en werken","is_vacation":false},
-{"week_num":38,"month":"juni","wk":2,"thema":"Religie, cultuur en beschaving","les":"Esthetica in de Islam — Literatuur, muziek, kaligrafie","is_vacation":false},
-{"week_num":39,"month":"juni","wk":3,"thema":"Religie, cultuur en beschaving","les":"Schoonheid in het werk — Esthetica verder","is_vacation":false},
-{"week_num":40,"month":"juni","wk":4,"thema":"Evaluatie","les":"Herhalen en evaluatie","is_vacation":false}
+{"wn":1,"mn":"sep","wk":1,"thema":"Geloofsleer","les":"1. De mens en zijn voorbeschikking1.1. Het begrip voorbeschikking1.2. Eigenschappen van de voorbeschikking bij de mens1.2.1. Het verstand (Al-aql)","vac":false,"skip":false,"ln":1},
+{"wn":2,"mn":"sep","wk":2,"thema":"Geloofsleer","les":"1.2.2. De wil (Al-irada)1.2.3. Het verantwoordelijkheidsgevoel","vac":false,"skip":false,"ln":2},
+{"wn":3,"mn":"sep","wk":2,"thema":"De aanbidding","les":"2.4. Doea in de Koran2.5. Soorten doea’s2.6. Reden voor verrichting van doea","vac":false,"skip":false,"ln":3},
+{"wn":4,"mn":"sep","wk":3,"thema":"Geloofsleer","les":"1.3. Bepaalde situaties betreffende voorbeschikking1.3.1. Leven en dood1.3.2. Ar-rizq1.3.3. Natuurrampen","vac":false,"skip":false,"ln":4},
+{"wn":5,"mn":"sep","wk":3,"thema":"De aanbidding","les":"2.7. Voordelen van doea2.8. Aandachtspunten tijdens doea2.9. Doea’s die nooit worden afgewezen","vac":false,"skip":false,"ln":5},
+{"wn":6,"mn":"sep","wk":4,"thema":"Geloofsleer","les":"1.3.4. Gezondheid1.3.5. Succes en falen1.3.6. At-tawakkoel 1.3.7. Goed en kwaad (chayr en sjarr)","vac":false,"skip":false,"ln":6},
+{"wn":7,"mn":"sep","wk":4,"thema":"De aanbidding","les":"2.10. Doe’s op aanbevolen tijdstippen en plaatsen2.11. Doe’s van profeten in de Koran2.12. Leestekst: Vier doea’s voor vier dirhem","vac":false,"skip":false,"ln":7},
+{"wn":8,"mn":"nov","wk":1,"thema":"Herfsvakantie","les":"30 october – 5 november","vac":true,"skip":false,"ln":0},
+{"wn":9,"mn":"nov","wk":2,"thema":"De aanbidding","les":"3. Voordelen van aanbidding3.1. Ibada of aanbidding","vac":false,"skip":false,"ln":8},
+{"wn":10,"mn":"nov","wk":3,"thema":"De aanbidding","les":"3.2. Persoonlijke voordelen van de aanbidding3.2.1. De aanbidding versterkt de band tussen Allah (s.w.t.) en de mens3.2.2. De aanbidding versterkt de innerlijke rust van de mens3.2.3. De aanbidding ontwikkelt het vertrouwen bij de mens3.2.4. De aanbidding ontwikkelt het verantwoordelijkheidsgevoel","vac":false,"skip":false,"ln":9},
+{"wn":11,"mn":"nov","wk":4,"thema":"De aanbidding","les":"3.3. Sociale voordelen van de aanbidding3.2.1. Het verbeten van de karakter3.3.2. Het weerhouden van de kwade3.3.3. Het leren om meer geduldig te zijn3.3.4. Het stimuleren van sociale hulp3.3.5. Het stimuleren van broederschap","vac":false,"skip":false,"ln":10},
+{"wn":12,"mn":"dec","wk":1,"thema":"Mohammed (s.a.w.)","les":"Voorbeeldig gedrag van Mohammed (s.a.w.)4.1. Voorbeeldig gedrag volgens de Koran4.2. Mohammed (s.a.w.) als een voorbeeldig mens4.2.1. Betrouwbaarheid van Mohammed (s.a.w.)4.2.2. Barmhartigheid van Mohammed (s.a.w.)","vac":false,"skip":false,"ln":11},
+{"wn":13,"mn":"dec","wk":2,"thema":"Mohammed (s.a.w.)","les":"4.2.3. Rechtvaardigheid van Mohammed (s.a.w.)4.2.4. Het vergemakkelijken van zaken door Mohammed (s.a.w.) 4.2.5. Tolerantie van Mohammed (s.a.w.)","vac":false,"skip":false,"ln":12},
+{"wn":14,"mn":"dec","wk":3,"thema":"Evaluatie","les":"Herhalen en evaluatie","vac":false,"skip":true,"ln":0},
+{"wn":15,"mn":"dec","wk":4,"thema":"Kerstvakantie","les":"25 december – 7 januari","vac":true,"skip":false,"ln":0},
+{"wn":16,"mn":"jan","wk":1,"thema":"Kerstvakantie","les":"25 december – 7 januari","vac":true,"skip":false,"ln":0},
+{"wn":17,"mn":"jan","wk":2,"thema":"Mohammed (s.a.w.)","les":"4.2.6. Het geduld van Mohammed (s.a.w.)4.3. Liefde voor Ahloe’l beyt4.4. Leestekst: Voorbeelden van liefdadigheid bij Mohammed (s.a.w.)","vac":false,"skip":false,"ln":13},
+{"wn":18,"mn":"jan","wk":3,"thema":"Openbaring en verstand","les":"5. De Koran en zijn interpretatie5.1. Het geloof en de interpretaties5.2. Redenen voor verschillen in de islamitische denkwijze5.2.1. Menselijke factor5.2.2. Maatschappelijke verandering","vac":false,"skip":false,"ln":14},
+{"wn":19,"mn":"jan","wk":4,"thema":"Openbaring en verstand","les":"5.3. Verschillende opvattingen bij Islamitische opvattingen5.3.1. Verschillende opvattingen betreffende het geloof5.3.2. Interpretaties betreffende de fiqh5.3.3. Soefistische opvattingen5.4. Bijgeloven","vac":false,"skip":false,"ln":15},
+{"wn":20,"mn":"feb","wk":1,"thema":"De moraal en de waarden","les":"6. Islam en vrede6.1. Leven in vrede is een behoefte6.2. Het belang van vrede en samenleving in Islam","vac":false,"skip":false,"ln":16},
+{"wn":21,"mn":"feb","wk":2,"thema":"De moraal en de waarden","les":"6.3. Help verlenen aan mensen6.4. Mohammed (s.a.w.) is een boodschapper van vrede6.5. Leven in vrede is het recht van de mens","vac":false,"skip":false,"ln":17},
+{"wn":22,"mn":"feb","wk":3,"thema":"Krokusvakantie","les":"12 – 18 februari","vac":true,"skip":false,"ln":0},
+{"wn":23,"mn":"feb","wk":4,"thema":"Islamgeschiedenis","les":"7. De rechtgeleide kaliefen7.1. Inleiding7.2. De eerste kalief Aboe Bakr (r.anh)7.2.1. Zijn bekering tot de Islam7.2.2. De emigratie","vac":false,"skip":false,"ln":18},
+{"wn":24,"mn":"maa","wk":1,"thema":"Islamgeschiedenis","les":"7.2.3. Zijn periode in Medina7.2.4. Reactie van Aboe Bakr na het overlijden van profeet Mohammed (s.a.w.)7.2.5. Zijn kalifaatperiode","vac":false,"skip":false,"ln":19},
+{"wn":25,"mn":"maa","wk":2,"thema":"Islamgeschiedenis","les":"7.2.6. Het overlijden 7.2.7. Zijn persoonlijkheid7.2.8. Enkele wijze uitspraken","vac":false,"skip":false,"ln":20},
+{"wn":26,"mn":"maa","wk":3,"thema":"Islamgeschiedenis","les":"7.3. De tweede kalief Omar (r.anh)7.3.1. Zijn persoonlijkheid7.3.2. Zijn bekering tot de Islam7.3.3. De veroveringen van Omar (r.anh)","vac":false,"skip":false,"ln":21},
+{"wn":27,"mn":"maa","wk":4,"thema":"Islamgeschiedenis","les":"7.3.4. Bijdragen van Omar (r.anh) aan de Islam7.3.5. De dood van Omar (r.anh)7.3.6. De adviezen en uitspraken van Omar (r.anh)","vac":false,"skip":false,"ln":22},
+{"wn":28,"mn":"apr","wk":1,"thema":"Paasvakantie","les":"1 – 15 april","vac":true,"skip":false,"ln":0},
+{"wn":29,"mn":"apr","wk":2,"thema":"Paasvakantie","les":"1 – 15 april","vac":true,"skip":false,"ln":0},
+{"wn":30,"mn":"apr","wk":3,"thema":"Islamgeschiedenis","les":"7.4. De derde kalief Oesman (r.anh)7.4.1. Zijn persoonlijkheid7.4.2. Zijn selectie als kalief","vac":false,"skip":false,"ln":23},
+{"wn":31,"mn":"apr","wk":4,"thema":"Islamgeschiedenis","les":"7.4.3. Enkele bijdragen van Oesman (r.anh) aan de Islam7.4.4. De ontstemming en de tweedracht7.4.5. De dood van kalief Oesman ibn Affan (r.anh)","vac":false,"skip":false,"ln":24},
+{"wn":32,"mn":"mei","wk":1,"thema":"Islamgeschiedenis","les":"7.5. De vierde kalief Ali (r.anh)7.5.1. De neef en de schoonzoon van Profeet (s.a.w.)7.5.2. De selectie als kalief","vac":false,"skip":false,"ln":25},
+{"wn":33,"mn":"mei","wk":2,"thema":"Islamgeschiedenis","les":"7.5.3. Zijn kalifaatschap 7.5.4. De dood van kalief Ali (r.anh)","vac":false,"skip":false,"ln":26},
+{"wn":34,"mn":"mei","wk":3,"thema":"Religie, cultuur en beschaving","les":"8. Islam en esthetica8.1. Evenwicht en harmonie in het universum8.2. De mens en schoonheid","vac":false,"skip":false,"ln":27},
+{"wn":35,"mn":"mei","wk":4,"thema":"Religie, cultuur en beschaving","les":"8.3. De Koran en schoonheid8.4. Mohammed (s.a.w.) en schoonheid","vac":false,"skip":false,"ln":28},
+{"wn":36,"mn":"jun","wk":1,"thema":"Religie, cultuur en beschaving","les":"8.5. Schoonheid in het leven8.5.1. Schoonheid in woorden8.5.2. Schoonheid bij het handelen","vac":false,"skip":false,"ln":29},
+{"wn":37,"mn":"jun","wk":2,"thema":"Religie, cultuur en beschaving","les":"8.5.3. Schoonheid in het werk8.6. Esthetica in de Islamitische beschaving8.6.1. Architectuur","vac":false,"skip":false,"ln":30},
+{"wn":38,"mn":"jun","wk":3,"thema":"Religie, cultuur en beschaving","les":"8.6.2. Literatuur8.6.3. Muziek8.6.4. Kaligrafie, vergulding en miniatuur","vac":false,"skip":false,"ln":31},
+{"wn":39,"mn":"jun","wk":4,"thema":"Evaluatie","les":"Herhalen en evaluatie","vac":false,"skip":true,"ln":0},
 ],
 "6":[
-{"week_num":1,"month":"september","wk":1,"thema":"Geloofsleer","les":"Het leven nu en het hiernamaals — Het leven is niet doelloos","is_vacation":false},
-{"week_num":2,"month":"september","wk":2,"thema":"Geloofsleer","les":"Alles heeft een tegenwaarde — Leven en in leven houden is een Islamitische verantwoordelijkheid","is_vacation":false},
-{"week_num":3,"month":"september","wk":3,"thema":"Geloofsleer","les":"De uitvaart naar het hiernamaals — Rechten van een overledene — Djanaza-gebed","is_vacation":false},
-{"week_num":4,"month":"september","wk":4,"thema":"Geloofsleer","les":"Dag des Oordeels — Een nieuw leven, achira","is_vacation":false},
-{"week_num":5,"month":"oktober","wk":1,"thema":"De aanbidding","les":"Aanbiddingen in de verschillende religies — Smeekbede in het dagelijks gebed","is_vacation":false},
-{"week_num":6,"month":"oktober","wk":2,"thema":"Mohammed (s.a.w.)","les":"Het begrijpen van Mohammed — Hadies en soenna","is_vacation":false},
-{"week_num":7,"month":"oktober","wk":3,"thema":"Mohammed (s.a.w.)","les":"De universele karakter van Mohammed — Belang van soenna","is_vacation":false},
-{"week_num":8,"month":"oktober","wk":4,"thema":"Mohammed (s.a.w.)","les":"Hoe moeten we Mohammed begrijpen? — De voornaamste hadiesbronnen","is_vacation":false},
-{"week_num":9,"month":"november","wk":1,"thema":"Herfstvakantie","les":"30 oktober – 5 november","is_vacation":true},
-{"week_num":10,"month":"november","wk":2,"thema":"De Koran","les":"De Koran — Het belang van het verstand in de Islam","is_vacation":false},
-{"week_num":11,"month":"november","wk":3,"thema":"De Koran","les":"De Koran hecht belang aan de juiste kennis — Kennis voorkomt extremisme","is_vacation":false},
-{"week_num":12,"month":"november","wk":4,"thema":"Achlak en waarden","les":"Berouw en vergiffenis — Fouten begaan is menselijk","is_vacation":false},
-{"week_num":13,"month":"december","wk":1,"thema":"Achlak en waarden","les":"Vergeven verhoogt de positie van de mens — Basis van tolerantie","is_vacation":false},
-{"week_num":14,"month":"december","wk":2,"thema":"Islamitische wetgeving","les":"De doelstellingen van de geboden en verboden in de Islam","is_vacation":false},
-{"week_num":15,"month":"december","wk":3,"thema":"Evaluatie","les":"Herhalen en evaluatie","is_vacation":false},
-{"week_num":16,"month":"december","wk":4,"thema":"Kerstvakantie","les":"25 december – 7 januari","is_vacation":true},
-{"week_num":17,"month":"januari","wk":1,"thema":"Kerstvakantie","les":"25 december – 7 januari","is_vacation":true},
-{"week_num":18,"month":"januari","wk":2,"thema":"Islamitische wetgeving","les":"Bescherming van het algemeen belang — De graden van de algemene belangen","is_vacation":false},
-{"week_num":19,"month":"januari","wk":3,"thema":"Openbaring en verstand","les":"Interpretaties binnen de Islamitische denkwijze — Redenen van verschillende opvattingen","is_vacation":false},
-{"week_num":20,"month":"januari","wk":4,"thema":"Openbaring en verstand","les":"Culturele, geografische en politieke redenen","is_vacation":false},
-{"week_num":21,"month":"februari","wk":1,"thema":"Openbaring en verstand","les":"Politieke interpretaties — Charidjiyya en Sjiisme","is_vacation":false},
-{"week_num":22,"month":"februari","wk":2,"thema":"Openbaring en verstand","les":"Moetazila — Matoeridiyya — Asjariyya","is_vacation":false},
-{"week_num":23,"month":"februari","wk":3,"thema":"Krokusvakantie","les":"12 – 18 februari","is_vacation":true},
-{"week_num":24,"month":"februari","wk":4,"thema":"Openbaring en verstand","les":"Interpretaties rond de Islamitische wetgeving — Djafariyya en Hanafisme","is_vacation":false},
-{"week_num":25,"month":"maart","wk":1,"thema":"Openbaring en verstand","les":"Malikisme — Sjafiisme — Hanbelisme","is_vacation":false},
-{"week_num":26,"month":"maart","wk":2,"thema":"Openbaring en verstand","les":"Gemeenschappelijke principes in de Islamitische denkwijze — Tawhid en Noeboewwa","is_vacation":false},
-{"week_num":27,"month":"maart","wk":3,"thema":"Openbaring en verstand","les":"Koran en Achira als gemeenschappelijke principes","is_vacation":false},
-{"week_num":28,"month":"maart","wk":4,"thema":"Mystiek","les":"Mystieke opvattingen in het Islamitische denken — Wat is tasawwoef?","is_vacation":false},
-{"week_num":29,"month":"april","wk":1,"thema":"Paasvakantie","les":"1 – 15 april","is_vacation":true},
-{"week_num":30,"month":"april","wk":2,"thema":"Paasvakantie","les":"1 – 15 april","is_vacation":true},
-{"week_num":31,"month":"april","wk":3,"thema":"Mystiek","les":"Ontstaan van het mysticisme — Relatie met geloof","is_vacation":false},
-{"week_num":32,"month":"april","wk":4,"thema":"Mystiek","les":"Etnische dimensie van het mysticisme","is_vacation":false},
-{"week_num":33,"month":"mei","wk":1,"thema":"Mystiek","les":"Mewlana Djalaladdin Roemi — Harmonie samenleven en tolerantie","is_vacation":false},
-{"week_num":34,"month":"mei","wk":2,"thema":"Sociale relaties","les":"Het huwelijk in de Islam — Belang van het huwelijk","is_vacation":false},
-{"week_num":35,"month":"mei","wk":3,"thema":"Sociale relaties","les":"Verschillende stadia van het huwelijk — Het kiezen van een partner","is_vacation":false},
-{"week_num":36,"month":"mei","wk":4,"thema":"Sociale relaties","les":"Het huwelijkscontract — De verloving","is_vacation":false},
-{"week_num":37,"month":"juni","wk":1,"thema":"Sociale relaties","les":"De huwelijkssluiting — De bruiloft","is_vacation":false},
-{"week_num":38,"month":"juni","wk":2,"thema":"Sociale relaties","les":"Rechten en plichten — Rechten van de echtgenoot en echtgenote","is_vacation":false},
-{"week_num":39,"month":"juni","wk":3,"thema":"Sociale relaties","les":"Rechten van het kind — Echtscheiding","is_vacation":false},
-{"week_num":40,"month":"juni","wk":4,"thema":"Evaluatie","les":"Herhalen en evaluatie","is_vacation":false}
-]
+{"wn":1,"mn":"sep","wk":1,"thema":"Geloofsleer","les":"Het leven nu en het hiernamaals1.1. Het leven is niet doelloos1.2. “Hayat” volgens de Koran","vac":false,"skip":false,"ln":1},
+{"wn":2,"mn":"sep","wk":2,"thema":"Geloofsleer","les":"1.3. Alles heeft een tegenwaarde1.4. Leven en in leven houden is een Islamitische verantwoordelijkheid1.5. De dood is een realiteit in het leven","vac":false,"skip":false,"ln":2},
+{"wn":3,"mn":"sep","wk":2,"thema":"Mohammed (s.a.w.)","les":"3. Het begrijpen van Mohammed (s.a.w.)3.1. Hadies en soenna3.2. De lokale en de universele dimensie van de handelingen van Mohammed (s.a.w.)","vac":false,"skip":false,"ln":3},
+{"wn":4,"mn":"sep","wk":3,"thema":"Geloofsleer","les":"1.6. De uitvaart naar het hiernamaals1.6.1. De rechten van een overledene1.6.2. Djanaza-gebed1.6.3. Begraven van de overledene1.6.4. Koran lezen en doe’a’s verrichten1.6.5. Goede daden verrichten","vac":false,"skip":false,"ln":4},
+{"wn":5,"mn":"sep","wk":3,"thema":"Mohammed (s.a.w.)","les":"3.3. De universele karakter van Mohammed (s.a.w.)3.4. Belang van soenna bij het begrijpen van de Islam","vac":false,"skip":false,"ln":5},
+{"wn":6,"mn":"sep","wk":4,"thema":"Geloofsleer","les":"1.7. Dag des Oordeels (yawma’l qiyama)1.8. Een nieuw leven, achira","vac":false,"skip":false,"ln":6},
+{"wn":7,"mn":"sep","wk":4,"thema":"Mohammed (s.a.w.)","les":"3.5. Hoe moeten we Mohammed (s.a.w.) begrijpen?3.6. De voornaamste hadiesbronnen","vac":false,"skip":false,"ln":7},
+{"wn":8,"mn":"nov","wk":1,"thema":"Herfsvakantie","les":"30 october – 5 november","vac":true,"skip":false,"ln":0},
+{"wn":9,"mn":"nov","wk":2,"thema":"De Koran","les":"4. De Koran4.1. Het belang van het verstand in de Islam4.2. De Koran wil dat wij ons verstand gebruiken","vac":false,"skip":false,"ln":8},
+{"wn":10,"mn":"nov","wk":3,"thema":"De Koran","les":"4.3. De Koran hecht belang aan de juiste kennis4.4. Manieren om kennis te verwerven binnen de Koran4.5. Kennis voorkomt extremisme","vac":false,"skip":false,"ln":9},
+{"wn":11,"mn":"nov","wk":4,"thema":"Achlak en waarden","les":"Berouw en vergiffenis5.1. Fouten begaan is menselijk5.2. Allah (s.w.t.) is Vergevensgezind en Hij (s.w.t.) houdt van degenen die vergeven","vac":false,"skip":false,"ln":10},
+{"wn":12,"mn":"dec","wk":1,"thema":"Achlak en waarden","les":"5.3. Vergeven verhoogt de positie van de mens5.4. Vergeven vormt de basis van de individuele en maatschappelijke tolerantie5.5. Het verrichten van goede daden wissen de slechte daden","vac":false,"skip":false,"ln":11},
+{"wn":13,"mn":"dec","wk":2,"thema":"Islamitische wetgeving","les":"6. De doelstellingen van de geboden en verboden in de Islam6.1. Inleiding6.2. De doelstellingen van de geboden en verboden binnen de Islam6.2.1. Het opvoeden van individu en hem laten rijpen op het vlak van moraal6.2.2. De totstandbrenging van rechtvaardigheid binnen een gemeenschap","vac":false,"skip":false,"ln":12},
+{"wn":14,"mn":"dec","wk":3,"thema":"Evaluatie","les":"Herhalen en evaluatie","vac":false,"skip":true,"ln":0},
+{"wn":15,"mn":"dec","wk":4,"thema":"Kerstvakantie","les":"25 december – 7 januari","vac":true,"skip":false,"ln":0},
+{"wn":16,"mn":"jan","wk":1,"thema":"Kerstvakantie","les":"25 december – 7 januari","vac":true,"skip":false,"ln":0},
+{"wn":17,"mn":"jan","wk":2,"thema":"Islamitische wetgeving","les":"6.2.3. Bescherming van het algemeen belanga) De algemene belangen die van kracht zijnb) De graden van de algemene belangenc) De verplichtingen binnen de hiërarchie van de algemene belangend) De hiërarchie van de plichten die van een mens verwacht worden6.3. Het overwinnen van moeilijkheden en het wegwerken van het schade","vac":false,"skip":false,"ln":13},
+{"wn":18,"mn":"jan","wk":3,"thema":"Openbaring en verstand","les":"Interpretaties binnen de Islamitische denkwijze7.1. Redenen van verschillende opvattingen in de Islamitische denkwijze7.1.1. Redenen ontstaan door de mens7.1.2. Sociale redenen","vac":false,"skip":false,"ln":14},
+{"wn":19,"mn":"jan","wk":4,"thema":"Openbaring en verstand","les":"7.1.3. Culturele redenen7.1.4. Geografische redenen7.1.5. Politieke redenen","vac":false,"skip":false,"ln":15},
+{"wn":20,"mn":"feb","wk":1,"thema":"Openbaring en verstand","les":"7.2. Politieke interpretaties en interpretaties aangaande de geloofsleer binnen de Islamitische denkwijze7.2.1. Charidjiyya7.2.2. Sjiisme","vac":false,"skip":false,"ln":16},
+{"wn":21,"mn":"feb","wk":2,"thema":"Openbaring en verstand","les":"7.2.3. Moetazila 7.2.4. Matoeridiyya7.2.5. Asjariyya","vac":false,"skip":false,"ln":17},
+{"wn":22,"mn":"feb","wk":3,"thema":"Krokusvakantie","les":"12 – 18 februari","vac":true,"skip":false,"ln":0},
+{"wn":23,"mn":"feb","wk":4,"thema":"Openbaring en verstand","les":"7.3. Interpretaties rond de Islamitische wetgeving (fiqh)7.3.1. Djafariyya7.3.2. Hanafisme","vac":false,"skip":false,"ln":18},
+{"wn":24,"mn":"maa","wk":1,"thema":"Openbaring en verstand","les":"7.3.3. Malikisme7.3.4. Sjafiisme7.3.5. Hanbelisme","vac":false,"skip":false,"ln":19},
+{"wn":25,"mn":"maa","wk":2,"thema":"Openbaring en verstand","les":"7.4. Gemeenschappelijke principes in de Islamitische denkwijzea) Tawhidb) Noeboewwa","vac":false,"skip":false,"ln":20},
+{"wn":26,"mn":"maa","wk":3,"thema":"Openbaring en verstand","les":"c) Korand) Achira","vac":false,"skip":false,"ln":21},
+{"wn":27,"mn":"maa","wk":4,"thema":"Wahiey en het verstand","les":"8. Mystieke opvattingen in het Islamitische denken8.1. Wat is tasawwoef, soefisme of Islamitisch mysticisme?","vac":false,"skip":false,"ln":22},
+{"wn":28,"mn":"apr","wk":1,"thema":"Paasvakantie","les":"1 – 15 april","vac":true,"skip":false,"ln":0},
+{"wn":29,"mn":"apr","wk":2,"thema":"Paasvakantie","les":"1 – 15 april","vac":true,"skip":false,"ln":0},
+{"wn":30,"mn":"apr","wk":3,"thema":"Wahiey en het verstand","les":"8.2. Onstaan van het mysticisme of tasawwoef8.3. Relatie Allah-schepping volgens het mysticisme","vac":false,"skip":false,"ln":23},
+{"wn":31,"mn":"apr","wk":4,"thema":"Wahiey en het verstand","les":"8.4. Etnische dimensie van het mysticisme8.4.1. Relatie iman en achlaq8.4.2. Enkele hoofdprincipes","vac":false,"skip":false,"ln":24},
+{"wn":32,"mn":"mei","wk":1,"thema":"Wahiey en het verstand","les":"8.4.3. Mewlana Djalaladdin Roemi8.5 Harmonie samenleven en tolerantie","vac":false,"skip":false,"ln":25},
+{"wn":33,"mn":"mei","wk":2,"thema":"Sociale relaties","les":"Het huwelijk in de Islam9.1. Belang van de huwelijk in de Islam","vac":false,"skip":false,"ln":26},
+{"wn":34,"mn":"mei","wk":3,"thema":"Sociale relaties","les":"9.2. Verschillende stadia van het huwelijk9.2.1. Het kiezen van het partner9.2.2. Het aanzoek en de acceptatie van het huwelijk","vac":false,"skip":false,"ln":27},
+{"wn":35,"mn":"mei","wk":4,"thema":"Sociale relaties","les":"9.2.3. Het huwelijkscontract 9.2.4. De verloving","vac":false,"skip":false,"ln":28},
+{"wn":36,"mn":"jun","wk":1,"thema":"Sociale relaties","les":"9.2.5. De huwelijkssluiting 9.2.6. De bruiloft","vac":false,"skip":false,"ln":29},
+{"wn":37,"mn":"jun","wk":2,"thema":"Sociale relaties","les":"9.3. Rechten en plichten9.3.1. Rechten van de echtgenote9.3.2. Rechten van de echtgenoot","vac":false,"skip":false,"ln":30},
+{"wn":38,"mn":"jun","wk":3,"thema":"Sociale relaties","les":"9.4. Rechten van het kind9.5. Echtscheiding","vac":false,"skip":false,"ln":31},
+{"wn":39,"mn":"jun","wk":4,"thema":"Evaluatie","les":"Herhalen en evaluatie","vac":false,"skip":true,"ln":0},
+],
 };
 
 // Get jaarplan week for a class based on school week index
 function getJaarplanWeek(classJaar, weekIdx) {
   if (!classJaar || !JAARPLAN[classJaar]) return null;
   const plan = JAARPLAN[classJaar];
-  // weekIdx is 0-based index in state.weeks; map to school week (skip nothing, direct mapping)
-  return plan[weekIdx] || null;
+  const e = plan[weekIdx];
+  if (!e) return null;
+  // Normalize field names (compact format: wn/mn/wk/thema/les/vac/skip/ln)
+  return {
+    week_num: e.wn ?? e.week_num,
+    month: e.mn ?? e.month,
+    thema: e.thema,
+    les: e.les,
+    is_vacation: e.vac ?? e.is_vacation ?? false,
+    is_skip: e.skip ?? e.is_skip ?? false,
+    les_num: e.ln ?? 0
+  };
 }
 
 // Get current school week index
@@ -1169,6 +1173,48 @@ function renderWeekView() {
   const students = state.selectedGroup ? groupStudents(state.selectedGroup) : [];
   const groupOpts = state.groups.map(g=>`<option value="${g.id}" ${g.id===state.selectedGroup?'selected':''}>${g.name}</option>`).join('');
 
+  // Build group selector panel — grouped by school, then group, then class
+  const allSchools = [...new Set(state.groups.flatMap(g=>g.classes.map(c=>c.school||'—')))].sort();
+  let groupPanel = `<div style="background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:14px;margin-bottom:18px">
+    <div style="font-size:10px;font-weight:900;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px">🏫 Groepen</div>`;
+  
+  // Sort groups alphabetically
+  const sortedGroups = [...state.groups].sort((a,b)=>a.name.localeCompare(b.name, 'nl', {numeric:true}));
+  
+  // Group by school
+  const schoolMap = {};
+  sortedGroups.forEach(g=>{
+    const schools = [...new Set(g.classes.map(c=>c.school||'—'))];
+    schools.forEach(sch=>{ if(!schoolMap[sch]) schoolMap[sch]=[]; if(!schoolMap[sch].find(x=>x.id===g.id)) schoolMap[sch].push(g); });
+  });
+  
+  const schoolNames = Object.keys(schoolMap).sort();
+  const multiSchool = schoolNames.length > 1;
+  
+  schoolNames.forEach(sch=>{
+    if(multiSchool) groupPanel += `<div style="font-size:10px;font-weight:700;color:var(--accent3);margin-bottom:6px;padding-left:2px">🏫 ${esc(sch)}</div>`;
+    schoolMap[sch].forEach(g=>{
+      const totalStudents = g.classes.reduce((s,c)=>s+c.students.length,0);
+      const isSelGroup = g.id === state.selectedGroup;
+      groupPanel += `<div style="margin-bottom:6px">
+        <div onclick="state.selectedGroup='${g.id}';render()" style="display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-radius:8px;cursor:pointer;font-weight:800;font-size:13px;background:${isSelGroup?'var(--accent1)':'var(--surface2)'};color:${isSelGroup?'#fff':'var(--text)'};border:1.5px solid ${isSelGroup?'var(--accent1)':'var(--border)'};transition:all .12s">
+          <span>📚 ${esc(g.name)}</span>
+          <span style="font-size:11px;opacity:.8">${totalStudents} ll.</span>
+        </div>`;
+      // Sort classes alphabetically/numerically
+      const sortedClasses = [...g.classes].sort((a,b)=>a.name.localeCompare(b.name,'nl',{numeric:true}));
+      sortedClasses.forEach(c=>{
+        const isSelClass = isSelGroup; // highlight when group selected
+        groupPanel += `<div onclick="state.selectedGroup='${g.id}';render()" style="display:flex;justify-content:space-between;align-items:center;padding:4px 10px 4px 22px;cursor:pointer;font-size:12px;color:${isSelGroup?'var(--accent1)':'var(--text2)'};font-weight:${isSelGroup?'700':'600'}">
+          <span>• ${esc(c.name)} ${c.jaar?`<span style="font-size:10px;color:var(--text3)">(${c.jaar}e jr)</span>`:''}</span>
+          <span style="font-size:10px;color:var(--text3)">${c.students.length}</span>
+        </div>`;
+      });
+      groupPanel += `</div>`;
+    });
+  });
+  groupPanel += `</div>`;
+
   let rows = '';
   if(students.length===0) {
     rows = `<tr><td colspan="99" style="text-align:center;color:var(--text3);padding:30px">Geen leerlingen in deze groep</td></tr>`;
@@ -1200,7 +1246,7 @@ function renderWeekView() {
           ${['Aanwezig','Afwezig','Te laat'].map(o=>`<button class="aanw-btn ${aanw===o?'sel-'+o.replace(' ','-'):''}" onclick="setAanw('${w.id}','${s.id}','${o}')">${o}</button>`).join('')}
         </div></td>
         ${catCells}
-        <td><input class="note-inp" value="${esc(ev.opmerking||'')}" placeholder="Notitie…" onchange="setNote('${w.id}','${s.id}',this.value)"></td>
+        <td><textarea class="note-inp" rows="3" placeholder="Notitie…" onchange="setNote('${w.id}','${s.id}',this.value)" style="resize:vertical;min-height:60px;width:100%;padding:4px 8px;font-family:'Nunito',sans-serif;font-size:11px;border:1.5px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text);outline:none" onfocus="this.style.borderColor='var(--accent1)'" onblur="this.style.borderColor='var(--border)'">${esc(ev.opmerking||'')}</textarea></td>
       </tr>`;
     });
   }
@@ -1212,25 +1258,30 @@ function renderWeekView() {
   const weekIdx = getWeekIdx(w.id);
   let lesinhoudBanner = '';
   if (selectedGrp) {
-    const klasBlokken = selectedGrp.classes.map(cls => {
+    const sortedCls = [...selectedGrp.classes].sort((a,b)=>a.name.localeCompare(b.name,'nl',{numeric:true}));
+    const klasBlokken = sortedCls.map(cls => {
       const jp = cls.jaar ? getJaarplanWeek(cls.jaar, weekIdx) : null;
       const lesNote = state.evaluations?.[w.id]?.['_lesnotitie_'+cls.id] || '';
       const isVac = jp?.is_vacation;
       return `
-        <div style="background:${isVac?'#fff8f0':'var(--cream)'};border:1.5px solid ${isVac?'#fde8d8':'var(--border)'};border-radius:10px;padding:12px 14px;min-width:220px;flex:1">
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
-            <span style="font-weight:800;font-size:13px;color:var(--accent1);cursor:pointer" onclick="openKlasOverzicht('${cls.id}')" title="Klik voor lesoverzicht">${esc(cls.name)}</span>
-            ${cls.jaar ? `<span style="font-size:10px;background:var(--accent1)22;color:var(--accent1);border-radius:8px;padding:1px 7px;font-weight:700">${cls.jaar}e jaar</span>` : ''}
-            <button onclick="openKlasOverzicht('${cls.id}')" style="margin-left:auto;background:none;border:none;cursor:pointer;font-size:11px;color:var(--text3);padding:2px 6px;border-radius:6px;transition:all .1s" onmouseover="this.style.color='var(--accent1)'" onmouseout="this.style.color='var(--text3)'">📋 Overzicht</button>
+        <div style="background:${isVac?'#fff8f0':'var(--cream)'};border:1.5px solid ${isVac?'#fde8d8':'var(--border)'};border-radius:10px;padding:14px 16px;min-width:260px;flex:1">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+            <span style="font-weight:800;font-size:15px;color:var(--accent1);cursor:pointer" onclick="openKlasOverzicht('${cls.id}')" title="Klik voor jaarplan overzicht">${esc(cls.name)}</span>
+            ${cls.jaar ? `<span style="font-size:11px;background:var(--accent1)22;color:var(--accent1);border-radius:8px;padding:2px 8px;font-weight:700">${cls.jaar}e jaar</span>` : ''}
+            <button onclick="openKlasOverzicht('${cls.id}')" style="margin-left:auto;background:var(--accent1)15;border:1.5px solid var(--accent1)44;cursor:pointer;font-size:12px;font-weight:700;color:var(--accent1);padding:4px 10px;border-radius:8px;transition:all .1s" onmouseover="this.style.background='var(--accent1)';this.style.color='#fff'" onmouseout="this.style.background='var(--accent1)15';this.style.color='var(--accent1)'">📋 Jaarplan overzicht</button>
           </div>
-          ${jp && !isVac ? `
-            <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:3px">📖 ${esc(jp.thema)}</div>
-            <div style="font-size:11px;color:var(--text);line-height:1.5">${esc(jp.les)}</div>
-          ` : jp && isVac ? `<div style="font-size:11px;color:var(--accent3);font-weight:700">🏖️ ${esc(jp.les)}</div>` : 
-          `<div style="font-size:11px;color:var(--text3)">Geen jaarplan gekoppeld</div>`}
-          <div style="margin-top:8px">
-            <input value="${esc(lesNote)}" placeholder="Eigen notitie (afwijking, film, ander onderwerp…)" 
-              style="width:100%;padding:5px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:11px;font-family:'Nunito',sans-serif;color:var(--text);background:var(--surface);outline:none"
+          ${jp && !isVac && !jp.is_skip ? `
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
+              ${jp.les_num > 0 ? `<span style="background:var(--accent1);color:#fff;font-size:10px;font-weight:800;border-radius:5px;padding:2px 7px">Les ${jp.les_num}</span>` : ''}
+              <div style="font-size:13px;font-weight:800;color:var(--text2)">📖 ${esc(jp.thema)}</div>
+            </div>
+            <div style="font-size:13px;color:var(--text);line-height:1.6">${esc(jp.les)}</div>
+          ` : jp && isVac ? `<div style="font-size:13px;color:var(--accent3);font-weight:700">🏖️ ${esc(jp.les)}</div>` : 
+          jp && jp.is_skip ? `<div style="font-size:12px;color:var(--text3);font-style:italic">📝 Herhaling / evaluatie</div>` :
+          `<div style="font-size:12px;color:var(--text3)">Geen jaarplan gekoppeld</div>`}
+          <div style="margin-top:10px">
+            <input value="${esc(lesNote)}" placeholder="Eigen notitie — afwijking, film, ander onderwerp…" 
+              style="width:100%;padding:6px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;font-family:'Nunito',sans-serif;color:var(--text);background:var(--surface);outline:none"
               onfocus="this.style.borderColor='var(--accent1)'" onblur="this.style.borderColor='var(--border)'"
               onchange="setLesNotitie('${w.id}','${cls.id}',this.value)">
           </div>
@@ -1238,9 +1289,9 @@ function renderWeekView() {
     }).join('');
     if (klasBlokken) {
       lesinhoudBanner = `
-        <div style="margin-bottom:16px">
-          <div style="font-size:10px;font-weight:900;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px">📚 Lesinhoud van vandaag</div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap">${klasBlokken}</div>
+        <div style="margin-bottom:18px">
+          <div style="font-size:11px;font-weight:900;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px">📚 Lesinhoud van vandaag</div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap">${klasBlokken}</div>
         </div>`;
     }
   }
@@ -1251,13 +1302,8 @@ function renderWeekView() {
         <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700">${w.label}</div>
         ${w.dateStr ? `<div style="font-size:12px;color:var(--text3);margin-top:2px">📅 ${w.dateStr}</div>` : ''}
       </div>
-      <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
-        <span style="font-size:11px;font-weight:700;color:var(--text3)">GROEP</span>
-        <select style="border:1.5px solid var(--border);border-radius:20px;padding:5px 14px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:var(--text);background:var(--cream);outline:none" onchange="state.selectedGroup=this.value;render()">
-          ${groupOpts}
-        </select>
-      </div>
     </div>
+    ${groupPanel}
     ${lesinhoudBanner}
     <div class="tbl-wrap">
       <table>
@@ -1586,9 +1632,15 @@ function renderSettings() {
   </tr>`).join('');
 
   // Groups & classes
-  let groupsHtml = state.groups.map(g=>{
-    let classesHtml = g.classes.map(c=>{
-      let studentChips = c.students.map(s=>`
+  // Sort groups alphabetically/numerically
+  const sortedGroups2 = [...state.groups].sort((a,b)=>a.name.localeCompare(b.name,'nl',{numeric:true}));
+  let groupsHtml = sortedGroups2.map(g=>{
+    // Sort classes
+    const sortedClasses2 = [...g.classes].sort((a,b)=>a.name.localeCompare(b.name,'nl',{numeric:true}));
+    let classesHtml = sortedClasses2.map(c=>{
+      // Sort students alphabetically
+      const sortedStudents = [...c.students].sort((a,b)=>a.name.localeCompare(b.name,'nl'));
+      let studentChips = sortedStudents.map(s=>`
         <span class="student-chip">
           ${esc(s.name)}
           <span onclick="modalEditStudent('${s.id}','${c.id}')" title="Bewerken">✏️</span>
@@ -1900,37 +1952,55 @@ function openKlasOverzicht(classId) {
   
   let rows = '';
   state.weeks.forEach((w, idx) => {
-    const jp = plan ? plan[idx] : null;
+    const jpRaw = plan ? plan[idx] : null;
+    const jp = jpRaw ? getJaarplanWeek(cls.jaar, idx) : null;
     const lesNote = state.evaluations?.[w.id]?.['_lesnotitie_'+classId] || '';
     const isVac = jp?.is_vacation || w.isHoliday;
-    const bg = isVac ? 'background:#fff8f0' : '';
-    rows += `<tr style="${bg}">
-      <td style="font-size:11px;font-weight:700;color:var(--accent1);white-space:nowrap">${w.label}</td>
-      <td style="font-size:10px;color:var(--text3);white-space:nowrap">${w.dateStr||''}</td>
-      <td style="font-size:11px;font-weight:600;color:${isVac?'var(--accent3)':'var(--text)'}">${jp?esc(jp.thema):''}</td>
-      <td style="font-size:11px;color:var(--text2)">${jp?esc(jp.les):''}</td>
-      <td style="font-size:11px;color:var(--text3);font-style:italic">${lesNote?esc(lesNote):''}</td>
+    const isSkip = jp?.is_skip;
+    let rowBg = '';
+    if (isVac) rowBg = 'background:#fff8f0';
+    else if (isSkip) rowBg = 'background:#f9f9f9';
+    
+    const lesNumBadge = jp && !isVac && !isSkip && jp.les_num > 0 
+      ? `<span style="display:inline-block;background:var(--accent1);color:#fff;font-size:9px;font-weight:800;border-radius:4px;padding:1px 5px;margin-right:4px">L${jp.les_num}</span>` : '';
+    
+    rows += `<tr style="${rowBg}">
+      <td style="font-size:12px;font-weight:700;color:var(--accent1);white-space:nowrap;padding:8px 10px">${w.label}</td>
+      <td style="font-size:11px;color:var(--text3);white-space:nowrap;padding:8px 10px">${w.dateStr||''}</td>
+      <td style="font-size:12px;font-weight:600;color:${isVac?'var(--accent3)':isSkip?'var(--text3)':'var(--text)'};padding:8px 10px">${jp?esc(jp.thema):''}</td>
+      <td style="font-size:12px;color:var(--text2);padding:8px 10px;max-width:420px">${lesNumBadge}${jp?esc(jp.les):''}</td>
+      <td style="font-size:12px;color:var(--accent1);font-weight:600;padding:8px 10px;font-style:${lesNote?'normal':'italic'}">${lesNote?esc(lesNote):'<span style="color:var(--text3);font-weight:400;font-size:11px">—</span>'}</td>
     </tr>`;
   });
 
+  // Override modal-box style for wide popup
+  const modalBox = document.getElementById('modal-box');
+  if (modalBox) {
+    modalBox.style.maxWidth = '92vw';
+    modalBox.style.width = '92vw';
+  }
+
   openModal(`
-    <div class="modal-title">📚 ${esc(cls.name)} — Lesoverzicht ${jaar?`(${jaar}de jaar)`:''}</div>
-    <div style="overflow-x:auto;max-height:65vh;overflow-y:auto;border-radius:8px;border:1px solid var(--border)">
-      <table style="width:100%;border-collapse:collapse;font-size:12px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700">📚 ${esc(cls.name)}</div>
+        <div style="font-size:13px;color:var(--text3);margin-top:2px">Jaarplan overzicht ${jaar?`· <strong>${jaar}de jaar</strong>`:''}  · ${esc(cls.school||'')}</div>
+      </div>
+      <button onclick="closeModal()" style="margin-left:auto;background:none;border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕ Sluiten</button>
+    </div>
+    <div style="overflow-x:auto;max-height:72vh;overflow-y:auto;border-radius:10px;border:1.5px solid var(--border)">
+      <table style="width:100%;border-collapse:collapse;font-size:13px">
         <thead style="position:sticky;top:0;z-index:1">
           <tr style="background:var(--cream)">
-            <th style="padding:8px;text-align:left;font-size:10px;font-weight:800;color:var(--text2);white-space:nowrap">Week</th>
-            <th style="padding:8px;text-align:left;font-size:10px;font-weight:800;color:var(--text2);white-space:nowrap">Datum</th>
-            <th style="padding:8px;text-align:left;font-size:10px;font-weight:800;color:var(--text2)">Thema</th>
-            <th style="padding:8px;text-align:left;font-size:10px;font-weight:800;color:var(--text2)">Lesinhoud (jaarplan)</th>
-            <th style="padding:8px;text-align:left;font-size:10px;font-weight:800;color:var(--text2)">Eigen notitie</th>
+            <th style="padding:10px 10px;text-align:left;font-size:11px;font-weight:800;color:var(--text2);white-space:nowrap;border-bottom:1.5px solid var(--border)">Week</th>
+            <th style="padding:10px 10px;text-align:left;font-size:11px;font-weight:800;color:var(--text2);white-space:nowrap;border-bottom:1.5px solid var(--border)">Datum</th>
+            <th style="padding:10px 10px;text-align:left;font-size:11px;font-weight:800;color:var(--text2);border-bottom:1.5px solid var(--border)">Thema</th>
+            <th style="padding:10px 10px;text-align:left;font-size:11px;font-weight:800;color:var(--text2);border-bottom:1.5px solid var(--border)">Lesinhoud (jaarplan)</th>
+            <th style="padding:10px 10px;text-align:left;font-size:11px;font-weight:800;color:var(--text2);border-bottom:1.5px solid var(--border)">Eigen notitie</th>
           </tr>
         </thead>
         <tbody>${rows}</tbody>
       </table>
-    </div>
-    <div style="display:flex;justify-content:flex-end;margin-top:12px">
-      <button class="btn btn-ghost" onclick="closeModal()">Sluiten</button>
     </div>`);
 }
 
