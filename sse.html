@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SSE Financiën</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <style>
 :root {
   --bg:#fdf6f0; --surface:#fff; --surface2:#fef3fb; --border:#f0dff5;
@@ -18,23 +21,13 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
 
-/* DATE INPUT - native picker styled */
-input[type="date"]{
-  font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;
-  color:var(--text);cursor:pointer;
-}
-input[type="date"]::-webkit-calendar-picker-indicator{
-  background:linear-gradient(135deg,var(--accent1),var(--accent2));
-  border-radius:4px;padding:3px;cursor:pointer;opacity:1;
-}
-
 /* HEADER */
-header{background:var(--surface);border-bottom:2px solid var(--border);padding:0 20px;display:flex;align-items:center;gap:10px;height:56px;box-shadow:var(--shadow);flex-wrap:nowrap;}
-.logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;background:linear-gradient(135deg,var(--accent1),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap;}
-.year-sel{background:linear-gradient(135deg,var(--accent1),var(--accent2));color:#fff;border:none;padding:3px 12px;border-radius:20px;font-size:11px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;}
-.nav-tabs{display:flex;gap:3px;margin-left:auto;}
-.nav-tab{padding:5px 13px;border-radius:20px;cursor:pointer;font-weight:700;font-size:11px;border:1.5px solid transparent;background:transparent;color:var(--text2);transition:all .15s;font-family:'Nunito',sans-serif;white-space:nowrap;}
-.nav-tab.active{background:linear-gradient(135deg,var(--accent1),var(--accent2));color:#fff;}
+header{background:var(--surface);border-bottom:2px solid var(--border);padding:0 28px;display:flex;align-items:center;gap:14px;height:66px;box-shadow:var(--shadow);flex-wrap:nowrap;}
+.logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;background:linear-gradient(135deg,var(--accent1),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap;}
+.year-sel{background:linear-gradient(135deg,var(--accent1),var(--accent2));color:#fff;border:none;padding:6px 18px;border-radius:24px;font-size:14px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;box-shadow:0 2px 8px rgba(192,132,252,.3);}
+.nav-tabs{display:flex;gap:5px;margin-left:auto;}
+.nav-tab{padding:8px 18px;border-radius:24px;cursor:pointer;font-weight:700;font-size:13px;border:1.5px solid transparent;background:transparent;color:var(--text2);transition:all .15s;font-family:'Nunito',sans-serif;white-space:nowrap;}
+.nav-tab.active{background:linear-gradient(135deg,var(--accent1),var(--accent2));color:#fff;box-shadow:0 2px 10px rgba(192,132,252,.35);}
 .nav-tab:hover:not(.active){background:var(--surface2);border-color:var(--border);}
 
 /* LAYOUT */
@@ -130,6 +123,23 @@ canvas{max-height:200px;}
 
 @media(max-width:640px){.form-row{grid-template-columns:1fr;}.chart-grid{grid-template-columns:1fr;}.nav-tab{padding:4px 8px;font-size:10px;}}
 @media print{header,.btn,.filter-bar,#auth-area{display:none!important;}.main{padding:8px;}}
+
+/* FLATPICKR PURPLE THEME */
+.flatpickr-calendar{background:#fff;border:2px solid var(--border);border-radius:16px;box-shadow:0 8px 32px rgba(192,132,252,.2);font-family:'Nunito',sans-serif;padding:4px;}
+.flatpickr-months{background:linear-gradient(135deg,var(--accent1),var(--accent2));border-radius:12px 12px 0 0;padding:6px 0;}
+.flatpickr-months .flatpickr-prev-month,.flatpickr-months .flatpickr-next-month{color:#fff;fill:#fff;padding:6px 12px;}
+.flatpickr-months .flatpickr-prev-month:hover,.flatpickr-months .flatpickr-next-month:hover{background:rgba(255,255,255,.2);border-radius:8px;}
+.flatpickr-months .flatpickr-month{background:transparent;}
+.flatpickr-current-month{color:#fff;font-size:15px;font-weight:800;}
+.flatpickr-current-month .numInput,.flatpickr-current-month .flatpickr-monthDropdown-months{color:#fff;font-weight:800;background:transparent;border:none;}
+.flatpickr-weekdays{background:var(--surface2);margin-top:4px;}
+span.flatpickr-weekday{color:var(--text2);font-weight:800;font-size:11px;}
+.flatpickr-day{border-radius:10px;font-weight:600;color:var(--text);}
+.flatpickr-day:hover{background:var(--surface2);border-color:var(--accent1);}
+.flatpickr-day.selected,.flatpickr-day.selected:hover{background:linear-gradient(135deg,var(--accent1),var(--accent2));border-color:transparent;color:#fff;font-weight:800;box-shadow:0 2px 8px rgba(192,132,252,.4);}
+.flatpickr-day.today{border-color:var(--accent2);color:var(--accent1);font-weight:800;}
+.flatpickr-day.today.selected{color:#fff;}
+.flatpickr-day.flatpickr-disabled{color:var(--text3);}
 ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
 </style>
 </head>
@@ -471,7 +481,11 @@ function vInkomsten() {
   return `
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
     <div style="font-family:'Playfair Display',serif;font-size:22px">💚 Inkomsten ${S.year}</div>
-    <button class="btn btn-primary" onclick="mAddIncome()">+ Inkomst toevoegen</button>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="btn btn-secondary btn-sm" onclick="window.print()">📄 PDF</button>
+      <button class="btn btn-secondary btn-sm" onclick="doCSV('income')">📊 CSV</button>
+      <button class="btn btn-primary" onclick="mAddIncome()">+ Inkomst toevoegen</button>
+    </div>
   </div>
   ${filterBar('income')}
   <div class="card" style="margin-bottom:14px;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-color:#86efac">
@@ -502,7 +516,11 @@ function vUitgaven() {
   return `
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
     <div style="font-family:'Playfair Display',serif;font-size:22px">💸 Uitgaven ${S.year}</div>
-    <button class="btn btn-primary" onclick="mAddExpense()">+ Uitgave toevoegen</button>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="btn btn-secondary btn-sm" onclick="window.print()">📄 PDF</button>
+      <button class="btn btn-secondary btn-sm" onclick="doCSV('expense')">📊 CSV</button>
+      <button class="btn btn-primary" onclick="mAddExpense()">+ Uitgave toevoegen</button>
+    </div>
   </div>
   ${filterBar('expense')}
   <div class="card" style="margin-bottom:14px;background:linear-gradient(135deg,#fef2f2,#fee2e2);border-color:#fca5a5">
@@ -569,7 +587,11 @@ function vSchulden() {
   return `
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
     <div style="font-family:'Playfair Display',serif;font-size:22px">🔴 Schulden & Te betalen</div>
-    <button class="btn btn-primary" onclick="mAddDebt()">+ Schuld toevoegen</button>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="btn btn-secondary btn-sm" onclick="window.print()">📄 PDF</button>
+      <button class="btn btn-secondary btn-sm" onclick="doCSV('debt')">📊 CSV</button>
+      <button class="btn btn-primary" onclick="mAddDebt()">+ Schuld toevoegen</button>
+    </div>
   </div>
   <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
     <div class="stat s-debt"><div class="stat-val" style="color:#ea580c">${fmt(tDebt)}</div><div class="stat-label">🔴 Nog te betalen</div></div>
@@ -608,18 +630,80 @@ function drawCharts() {
   const mOut=MAANDEN.map((_,i)=>exp.filter(x=>new Date(x.date).getMonth()===i).reduce((s,x)=>s+parseFloat(x.amount||0),0));
   let cum=0; const cumData=MAANDEN.map((_,i)=>{cum+=mIn[i]-mOut[i];return cum;});
 
-  const opts={plugins:{legend:{position:'bottom',labels:{font:{family:'Nunito',size:11}}}},responsive:true,maintainAspectRatio:true};
+  // Register datalabels plugin if available
+  if(window.ChartDataLabels) Chart.register(ChartDataLabels);
 
-  if(incByCat.length) new Chart(document.getElementById('ch1'),{type:'doughnut',data:{labels:incByCat.map(c=>c.label),datasets:[{data:incByCat.map(c=>c.val),backgroundColor:incByCat.map(c=>c.col),borderWidth:2,borderColor:'#fff'}]},options:opts});
-  if(expByCat.length) new Chart(document.getElementById('ch2'),{type:'doughnut',data:{labels:expByCat.map(c=>c.label),datasets:[{data:expByCat.map(c=>c.val),backgroundColor:expByCat.map(c=>c.col),borderWidth:2,borderColor:'#fff'}]},options:opts});
-  new Chart(document.getElementById('ch3'),{type:'bar',data:{labels:MSHORT,datasets:[{label:'Inkomsten',data:mIn,backgroundColor:'#86efac',borderRadius:5},{label:'Uitgaven',data:mOut,backgroundColor:'#fca5a5',borderRadius:5}]},options:{...opts,scales:{x:{grid:{display:false}}}}});
-  new Chart(document.getElementById('ch4'),{type:'line',data:{labels:MSHORT,datasets:[{label:'Cumulatief saldo',data:cumData,borderColor:'#c084fc',backgroundColor:'rgba(192,132,252,.1)',fill:true,tension:.4,pointBackgroundColor:'#c084fc',pointRadius:4}]},options:{...opts,scales:{y:{grid:{color:'#f0dff5'}},x:{grid:{display:false}}}}});
+  const dlPlugin = window.ChartDataLabels ? [ChartDataLabels] : [];
+
+  const donutOpts = (total) => ({
+    plugins:{
+      legend:{position:'bottom',labels:{font:{family:'Nunito',size:11},padding:10}},
+      datalabels:{
+        display: ctx => ctx.dataset.data[ctx.dataIndex] > 0,
+        color:'#fff',
+        font:{family:'Nunito',size:11,weight:'bold'},
+        formatter:(val,ctx)=>{
+          const pct=(val/total*100).toFixed(0);
+          return pct>='5' ? pct+'%' : '';
+        },
+        textStrokeColor:'rgba(0,0,0,.18)',textStrokeWidth:2,
+      }
+    },
+    responsive:true,maintainAspectRatio:true
+  });
+
+  const barOpts = {
+    plugins:{
+      legend:{position:'bottom',labels:{font:{family:'Nunito',size:11}}},
+      datalabels:{
+        display: ctx => ctx.dataset.data[ctx.dataIndex]>0,
+        anchor:'end',align:'end',
+        color:ctx=>ctx.datasetIndex===0?'#16a34a':'#dc2626',
+        font:{family:'Nunito',size:9,weight:'bold'},
+        formatter: v => v>0?'€'+v.toFixed(0):'',
+      }
+    },
+    responsive:true,maintainAspectRatio:true,
+    scales:{x:{grid:{display:false}},y:{grid:{color:'#f0dff5'}}}
+  };
+
+  const lineOpts = {
+    plugins:{
+      legend:{position:'bottom',labels:{font:{family:'Nunito',size:11}}},
+      datalabels:{display:false}
+    },
+    responsive:true,maintainAspectRatio:true,
+    scales:{y:{grid:{color:'#f0dff5'}},x:{grid:{display:false}}}
+  };
+
+  const tIn2=incByCat.reduce((s,c)=>s+c.val,0)||1;
+  const tOut2=expByCat.reduce((s,c)=>s+c.val,0)||1;
+
+  if(incByCat.length) new Chart(document.getElementById('ch1'),{type:'doughnut',plugins:dlPlugin,data:{labels:incByCat.map(c=>c.label),datasets:[{data:incByCat.map(c=>c.val),backgroundColor:incByCat.map(c=>c.col),borderWidth:2,borderColor:'#fff'}]},options:donutOpts(tIn2)});
+  if(expByCat.length) new Chart(document.getElementById('ch2'),{type:'doughnut',plugins:dlPlugin,data:{labels:expByCat.map(c=>c.label),datasets:[{data:expByCat.map(c=>c.val),backgroundColor:expByCat.map(c=>c.col),borderWidth:2,borderColor:'#fff'}]},options:donutOpts(tOut2)});
+  new Chart(document.getElementById('ch3'),{type:'bar',plugins:dlPlugin,data:{labels:MSHORT,datasets:[{label:'Inkomsten',data:mIn,backgroundColor:'#86efac',borderRadius:5},{label:'Uitgaven',data:mOut,backgroundColor:'#fca5a5',borderRadius:5}]},options:barOpts});
+  new Chart(document.getElementById('ch4'),{type:'line',plugins:dlPlugin,data:{labels:MSHORT,datasets:[{label:'Cumulatief saldo',data:cumData,borderColor:'#c084fc',backgroundColor:'rgba(192,132,252,.1)',fill:true,tension:.4,pointBackgroundColor:'#c084fc',pointRadius:4}]},options:lineOpts});
 }
 
 // ── MODAL SYSTEM ──────────────────────────────────────────────
 function showModal(html) {
   const root = document.getElementById('modal-root');
   root.innerHTML = `<div class="modal-overlay" id="modal-overlay"><div class="modal-box">${html}</div></div>`;
+  // Init flatpickr on all date inputs in modal
+  setTimeout(() => {
+    root.querySelectorAll('input[type="date"]').forEach(el => {
+      if (el._flatpickr) return;
+      flatpickr(el, {
+        dateFormat: 'Y-m-d',
+        locale: {
+          firstDayOfWeek: 1,
+          weekdays: { shorthand:['Zo','Ma','Di','Wo','Do','Vr','Za'], longhand:['Zondag','Maandag','Dinsdag','Woensdag','Donderdag','Vrijdag','Zaterdag'] },
+          months: { shorthand:['Jan','Feb','Maa','Apr','Mei','Jun','Jul','Aug','Sep','Okt','Nov','Dec'], longhand:['Januari','Februari','Maart','April','Mei','Juni','Juli','Augustus','September','Oktober','November','December'] }
+        },
+        allowInput: true,
+      });
+    });
+  }, 50);
 }
 function closeModal() {
   document.getElementById('modal-root').innerHTML = '';
@@ -925,14 +1009,34 @@ window.delDebt = (id) => {
 };
 
 // ── EXPORT ────────────────────────────────────────────────────
-window.doCSV = () => {
+window.doCSV = (type) => {
   const yr=S.year;
-  const rows=[['Type','Datum','Categorie','Beschrijving','Bedrag','Van IBAN','Aan IBAN']];
-  S.incomes.filter(x=>getYr(x)==yr).forEach(x=>rows.push(['Inkomst',x.date,catL(x.category,true),x.description,x.amount,x.ibanVan||'',x.ibanAan||'']));
-  S.expenses.filter(x=>getYr(x)==yr).forEach(x=>rows.push(['Uitgave',x.date,catL(x.category,false),x.description,'-'+x.amount,x.ibanVan||'',x.ibanAan||'']));
-  const csv=rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
-  a.download=`SSE_${yr}.csv`;a.click();
+  let rows, filename;
+  if (type==='income') {
+    rows=[['Datum','Categorie','Beschrijving','Bedrag','Van IBAN','Naar IBAN','Notitie']];
+    S.incomes.filter(x=>getYr(x)==yr).sort((a,b)=>a.date.localeCompare(b.date))
+      .forEach(x=>rows.push([fmtD(x.date),catL(x.category,true),x.description,x.amount,x.ibanVan||'',x.ibanAan||'',x.note||'']));
+    filename=`SSE_Inkomsten_${yr}.csv`;
+  } else if (type==='expense') {
+    rows=[['Datum','Categorie','Beschrijving','Bedrag','Van IBAN','Aan IBAN','Notitie']];
+    S.expenses.filter(x=>getYr(x)==yr).sort((a,b)=>a.date.localeCompare(b.date))
+      .forEach(x=>rows.push([fmtD(x.date),catL(x.category,false),x.description,x.amount,x.ibanVan||'',x.ibanAan||'',x.note||'']));
+    filename=`SSE_Uitgaven_${yr}.csv`;
+  } else if (type==='debt') {
+    rows=[['Naam','Totaal','Betaald','Resterend','Vervaldag','Notitie']];
+    S.debts.sort((a,b)=>(a.dueDate||'').localeCompare(b.dueDate||''))
+      .forEach(d=>{const r=Math.max(0,parseFloat(d.total||0)-parseFloat(d.paid||0));
+        rows.push([d.name,d.total,d.paid||0,r.toFixed(2),fmtD(d.dueDate),d.note||'']);});
+    filename=`SSE_Schulden_${yr}.csv`;
+  } else {
+    rows=[['Type','Datum','Categorie','Beschrijving','Bedrag','Van IBAN','Aan IBAN']];
+    S.incomes.filter(x=>getYr(x)==yr).forEach(x=>rows.push(['Inkomst',fmtD(x.date),catL(x.category,true),x.description,x.amount,x.ibanVan||'',x.ibanAan||'']));
+    S.expenses.filter(x=>getYr(x)==yr).forEach(x=>rows.push(['Uitgave',fmtD(x.date),catL(x.category,false),x.description,x.amount,x.ibanVan||'',x.ibanAan||'']));
+    filename=`SSE_${yr}.csv`;
+  }
+  const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));
+  a.download=filename;a.click();
   toast('📊 CSV gedownload!');
 };
 
