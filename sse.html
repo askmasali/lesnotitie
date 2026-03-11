@@ -262,10 +262,16 @@ async function loadData(uid) {
     const snap = await getDoc(doc(db, "sse_finance", uid));
     if (snap.exists()) {
       const parsed = JSON.parse(snap.data().data);
-      Object.assign(window.finState, parsed);
+      // Replace arrays fully instead of merging
+      if (parsed.incomes) window.finState.incomes = parsed.incomes;
+      if (parsed.expenses) window.finState.expenses = parsed.expenses;
+      if (parsed.debts) window.finState.debts = parsed.debts;
+      if (parsed.years) window.finState.years = parsed.years;
+      if (parsed.currentYear) window.finState.currentYear = parsed.currentYear;
+      generateHuurSchulden(); // ensure auto debts still present
       populateYearSelect();
       render();
-      showToast("☁️ Gegevens geladen!");
+      showToast("☁️ Cloud data geladen!");
     }
   } catch(e) { console.warn("Load error:", e); }
 }
@@ -327,16 +333,30 @@ function uid() { return Math.random().toString(36).substr(2, 9); }
 
 function saveState() {
   try {
-    localStorage.setItem('sse_finance_v1', JSON.stringify(window.finState));
+    const json = JSON.stringify(window.finState);
+    localStorage.setItem('sse_finance_v1', json);
+  } catch(e) { console.warn('localStorage save failed:', e); }
+  // Firebase save (async, non-blocking)
+  try {
     if (window._saveData) window._saveData();
-  } catch(e) {}
+  } catch(e) { console.warn('Firebase save failed:', e); }
 }
 
 function loadLocal() {
   try {
     const saved = localStorage.getItem('sse_finance_v1');
-    if (saved) Object.assign(window.finState, JSON.parse(saved));
-  } catch(e) {}
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // Merge carefully - arrays should replace, not merge
+      if (parsed.incomes) window.finState.incomes = parsed.incomes;
+      if (parsed.expenses) window.finState.expenses = parsed.expenses;
+      if (parsed.debts) window.finState.debts = parsed.debts;
+      if (parsed.years) window.finState.years = parsed.years;
+      if (parsed.currentYear) window.finState.currentYear = parsed.currentYear;
+      console.log('Local loaded: incomes:', window.finState.incomes.length,
+        'expenses:', window.finState.expenses.length, 'debts:', window.finState.debts.length);
+    }
+  } catch(e) { console.warn('loadLocal error:', e); }
 }
 
 function esc(s) {
@@ -424,7 +444,13 @@ function renderNavTabs() {
   });
 }
 
-function switchView(v) { currentView = v; filterMonth = 'all'; filterCat = 'all'; render(); }
+function switchView(v) {
+  currentView = v;
+  filterMonth = 'all';
+  filterCat = 'all';
+  try { localStorage.setItem('sse_view', v); } catch(e) {}
+  render();
+}
 
 // ===================== OVERZICHT =====================
 function renderOverzicht() {
@@ -1305,6 +1331,11 @@ function generateHuurSchulden() {
 loadLocal();
 generateHuurSchulden();
 populateYearSelect();
+// Restore last active tab
+try {
+  const savedView = localStorage.getItem('sse_view');
+  if (savedView) currentView = savedView;
+} catch(e) {}
 render();
 
 // Init date pickers after each modal open
