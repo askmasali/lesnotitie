@@ -350,8 +350,10 @@ function fmt(n) {
 
 function fmtDate(d) {
   if (!d) return '';
-  const dt = new Date(d);
-  return `${dt.getDate()} ${MONTHS[dt.getMonth()]} ${dt.getFullYear()}`;
+  const dt = new Date(d + 'T12:00:00'); // avoid timezone shift
+  const day = String(dt.getDate()).padStart(2,'0');
+  const month = String(dt.getMonth()+1).padStart(2,'0');
+  return `${day}/${month}/${dt.getFullYear()}`;
 }
 
 // ===================== YEAR =====================
@@ -527,16 +529,42 @@ function renderOverzicht() {
     </div>
 
     <div class="card" style="background:linear-gradient(135deg,#f5e6ff,#fff0fa)">
-      <div style="font-size:13px;font-weight:800;color:var(--accent1);margin-bottom:8px">⚡ Snelle acties</div>
+      <div style="font-size:13px;font-weight:800;color:var(--accent1);margin-bottom:4px">⚡ Snelle acties</div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:10px">Voeg snel transacties of schulden toe. Schuld-knoppen voegen een "te betalen" post toe zodat je kunt bijhouden of het betaald is.</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn btn-secondary btn-sm" onclick="quickAdd('huur')">🏠 Maandhuur 500€</button>
-        <button class="btn btn-secondary btn-sm" onclick="quickAdd('bank')">🏦 KBC 51€</button>
-        <button class="btn btn-secondary btn-sm" onclick="quickAdd('kbc178')">💳 KBC 178€</button>
-        <button class="btn btn-primary btn-sm" onclick="switchView('inkomsten')">+ Inkomst</button>
-        <button class="btn btn-primary btn-sm" onclick="switchView('uitgaven')">+ Uitgave</button>
-        <button class="btn btn-primary btn-sm" onclick="switchView('schulden')">+ Schuld</button>
+        <button class="btn btn-primary btn-sm" onclick="switchView('inkomsten')">💚 + Inkomst</button>
+        <button class="btn btn-primary btn-sm" onclick="switchView('uitgaven')">💸 + Uitgave</button>
+        <button class="btn btn-primary btn-sm" onclick="switchView('schulden')">🔴 + Schuld</button>
+
       </div>
     </div>`;
+}
+
+function quickAdd(type) {
+  const yr = window.finState.currentYear;
+  const addDebt = (name, total, dueDate, note) => {
+    if (window.finState.debts.some(d => d.name === name)) {
+      showToast('⚠️ Al aanwezig: ' + name.slice(0,30) + '...'); return;
+    }
+    window.finState.debts.push({ id: uid(), name, total, paid: 0, dueDate, note, year: yr });
+    saveState(); switchView('schulden');
+  };
+  if (type === 'huur') {
+    switchView('schulden');
+    showToast('🏠 Huur staat al automatisch in Schulden!');
+  } else if (type === 'bank') {
+    addDebt('KBC Business PRO — jaarlijkse kost 2026', 51, '2026-03-05',
+      'KBC bankkosten jaarlijks. Ontvangen 05/03/2026');
+    showToast('🏦 KBC 51€ toegevoegd als schuld!');
+  } else if (type === 'kbc178') {
+    addDebt('KBC — rekening aanvraagkosten 2026', 178, '2026-01-02',
+      'Eenmalige aanvraagkost KBC Business PRO bij oprichting VZW');
+    showToast('💳 KBC 178€ toegevoegd als schuld!');
+  } else if (type === 'fod') {
+    addDebt('FOD Justitie — registratiekosten VZW', 173.76, '2026-01-02',
+      'Neerlegging statuten + publicatie Belgisch Staatsblad');
+    showToast('🏛️ FOD Justitie toegevoegd als schuld!');
+  }
 }
 
 // ===================== INKOMSTEN =====================
@@ -562,7 +590,10 @@ function renderInkomsten() {
             items.sort((a,b) => new Date(b.date)-new Date(a.date)).map(x => `<tr>
               <td style="color:var(--text3);white-space:nowrap">${fmtDate(x.date)}</td>
               <td><span class="cat-badge cat-${x.category}">${getCatIcon(x.category,true)} ${getCatLabel(x.category,true)}</span></td>
-              <td style="max-width:200px">${esc(x.description)}</td>
+              <td style="max-width:220px">
+                <div>${esc(x.description)}</div>
+                ${(x.ibanVan||x.ibanAan) ? `<div style="font-size:9px;color:var(--text3);margin-top:2px">${x.ibanVan?'Van: '+x.ibanVan:''}${x.ibanVan&&x.ibanAan?' → ':''}${x.ibanAan?'Naar: '+x.ibanAan:''}</div>` : ''}
+              </td>
               <td class="amount-in" style="white-space:nowrap">${fmt(x.amount)}</td>
               <td>
                 <div style="display:flex;gap:4px">
@@ -599,7 +630,10 @@ function renderUitgaven() {
             items.sort((a,b) => new Date(b.date)-new Date(a.date)).map(x => `<tr>
               <td style="color:var(--text3);white-space:nowrap">${fmtDate(x.date)}</td>
               <td><span class="cat-badge cat-${x.category}">${getCatIcon(x.category,false)} ${getCatLabel(x.category,false)}</span></td>
-              <td style="max-width:200px">${esc(x.description)}</td>
+              <td style="max-width:220px">
+                <div>${esc(x.description)}</div>
+                ${(x.ibanVan||x.ibanAan) ? `<div style="font-size:9px;color:var(--text3);margin-top:2px">${x.ibanVan?'Van: '+x.ibanVan:''}${x.ibanVan&&x.ibanAan?' → ':''}${x.ibanAan?'Aan: '+x.ibanAan:''}</div>` : ''}
+              </td>
               <td class="amount-out" style="white-space:nowrap">${fmt(x.amount)}</td>
               <td>
                 <div style="display:flex;gap:4px">
@@ -617,8 +651,10 @@ function renderUitgaven() {
 function renderSchulden() {
   const debts = window.finState.debts;
   const totalDebt = debts.reduce((s,d) => s + Math.max(0, parseFloat(d.total||0) - parseFloat(d.paid||0)), 0);
-  const paid = debts.filter(d => parseFloat(d.paid||0) >= parseFloat(d.total||0));
-  const open = debts.filter(d => parseFloat(d.paid||0) < parseFloat(d.total||0));
+  const paid = debts.filter(d => parseFloat(d.paid||0) >= parseFloat(d.total||0))
+    .sort((a,b) => new Date(b.dueDate||'2099') - new Date(a.dueDate||'2099'));
+  const open = debts.filter(d => parseFloat(d.paid||0) < parseFloat(d.total||0))
+    .sort((a,b) => new Date(b.dueDate||'2099') - new Date(a.dueDate||'2099'));
 
   return `
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
@@ -836,6 +872,10 @@ function modalAddIncome() {
         ${INCOME_CATS.map(c=>`<option value="${c.id}">${c.icon} ${c.label}</option>`).join('')}
       </select></div>
     <div class="form-group"><label class="form-label">Beschrijving</label><input class="form-input" id="m-desc" placeholder="Omschrijving..."></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Van IBAN (betaler)</label><input class="form-input" id="m-iban-van" placeholder="bijv. BE10 7350 7584 5904"></div>
+      <div class="form-group"><label class="form-label">Naar IBAN (ontvanger)</label><input class="form-input" id="m-iban-aan" placeholder="bijv. BE68 7390 3074 2634" value="BE68 7390 3074 2634"></div>
+    </div>
     <div class="form-group"><label class="form-label">Notitie (optioneel)</label><textarea class="form-textarea" id="m-note" placeholder="Extra info..."></textarea></div>
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
       <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
@@ -851,7 +891,9 @@ function doAddIncome() {
   const description = document.getElementById('m-desc').value.trim();
   const note = document.getElementById('m-note').value.trim();
   if (!date || !amount || amount <= 0) { showToast("⚠️ Datum en bedrag invullen!"); return; }
-  window.finState.incomes.push({ id: uid(), date, amount, category, description, note, year: window.finState.currentYear });
+  const ibanVan = document.getElementById('m-iban-van')?.value.trim() || '';
+  const ibanAan = document.getElementById('m-iban-aan')?.value.trim() || '';
+  window.finState.incomes.push({ id: uid(), date, amount, category, description, note, ibanVan, ibanAan, year: window.finState.currentYear });
   saveState(); closeModal(); render(); showToast("✅ Inkomst toegevoegd!");
 }
 
@@ -868,6 +910,10 @@ function modalEditIncome(id) {
         ${INCOME_CATS.map(c=>`<option value="${c.id}" ${c.id===x.category?'selected':''}>${c.icon} ${c.label}</option>`).join('')}
       </select></div>
     <div class="form-group"><label class="form-label">Beschrijving</label><input class="form-input" id="m-desc" value="${esc(x.description)}"></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Van IBAN</label><input class="form-input" id="m-iban-van" value="${esc(x.ibanVan||'')}"></div>
+      <div class="form-group"><label class="form-label">Naar IBAN</label><input class="form-input" id="m-iban-aan" value="${esc(x.ibanAan||'BE68 7390 3074 2634')}"></div>
+    </div>
     <div class="form-group"><label class="form-label">Notitie</label><textarea class="form-textarea" id="m-note">${esc(x.note||'')}</textarea></div>
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
       <button class="btn btn-danger" onclick="deleteIncome('${id}');closeModal()">🗑 Verwijderen</button>
@@ -884,7 +930,9 @@ function doEditIncome(id) {
     amount: parseFloat(document.getElementById('m-amount').value),
     category: document.getElementById('m-cat').value,
     description: document.getElementById('m-desc').value.trim(),
-    note: document.getElementById('m-note').value.trim()
+    note: document.getElementById('m-note').value.trim(),
+    ibanVan: document.getElementById('m-iban-van')?.value.trim() || '',
+    ibanAan: document.getElementById('m-iban-aan')?.value.trim() || ''
   };
   saveState(); closeModal(); render(); showToast("✅ Bijgewerkt!");
 }
@@ -906,6 +954,10 @@ function modalAddExpense() {
         ${EXPENSE_CATS.map(c=>`<option value="${c.id}">${c.icon} ${c.label}</option>`).join('')}
       </select></div>
     <div class="form-group"><label class="form-label">Beschrijving</label><input class="form-input" id="m-desc" placeholder="Omschrijving..."></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Van IBAN (betaler)</label><input class="form-input" id="m-iban-van" placeholder="bijv. BE68 7390 3074 2634" value="BE68 7390 3074 2634"></div>
+      <div class="form-group"><label class="form-label">Aan / Naam ontvanger</label><input class="form-input" id="m-iban-aan" placeholder="Naam of IBAN ontvanger"></div>
+    </div>
     <div class="form-group"><label class="form-label">Notitie (optioneel)</label><textarea class="form-textarea" id="m-note" placeholder="Extra info..."></textarea></div>
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
       <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
@@ -921,7 +973,9 @@ function doAddExpense() {
   const description = document.getElementById('m-desc').value.trim();
   const note = document.getElementById('m-note').value.trim();
   if (!date || !amount || amount <= 0) { showToast("⚠️ Datum en bedrag invullen!"); return; }
-  window.finState.expenses.push({ id: uid(), date, amount, category, description, note, year: window.finState.currentYear });
+  const ibanVan = document.getElementById('m-iban-van')?.value.trim() || '';
+  const ibanAan = document.getElementById('m-iban-aan')?.value.trim() || '';
+  window.finState.expenses.push({ id: uid(), date, amount, category, description, note, ibanVan, ibanAan, year: window.finState.currentYear });
   saveState(); closeModal(); render(); showToast("✅ Uitgave toegevoegd!");
 }
 
@@ -938,6 +992,10 @@ function modalEditExpense(id) {
         ${EXPENSE_CATS.map(c=>`<option value="${c.id}" ${c.id===x.category?'selected':''}>${c.icon} ${c.label}</option>`).join('')}
       </select></div>
     <div class="form-group"><label class="form-label">Beschrijving</label><input class="form-input" id="m-desc" value="${esc(x.description)}"></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Van IBAN (betaler)</label><input class="form-input" id="m-iban-van" value="${esc(x.ibanVan||'BE68 7390 3074 2634')}"></div>
+      <div class="form-group"><label class="form-label">Aan / Naam ontvanger</label><input class="form-input" id="m-iban-aan" value="${esc(x.ibanAan||'')}"></div>
+    </div>
     <div class="form-group"><label class="form-label">Notitie</label><textarea class="form-textarea" id="m-note">${esc(x.note||'')}</textarea></div>
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
       <button class="btn btn-danger" onclick="deleteExpense('${id}');closeModal()">🗑 Verwijderen</button>
@@ -954,7 +1012,9 @@ function doEditExpense(id) {
     amount: parseFloat(document.getElementById('m-amount').value),
     category: document.getElementById('m-cat').value,
     description: document.getElementById('m-desc').value.trim(),
-    note: document.getElementById('m-note').value.trim()
+    note: document.getElementById('m-note').value.trim(),
+    ibanVan: document.getElementById('m-iban-van')?.value.trim() || '',
+    ibanAan: document.getElementById('m-iban-aan')?.value.trim() || ''
   };
   saveState(); closeModal(); render(); showToast("✅ Bijgewerkt!");
 }
@@ -1119,41 +1179,48 @@ const _origOpenModal = window.openModal;
 
 // ===================== AUTO HUUR SCHULDEN =====================
 function generateHuurSchulden() {
-  // Generate monthly huur debts from Jan 2026 up to current month
   const now = new Date();
   const startYear = 2026;
-  const startMonth = 0; // January
-
   const MAANDEN_NL = ['Januari','Februari','Maart','April','Mei','Juni',
                        'Juli','Augustus','September','Oktober','November','December'];
-
   let generated = 0;
+
+  // Monthly huur
   for (let y = startYear; y <= now.getFullYear(); y++) {
-    const mStart = (y === startYear) ? startMonth : 0;
+    const mStart = 0;
     const mEnd = (y === now.getFullYear()) ? now.getMonth() : 11;
     for (let m = mStart; m <= mEnd; m++) {
       const maandNaam = MAANDEN_NL[m] + ' ' + y;
       const debtName = 'Mustafa Turk - Huur ' + maandNaam;
-      // Check if already exists (by name)
-      const exists = window.finState.debts.some(d => d.name === debtName);
-      if (!exists) {
+      if (!window.finState.debts.some(d => d.name === debtName)) {
         const dueDay = String(y) + '-' + String(m+1).padStart(2,'0') + '-02';
         window.finState.debts.push({
-          id: uid(),
-          name: debtName,
-          total: 500,
-          paid: 0,
+          id: uid(), name: debtName, total: 500, paid: 0,
           dueDate: dueDay,
-          note: 'Automatisch gegenereerd — maandelijkse huur Zavelputstraat 18',
+          note: 'Automatisch — maandelijkse huur Zavelputstraat 18',
           year: y
         });
         generated++;
       }
     }
   }
+
+  // One-time vaste schulden (if not already present)
+  const vaste = [
+    { name: 'KBC Business PRO — jaarlijkse kost 2026', total: 51, dueDate: '2026-03-05',
+      note: 'KBC bankkosten jaarlijks. Vervaldag 05/03/2026. Van: BE10 7350 7584 5904 → Naar: BE68 7390 3074 2634 (dernek)', year: 2026 },
+    { name: 'FOD Justitie — registratiekosten VZW', total: 173.76, dueDate: '2026-01-02',
+      note: 'Neerlegging statuten + publicatie Belgisch Staatsblad. Registratie Smart Skills Education VZW', year: 2026 },
+  ];
+  vaste.forEach(v => {
+    if (!window.finState.debts.some(d => d.name === v.name)) {
+      window.finState.debts.push({ id: uid(), paid: 0, ...v });
+      generated++;
+    }
+  });
+
   if (generated > 0) {
     saveState();
-    showToast('🏠 ' + generated + ' huurmaand(en) automatisch toegevoegd!');
   }
 }
 
