@@ -5,10 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SSE Financiën</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/themes/airbnb.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/l10n/nl.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root {
@@ -141,46 +137,7 @@
 
   @media(max-width: 600px) { .form-row { grid-template-columns: 1fr; } .chart-grid { grid-template-columns: 1fr; } }
 
-  /* FLATPICKR CUSTOM THEMING */
-  .flatpickr-calendar {
-    border-radius: 16px !important;
-    border: 2px solid var(--border) !important;
-    box-shadow: 0 12px 40px rgba(192,132,252,0.25) !important;
-    font-family: 'Nunito', sans-serif !important;
-    padding: 8px !important;
-    width: 340px !important;
-  }
-  .flatpickr-months { padding: 8px 4px !important; }
-  .flatpickr-month { background: transparent !important; }
-  .flatpickr-current-month { font-size: 16px !important; font-weight: 800 !important; color: var(--text) !important; }
-  .flatpickr-current-month .flatpickr-monthDropdown-months {
-    background: var(--surface) !important; font-family: 'Nunito', sans-serif !important;
-    font-weight: 800 !important; font-size: 16px !important; color: var(--text) !important;
-  }
-  .flatpickr-current-month input.cur-year {
-    font-family: 'Nunito', sans-serif !important; font-weight: 800 !important;
-    font-size: 16px !important; color: var(--text) !important;
-  }
-  .flatpickr-weekday { font-family: 'Nunito', sans-serif !important; font-weight: 800 !important; font-size: 11px !important; color: var(--text3) !important; }
-  .flatpickr-day {
-    font-family: 'Nunito', sans-serif !important; font-weight: 700 !important;
-    border-radius: 10px !important; font-size: 13px !important;
-    height: 38px !important; line-height: 38px !important;
-    margin: 2px !important; width: 38px !important; max-width: 38px !important;
-  }
-  .flatpickr-day:hover { background: var(--surface2) !important; border-color: var(--accent1) !important; }
-  .flatpickr-day.selected, .flatpickr-day.selected:hover {
-    background: linear-gradient(135deg, #c084fc, #f9a8d4) !important;
-    border-color: transparent !important; color: #fff !important;
-    box-shadow: 0 2px 10px rgba(192,132,252,0.4) !important;
-  }
-  .flatpickr-day.today { border: 2px solid var(--accent1) !important; font-weight: 900 !important; }
-  .flatpickr-day.today.selected { border-color: transparent !important; }
-  .flatpickr-prev-month, .flatpickr-next-month { color: var(--accent1) !important; fill: var(--accent1) !important; }
-  .flatpickr-prev-month:hover svg, .flatpickr-next-month:hover svg { fill: var(--accent2) !important; }
-  .numInputWrapper:hover { background: transparent !important; }
-  .numInputWrapper span { border-color: var(--border) !important; }
-</style>
+  </style>
 </head>
 <body>
 
@@ -418,6 +375,19 @@ function getFiltered(arr) {
 
 function totalOf(arr) {
   return arr.reduce((s, x) => s + parseFloat(x.amount || 0), 0);
+}
+
+
+// Date helpers for modals
+function todayDMY() {
+  const d = new Date();
+  return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') + '/' + d.getFullYear();
+}
+function isoToDmy(iso) {
+  if (!iso) return '';
+  const parts = iso.split('-');
+  if (parts.length === 3) return parts[2] + '/' + parts[1] + '/' + parts[0];
+  return iso;
 }
 
 // ===================== RENDER =====================
@@ -890,7 +860,7 @@ function modalAddIncome() {
   const today = new Date().toISOString().slice(0,10);
   openModal(`<div class="modal-title">💚 Inkomst toevoegen</div>
     <div class="form-row">
-      <div class="form-group"><label class="form-label">Datum</label><input class="form-input" type="date" id="m-date" value="${today}"></div>
+      <div class="form-group"><label class="form-label">Datum</label><input class="form-input" type="text" data-date="1" id="m-date" placeholder="DD/MM/YYYY" value="${todayDMY()}"></div>
       <div class="form-group"><label class="form-label">Bedrag (€)</label><input class="form-input" type="number" id="m-amount" placeholder="0.00" min="0" step="0.01"></div>
     </div>
     <div class="form-group"><label class="form-label">Categorie</label>
@@ -945,7 +915,7 @@ function modalEditIncome(id) {
   if (!x) return;
   openModal(`<div class="modal-title">✏️ Inkomst bewerken</div>
     <div class="form-row">
-      <div class="form-group"><label class="form-label">Datum</label><input class="form-input" type="date" id="m-date" value="${x.date}"></div>
+      <div class="form-group"><label class="form-label">Datum</label><input class="form-input" type="text" data-date="1" id="m-date" placeholder="DD/MM/YYYY" value="${isoToDmy(x.date)}"></div>
       <div class="form-group"><label class="form-label">Bedrag (€)</label><input class="form-input" type="number" id="m-amount" value="${x.amount}" min="0" step="0.01"></div>
     </div>
     <div class="form-group"><label class="form-label">Categorie</label>
@@ -989,7 +959,7 @@ function modalAddExpense() {
   const today = new Date().toISOString().slice(0,10);
   openModal(`<div class="modal-title">💸 Uitgave toevoegen</div>
     <div class="form-row">
-      <div class="form-group"><label class="form-label">Datum</label><input class="form-input" type="date" id="m-date" value="${today}"></div>
+      <div class="form-group"><label class="form-label">Datum</label><input class="form-input" type="text" data-date="1" id="m-date" placeholder="DD/MM/YYYY" value="${todayDMY()}"></div>
       <div class="form-group"><label class="form-label">Bedrag (€)</label><input class="form-input" type="number" id="m-amount" placeholder="0.00" min="0" step="0.01"></div>
     </div>
     <div class="form-group"><label class="form-label">Categorie</label>
@@ -1044,7 +1014,7 @@ function modalEditExpense(id) {
   if (!x) return;
   openModal(`<div class="modal-title">✏️ Uitgave bewerken</div>
     <div class="form-row">
-      <div class="form-group"><label class="form-label">Datum</label><input class="form-input" type="date" id="m-date" value="${x.date}"></div>
+      <div class="form-group"><label class="form-label">Datum</label><input class="form-input" type="text" data-date="1" id="m-date" placeholder="DD/MM/YYYY" value="${isoToDmy(x.date)}"></div>
       <div class="form-group"><label class="form-label">Bedrag (€)</label><input class="form-input" type="number" id="m-amount" value="${x.amount}" min="0" step="0.01"></div>
     </div>
     <div class="form-group"><label class="form-label">Categorie</label>
@@ -1093,7 +1063,7 @@ function modalAddDebt() {
       <div class="form-group"><label class="form-label">Totaal bedrag (€)</label><input class="form-input" type="number" id="m-total" placeholder="0.00" min="0" step="0.01"></div>
       <div class="form-group"><label class="form-label">Al betaald (€)</label><input class="form-input" type="number" id="m-paid" placeholder="0.00" min="0" step="0.01" value="0"></div>
     </div>
-    <div class="form-group"><label class="form-label">Vervaldatum (optioneel)</label><input class="form-input" type="date" id="m-due"></div>
+    <div class="form-group"><label class="form-label">Vervaldatum (optioneel)</label><input class="form-input" type="text" data-date="1" id="m-due" placeholder="DD/MM/YYYY"></div>
     <div class="form-group"><label class="form-label">Notitie</label><textarea class="form-textarea" id="m-note" placeholder="Extra info..."></textarea></div>
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
       <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
@@ -1125,7 +1095,7 @@ function modalPayDebt(id) {
     <div class="form-group"><label class="form-label">Betaald bedrag (€)</label>
       <input class="form-input" type="number" id="m-pay" placeholder="0.00" min="0" step="0.01" value="${remaining.toFixed(2)}" autofocus></div>
     <div class="form-group"><label class="form-label">Datum</label>
-      <input class="form-input" type="date" id="m-date" value="${new Date().toISOString().slice(0,10)}"></div>
+      <input class="form-input" type="text" data-date="1" id="m-date" placeholder="DD/MM/YYYY" value="${todayDMY()}"></div>
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
       <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
       <button class="btn btn-success" onclick="doPayDebt('${id}')">✅ Betaling registreren</button>
@@ -1153,7 +1123,7 @@ function modalEditDebt(id) {
       <div class="form-group"><label class="form-label">Totaal (€)</label><input class="form-input" type="number" id="m-total" value="${d.total}" min="0" step="0.01"></div>
       <div class="form-group"><label class="form-label">Al betaald (€)</label><input class="form-input" type="number" id="m-paid" value="${d.paid||0}" min="0" step="0.01"></div>
     </div>
-    <div class="form-group"><label class="form-label">Vervaldatum</label><input class="form-input" type="date" id="m-due" value="${d.dueDate||''}"></div>
+    <div class="form-group"><label class="form-label">Vervaldatum</label><input class="form-input" type="text" data-date="1" id="m-due" placeholder="DD/MM/YYYY" value="${isoToDmy(d.dueDate)}"></div>
     <div class="form-group"><label class="form-label">Notitie</label><textarea class="form-textarea" id="m-note">${esc(d.note||'')}</textarea></div>
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
       <button class="btn btn-danger" onclick="deleteDebt('${id}');closeModal()">🗑</button>
@@ -1215,70 +1185,33 @@ document.addEventListener('keydown', e => {
 
 // ===================== DATE PICKERS =====================
 function initDatePickers() {
-  document.querySelectorAll('input[type="date"]').forEach(el => {
-    if (el._flatpickr) el._flatpickr.destroy();
-    // Convert existing YYYY-MM-DD value to show DD/MM/YYYY
-    const existingVal = el.value;
-    flatpickr(el, {
-      locale: "nl",
-      dateFormat: "d/m/Y",        // display to user: 11/03/2026
-      altInput: false,
-      allowInput: true,
-      disableMobile: true,
-      monthSelectorType: "dropdown",
-      defaultDate: existingVal || null,
-      onReady(_, __, fp) {
-        if (fp.calendarContainer) fp.calendarContainer.style.zIndex = '9999';
-      },
-      onChange(selectedDates, dateStr, fp) {
-        // Store YYYY-MM-DD in a hidden sibling for JS to read
-        const hidden = fp.element.nextElementSibling;
-        if (hidden && hidden.classList.contains('fp-hidden-date')) {
-          hidden.value = selectedDates[0] ? selectedDates[0].toISOString().slice(0,10) : '';
-        }
-      }
+  // Simple: format date inputs as DD/MM/YYYY text
+  document.querySelectorAll('input[data-date]').forEach(el => {
+    el.addEventListener('input', function() {
+      // auto-insert slashes
+      let v = this.value.replace(/\D/g,'');
+      if (v.length > 2) v = v.slice(0,2) + '/' + v.slice(2);
+      if (v.length > 5) v = v.slice(0,5) + '/' + v.slice(5,9);
+      this.value = v;
     });
-    // Add hidden input after date field to store ISO value
-    if (!el.nextElementSibling || !el.nextElementSibling.classList.contains('fp-hidden-date')) {
-      const hidden = document.createElement('input');
-      hidden.type = 'hidden';
-      hidden.className = 'fp-hidden-date';
-      hidden.value = existingVal || '';
-      el.parentNode.insertBefore(hidden, el.nextSibling);
-    }
   });
 }
 
-// Helper: get date value from flatpickr input (returns YYYY-MM-DD)
+// Get date as YYYY-MM-DD from a DD/MM/YYYY text input
 function getDateVal(id) {
   const el = document.getElementById(id);
-  if (!el) return '';
-  // Try flatpickr instance directly
-  if (el._flatpickr && el._flatpickr.selectedDates.length > 0) {
-    const d = el._flatpickr.selectedDates[0];
-    const y = d.getFullYear();
-    const m = String(d.getMonth()+1).padStart(2,'0');
-    const day = String(d.getDate()).padStart(2,'0');
-    return y + '-' + m + '-' + day;
-  }
-  // Try hidden sibling
-  const hidden = el.nextElementSibling;
-  if (hidden && hidden.classList.contains('fp-hidden-date') && hidden.value) return hidden.value;
-  // Fallback: parse value directly
-  const v = el.value;
-  if (!v) return '';
-  // Already ISO?
-  if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
-  // DD/MM/YYYY?
+  if (!el) return new Date().toISOString().slice(0,10);
+  const v = el.value.trim();
+  if (!v) return new Date().toISOString().slice(0,10);
+  // DD/MM/YYYY
   const parts = v.split('/');
-  if (parts.length === 3 && parts[2].length === 4) {
+  if (parts.length === 3 && parts[2].length >= 4) {
     return parts[2] + '-' + parts[1].padStart(2,'0') + '-' + parts[0].padStart(2,'0');
   }
-  return v;
+  // YYYY-MM-DD fallback
+  if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
+  return new Date().toISOString().slice(0,10);
 }
-
-// Observe modal changes to init pickers when modal opens
-const _origOpenModal = window.openModal;
 
 // ===================== AUTO HUUR SCHULDEN =====================
 function generateHuurSchulden() {
@@ -1338,12 +1271,7 @@ try {
 } catch(e) {}
 render();
 
-// Init date pickers after each modal open
-const _origOpen = openModal;
-window.openModal = function(html) {
-  _origOpen(html);
-  setTimeout(initDatePickers, 80);
-};
+// Date pickers: simple text input, no library needed
 </script>
 </body>
 </html>
