@@ -71,8 +71,6 @@
   th { padding:10px 12px; text-align:left; font-size:10px; font-weight:800; color:var(--text2); text-transform:uppercase; letter-spacing:.8px; background:var(--cream); border-bottom:1.5px solid var(--border); white-space:nowrap; }
   td { padding:8px 10px; border-bottom:1px solid var(--border); vertical-align:middle; }
   tr:last-child td { border-bottom:none; }
-  tr:nth-child(odd) td { background:#fff9f5; }
-  tr:nth-child(even) td { background:var(--surface); }
   tr:hover td { background:#fdf4ff !important; }
   tr.row-vacation td { background:#f0fdf4 !important; }
 
@@ -548,267 +546,299 @@ function showToast(msg) {
 // ===================== JAARPLAN DATA =====================
 const JAARPLAN = {
 "1":[
-{"wn":1,"mn":"sep","wk":1,"thema":"Geloofsleer","les":"Islam, iman, ihsan1.1. Leestekst: Vreemde man (Hadies Djibriel)1.2. Wat betekent Islam?","vac":false,"skip":false,"ln":1},
-{"wn":2,"mn":"sep","wk":2,"thema":"Geloofsleer","les":"1.3. Wat betekent iman?1.4. Wat betekent ihsan?","vac":false,"skip":false,"ln":2},
-{"wn":3,"mn":"sep","wk":2,"thema":"Geloofsleer","les":"2.5. Niets of niemand is aan Allah gelijkwaardig2.6. Allah hoort, weet en ziet alles","vac":false,"skip":false,"ln":3},
-{"wn":4,"mn":"sep","wk":3,"thema":"Geloofsleer","les":"1.5. De verantwoordelijke moslim en zijn plichten.1.6. Amantoe en de betekenis","vac":false,"skip":false,"ln":4},
-{"wn":5,"mn":"sep","wk":3,"thema":"Geloofsleer","les":"2.7. Allah is almachtig over alle dingen2.8. Allah is met ons","vac":false,"skip":false,"ln":5},
-{"wn":6,"mn":"sep","wk":4,"thema":"Geloofsleer","les":"2. Het geloof in Allah2.1. De mens is een verstandig en gelovig wezen2.2. Er is een zeker evenwicht en overeenstemming in het heelal","vac":false,"skip":false,"ln":6},
-{"wn":7,"mn":"sep","wk":4,"thema":"Geloofsleer","les":"2.9. Ik werk,ik vertrouw op de hulp van Allah en heb succes2.10. Soera al Ihclas en de betekenis","vac":false,"skip":false,"ln":7},
-{"wn":8,"mn":"nov","wk":1,"thema":"Herfsvakantie","les":"29 october – 4 november","vac":true,"skip":false,"ln":0},
-{"wn":9,"mn":"nov","wk":2,"thema":"Geloofsleer","les":"3. Het geloof in de engelen en in de boeken3.1. De wereld van de schepsel3.2. Het geloof in de engelen","vac":false,"skip":false,"ln":8},
-{"wn":10,"mn":"nov","wk":3,"thema":"Geloofsleer","les":"3.3. Het geloof in boeken","vac":false,"skip":false,"ln":9},
-{"wn":11,"mn":"nov","wk":4,"thema":"Aanbidding","les":"4. Reinheid en aanbidding in de Islam4.1. Reinheid4.1.1. Kleine rituele wassing (abdest)4.1.2. Grote rituele wassing (ghoesl)4.1.3. Tayammoem","vac":false,"skip":false,"ln":10},
-{"wn":12,"mn":"dec","wk":1,"thema":"Aanbidding","les":"4.2. Aanbidding in de Islam","vac":false,"skip":false,"ln":11},
-{"wn":13,"mn":"dec","wk":2,"thema":"Aanbidding","les":"5.2 De maand Ramadan en het vasten5.1. De maand Ramadan en haar belang5.2. Wat betekent het vasten","vac":false,"skip":false,"ln":12},
-{"wn":14,"mn":"dec","wk":3,"thema":"Evaluatie & Herhaling","les":"Herhalen en evaluatie van de behandelde leerstof","vac":false,"skip":false,"ln":13},
-{"wn":15,"mn":"dec","wk":4,"thema":"Kerstvakantie","les":"24 december – 6 januari","vac":true,"skip":false,"ln":0},
-{"wn":16,"mn":"jan","wk":1,"thema":"Kerstvakantie","les":"24 december – 6 januari","vac":true,"skip":false,"ln":0},
-{"wn":17,"mn":"jan","wk":2,"thema":"Aanbidding","les":"5.3. De maand Ramadan en belangrijke begrippen i.v.m. het vasten5.4. Waarop moeten we letten als we vasten?","vac":false,"skip":false,"ln":14},
-{"wn":18,"mn":"jan","wk":3,"thema":"Aanbidding","les":"5.5. Wat maakt je vasten ongeldig?5.6. Voordelen van het vasten voor de mens en de maatschappij","vac":false,"skip":false,"ln":15},
-{"wn":19,"mn":"jan","wk":4,"thema":"Aanbidding","les":"5.7. Vreugde van de Ramadanfeest5.8. Soera Ma’oen en de betekenis","vac":false,"skip":false,"ln":16},
-{"wn":20,"mn":"feb","wk":1,"thema":"Mohammed (s.a.w.)","les":"6.1. Het leven van de Profeet Mohammed (s.a.w.)6.1.1. Zijn geboorte","vac":false,"skip":false,"ln":17},
-{"wn":21,"mn":"feb","wk":2,"thema":"Mohammed (s.a.w.)","les":"6.1.2. Zijn kinderjaren","vac":false,"skip":false,"ln":18},
-{"wn":22,"mn":"feb","wk":3,"thema":"Krokusvakantie","les":"04 – 10 maart","vac":true,"skip":false,"ln":0},
-{"wn":23,"mn":"feb","wk":4,"thema":"Mohammed (s.a.w.)","les":"6.1.3. Zijn huwelijk","vac":false,"skip":false,"ln":19},
-{"wn":24,"mn":"maa","wk":1,"thema":"Mohammed (s.a.w.)","les":"6.1.4. Zijn profeetschap","vac":false,"skip":false,"ln":20},
-{"wn":25,"mn":"maa","wk":2,"thema":"Mohammed (s.a.w.)","les":"6.2. Als een profeet en een mens; profeet Mohammed (s.a.w.)6.2.1. Mohammed (s.a.w.) als mens6.2.2. Mohammed (s.a.w.) als profeet","vac":false,"skip":false,"ln":21},
-{"wn":26,"mn":"maa","wk":3,"thema":"Mohammed (s.a.w.)","les":"6.2.3. Mohammed (s.a.w.) is de verklaarder van de Koran6.2.4. Mohammed (s.a.w.) is een waarschuwer6.2.5. Mohammed (s.a.w.) is barmhartig voor de mensheid","vac":false,"skip":false,"ln":22},
-{"wn":27,"mn":"maa","wk":4,"thema":"Koran","les":"7. Koran en hadies7.1. Koran","vac":false,"skip":false,"ln":23},
-{"wn":28,"mn":"apr","wk":1,"thema":"Paasvakantie","les":"8– 21 april","vac":true,"skip":false,"ln":0},
-{"wn":29,"mn":"apr","wk":2,"thema":"Paasvakantie","les":"8– 21 april","vac":true,"skip":false,"ln":0},
-{"wn":30,"mn":"apr","wk":3,"thema":"Koran","les":"7.2. Soenna en hadies","vac":false,"skip":false,"ln":24},
-{"wn":31,"mn":"apr","wk":4,"thema":"Koran","les":"7.3. Soera, aya en doe’a","vac":false,"skip":false,"ln":25},
-{"wn":32,"mn":"mei","wk":1,"thema":"Koran","les":"7.4. Verhaal","vac":false,"skip":false,"ln":26},
-{"wn":33,"mn":"mei","wk":2,"thema":"Gedragsvorming/Achlaq","les":"8. Liefde, vriendschap en broederschap8.1. Waarom is liefhebben en geliefd zijn een behoefte?","vac":false,"skip":false,"ln":27},
-{"wn":34,"mn":"mei","wk":3,"thema":"Achlaq","les":"8.2. Liefde is een geschenk voor ons van Allah (s.w.t.)","vac":false,"skip":false,"ln":28},
-{"wn":35,"mn":"mei","wk":4,"thema":"Achlaq","les":"8.3. Allah (s.w.t.) houdt van Zijn schepsel","vac":false,"skip":false,"ln":29},
-{"wn":36,"mn":"jun","wk":1,"thema":"Achlaq","les":"8.4. De basis van vriendschap en broederschap is liefde","vac":false,"skip":false,"ln":30},
-{"wn":37,"mn":"jun","wk":2,"thema":"Achlaq","les":"8.5. De islamitische godsdienst raadt aan om te leven als broeders","vac":false,"skip":false,"ln":31},
-{"wn":38,"mn":"jun","wk":3,"thema":"Achlaq","les":"8.6. Zorg dragen voor andere schepsel","vac":false,"skip":false,"ln":32},
-{"wn":39,"mn":"jun","wk":4,"thema":"Evaluatie & Herhaling","les":"Herhalen en evaluatie van de behandelde leerstof","vac":false,"skip":false,"ln":33},
+{"wn":1,"mn":"sep","thema":"GELOOFSLEER","les":"Islam, iman, ihsan — 1.1. Leestekst: Vreemde man (Hadies Djibriel) — 1.2. Wat betekent Islam? (5 zuilen van de Islam, isra en miradj)","vac":false,"ln":1},
+{"wn":2,"mn":"sep","thema":"GELOOFSLEER","les":"1.3. Wat betekent iman? (6 basisprincipes van het geloof) — 1.4. Wat betekent ihsan? (Moslim, kafier, moenafiq, moesjriek…)","vac":false,"ln":2},
+{"wn":3,"mn":"sep","thema":"GELOOFSLEER","les":"1.5. De verantwoordelijke moslim en zijn plichten (Farz, soenna, wadjieb, moebah, mekroeh, haram, helal…) — 1.6. Amantoe en de betekenis","vac":false,"ln":3},
+{"wn":4,"mn":"sep","thema":"GELOOFSLEER","les":"2. Het geloof in Allah — 2.1. De mens is een verstandig en gelovig wezen — 2.2. Er is een zeker evenwicht en overeenstemming in het heelal","vac":false,"ln":4},
+{"wn":5,"mn":"okt","thema":"GELOOFSLEER","les":"2.3. Allah bestaat en hij is een — 2.4. Allah is schepper van alles (Adam as en Hawa, Iblies)","vac":false,"ln":5},
+{"wn":6,"mn":"okt","thema":"GELOOFSLEER","les":"2.5. Niets of niemand is aan Allah gelijkwaardig (De schone namen van Allah swt, sjirk) — 2.6. Allah hoort, weet en ziet alles","vac":false,"ln":6},
+{"wn":7,"mn":"okt","thema":"GELOOFSLEER","les":"2.7. Allah is almachtig over alle dingen — 2.8. Allah is met ons","vac":false,"ln":7},
+{"wn":8,"mn":"okt","thema":"GELOOFSLEER","les":"2.9. Ik werk, ik vertrouw op de hulp van Allah en heb succes — 2.10. Soera Ihlas en de betekenis","vac":false,"ln":8},
+{"wn":9,"mn":"nov","thema":"Herfstvakantie","les":"Herfstvakantie","vac":true,"ln":0},
+{"wn":10,"mn":"nov","thema":"GELOOFSLEER","les":"3. Het geloof in de engelen en in de boeken — 3.1. De wereld van de schepsel (Zichtbare en onzichtbare schepsels) — 3.2. Het geloof in de engelen","vac":false,"ln":9},
+{"wn":11,"mn":"nov","thema":"GELOOFSLEER","les":"3.3. Het geloof in boeken (De 4 heilige boeken, sahifes, het vergelijken van de Koran met de voorgaande heilige boeken, nebi en rasoel)","vac":false,"ln":10},
+{"wn":12,"mn":"nov","thema":"AANBIDDING","les":"4. Reinheid en aanbidding in de Islam — 4.1. Reinheid — 4.1.1. Kleine rituele wassing (abdest) — 4.1.2. Grote rituele wassing (ghoesl) — 4.1.3. Tayammoem","vac":false,"ln":11},
+{"wn":13,"mn":"dec","thema":"AANBIDDING","les":"4.2. Aanbidding in de Islam (Soorten aanbiddingen, 5 zuilen van de Islam, gebed, soorten gebeden, gebed verrichten)","vac":false,"ln":12},
+{"wn":14,"mn":"dec","thema":"AANBIDDING","les":"5.1. De maand Ramadan en haar belang — 5.2. Wat betekent het vasten","vac":false,"ln":13},
+{"wn":15,"mn":"dec","thema":"AANBIDDING","les":"5.3. De maand Ramadan en belangrijke begrippen i.v.m. het vasten (Sahoer, iftar, imsak, mukabele, terawiehgebed, zekati fitr)","vac":false,"ln":14},
+{"wn":16,"mn":"dec","thema":"Kerstvakantie","les":"Kerstvakantie","vac":true,"ln":0},
+{"wn":17,"mn":"jan","thema":"Kerstvakantie","les":"Kerstvakantie","vac":true,"ln":0},
+{"wn":18,"mn":"jan","thema":"AANBIDDING","les":"5.4. Waarop moeten we letten als we vasten? — 5.5. Wat maakt je vasten ongeldig?","vac":false,"ln":15},
+{"wn":19,"mn":"jan","thema":"AANBIDDING","les":"5.6. Voordelen van het vasten voor de mens en de maatschappij (Persoonlijke en maatschappelijke voordelen)","vac":false,"ln":16},
+{"wn":20,"mn":"jan","thema":"AANBIDDING","les":"5.7. Vreugde van de Ramadan Feest (De voordelen van de feestdagen, de feestdagen in de Islam)","vac":false,"ln":17},
+{"wn":21,"mn":"feb","thema":"AANBIDDING","les":"5.8. Soera Ma'oen en de betekenis — Soera Nas en de betekenis — Soera Felak en de betekenis","vac":false,"ln":18},
+{"wn":22,"mn":"feb","thema":"HET LEVEN VAN DE PROFEET","les":"6.1. Het leven van de Profeet Mohammed (s.a.w.) — 6.1.1. Zijn geboorte (Het jaar van olifant, Quraish stam, Hasjim klan, zoogmoeder)","vac":false,"ln":19},
+{"wn":23,"mn":"feb","thema":"Krokusvakantie","les":"Krokusvakantie","vac":true,"ln":0},
+{"wn":24,"mn":"feb","thema":"HET LEVEN VAN DE PROFEET","les":"6.1.2. Zijn kinderjaren (Bezoek Medina, Amina, Abdulmuttalib, Ebu Talib, handelreizen)","vac":false,"ln":20},
+{"wn":25,"mn":"mrt","thema":"HET LEVEN VAN DE PROFEET","les":"6.1.3. Zijn huwelijk (Hatidja ranha, kinderen)","vac":false,"ln":21},
+{"wn":26,"mn":"mrt","thema":"HET LEVEN VAN DE PROFEET","les":"6.1.4. Zijn profeetschap (De eerste wahy, de wahy engel, verkondiging van Islam)","vac":false,"ln":22},
+{"wn":27,"mn":"mrt","thema":"HET LEVEN VAN DE PROFEET","les":"6.2. Als een profeet en een mens; profeet Mohammed (s.a.w.) — 6.2.1. Mohammed als mens — 6.2.2. Mohammed als profeet","vac":false,"ln":23},
+{"wn":28,"mn":"mrt","thema":"HET LEVEN VAN DE PROFEET","les":"6.2.3. Mohammed (s.a.w.) is de verklaarder van de Koran — 6.2.4. Mohammed is een waarschuwer — 6.2.5. Mohammed is barmhartig voor de mensheid","vac":false,"ln":24},
+{"wn":29,"mn":"apr","thema":"Paasvakantie","les":"Paasvakantie","vac":true,"ln":0},
+{"wn":30,"mn":"apr","thema":"Paasvakantie","les":"Paasvakantie","vac":true,"ln":0},
+{"wn":31,"mn":"apr","thema":"DE KORAN","les":"7.1. Koran — 7.1.1. Definitie van de Koran — 7.1.2. Wat betekent Wahy (De eerste openbaring, soorten wahy) — 7.1.3. Belangrijke namen van de Koran","vac":false,"ln":25},
+{"wn":32,"mn":"apr","thema":"DE KORAN","les":"7.1.4. De neerzending van de Koran — 7.1.5. De inhoud van de Koran","vac":false,"ln":26},
+{"wn":33,"mn":"mei","thema":"DE KORAN","les":"7.1.6. De eigenschappen van de Koran — 7.1.7. Regels bij het lezen van de Koran","vac":false,"ln":27},
+{"wn":34,"mn":"mei","thema":"DE KORAN","les":"7.2. Soenna en hadies — 7.2.1. Betekenis van soenna — 7.2.2. Betekenis van hadies","vac":false,"ln":28},
+{"wn":35,"mn":"mei","thema":"DE KORAN","les":"7.2.3. Het belang van de hadies — 7.2.4. Voorbeelden van de bekende ahadies","vac":false,"ln":29},
+{"wn":36,"mn":"mei","thema":"DE KORAN","les":"7.2.5. Het verschil tussen de Koran en hadies","vac":false,"ln":30},
+{"wn":37,"mn":"jun","thema":"DE KORAN","les":"7.3. Soera, aya en doe'a (Het belang van doea, enkele voorbeelden van doe's) — 7.4. Verhaal: Allah swt denkt aan ons","vac":false,"ln":31},
+{"wn":38,"mn":"jun","thema":"ZEDELIJKHEID","les":"8. Liefde, vriendschap en broederschap — 8.1. Waarom is liefhebben en geliefd zijn een behoefte? — 8.2. Liefde is een geschenk van Allah","vac":false,"ln":32},
+{"wn":39,"mn":"jun","thema":"ZEDELIJKHEID","les":"8.3. Allah (s.w.t.) houdt van Zijn schepsel — 8.4. De basis van vriendschap en broederschap is liefde","vac":false,"ln":33},
+{"wn":40,"mn":"jun","thema":"ZEDELIJKHEID","les":"8.5. De islamitische godsdienst raadt aan om te leven als broeders — 8.6. Zorg dragen voor andere schepsels","vac":false,"ln":34},
+{"wn":41,"mn":"jun","thema":"EVALUATIE","les":"Herhaling en evaluatie van Geloofsleer en Aanbidding","vac":false,"ln":35},
+{"wn":42,"mn":"jun","thema":"EVALUATIE","les":"Herhaling en evaluatie van Het leven van de Profeet en De Koran","vac":false,"ln":36},
+{"wn":43,"mn":"jun","thema":"EVALUATIE","les":"Herhaling en evaluatie van Zedelijkheid — afsluiting schooljaar","vac":false,"ln":37},
+{"wn":44,"mn":"jul","thema":"Zomervakantie","les":"Zomervakantie","vac":true,"ln":0},
 ],
 "2":[
-{"wn":1,"mn":"sep","wk":1,"thema":"Geloofsleer","les":"1. Noodlot en voorbestemming (Qada en Qadar)1.1. Allah (s.w.t.) heeft alles naar een bepaalde maat geschapen","vac":false,"skip":false,"ln":1},
-{"wn":2,"mn":"sep","wk":2,"thema":"Geloofsleer","les":"1.2. Al qadar (voorbestemming) en de wetten in het heelal1.2.1. Fysische wetten1.2.2. Biologische wetten1.2.3. Maatschappelijke","vac":false,"skip":false,"ln":2},
-{"wn":3,"mn":"sep","wk":2,"thema":"Geloofsleer","les":"2.2. Geloven in de achira2.2.1. De dag des oordeels en de wederopstanding2.2.2. Het hiernamaals: beloning of bestraffing voor onze daden in de wereld2.2.3. De invloed van het geloven in het hiernamaals op ons gedrag","vac":false,"skip":false,"ln":3},
-{"wn":4,"mn":"sep","wk":3,"thema":"Geloofsleer","les":"1.3. Menselijke wilsuiting en de voorbeschikking1.3.1. Vrijheid en de verantwoordelijkheid van de mens1.3.2. Inzet van de mens: werk en “rizq”1.3.3. Einde van het wereldse leven: overlijden en levensduur","vac":false,"skip":false,"ln":4},
-{"wn":5,"mn":"sep","wk":3,"thema":"Aanbidding","les":"3. Verschillende vormen van aanbidding3.1. Mensen hebben behoefte om met elkaar te delen en elkaar te helpen","vac":false,"skip":false,"ln":5},
-{"wn":6,"mn":"sep","wk":4,"thema":"Geloofsleer","les":"1.4. Vertrouwen in Allah (s.w.t.) (tawakkoel)","vac":false,"skip":false,"ln":6},
-{"wn":7,"mn":"sep","wk":4,"thema":"Aanbidding","les":"3.2. Almoes (zakaat) geven als een onderdeel van vrijgevigheid3.2.1. Wie moet zekaat betalen?3.2.2. Waarvan kan men zekaat betalen?3.2.3. Aan wie en op welke wijze moet men zekaat betalen?","vac":false,"skip":false,"ln":7},
-{"wn":8,"mn":"nov","wk":1,"thema":"Herfsvakantie","les":"30 october – 5 november","vac":true,"skip":false,"ln":0},
-{"wn":9,"mn":"nov","wk":2,"thema":"Aanbidding","les":"3.3. Sadaqa als maatschappelijke steun","vac":false,"skip":false,"ln":8},
-{"wn":10,"mn":"nov","wk":3,"thema":"Aanbidding","les":"3.4. Hulporganisaties","vac":false,"skip":false,"ln":9},
-{"wn":11,"mn":"nov","wk":4,"thema":"Aanbidding","les":"3.5. Wat is de bedevaart en waarom wordt het verricht?","vac":false,"skip":false,"ln":10},
-{"wn":12,"mn":"dec","wk":1,"thema":"Mohammed (s.a.w.)","les":"Medina al Moenawwara4.1. Medina: de verlichte stad","vac":false,"skip":false,"ln":11},
-{"wn":13,"mn":"dec","wk":2,"thema":"Mohammed (s.a.w.)","les":"4.2 Emigratie naar Medina4.2.1. Emigratie4.2.2. De angstaanjagende beslissing4.2.3. Maatregelen van Mohammed (s.a.w.)4.2.4. In de grot","vac":false,"skip":false,"ln":12},
-{"wn":14,"mn":"dec","wk":3,"thema":"Evaluatie & Herhaling","les":"Herhalen en evaluatie van de behandelde leerstof","vac":false,"skip":false,"ln":13},
-{"wn":15,"mn":"dec","wk":4,"thema":"Kerstvakantie","les":"25 december – 7 januari","vac":true,"skip":false,"ln":0},
-{"wn":16,"mn":"jan","wk":1,"thema":"Kerstvakantie","les":"25 december – 7 januari","vac":true,"skip":false,"ln":0},
-{"wn":17,"mn":"jan","wk":2,"thema":"Mohammed (s.a.w.)","les":"4.3. De verwelkoming van Mohammed (s.a.w.)","vac":false,"skip":false,"ln":14},
-{"wn":18,"mn":"jan","wk":3,"thema":"Mohammed (s.a.w.)","les":"4.4. Zaken die gedaan werden in het eerste jaar van de emigratie4.4.1. De broederschap in de Islam","vac":false,"skip":false,"ln":15},
-{"wn":19,"mn":"jan","wk":4,"thema":"Mohammed (s.a.w.)","les":"4.5. De overeenkomst die Mohammed (s.a.w.) sloot met de verschillende godsdienstleiders","vac":false,"skip":false,"ln":16},
-{"wn":20,"mn":"feb","wk":1,"thema":"Mohammed (s.a.w.)","les":"4.6. De slag bij Badr (624)","vac":false,"skip":false,"ln":17},
-{"wn":21,"mn":"feb","wk":2,"thema":"Mohammed (s.a.w.)","les":"4.7. De slag bij Oehoed (625)","vac":false,"skip":false,"ln":18},
-{"wn":22,"mn":"feb","wk":3,"thema":"Krokusvakantie","les":"12 – 18 februari","vac":true,"skip":false,"ln":0},
-{"wn":23,"mn":"feb","wk":4,"thema":"Mohammed (s.a.w.)","les":"4.8. Vredesverdrag van Hoedaybiya","vac":false,"skip":false,"ln":19},
-{"wn":24,"mn":"maa","wk":1,"thema":"Mohammed (s.a.w.)","les":"4.9. De verovering van Mekka (630)","vac":false,"skip":false,"ln":20},
-{"wn":25,"mn":"maa","wk":2,"thema":"Mohammed (s.a.w.)","les":"4.10. De afscheidsbedevaart en het overlijden van onze Profeet","vac":false,"skip":false,"ln":21},
-{"wn":26,"mn":"maa","wk":3,"thema":"Mohammed (s.a.w.)","les":"5. Voorbeeldige gedrag van Profeet Mohammed (s.a.w.)5.1. Mohammed (s.a.w.) werd als een voorbeeldfiguur gestuurd naar de mensen","vac":false,"skip":false,"ln":22},
-{"wn":27,"mn":"maa","wk":4,"thema":"Mohammed (s.a.w.)","les":"5.2. Voorbeeldige gedrag (achlaq) van de Profeet (s.a.w.)5.2.1. Mohammed (s.a.w.) was een betrouwbare man5.2.2. Mohammed (s.a.w.) was barmhartig en vergevensgezind5.2.3. Mohammed (s.a.w.) behandelde iedereen als evenwaardig5.2.4. Mohammed (s.a.w.) was een moedig man5.2.5. Mohammed (s.a.w.) spoorde rechtvaardig gedrag aan5.2.6. Mohammed (s.a.w.) was geduldig","vac":false,"skip":false,"ln":23},
-{"wn":28,"mn":"apr","wk":1,"thema":"Paasvakantie","les":"1 – 15 april","vac":true,"skip":false,"ln":0},
-{"wn":29,"mn":"apr","wk":2,"thema":"Paasvakantie","les":"1 – 15 april","vac":true,"skip":false,"ln":0},
-{"wn":30,"mn":"apr","wk":3,"thema":"Mohammed (s.a.w.)","les":"5.2.7. Mohammed (s.a.w.) kwam zijn belofte altijd na 5.2.8. Mohammed (s.a.w.) was verdraagzaam (tolerant)5.2.9. Mohammed (s.a.w.) hechtte belang aan kennis en onderwijs5.2.10. Mohammed (s.a.w.) benutte zijn tijd op de best mogelijke wijze5.2.11. Mohammed (s.a.w.) vroeg steeds advies aan zijn vrienden5.2.12. Mohammed (s.a.w.) hield van de dieren en de natuur","vac":false,"skip":false,"ln":24},
-{"wn":31,"mn":"apr","wk":4,"thema":"Geloofsleer","les":"Rechten en plichten van een moslim6.1. Respect6.2. Vrees voor Allah (s.w.t.)6.2.1. Hoe zich gedragen tegenover Allah (s.w.t.)6.3. Onze plichten tegenover Allah (s.w.t.), de Profeet (s.a.w.) en de Koran6.3.1. Plichten tegenover Allah (s.w.t.)6.3.2. Plichten tegenover profeten6.3.3. Plichten tegenover Koran6.4. respect tegenover ouders","vac":false,"skip":false,"ln":25},
-{"wn":32,"mn":"mei","wk":1,"thema":"Gedragsvorming/Achlaq","les":"Goede achlaq7.1. Op welke manier levert de godsdienst een bijdrage aan mijn goede achlaq?","vac":false,"skip":false,"ln":26},
-{"wn":33,"mn":"mei","wk":2,"thema":"Achlaq","les":"7.2. Bepaalde gedragingen die door de Islam geprezen worden7.2.1. Eerlijkheid 7.2.2. Anderen financieel steunen (infaq)7.2.3. Het beschermen van het in bewaring gegeven goederen7.2.4. Rechtvaardigheid zijn7.2.5. Broederschap7.2.6. Verdraagzaamheid en vergiffenis7.2.7. Bescheidenheid (tawadoe)7.2.8. Manieren hebben7.2.9. Vriendelijk zijn tegenover mensen7.2.10. Verspilling vermijden","vac":false,"skip":false,"ln":27},
-{"wn":34,"mn":"mei","wk":3,"thema":"Geloofsleer","les":"8. Godsdiensten en universele raadgevingen8.1. Waarom is godsdienst universeel?8.2. Waarom bestaat er meer dan een godsdienst?","vac":false,"skip":false,"ln":28},
-{"wn":35,"mn":"mei","wk":4,"thema":"Geloofsleer","les":"8.3. Laten we de verschillende levensbeschouwingen even bekijken8.3.1. Hindoeïsme en Boeddhisme 8.3.2. Het Jodendom8.3.3. Het Christendom8.3.4. De Islam","vac":false,"skip":false,"ln":29},
-{"wn":36,"mn":"jun","wk":1,"thema":"Geloofsleer","les":"8.4. Gelijkenissen tussen de Islam en de andere godsdiensten8.4.1. Eerlijkheid8.4.2. Hygiëne8.4.3. Godheid en behulpzaamheid8.4.4. Respect tegenover ouderen en liefde tegenover jongeren","vac":false,"skip":false,"ln":30},
-{"wn":37,"mn":"jun","wk":2,"thema":"Geloofsleer","les":"8.4.5. Goed gedrag tegenover dieren8.4.6. Het leefmilieu beschermen8.4.7. Afstand nemen van schadelijke gewoonten8.4.8. Anderen geen schade aanbrengen","vac":false,"skip":false,"ln":31},
-{"wn":38,"mn":"jun","wk":3,"thema":"Geloofsleer","les":"8.5. Verdraagzaam zijn tegenover andere godsdiensten","vac":false,"skip":false,"ln":32},
-{"wn":39,"mn":"jun","wk":4,"thema":"Evaluatie & Herhaling","les":"Herhalen en evaluatie van de behandelde leerstof","vac":false,"skip":false,"ln":33},
+{"wn":1,"mn":"sep","thema":"GELOOFSLEER","les":"1. Noodlot en voorbestemming (Qada en Qadar) — 1.1. Allah heeft alles naar een bepaalde maat geschapen (De schepping, het universum)","vac":false,"ln":1},
+{"wn":2,"mn":"sep","thema":"GELOOFSLEER","les":"1.2. Al qadar (voorbestemming) en de wetten in het heelal — 1.2.1. Fysische wetten — 1.2.2. Biologische wetten — 1.2.3. Maatschappelijke wetten","vac":false,"ln":2},
+{"wn":3,"mn":"sep","thema":"GELOOFSLEER","les":"1.3. Menselijke wilsuiting en de voorbeschikking — 1.3.1. Vrijheid en de verantwoordelijkheid van de mens — 1.3.2. Inzet van de mens: werk en \"rizq\" — 1.3.3. Einde van het wereldse leven","vac":false,"ln":3},
+{"wn":4,"mn":"sep","thema":"GELOOFSLEER","les":"1.4. Vertrouwen in Allah (s.w.t.) (tawakkoel) — Ayatoel Koersi en de betekenis","vac":false,"ln":4},
+{"wn":5,"mn":"okt","thema":"GELOOFSLEER","les":"2. Het geloven in de profeten en achira — 2.1. Geloven in de profeten — 2.1.1. Namen van de profeten in de Koran — 2.1.2. De behoefte aan profeten — 2.1.3. De eigenschappen van de profeten","vac":false,"ln":5},
+{"wn":6,"mn":"okt","thema":"GELOOFSLEER","les":"2.2. Geloven in de achira — 2.2.1. De dag des oordeels en de wederopstanding — 2.2.2. Het hiernamaals: beloning of bestraffing — 2.2.3. De invloed van het geloven in het hiernamaals op ons gedrag","vac":false,"ln":6},
+{"wn":7,"mn":"okt","thema":"AANBIDDING","les":"3. Verschillende vormen van aanbidding — 3.1. Mensen hebben behoefte om met elkaar te delen en elkaar te helpen","vac":false,"ln":7},
+{"wn":8,"mn":"okt","thema":"AANBIDDING","les":"3.2. Almoes (zakaat) geven als een onderdeel van vrijgevigheid — 3.2.1. Wie moet zakaat betalen? — 3.2.2. Waarvan kan men zakaat betalen? — 3.2.3. Aan wie en op welke wijze?","vac":false,"ln":8},
+{"wn":9,"mn":"nov","thema":"Herfstvakantie","les":"Herfstvakantie","vac":true,"ln":0},
+{"wn":10,"mn":"nov","thema":"AANBIDDING","les":"3.3. Sadaqa als maatschappelijke steun (Het verschil tussen sadaqa en zakaat, voordelen van sadaqa) — 3.4. Hulporganisaties","vac":false,"ln":9},
+{"wn":11,"mn":"nov","thema":"AANBIDDING","les":"3.5. Wat is de bedevaart en waarom wordt het verricht? (Voor wie verplicht, hoe verrichten, voorwaarden, verschil hadj en oemra)","vac":false,"ln":10},
+{"wn":12,"mn":"nov","thema":"AANBIDDING","les":"3.6. Invloed van de bedevaart op het menselijke gedrag (Offeren, het verhaal van Ibrahim as en zijn zoon Ismail as)","vac":false,"ln":11},
+{"wn":13,"mn":"dec","thema":"HET LEVEN VAN DE PROFEET","les":"Medina al Moenawwara — 4.1. Medina: de verlichte stad (De betekenis van emigratie, moehadjier en ansar, de broederschap)","vac":false,"ln":12},
+{"wn":14,"mn":"dec","thema":"HET LEVEN VAN DE PROFEET","les":"4.2. Emigratie naar Medina — 4.2.1. Emigratie — 4.2.2. De angstaanjagende beslissing (Tawakkoel, vertrouw op Allah swt)","vac":false,"ln":13},
+{"wn":15,"mn":"dec","thema":"HET LEVEN VAN DE PROFEET","les":"4.2.3. Maatregelen van Mohammed (s.a.w.) — 4.2.4. In de grot","vac":false,"ln":14},
+{"wn":16,"mn":"dec","thema":"Kerstvakantie","les":"Kerstvakantie","vac":true,"ln":0},
+{"wn":17,"mn":"jan","thema":"Kerstvakantie","les":"Kerstvakantie","vac":true,"ln":0},
+{"wn":18,"mn":"jan","thema":"HET LEVEN VAN DE PROFEET","les":"4.3. De verwelkoming van Mohammed (s.a.w.) (Het mooie gedrag van de Profeet saw tegenover de anderen)","vac":false,"ln":15},
+{"wn":19,"mn":"jan","thema":"HET LEVEN VAN DE PROFEET","les":"4.4. Zaken die gedaan werden in het eerste jaar van de emigratie — 4.4.1. De broederschap in de Islam","vac":false,"ln":16},
+{"wn":20,"mn":"jan","thema":"HET LEVEN VAN DE PROFEET","les":"4.5. De overeenkomst die Mohammed (s.a.w.) sloot met de verschillende godsdienstleiders (Het belang van de Medina Akkoord)","vac":false,"ln":17},
+{"wn":21,"mn":"feb","thema":"HET LEVEN VAN DE PROFEET","les":"4.6. De slag bij Badr (624) (Het belang van de Badr, Koranverzen over de Badr oorlog)","vac":false,"ln":18},
+{"wn":22,"mn":"feb","thema":"HET LEVEN VAN DE PROFEET","les":"4.7. De slag bij Oehoed (625) (De reden, voorbereidingen en gevolgen van de Oehoed)","vac":false,"ln":19},
+{"wn":23,"mn":"feb","thema":"Krokusvakantie","les":"Krokusvakantie","vac":true,"ln":0},
+{"wn":24,"mn":"feb","thema":"HET LEVEN VAN DE PROFEET","les":"4.8. Vredesverdrag van Hoedaybiya (Het belang van de Hoedaybiya, de gevolgen daarvan)","vac":false,"ln":20},
+{"wn":25,"mn":"mrt","thema":"HET LEVEN VAN DE PROFEET","les":"4.9. De verovering van Mekka (630) (Het belang van de verovering en de gevolgen daarvan)","vac":false,"ln":21},
+{"wn":26,"mn":"mrt","thema":"HET LEVEN VAN DE PROFEET","les":"4.10. De afscheidsbedevaart en het overlijden van onze Profeet saw (De afscheidspreek en het belang daarvan)","vac":false,"ln":22},
+{"wn":27,"mn":"mrt","thema":"HET LEVEN VAN DE PROFEET","les":"5. Voorbeeldig gedrag van Profeet Mohammed (s.a.w.) — 5.1. Mohammed werd als voorbeeldfiguur gestuurd — 5.2.1. Mohammed was een betrouwbare man — 5.2.2. Barmhartig en vergevensgezind","vac":false,"ln":23},
+{"wn":28,"mn":"mrt","thema":"HET LEVEN VAN DE PROFEET","les":"5.2.3. Mohammed behandelde iedereen als evenwaardig — 5.2.4. Mohammed was moedig — 5.2.5. Mohammed spoorde rechtvaardig gedrag aan — 5.2.6. Mohammed was geduldig","vac":false,"ln":24},
+{"wn":29,"mn":"apr","thema":"Paasvakantie","les":"Paasvakantie","vac":true,"ln":0},
+{"wn":30,"mn":"apr","thema":"Paasvakantie","les":"Paasvakantie","vac":true,"ln":0},
+{"wn":31,"mn":"apr","thema":"HET LEVEN VAN DE PROFEET","les":"5.2.7. Mohammed kwam zijn belofte altijd na — 5.2.8. Verdraagzaam — 5.2.9. Hechtte belang aan kennis — 5.2.10. Benutte zijn tijd — 5.2.11. Vroeg steeds advies — 5.2.12. Hield van dieren en natuur","vac":false,"ln":25},
+{"wn":32,"mn":"apr","thema":"ZEDELIJKHEID","les":"6. Rechten en plichten van een moslim — 6.1. Respect — 6.2. Vrees voor Allah — 6.2.1. Hoe ze zich gedragen tegenover Allah","vac":false,"ln":26},
+{"wn":33,"mn":"mei","thema":"ZEDELIJKHEID","les":"6.3. Plichten tegenover Allah, de Profeet en de Koran — 6.4. Respect tegenover ouders","vac":false,"ln":27},
+{"wn":34,"mn":"mei","thema":"ZEDELIJKHEID","les":"7. Goede achlaq — 7.1. Bijdrage godsdienst aan goede achlaq — 7.2.1. Eerlijkheid — 7.2.2. Infaq — 7.2.3. Beschermen van toevertrouwde goederen","vac":false,"ln":28},
+{"wn":35,"mn":"mei","thema":"ZEDELIJKHEID","les":"7.2.4. Rechtvaardigheid — 7.2.5. Broederschap — 7.2.6. Verdraagzaamheid en vergiffenis — 7.2.7. Bescheidenheid — 7.2.8. Manieren — 7.2.9. Vriendelijkheid — 7.2.10. Verspilling vermijden","vac":false,"ln":29},
+{"wn":36,"mn":"mei","thema":"GODSDIENST EN CULTUUR","les":"8. Godsdiensten en universele raadgevingen — 8.1. Waarom is godsdienst universeel? — 8.2. Waarom bestaat er meer dan een godsdienst?","vac":false,"ln":30},
+{"wn":37,"mn":"jun","thema":"GODSDIENST EN CULTUUR","les":"8.3. Laten we de verschillende levensbeschouwingen bekijken — 8.3.1. Hindoeïsme en Boeddhisme — 8.3.2. Het Jodendom — 8.3.3. Het Christendom — 8.3.4. De Islam","vac":false,"ln":31},
+{"wn":38,"mn":"jun","thema":"GODSDIENST EN CULTUUR","les":"8.4. Gelijkenissen tussen de Islam en de andere godsdiensten — 8.4.1-8.4.4: Eerlijkheid, Hygiëne, Godheid, Respect tegenover ouderen","vac":false,"ln":32},
+{"wn":39,"mn":"jun","thema":"GODSDIENST EN CULTUUR","les":"8.4.5. Goed gedrag tegenover dieren — 8.4.6. Het leefmilieu beschermen — 8.4.7. Afstand nemen van schadelijke gewoonten","vac":false,"ln":33},
+{"wn":40,"mn":"jun","thema":"GODSDIENST EN CULTUUR","les":"8.4.8. Anderen geen schade aanbrengen — 8.5. Verdraagzaam zijn tegenover andere godsdiensten (Soera Kaafiroen en de betekenis)","vac":false,"ln":34},
+{"wn":41,"mn":"jun","thema":"EVALUATIE","les":"Herhaling en evaluatie van Geloofsleer: Qada en Qadar, profeten en achira","vac":false,"ln":35},
+{"wn":42,"mn":"jun","thema":"EVALUATIE","les":"Herhaling en evaluatie van Aanbidding en Het leven van de Profeet","vac":false,"ln":36},
+{"wn":43,"mn":"jun","thema":"EVALUATIE","les":"Herhaling en evaluatie van Zedelijkheid en Godsdienst en Cultuur — afsluiting schooljaar","vac":false,"ln":37},
+{"wn":44,"mn":"jul","thema":"Zomervakantie","les":"Zomervakantie","vac":true,"ln":0},
 ],
 "3":[
-{"wn":1,"mn":"sep","wk":1,"thema":"Het geloof","les":"1. Mens en religie1.1. De positie van de mens","vac":false,"skip":false,"ln":1},
-{"wn":2,"mn":"sep","wk":2,"thema":"Het geloof","les":"1.2. De natuur van de mens en het geloof1.3. De positie en het belang van de godsdienst in het mensenleven","vac":false,"skip":false,"ln":2},
-{"wn":3,"mn":"sep","wk":2,"thema":"Het geloof","les":"2.4. Waarom komen profetenverhalen voor in de Koran?2.5. De kenmerken van profetenverhalen in de Koran","vac":false,"skip":false,"ln":3},
-{"wn":4,"mn":"sep","wk":3,"thema":"Het geloof","les":"1.4. De verschillende vormen van geloven1.4.1. Monotheïsme 1.4.2. Polytheïsme1.4.3. Gnosticisme1.4.4. Agnosticisme1.4.5. Atheïsme","vac":false,"skip":false,"ln":4},
-{"wn":5,"mn":"sep","wk":3,"thema":"Het geloof","les":"2.6. De eigenschappen van 25 profeten vermeld in de Koran2.6.1. Adem (a.s.) - Mohammed (s.a.w.)","vac":false,"skip":false,"ln":5},
-{"wn":6,"mn":"sep","wk":4,"thema":"Het geloof","les":"2. De profeten in de Koran2.1. Het profeetschap","vac":false,"skip":false,"ln":6},
-{"wn":7,"mn":"sep","wk":4,"thema":"Het geloof","les":"3. Reinheid en aanbidding3.1. Het begrip “aanbidding”","vac":false,"skip":false,"ln":7},
-{"wn":8,"mn":"nov","wk":1,"thema":"Herfsvakantie","les":"30 october – 5 november","vac":true,"skip":false,"ln":0},
-{"wn":9,"mn":"nov","wk":2,"thema":"De aanbidding","les":"3.2. Waarom aanbidding wij Allah (s.w.t.)?","vac":false,"skip":false,"ln":8},
-{"wn":10,"mn":"nov","wk":3,"thema":"De aanbidding","les":"3.3. De inhoud van het begrip “aanbidding”","vac":false,"skip":false,"ln":9},
-{"wn":11,"mn":"nov","wk":4,"thema":"De aanbidding","les":"3.4. De relatie tussen aanbidding en reinheid3.5. De reinheid","vac":false,"skip":false,"ln":10},
-{"wn":12,"mn":"dec","wk":1,"thema":"Mohammed (s.a.w.)","les":"Het levensverhaal van profeet Mohammed (s.a.w.)4.1. De geboorte, de kindertijd en de jeugd van profeet Mohammed (s.a.w.)","vac":false,"skip":false,"ln":11},
-{"wn":13,"mn":"dec","wk":2,"thema":"Mohammed (s.a.w.)","les":"4.2. De eerste openbaring aan profeet Mohammed (s.a.w.)4.3. De hidjra (verhuizing) van profeet Mohammed (s.a.w.)","vac":false,"skip":false,"ln":12},
-{"wn":14,"mn":"dec","wk":3,"thema":"Evaluatie & Herhaling","les":"Herhalen en evaluatie van de behandelde leerstof","vac":false,"skip":false,"ln":13},
-{"wn":15,"mn":"dec","wk":4,"thema":"Kerstvakantie","les":"25 december – 7 januari","vac":true,"skip":false,"ln":0},
-{"wn":16,"mn":"jan","wk":1,"thema":"Kerstvakantie","les":"25 december – 7 januari","vac":true,"skip":false,"ln":0},
-{"wn":17,"mn":"jan","wk":2,"thema":"Mohammed (s.a.w.)","les":"4.4. De activiteiten van profeet Mohammed (s.a.w.) gericht op een vredevolle samenleven","vac":false,"skip":false,"ln":14},
-{"wn":18,"mn":"jan","wk":3,"thema":"Mohammed (s.a.w.)","les":"4.5. De inspanningen van profeet Mohammed (s.a.w.) rond de verspreiding van de Islam","vac":false,"skip":false,"ln":15},
-{"wn":19,"mn":"jan","wk":4,"thema":"Mohammed (s.a.w.)","les":"4.6. Universele principes in de “Afscheidspreek” van profeet Mohammed (s.a.w.)","vac":false,"skip":false,"ln":16},
-{"wn":20,"mn":"feb","wk":1,"thema":"Mohammed (s.a.w.)","les":"4.7. Het overlijden van profeet Mohammed (s.a.w.)","vac":false,"skip":false,"ln":17},
-{"wn":21,"mn":"feb","wk":2,"thema":"De openbaring(al-Wahy)","les":"De Koran en de inhoud5.1. De Koran is de hoofdbron van de Islamitische godsdienst","vac":false,"skip":false,"ln":18},
-{"wn":22,"mn":"feb","wk":3,"thema":"Krokusvakantie","les":"12 – 18 februari","vac":true,"skip":false,"ln":0},
-{"wn":23,"mn":"feb","wk":4,"thema":"De openbaring","les":"5.2. De geschiedenis van de Koran5.3. Enkele begrippen in verband met de Koran","vac":false,"skip":false,"ln":19},
-{"wn":24,"mn":"maa","wk":1,"thema":"De openbaring","les":"5.4. De basisonderwerpen van de Koran5.5. De boodschappen van de Koran in Nederlandse uitdrukkingen","vac":false,"skip":false,"ln":20},
-{"wn":25,"mn":"maa","wk":2,"thema":"De moraal en de waarden","les":"De waarden en het gezin6.1. Wat betekent “de waarde”?","vac":false,"skip":false,"ln":21},
-{"wn":26,"mn":"maa","wk":3,"thema":"De moraal/waarden","les":"6.2. De invloed van de godsdienst op morele waarden6.3. De Islamitische waarden","vac":false,"skip":false,"ln":22},
-{"wn":27,"mn":"maa","wk":4,"thema":"De moraal/waarden","les":"6.4. De invloed van de Islamitische waarden op ons gedrag","vac":false,"skip":false,"ln":23},
-{"wn":28,"mn":"apr","wk":1,"thema":"Paasvakantie","les":"1 – 15 april","vac":true,"skip":false,"ln":0},
-{"wn":29,"mn":"apr","wk":2,"thema":"Paasvakantie","les":"1 – 15 april","vac":true,"skip":false,"ln":0},
-{"wn":30,"mn":"apr","wk":3,"thema":"De moraal/waarden","les":"6.5. Relatie tussen de waarden en het gezin","vac":false,"skip":false,"ln":24},
-{"wn":31,"mn":"apr","wk":4,"thema":"De moraal/waarden","les":"6.6. Aanbevelingen van de Koran en de profeet Mohammed (s.a.w.) in verband met het gezin","vac":false,"skip":false,"ln":25},
-{"wn":32,"mn":"mei","wk":1,"thema":"Hadis ve soenna","les":"Het belang van soenna in de Islam7.1. De definitie van hadis","vac":false,"skip":false,"ln":26},
-{"wn":33,"mn":"mei","wk":2,"thema":"Hadis ve soenna","les":"7.2. De opbouw van hadis7.3. De eigenschappen van de hadis overleveraars en de zeven sahaba die meer dan duizend hadis overgeleverd hebben","vac":false,"skip":false,"ln":27},
-{"wn":34,"mn":"mei","wk":3,"thema":"Hadis ve soenna","les":"7.4. De soorten hadis7.5. Het belang van hadis","vac":false,"skip":false,"ln":28},
-{"wn":35,"mn":"mei","wk":4,"thema":"Hadis ve soenna","les":"7.6. De meest beroemde hadis boeken (Koetoeboes-Sitta)7.7. De definitie van soenna","vac":false,"skip":false,"ln":29},
-{"wn":36,"mn":"jun","wk":1,"thema":"De feestdagen van de Islam","les":"De Islamitische jaarkalender en de feestdagen8.1. De kalender8.2. De Islamitische jaarkalender","vac":false,"skip":false,"ln":30},
-{"wn":37,"mn":"jun","wk":2,"thema":"De feestdagen van de Islam","les":"8.3. De feestdagen van de Islam8.4. De belangrijke dagen en nachten in de Islam","vac":false,"skip":false,"ln":31},
-{"wn":38,"mn":"jun","wk":3,"thema":"De feestdagen van de Islam","les":"8.5. De islamitische jaarkalender met belangrijke data8.6. De christelijke en joodse kalender met belangrijke data","vac":false,"skip":false,"ln":32},
-{"wn":39,"mn":"jun","wk":4,"thema":"Evaluatie & Herhaling","les":"Herhalen en evaluatie van de behandelde leerstof","vac":false,"skip":false,"ln":33},
+{"wn":1,"mn":"sep","thema":"GELOOFSLEER","les":"1. Mens en religie — 1.1. De positie van de mens (Het heelal, de zichtbare en onzichtbare schepsels)","vac":false,"ln":1},
+{"wn":2,"mn":"sep","thema":"GELOOFSLEER","les":"1.2. De natuur van de mens en het geloof — 1.3. De positie en het belang van de godsdienst in het mensenleven (Het nut van de godsdienst)","vac":false,"ln":2},
+{"wn":3,"mn":"sep","thema":"GELOOFSLEER","les":"1.4. De verschillende vormen van geloven — 1.4.1. Monotheïsme — 1.4.2. Polytheïsme — 1.4.3. Gnosticisme — 1.4.4. Agnosticisme — 1.4.5. Atheïsme","vac":false,"ln":3},
+{"wn":4,"mn":"sep","thema":"GELOOFSLEER","les":"2. De profeten in de Koran — 2.1. Het profeetschap","vac":false,"ln":4},
+{"wn":5,"mn":"okt","thema":"GELOOFSLEER","les":"2.2. De nood aan profeten — 2.3. De opdracht van profeten","vac":false,"ln":5},
+{"wn":6,"mn":"okt","thema":"GELOOFSLEER","les":"2.4. Waarom komen profetenverhalen voor in de Koran? — 2.5. De kenmerken van profetenverhalen in de Koran","vac":false,"ln":6},
+{"wn":7,"mn":"okt","thema":"GELOOFSLEER","les":"2.6. De eigenschappen van 25 profeten vermeld in de Koran — 2.6.1. De profeten van Adem (a.s.) tot Mohammed (s.a.w.)","vac":false,"ln":7},
+{"wn":8,"mn":"okt","thema":"AANBIDDING","les":"3. Reinheid en aanbidding — 3.1. Het begrip \"aanbidding\" (5 zuilen van de Islam, de soera Fatiha en de betekenis)","vac":false,"ln":8},
+{"wn":9,"mn":"nov","thema":"Herfstvakantie","les":"Herfstvakantie","vac":true,"ln":0},
+{"wn":10,"mn":"nov","thema":"AANBIDDING","les":"3.2. Waarom aanbidding wij Allah (s.w.t.)? (Allah aanbidden maakt ons: Gelukkig, hoopvol, moedig, plichtbewust, liefdevol, dankbaar)","vac":false,"ln":9},
+{"wn":11,"mn":"nov","thema":"AANBIDDING","les":"3.3. De inhoud van het begrip \"aanbidding\" — 3.4. De relatie tussen aanbidding en reinheid","vac":false,"ln":10},
+{"wn":12,"mn":"nov","thema":"AANBIDDING","les":"3.5. De reinheid (De innerlijke reinheid, de uiterlijke reinheid, grote en kleine wassing, tayammoem, reinheid van het milieu)","vac":false,"ln":11},
+{"wn":13,"mn":"dec","thema":"HET LEVEN VAN DE PROFEET","les":"4. Het levensverhaal van profeet Mohammed (s.a.w.) — 4.1. De geboorte, de kindertijd en de jeugd van profeet Mohammed (s.a.w.) (Toenmalige samenleving in Mekka)","vac":false,"ln":12},
+{"wn":14,"mn":"dec","thema":"HET LEVEN VAN DE PROFEET","les":"4.2. De eerste openbaring aan profeet Mohammed (s.a.w.) (De eerste moslims, de reactie van Mekka)","vac":false,"ln":13},
+{"wn":15,"mn":"dec","thema":"HET LEVEN VAN DE PROFEET","les":"4.3. De hidjra (verhuizing) van profeet Mohammed (s.a.w.) (De redenen en gevolgen) — 4.4. De activiteiten gericht op een vredevolle samenleving (De Medina overeenkomst)","vac":false,"ln":14},
+{"wn":16,"mn":"dec","thema":"Kerstvakantie","les":"Kerstvakantie","vac":true,"ln":0},
+{"wn":17,"mn":"jan","thema":"Kerstvakantie","les":"Kerstvakantie","vac":true,"ln":0},
+{"wn":18,"mn":"jan","thema":"HET LEVEN VAN DE PROFEET","les":"4.5. De inspanningen van profeet Mohammed rond de verspreiding van de Islam — 4.5.1. De funkties van de Mescid-i Nebevi (De uitnodigingsbrieven)","vac":false,"ln":15},
+{"wn":19,"mn":"jan","thema":"HET LEVEN VAN DE PROFEET","les":"4.6. Universele principes in de \"Afscheidspreek\" van profeet Mohammed (s.a.w.) (Het belang en gevolgen van de Afscheidspreek)","vac":false,"ln":16},
+{"wn":20,"mn":"jan","thema":"HET LEVEN VAN DE PROFEET","les":"4.7. Het overlijden van profeet Mohammed (s.a.w.) (Chronologisch overzicht van het leven, de gevolgen van de dood, de kalifaatschap)","vac":false,"ln":17},
+{"wn":21,"mn":"feb","thema":"DE KORAN","les":"5. De Koran en de inhoud — 5.1. De Koran is de hoofdbron van de Islamitische godsdienst — 5.2. De geschiedenis van de Koran","vac":false,"ln":18},
+{"wn":22,"mn":"feb","thema":"DE KORAN","les":"5.3. Enkele begrippen ivm de Koran — 5.3.1. Begrippen ivm de structuur (aya, soera, djoez, hizb) — 5.3.2. Begrippen ivm reciteren (moeshaf, tadjwied, moakabele, hatim, hafiz)","vac":false,"ln":19},
+{"wn":23,"mn":"feb","thema":"Krokusvakantie","les":"Krokusvakantie","vac":true,"ln":0},
+{"wn":24,"mn":"feb","thema":"DE KORAN","les":"5.3.3. Begrippen ivm het begrijpen en interpreteren van de Koran (Meal, tafsir, soorten tafsir) — 5.3.4. Een voorbeeld tafsir: De soera Fatiha","vac":false,"ln":20},
+{"wn":25,"mn":"mrt","thema":"DE KORAN","les":"5.4. De basisonderwerpen van de Koran (geloof, aanbidding, goed gedrag, verhalen van profeten, verboden en geboden) — 5.5. De boodschappen van de Koran in Nederlandse uitdrukkingen","vac":false,"ln":21},
+{"wn":26,"mn":"mrt","thema":"ZEDELIJKHEID","les":"6. De waarden en het gezin — 6.1. Wat betekent \"de waarde\"? (De relatie tussen maatschappij en de waarde) — 6.2. De invloed van de godsdienst op morele waarden","vac":false,"ln":22},
+{"wn":27,"mn":"mrt","thema":"ZEDELIJKHEID","les":"6.3. De Islamitische waarden (Vrede, eerlijkheid, verdraagzaamheid, liefde, barmhartigheid, broederschap, hulpvaardigheid, vrouwenrechten, mensenrechten)","vac":false,"ln":23},
+{"wn":28,"mn":"mrt","thema":"ZEDELIJKHEID","les":"6.4. De invloed van de Islamitische waarden op ons gedrag (Streven naar een deugdelijk leven, geloven in het bestaan van Allah, geloven in het hiernamaals)","vac":false,"ln":24},
+{"wn":29,"mn":"apr","thema":"Paasvakantie","les":"Paasvakantie","vac":true,"ln":0},
+{"wn":30,"mn":"apr","thema":"Paasvakantie","les":"Paasvakantie","vac":true,"ln":0},
+{"wn":31,"mn":"apr","thema":"ZEDELIJKHEID","les":"6.5. Relatie tussen de waarden en het gezin (Het belang van het gezin volgens de Koran en de soenna) — 6.1. Het stichten en beschermen van het gezin — 6.2. De relatie binnen het gezin","vac":false,"ln":25},
+{"wn":32,"mn":"apr","thema":"ZEDELIJKHEID","les":"6.6. Aanbevelingen van de Koran en de profeet Mohammed (s.a.w.) ivm het gezin — 6.3. Rechten en plichten in het gezin — 6.4. Aanbevelingen ivm relaties met bloedverwanten","vac":false,"ln":26},
+{"wn":33,"mn":"mei","thema":"ZEDELIJKHEID","les":"7. Het belang van soenna in de Islam — 7.1. De definitie van hadis (De bronnen van de Islam, voorbeelden van ahadies, onderscheid Koran en hadies)","vac":false,"ln":27},
+{"wn":34,"mn":"mei","thema":"ZEDELIJKHEID","les":"7.2. De opbouw van hadis (Isnad, metn, rawi, riwaya, moehaddis) — 7.3. De eigenschappen van de hadis overleveraars en de 7 sahaba die meer dan 1000 hadis overgeleverd hebben","vac":false,"ln":28},
+{"wn":35,"mn":"mei","thema":"ZEDELIJKHEID","les":"7.4. De soorten hadis (Sahih, djaif, moetawatir, qoedsi, marfoe hadies) — 7.5. Het belang van hadis","vac":false,"ln":29},
+{"wn":36,"mn":"mei","thema":"ZEDELIJKHEID","les":"7.6. De meest beroemde hadis boeken (Koetoeboes-Sitta) — De eigenschappen van de hadies boeken","vac":false,"ln":30},
+{"wn":37,"mn":"jun","thema":"ZEDELIJKHEID","les":"7.7. De definitie van soenna (De relatie tussen hadies en soenna, het belang van soenna, voorbeelden van soenna, het levensverhaal van de moehaddise Aisja r.anha)","vac":false,"ln":31},
+{"wn":38,"mn":"jun","thema":"GODSDIENST EN CULTUUR","les":"8. De Islamitische jaarkalender en de feestdagen — 8.1. De kalender (Welke kalenders bestaan er in de wereld?) — 8.2. De Islamitische jaarkalender","vac":false,"ln":32},
+{"wn":39,"mn":"jun","thema":"GODSDIENST EN CULTUUR","les":"8.3. De feestdagen van de Islam — 8.4. De belangrijke dagen en nachten in de Islam","vac":false,"ln":33},
+{"wn":40,"mn":"jun","thema":"GODSDIENST EN CULTUUR","les":"8.5. De islamitische kalender met belangrijke data (Welke vormen van aanbidding vinden plaats op specifieke tijdstippen?) — 8.6. De christelijke en joodse kalender met belangrijke data","vac":false,"ln":34},
+{"wn":41,"mn":"jun","thema":"EVALUATIE","les":"Herhaling en evaluatie van Geloofsleer en Aanbidding","vac":false,"ln":35},
+{"wn":42,"mn":"jun","thema":"EVALUATIE","les":"Herhaling en evaluatie van Het leven van de Profeet en De Koran","vac":false,"ln":36},
+{"wn":43,"mn":"jun","thema":"EVALUATIE","les":"Herhaling en evaluatie van Zedelijkheid en Godsdienst en Cultuur — afsluiting schooljaar","vac":false,"ln":37},
+{"wn":44,"mn":"jul","thema":"Zomervakantie","les":"Zomervakantie","vac":true,"ln":0},
 ],
 "4":[
-{"wn":1,"mn":"sep","wk":1,"thema":"Het geloof in Allah","les":"1. Het geloof in Allah (s.w.t.)1.1. Bewijzen over de uniciteit van Allah (s.w.t.)","vac":false,"skip":false,"ln":1},
-{"wn":2,"mn":"sep","wk":2,"thema":"Het geloof in Allah","les":"1.2. Allah (s.w.t.) is de schepper van universum1.3. Allah (s.w.t.) is de levensgevende","vac":false,"skip":false,"ln":2},
-{"wn":3,"mn":"sep","wk":2,"thema":"De aanbidding","les":"2.2. Belangrijkste vormen van ibada?2.3. Oprechte handelingen","vac":false,"skip":false,"ln":3},
-{"wn":4,"mn":"sep","wk":3,"thema":"Het geloof in Allah","les":"1.4. Allah (s.w.t.) is alziende1.5. Relatie tussen Allah (s.w.t.) en de mens","vac":false,"skip":false,"ln":4},
-{"wn":5,"mn":"sep","wk":3,"thema":"De aanbidding","les":"2.4. Fundamentele aspecten bij ibada2.5. Leestekst: Ali (r.anh) en zijn persoonlijkheid","vac":false,"skip":false,"ln":5},
-{"wn":6,"mn":"sep","wk":4,"thema":"Het geloof in Allah","les":"1.6. Islamitische geloofsleer","vac":false,"skip":false,"ln":6},
-{"wn":7,"mn":"sep","wk":4,"thema":"Mohammed (s.a.w.)","les":"3. Mohammed (s.a.w.) volgens de Koran3.1. Mohammed (s.a.w.) is een mens","vac":false,"skip":false,"ln":7},
-{"wn":8,"mn":"nov","wk":1,"thema":"Herfsvakantie","les":"30 october – 5 november","vac":true,"skip":false,"ln":0},
-{"wn":9,"mn":"nov","wk":2,"thema":"Mohammed (s.a.w.)","les":"3.2. Mohammed (s.a.w.) is een profeet3.3. Mohammed (s.a.w.) is de laatste profeet","vac":false,"skip":false,"ln":8},
-{"wn":10,"mn":"nov","wk":3,"thema":"Mohammed (s.a.w.)","les":"3.4. Mohammed (s.a.w.) is de uitlegger van de Koran3.5. Mohammed (s.a.w.) is een waarschuwer voor de hele mensheid","vac":false,"skip":false,"ln":9},
-{"wn":11,"mn":"nov","wk":4,"thema":"Mohammed (s.a.w.)","les":"3.6. Mohammed (s.a.w.) is barmhartig voor de mensheid3.7. Mohammed (s.a.w.) is de aanvuller van etnische waarden","vac":false,"skip":false,"ln":10},
-{"wn":12,"mn":"dec","wk":1,"thema":"De openbaring en het verstand","les":"Koran en interpretatie4.1. Fundamentele doelstellingen van de Koran","vac":false,"skip":false,"ln":11},
-{"wn":13,"mn":"dec","wk":2,"thema":"De openbaring en het verstand","les":"4.2. Het reciteren van de Koran4.3. Het begrijpen en interpreteren van de Koran","vac":false,"skip":false,"ln":12},
-{"wn":14,"mn":"dec","wk":3,"thema":"Evaluatie & Herhaling","les":"Herhalen en evaluatie van de behandelde leerstof","vac":false,"skip":false,"ln":13},
-{"wn":15,"mn":"dec","wk":4,"thema":"Kerstvakantie","les":"25 december – 7 januari","vac":true,"skip":false,"ln":0},
-{"wn":16,"mn":"jan","wk":1,"thema":"Kerstvakantie","les":"25 december – 7 januari","vac":true,"skip":false,"ln":0},
-{"wn":17,"mn":"jan","wk":2,"thema":"De moraal en de waarden","les":"Rechten en vrijheden5.1. Terminologie: recht en vrijheid5.2. Bepaalde rechten en vrijheden","vac":false,"skip":false,"ln":14},
-{"wn":18,"mn":"jan","wk":3,"thema":"De moraal en de waarden","les":"5.3. Gebruik van rechten en vrijheden5.4. Suprematie van het recht","vac":false,"skip":false,"ln":15},
-{"wn":19,"mn":"jan","wk":4,"thema":"De moraal en de waarden","les":"5.5. Schenden van burgerrechten is een grote zonde5.6. Leestekst: Omar (r.anh) en zijn rechtvaardigheid","vac":false,"skip":false,"ln":16},
-{"wn":20,"mn":"feb","wk":1,"thema":"Eredienst","les":"De sociale rol van de moskee6.1. De moskee, het hart van de stad","vac":false,"skip":false,"ln":17},
-{"wn":21,"mn":"feb","wk":2,"thema":"Eredienst","les":"6.2. De moskee en de eenheid van de moslims: de gemeenschappelijke gebeden","vac":false,"skip":false,"ln":18},
-{"wn":22,"mn":"feb","wk":3,"thema":"Krokusvakantie","les":"12 – 18 februari","vac":true,"skip":false,"ln":0},
-{"wn":23,"mn":"feb","wk":4,"thema":"Eredienst","les":"6.3. De moskee: de opvoeding en het onderwijs6.4. Indeling van de moskee","vac":false,"skip":false,"ln":19},
-{"wn":24,"mn":"maa","wk":1,"thema":"Eredienst","les":"6.5. Belangrijke leefregels in de moskee6.6. Voorbeeld van een multifunctionele moskee","vac":false,"skip":false,"ln":20},
-{"wn":25,"mn":"maa","wk":2,"thema":"Ethiek in de Islam","les":"Sabr in de Islam7.1. As-Sabr: de betekenis in Islam","vac":false,"skip":false,"ln":21},
-{"wn":26,"mn":"maa","wk":3,"thema":"Ethiek in de Islam","les":"7.2. Verschillende niveaus van sabr7.3. Leren geduldig zijn","vac":false,"skip":false,"ln":22},
-{"wn":27,"mn":"maa","wk":4,"thema":"Ethiek in de Islam","les":"7.4. De goddelijke beloning voor hen die geduldig zijn7.5. Leestekst: het verhaal van Ayyoeb (a.s.)","vac":false,"skip":false,"ln":23},
-{"wn":28,"mn":"apr","wk":1,"thema":"Paasvakantie","les":"1 – 15 april","vac":true,"skip":false,"ln":0},
-{"wn":29,"mn":"apr","wk":2,"thema":"Paasvakantie","les":"1 – 15 april","vac":true,"skip":false,"ln":0},
-{"wn":30,"mn":"apr","wk":3,"thema":"Ethiek in de Islam","les":"Schaamte en fatsoen in de Islam8.1. Schaamte versuz verlegenheid","vac":false,"skip":false,"ln":24},
-{"wn":31,"mn":"apr","wk":4,"thema":"Ethiek in de Islam","les":"8.2. Haya in de Islam8.3. Domeinen van haya","vac":false,"skip":false,"ln":25},
-{"wn":32,"mn":"mei","wk":1,"thema":"Geloof, cultuur en beschaving","les":"Islam en wetenschap9.1. Verband tussen geloof en wetenschap9.2. Bronnen van kennis in de Islam","vac":false,"skip":false,"ln":26},
-{"wn":33,"mn":"mei","wk":2,"thema":"Geloof, cultuur en beschaving","les":"9.3. Islam promoot het gebruik van het verstand en de wetenschap9.4. Islam steunt wetenschappelijk onderzoek","vac":false,"skip":false,"ln":27},
-{"wn":34,"mn":"mei","wk":3,"thema":"Geloof, cultuur en beschaving","les":"9.5. Onderwijsinstanties in de Islamitische beschaving9.6. Bijdrage van moslims aan wetenschap","vac":false,"skip":false,"ln":28},
-{"wn":35,"mn":"mei","wk":4,"thema":"Gedragsvorming","les":"10. Slechte gewoontes volgens de Islam10.1. Roken","vac":false,"skip":false,"ln":29},
-{"wn":36,"mn":"jun","wk":1,"thema":"Gedragsvorming","les":"10.2. Alcohol drinken10.3. Drugs en andere verdovende middelen","vac":false,"skip":false,"ln":30},
-{"wn":37,"mn":"jun","wk":2,"thema":"Gedragsvorming","les":"10.4. Gokken10.5. Hoe begint men aan de slechte gewoontes","vac":false,"skip":false,"ln":31},
-{"wn":38,"mn":"jun","wk":3,"thema":"Gedragsvorming","les":"10.6. Hoe kan men zich beschermen tegen de slechte gewoontes10.7. Respecteren van de rechten van andere mensen","vac":false,"skip":false,"ln":32},
-{"wn":39,"mn":"jun","wk":4,"thema":"Evaluatie & Herhaling","les":"Herhalen en evaluatie van de behandelde leerstof","vac":false,"skip":false,"ln":33},
+{"wn":1,"mn":"sep","thema":"GELOOFSLEER","les":"1. Het geloof in Allah (s.w.t.) — 1.1. Bewijzen over de uniciteit van Allah (Soera Ihlas, grondslag van het geloof) — 1.2. Allah is de schepper van universum (Zichtbare en onzichtbare, mensen, fauna en flora)","vac":false,"ln":1},
+{"wn":2,"mn":"sep","thema":"GELOOFSLEER","les":"1.3. Allah (s.w.t.) is de levengevende — 1.4. Allah (s.w.t.) is alziende","vac":false,"ln":2},
+{"wn":3,"mn":"sep","thema":"GELOOFSLEER","les":"1.5. Relatie tussen Allah en de mens (De smeekbede, de aanbidding, de verplichte en vrijwillige ibada, vergiffenis, het lezen van de Koran)","vac":false,"ln":3},
+{"wn":4,"mn":"sep","thema":"GELOOFSLEER","les":"1.6. Islamitische geloofsleer — 1.6.1. Geloven in Allah swt (De 6 basisprincipes van het geloof, dzatie en soeboetie eigenschappen, de 99 schone namen)","vac":false,"ln":4},
+{"wn":5,"mn":"okt","thema":"GELOOFSLEER","les":"1.6.2. Geloven in de engelen (De eigenschappen van de engelen, de verschillende soorten engelen en hun taken, de 4 grote engelen, de invloed van de engelen op ons)","vac":false,"ln":5},
+{"wn":6,"mn":"okt","thema":"GELOOFSLEER","les":"1.6.3. Geloven in boeken (De vier heilige boeken, de profeten die boeken kregen van Allah swt, de vergelijking van de Koran met de voorgaande heilige boeken)","vac":false,"ln":6},
+{"wn":7,"mn":"okt","thema":"GELOOFSLEER","les":"1.6.4. Geloven in profeten (25 profeten in de Koran, de eigenschappen van de profeten, het verschil tussen rasul en nebi, de invloed van de profeten op ons dagelijks leven)","vac":false,"ln":7},
+{"wn":8,"mn":"okt","thema":"GELOOFSLEER","les":"1.6.5. Geloven in qadar/voorbeschikking (Wil van de mens, wetten van het heelal, fysische/biologische/sociale wetten, de gevolgen van de vrije wilskracht)","vac":false,"ln":8},
+{"wn":9,"mn":"nov","thema":"Herfstvakantie","les":"Herfstvakantie","vac":true,"ln":0},
+{"wn":10,"mn":"nov","thema":"GELOOFSLEER","les":"1.6.6. Geloven in het hiernamaals (Het belang van ahira, het leven na de dood, de stappen in het hiernamaals, barzah, mahsjar, mizan, het paradijs en de hel)","vac":false,"ln":9},
+{"wn":11,"mn":"nov","thema":"AANBIDDING","les":"2. Soorten ibada in Islam — 2.1. Verband tussen iman en ibada (Het belang van oprechtheid, de verplichte en vrijwillige aanbiddingen, de 5 zuilen van de Islam)","vac":false,"ln":10},
+{"wn":12,"mn":"nov","thema":"AANBIDDING","les":"2.2. Belangrijkste vormen van ibada (Lichamelijk, door middel van bezittingen, beide) — 2.2.1. Het gebed (as-salat) (Voorwaarden, fundamentele handelingen, reinheid, wassing, tayammoem)","vac":false,"ln":11},
+{"wn":13,"mn":"dec","thema":"AANBIDDING","les":"2.2.2. De vast (as-sawm) (De voorwaarden van de vast, de zaken die vast afbreken, de lichamelijke voordelen, het belang van de maand Ramadan)","vac":false,"ln":12},
+{"wn":14,"mn":"dec","thema":"AANBIDDING","les":"2.2.3. De armenbelasting (az-zakaat) (De voorwaarden, de nisab, de persoonlijke en maatschappelijke voordelen, aan wie mag zakaat gegeven worden)","vac":false,"ln":13},
+{"wn":15,"mn":"dec","thema":"AANBIDDING","les":"2.2.3. De bedevaart (al-haddj) (Het belang, de voorwaarden, het verrichten, de afscheidsbedevaart van de Profeet saw, de invloed van de haddj op ons dagelijks leven)","vac":false,"ln":14},
+{"wn":16,"mn":"dec","thema":"Kerstvakantie","les":"Kerstvakantie","vac":true,"ln":0},
+{"wn":17,"mn":"jan","thema":"Kerstvakantie","les":"Kerstvakantie","vac":true,"ln":0},
+{"wn":18,"mn":"jan","thema":"AANBIDDING","les":"2.2.3. Het offeren (De soorten offerdieren, het belang van het offeren, verschillende vormen) — 2.3. Oprechte handelingen","vac":false,"ln":15},
+{"wn":19,"mn":"jan","thema":"AANBIDDING","les":"2.4. Fundamentele aspecten bij ibada (Het belang van de intentie, oprechtheid, bescheidenheid, eenvoudigheid, het belang van dagelijks Allah aanbidden) — 2.5. Leestekst: Ali (r.anh)","vac":false,"ln":16},
+{"wn":20,"mn":"jan","thema":"HET LEVEN VAN DE PROFEET","les":"3. Mohammed (s.a.w.) volgens de Koran — 3.1. Mohammed is een mens — 3.2. Mohammed is een profeet — 3.3. Mohammed is de laatste profeet","vac":false,"ln":17},
+{"wn":21,"mn":"feb","thema":"HET LEVEN VAN DE PROFEET","les":"3.4. Mohammed is de uitlegger van de Koran — 3.5. Mohammed is een waarschuwer voor de hele mensheid (De uitnodigingsbrieven van de Profeet saw tot Islam)","vac":false,"ln":18},
+{"wn":22,"mn":"feb","thema":"HET LEVEN VAN DE PROFEET","les":"3.6. Mohammed is barmhartig voor de mensheid — 3.7. Mohammed is de aanvuller van etnische waarden (Enkele eigenschappen van de Profeet Mohammed saw)","vac":false,"ln":19},
+{"wn":23,"mn":"feb","thema":"Krokusvakantie","les":"Krokusvakantie","vac":true,"ln":0},
+{"wn":24,"mn":"feb","thema":"DE KORAN","les":"4. Koran en interpretatie — 4.1. Fundamentele doelstellingen van de Koran (Betekenissen van tafsir, meal en sebebi noezoel, moemin, kafier, moenafiq)","vac":false,"ln":20},
+{"wn":25,"mn":"mrt","thema":"DE KORAN","les":"4.2. Het reciteren van de Koran (De recitatie in het Arabisch, het lezen van de Koranvertaling) — 4.3. Het begrijpen en interpreteren van de Koran (Fundamentele aspecten)","vac":false,"ln":21},
+{"wn":26,"mn":"mrt","thema":"ZEDELIJKHEID","les":"5. Rechten en vrijheden — 5.1. Terminologie: recht en vrijheid (De rechten en plichten, recht op vrije meningsuiting, gezondheid, godsdienst, onderwijs, leven, privacy, economisch recht)","vac":false,"ln":22},
+{"wn":27,"mn":"mrt","thema":"ZEDELIJKHEID","les":"5.3. Gebruik van rechten en vrijheden — 5.4. Suprematie van het recht (Fundamenten van absolute rechtvaardigheid)","vac":false,"ln":23},
+{"wn":28,"mn":"mrt","thema":"ZEDELIJKHEID","les":"5.5. Schenden van burgerrechten is een grote zonde — 5.6. Leestekst: Omar (r.anh) en zijn rechtvaardigheid (Het belang van de rechtvaardigheid)","vac":false,"ln":24},
+{"wn":29,"mn":"apr","thema":"Paasvakantie","les":"Paasvakantie","vac":true,"ln":0},
+{"wn":30,"mn":"apr","thema":"Paasvakantie","les":"Paasvakantie","vac":true,"ln":0},
+{"wn":31,"mn":"apr","thema":"AANBIDDING","les":"6. De sociale rol van de moskee — 6.1. De moskee, het hart van de stad — 6.2. De moskee en de eenheid van de moslims: de gemeenschappelijke gebeden — 6.3. De moskee: opvoeding en onderwijs","vac":false,"ln":25},
+{"wn":32,"mn":"apr","thema":"AANBIDDING","les":"6.4. Indeling van de moskee — 6.5. Belangrijke leefregels in de moskee — 6.6. Voorbeeld van een multifunctionele moskee","vac":false,"ln":26},
+{"wn":33,"mn":"mei","thema":"AANBIDDING","les":"7. Sabr in de Islam — 7.1. As-Sabr: de betekenis in Islam — 7.2. Verschillende niveaus van sabr (Geduld voor het weerhouden van slechte daden, voor tegenslagen, voor de aanbidding)","vac":false,"ln":27},
+{"wn":34,"mn":"mei","thema":"AANBIDDING","les":"7.3. Leren geduldig zijn — 7.4. De goddelijke beloning voor hen die geduldig zijn — 7.5. Leestekst: het verhaal van Ayyoeb (a.s.)","vac":false,"ln":28},
+{"wn":35,"mn":"mei","thema":"ZEDELIJKHEID","les":"8. Schaamte en fatsoen in de Islam — 8.1. Schaamte versus verlegenheid (Betekenissen van schaamte, fatsoen, verlegenheid, vulgariteit, Koranverzen over goed gedrag)","vac":false,"ln":29},
+{"wn":36,"mn":"mei","thema":"ZEDELIJKHEID","les":"8.2. Haya in de Islam — 8.3. Domeinen van haya (Haya tov Allah, schaamte en sociaal fatsoen, kledij, houding en gedrag in het openbaar, voorbeeldig gedrag van de Profeet)","vac":false,"ln":30},
+{"wn":37,"mn":"jun","thema":"GODSDIENST EN CULTUUR","les":"9. Islam en wetenschap — 9.1. Verband tussen geloof en wetenschap — 9.2. Bronnen van kennis in de Islam — 9.3. Islam promoot het gebruik van het verstand en de wetenschap","vac":false,"ln":31},
+{"wn":38,"mn":"jun","thema":"GODSDIENST EN CULTUUR","les":"9.4. Islam steunt wetenschappelijk onderzoek — 9.5. Onderwijsinstanties in de Islamitische beschaving — 9.6. Bijdrage van moslims aan wetenschap (geneeskunde, wiskunde, astronomie)","vac":false,"ln":32},
+{"wn":39,"mn":"jun","thema":"GODSDIENST EN CULTUUR","les":"10. Slechte gewoontes — 10.1. Roken — 10.2. Alcohol drinken — 10.3. Drugs en andere verdovende middelen (De nadelen van alcohol en verdovende middelen op onze gezondheid)","vac":false,"ln":33},
+{"wn":40,"mn":"jun","thema":"GODSDIENST EN CULTUUR","les":"10.4. Gokken — 10.5. Hoe begint men aan de slechte gewoontes — 10.6. Hoe kan men zich beschermen — 10.7. Respecteren van de rechten van andere mensen","vac":false,"ln":34},
+{"wn":41,"mn":"jun","thema":"EVALUATIE","les":"Herhaling en evaluatie van Geloofsleer en Aanbidding","vac":false,"ln":35},
+{"wn":42,"mn":"jun","thema":"EVALUATIE","les":"Herhaling en evaluatie van Het leven van de Profeet en De Koran","vac":false,"ln":36},
+{"wn":43,"mn":"jun","thema":"EVALUATIE","les":"Herhaling en evaluatie van Zedelijkheid en Godsdienst en Cultuur — afsluiting schooljaar","vac":false,"ln":37},
+{"wn":44,"mn":"jul","thema":"Zomervakantie","les":"Zomervakantie","vac":true,"ln":0},
 ],
 "5":[
-{"wn":1,"mn":"sep","wk":1,"thema":"Geloofsleer","les":"1. De mens en zijn voorbeschikking1.1. Het begrip voorbeschikking1.2. Eigenschappen van de voorbeschikking bij de mens1.2.1. Het verstand (Al-aql)","vac":false,"skip":false,"ln":1},
-{"wn":2,"mn":"sep","wk":2,"thema":"Geloofsleer","les":"1.2.2. De wil (Al-irada)1.2.3. Het verantwoordelijkheidsgevoel","vac":false,"skip":false,"ln":2},
-{"wn":3,"mn":"sep","wk":2,"thema":"De aanbidding","les":"2.4. Doea in de Koran2.5. Soorten doea’s2.6. Reden voor verrichting van doea","vac":false,"skip":false,"ln":3},
-{"wn":4,"mn":"sep","wk":3,"thema":"Geloofsleer","les":"1.3. Bepaalde situaties betreffende voorbeschikking1.3.1. Leven en dood1.3.2. Ar-rizq1.3.3. Natuurrampen","vac":false,"skip":false,"ln":4},
-{"wn":5,"mn":"sep","wk":3,"thema":"De aanbidding","les":"2.7. Voordelen van doea2.8. Aandachtspunten tijdens doea2.9. Doea’s die nooit worden afgewezen","vac":false,"skip":false,"ln":5},
-{"wn":6,"mn":"sep","wk":4,"thema":"Geloofsleer","les":"1.3.4. Gezondheid1.3.5. Succes en falen1.3.6. At-tawakkoel 1.3.7. Goed en kwaad (chayr en sjarr)","vac":false,"skip":false,"ln":6},
-{"wn":7,"mn":"sep","wk":4,"thema":"De aanbidding","les":"2.10. Doe’s op aanbevolen tijdstippen en plaatsen2.11. Doe’s van profeten in de Koran2.12. Leestekst: Vier doea’s voor vier dirhem","vac":false,"skip":false,"ln":7},
-{"wn":8,"mn":"nov","wk":1,"thema":"Herfsvakantie","les":"30 october – 5 november","vac":true,"skip":false,"ln":0},
-{"wn":9,"mn":"nov","wk":2,"thema":"De aanbidding","les":"3. Voordelen van aanbidding3.1. Ibada of aanbidding","vac":false,"skip":false,"ln":8},
-{"wn":10,"mn":"nov","wk":3,"thema":"De aanbidding","les":"3.2. Persoonlijke voordelen van de aanbidding3.2.1. De aanbidding versterkt de band tussen Allah (s.w.t.) en de mens3.2.2. De aanbidding versterkt de innerlijke rust van de mens3.2.3. De aanbidding ontwikkelt het vertrouwen bij de mens3.2.4. De aanbidding ontwikkelt het verantwoordelijkheidsgevoel","vac":false,"skip":false,"ln":9},
-{"wn":11,"mn":"nov","wk":4,"thema":"De aanbidding","les":"3.3. Sociale voordelen van de aanbidding3.2.1. Het verbeten van de karakter3.3.2. Het weerhouden van de kwade3.3.3. Het leren om meer geduldig te zijn3.3.4. Het stimuleren van sociale hulp3.3.5. Het stimuleren van broederschap","vac":false,"skip":false,"ln":10},
-{"wn":12,"mn":"dec","wk":1,"thema":"Mohammed (s.a.w.)","les":"Voorbeeldig gedrag van Mohammed (s.a.w.)4.1. Voorbeeldig gedrag volgens de Koran4.2. Mohammed (s.a.w.) als een voorbeeldig mens4.2.1. Betrouwbaarheid van Mohammed (s.a.w.)4.2.2. Barmhartigheid van Mohammed (s.a.w.)","vac":false,"skip":false,"ln":11},
-{"wn":13,"mn":"dec","wk":2,"thema":"Mohammed (s.a.w.)","les":"4.2.3. Rechtvaardigheid van Mohammed (s.a.w.)4.2.4. Het vergemakkelijken van zaken door Mohammed (s.a.w.) 4.2.5. Tolerantie van Mohammed (s.a.w.)","vac":false,"skip":false,"ln":12},
-{"wn":14,"mn":"dec","wk":3,"thema":"Evaluatie & Herhaling","les":"Herhalen en evaluatie van de behandelde leerstof","vac":false,"skip":false,"ln":13},
-{"wn":15,"mn":"dec","wk":4,"thema":"Kerstvakantie","les":"25 december – 7 januari","vac":true,"skip":false,"ln":0},
-{"wn":16,"mn":"jan","wk":1,"thema":"Kerstvakantie","les":"25 december – 7 januari","vac":true,"skip":false,"ln":0},
-{"wn":17,"mn":"jan","wk":2,"thema":"Mohammed (s.a.w.)","les":"4.2.6. Het geduld van Mohammed (s.a.w.)4.3. Liefde voor Ahloe’l beyt4.4. Leestekst: Voorbeelden van liefdadigheid bij Mohammed (s.a.w.)","vac":false,"skip":false,"ln":14},
-{"wn":18,"mn":"jan","wk":3,"thema":"Openbaring en verstand","les":"5. De Koran en zijn interpretatie5.1. Het geloof en de interpretaties5.2. Redenen voor verschillen in de islamitische denkwijze5.2.1. Menselijke factor5.2.2. Maatschappelijke verandering","vac":false,"skip":false,"ln":15},
-{"wn":19,"mn":"jan","wk":4,"thema":"Openbaring en verstand","les":"5.3. Verschillende opvattingen bij Islamitische opvattingen5.3.1. Verschillende opvattingen betreffende het geloof5.3.2. Interpretaties betreffende de fiqh5.3.3. Soefistische opvattingen5.4. Bijgeloven","vac":false,"skip":false,"ln":16},
-{"wn":20,"mn":"feb","wk":1,"thema":"De moraal en de waarden","les":"6. Islam en vrede6.1. Leven in vrede is een behoefte6.2. Het belang van vrede en samenleving in Islam","vac":false,"skip":false,"ln":17},
-{"wn":21,"mn":"feb","wk":2,"thema":"De moraal en de waarden","les":"6.3. Help verlenen aan mensen6.4. Mohammed (s.a.w.) is een boodschapper van vrede6.5. Leven in vrede is het recht van de mens","vac":false,"skip":false,"ln":18},
-{"wn":22,"mn":"feb","wk":3,"thema":"Krokusvakantie","les":"12 – 18 februari","vac":true,"skip":false,"ln":0},
-{"wn":23,"mn":"feb","wk":4,"thema":"Islamgeschiedenis","les":"7. De rechtgeleide kaliefen7.1. Inleiding7.2. De eerste kalief Aboe Bakr (r.anh)7.2.1. Zijn bekering tot de Islam7.2.2. De emigratie","vac":false,"skip":false,"ln":19},
-{"wn":24,"mn":"maa","wk":1,"thema":"Islamgeschiedenis","les":"7.2.3. Zijn periode in Medina7.2.4. Reactie van Aboe Bakr na het overlijden van profeet Mohammed (s.a.w.)7.2.5. Zijn kalifaatperiode","vac":false,"skip":false,"ln":20},
-{"wn":25,"mn":"maa","wk":2,"thema":"Islamgeschiedenis","les":"7.2.6. Het overlijden 7.2.7. Zijn persoonlijkheid7.2.8. Enkele wijze uitspraken","vac":false,"skip":false,"ln":21},
-{"wn":26,"mn":"maa","wk":3,"thema":"Islamgeschiedenis","les":"7.3. De tweede kalief Omar (r.anh)7.3.1. Zijn persoonlijkheid7.3.2. Zijn bekering tot de Islam7.3.3. De veroveringen van Omar (r.anh)","vac":false,"skip":false,"ln":22},
-{"wn":27,"mn":"maa","wk":4,"thema":"Islamgeschiedenis","les":"7.3.4. Bijdragen van Omar (r.anh) aan de Islam7.3.5. De dood van Omar (r.anh)7.3.6. De adviezen en uitspraken van Omar (r.anh)","vac":false,"skip":false,"ln":23},
-{"wn":28,"mn":"apr","wk":1,"thema":"Paasvakantie","les":"1 – 15 april","vac":true,"skip":false,"ln":0},
-{"wn":29,"mn":"apr","wk":2,"thema":"Paasvakantie","les":"1 – 15 april","vac":true,"skip":false,"ln":0},
-{"wn":30,"mn":"apr","wk":3,"thema":"Islamgeschiedenis","les":"7.4. De derde kalief Oesman (r.anh)7.4.1. Zijn persoonlijkheid7.4.2. Zijn selectie als kalief","vac":false,"skip":false,"ln":24},
-{"wn":31,"mn":"apr","wk":4,"thema":"Islamgeschiedenis","les":"7.4.3. Enkele bijdragen van Oesman (r.anh) aan de Islam7.4.4. De ontstemming en de tweedracht7.4.5. De dood van kalief Oesman ibn Affan (r.anh)","vac":false,"skip":false,"ln":25},
-{"wn":32,"mn":"mei","wk":1,"thema":"Islamgeschiedenis","les":"7.5. De vierde kalief Ali (r.anh)7.5.1. De neef en de schoonzoon van Profeet (s.a.w.)7.5.2. De selectie als kalief","vac":false,"skip":false,"ln":26},
-{"wn":33,"mn":"mei","wk":2,"thema":"Islamgeschiedenis","les":"7.5.3. Zijn kalifaatschap 7.5.4. De dood van kalief Ali (r.anh)","vac":false,"skip":false,"ln":27},
-{"wn":34,"mn":"mei","wk":3,"thema":"Religie, cultuur en beschaving","les":"8. Islam en esthetica8.1. Evenwicht en harmonie in het universum8.2. De mens en schoonheid","vac":false,"skip":false,"ln":28},
-{"wn":35,"mn":"mei","wk":4,"thema":"Religie, cultuur en beschaving","les":"8.3. De Koran en schoonheid8.4. Mohammed (s.a.w.) en schoonheid","vac":false,"skip":false,"ln":29},
-{"wn":36,"mn":"jun","wk":1,"thema":"Religie, cultuur en beschaving","les":"8.5. Schoonheid in het leven8.5.1. Schoonheid in woorden8.5.2. Schoonheid bij het handelen","vac":false,"skip":false,"ln":30},
-{"wn":37,"mn":"jun","wk":2,"thema":"Religie, cultuur en beschaving","les":"8.5.3. Schoonheid in het werk8.6. Esthetica in de Islamitische beschaving8.6.1. Architectuur","vac":false,"skip":false,"ln":31},
-{"wn":38,"mn":"jun","wk":3,"thema":"Religie, cultuur en beschaving","les":"8.6.2. Literatuur8.6.3. Muziek8.6.4. Kaligrafie, vergulding en miniatuur","vac":false,"skip":false,"ln":32},
-{"wn":39,"mn":"jun","wk":4,"thema":"Evaluatie & Herhaling","les":"Herhalen en evaluatie van de behandelde leerstof","vac":false,"skip":false,"ln":33},
+{"wn":1,"mn":"sep","thema":"GELOOFSLEER","les":"1. De mens en zijn voorbeschikking — 1.1. Het begrip voorbeschikking — 1.2. Eigenschappen van de voorbeschikking bij de mens — 1.2.1. Het verstand (Al-aql) — 1.2.2. De wil (Al-irada) — 1.2.3. Het verantwoordelijkheidsgevoel","vac":false,"ln":1},
+{"wn":2,"mn":"sep","thema":"GELOOFSLEER","les":"1.3. Bepaalde situaties betreffende voorbeschikking — 1.3.1. Leven en dood — 1.3.2. Ar-rizq — 1.3.3. Natuurrampen","vac":false,"ln":2},
+{"wn":3,"mn":"sep","thema":"GELOOFSLEER","les":"1.3.4. Gezondheid — 1.3.5. Succes en falen — 1.3.6. At-tawakkoel — 1.3.7. Goed en kwaad (chayr en sjarr)","vac":false,"ln":3},
+{"wn":4,"mn":"sep","thema":"AANBIDDING","les":"2. Doea of smeekbede — 2.1. Inleiding (Het belang van de doea, de oprechtheid, de nood aan Allah swt) — 2.2. Doea of smeekbede — 2.3. Enkele hadies i.v.m. doea","vac":false,"ln":4},
+{"wn":5,"mn":"okt","thema":"AANBIDDING","les":"2.4. Doea in de Koran — 2.5. Soorten doea's — 2.6. Reden voor verrichting van doea","vac":false,"ln":5},
+{"wn":6,"mn":"okt","thema":"AANBIDDING","les":"2.7. Voordelen van doea — 2.8. Aandachtspunten tijdens doea — 2.9. Doea's die nooit worden afgewezen","vac":false,"ln":6},
+{"wn":7,"mn":"okt","thema":"AANBIDDING","les":"2.10. Doe's op aanbevolen tijdstippen en plaatsen — 2.11. Doe's van profeten in de Koran — 2.12. Leestekst: Vier doea's voor vier dirhem","vac":false,"ln":7},
+{"wn":8,"mn":"okt","thema":"AANBIDDING","les":"3. Voordelen van aanbidding — 3.1. Ibada of aanbidding (het respecteren van Allah swt in geboden en verboden, een brug tussen Allah en de mens) — 3.2. Persoonlijke voordelen van de aanbidding","vac":false,"ln":8},
+{"wn":9,"mn":"nov","thema":"Herfstvakantie","les":"Herfstvakantie","vac":true,"ln":0},
+{"wn":10,"mn":"nov","thema":"AANBIDDING","les":"3.2.1. De aanbidding versterkt de band tussen Allah en de mens — 3.2.2. De aanbidding versterkt de innerlijke rust — 3.2.3. Vertrouwen — 3.2.4. Verantwoordelijkheidsgevoel","vac":false,"ln":9},
+{"wn":11,"mn":"nov","thema":"AANBIDDING","les":"3.3. Sociale voordelen van de aanbidding — 3.3.1. Het verbeteren van de karakter — 3.3.2. Het weerhouden van het kwade — 3.3.3. Het leren om meer geduldig te zijn","vac":false,"ln":10},
+{"wn":12,"mn":"nov","thema":"AANBIDDING","les":"3.3.4. Het stimuleren van sociale hulp (instellingen die zich inzetten ten behoeve van hulp aan behoeftigen) — 3.3.5. Het stimuleren van broederschap","vac":false,"ln":11},
+{"wn":13,"mn":"dec","thema":"HET LEVEN VAN DE PROFEET","les":"4. Voorbeeldig gedrag van Mohammed (s.a.w.) — 4.1. Voorbeeldig gedrag volgens de Koran — 4.2. Mohammed (s.a.w.) als een voorbeeldig mens","vac":false,"ln":12},
+{"wn":14,"mn":"dec","thema":"HET LEVEN VAN DE PROFEET","les":"4.2.1. Betrouwbaarheid van Mohammed (s.a.w.) — 4.2.2. Barmhartigheid van Mohammed (s.a.w.)","vac":false,"ln":13},
+{"wn":15,"mn":"dec","thema":"HET LEVEN VAN DE PROFEET","les":"4.2.3. Rechtvaardigheid — 4.2.4. Het vergemakkelijken van zaken — 4.2.5. Tolerantie van Mohammed (s.a.w.)","vac":false,"ln":14},
+{"wn":16,"mn":"dec","thema":"Kerstvakantie","les":"Kerstvakantie","vac":true,"ln":0},
+{"wn":17,"mn":"jan","thema":"Kerstvakantie","les":"Kerstvakantie","vac":true,"ln":0},
+{"wn":18,"mn":"jan","thema":"HET LEVEN VAN DE PROFEET","les":"4.2.6. Het geduld van Mohammed (s.a.w.) (De moeilijke perioden van de profeet, soera Doeha en soera Insjirah en de betekenissen daarvan)","vac":false,"ln":15},
+{"wn":19,"mn":"jan","thema":"HET LEVEN VAN DE PROFEET","les":"4.3. Liefde voor Ahli beyt — 4.4. Leestekst: Voorbeelden van liefdadigheid bij Mohammed (s.a.w.) (De voorbeelden van het levensverhaal van de profeet)","vac":false,"ln":16},
+{"wn":20,"mn":"jan","thema":"DE KORAN","les":"5. De Koran en zijn interpretatie — 5.1. Het geloof en de interpretaties — 5.2. Redenen voor verschillen in de islamitische denkwijze — 5.2.1. Menselijke factor — 5.2.2. Maatschappelijke verandering","vac":false,"ln":17},
+{"wn":21,"mn":"feb","thema":"DE KORAN","les":"5.3. Verschillende opvattingen bij Islamitische opvattingen — 5.3.1. Verschillende opvattingen betreffende het geloof — 5.3.2. Interpretaties betreffende de fiqh (De rechtscholen van Islam: hanefieten, malikieten, sjafieten, hanbelieten, sjiiten en soennieten)","vac":false,"ln":18},
+{"wn":22,"mn":"feb","thema":"DE KORAN","les":"5.3.3. Soefistische opvattingen (Dialoog tussen de kleuren) — 5.4. Bijgeloven (De bekende bijgeloven, het oproepen van geesten, zwarte magie, tovenarij, waarzeggerij, soera Felaq en soera Nas)","vac":false,"ln":19},
+{"wn":23,"mn":"feb","thema":"Krokusvakantie","les":"Krokusvakantie","vac":true,"ln":0},
+{"wn":24,"mn":"feb","thema":"ZEDELIJKHEID","les":"6. Islam en vrede — 6.1. Leven in vrede is een behoefte (Interne vrede, sociale vrede, positieve gevolgen van vrede, wereldvrede) — 6.2. Het belang van vrede en samenleving in Islam","vac":false,"ln":20},
+{"wn":25,"mn":"mrt","thema":"ZEDELIJKHEID","les":"6.3. Hulp verlenen aan mensen — 6.4. Mohammed (s.a.w.) is een boodschapper van vrede (Bijdragen van de profeet voor de vrede) — 6.5. Leven in vrede is het recht van de mens","vac":false,"ln":21},
+{"wn":26,"mn":"mrt","thema":"HET LEVEN VAN DE PROFEET","les":"7. De rechtgeleide kaliefen — 7.1. Inleiding (De kalifaatschap, de nood aan de kalief) — 7.2. De eerste kalief Aboe Bakr (r.anh) — 7.2.1. Zijn bekering tot de Islam — 7.2.2. De emigratie","vac":false,"ln":22},
+{"wn":27,"mn":"mrt","thema":"HET LEVEN VAN DE PROFEET","les":"7.2.3. Zijn periode in Medina — 7.2.4. Reactie van Aboe Bakr na het overlijden van de profeet — 7.2.5. Zijn kalifaat periode","vac":false,"ln":23},
+{"wn":28,"mn":"mrt","thema":"HET LEVEN VAN DE PROFEET","les":"7.2.6. Het overlijden — 7.2.7. Zijn persoonlijkheid — 7.2.8. Enkele wijze uitspraken","vac":false,"ln":24},
+{"wn":29,"mn":"apr","thema":"Paasvakantie","les":"Paasvakantie","vac":true,"ln":0},
+{"wn":30,"mn":"apr","thema":"Paasvakantie","les":"Paasvakantie","vac":true,"ln":0},
+{"wn":31,"mn":"apr","thema":"HET LEVEN VAN DE PROFEET","les":"7.3. De tweede kalief Omar (r.anh) — 7.3.1. Zijn persoonlijkheid — 7.3.2. Zijn bekering tot de Islam — 7.3.3. De veroveringen van Omar (r.anh)","vac":false,"ln":25},
+{"wn":32,"mn":"apr","thema":"HET LEVEN VAN DE PROFEET","les":"7.3.4. Bijdragen van Omar (r.anh) aan de Islam — 7.3.5. De dood van Omar (r.anh) — 7.3.6. De adviezen en uitspraken van Omar (r.anh)","vac":false,"ln":26},
+{"wn":33,"mn":"mei","thema":"HET LEVEN VAN DE PROFEET","les":"7.4. De derde kalief Osman (r.anh) — 7.4.1. Zijn persoonlijkheid — 7.4.2. Zijn selectie als kalief","vac":false,"ln":27},
+{"wn":34,"mn":"mei","thema":"HET LEVEN VAN DE PROFEET","les":"7.4.3. Enkele bijdragen van Osman (r.anh) aan de Islam — 7.4.4. De ontstemming en de tweedracht — 7.4.5. De dood van kalief Osman ibn Affan (r.anh)","vac":false,"ln":28},
+{"wn":35,"mn":"mei","thema":"HET LEVEN VAN DE PROFEET","les":"7.5. De vierde kalief Ali (r.anh) — 7.5.1. De neef en de schoonzoon van Profeet (s.a.w.) — 7.5.2. De selectie als kalief","vac":false,"ln":29},
+{"wn":36,"mn":"mei","thema":"HET LEVEN VAN DE PROFEET","les":"7.5.3. Zijn kalifaatschap (De onrust, de oorlogen tussen de moslims) — 7.5.4. De dood van kalief Ali (r.anh)","vac":false,"ln":30},
+{"wn":37,"mn":"jun","thema":"GODSDIENST EN CULTUUR","les":"8. Islam en esthetica — 8.1. Evenwicht en harmonie in het universum — 8.2. De mens en schoonheid — 8.3. De Koran en schoonheid","vac":false,"ln":31},
+{"wn":38,"mn":"jun","thema":"GODSDIENST EN CULTUUR","les":"8.4. Mohammed (s.a.w.) en schoonheid — 8.5. Schoonheid in het leven — 8.5.1. Schoonheid in woorden — 8.5.2. Schoonheid bij het handelen","vac":false,"ln":32},
+{"wn":39,"mn":"jun","thema":"GODSDIENST EN CULTUUR","les":"8.5.3. Schoonheid in het werk — 8.6. Esthetica in de Islamitische beschaving — 8.6.1. Architectuur","vac":false,"ln":33},
+{"wn":40,"mn":"jun","thema":"GODSDIENST EN CULTUUR","les":"8.6.2. Literatuur — 8.6.3. Muziek — 8.6.4. Kaligrafie, vergulding en miniatuur","vac":false,"ln":34},
+{"wn":41,"mn":"jun","thema":"EVALUATIE","les":"Herhaling en evaluatie van Geloofsleer, Aanbidding en Zedelijkheid","vac":false,"ln":35},
+{"wn":42,"mn":"jun","thema":"EVALUATIE","les":"Herhaling en evaluatie van Het leven van de Profeet en De Koran","vac":false,"ln":36},
+{"wn":43,"mn":"jun","thema":"EVALUATIE","les":"Herhaling en evaluatie van Godsdienst en Cultuur — afsluiting schooljaar","vac":false,"ln":37},
+{"wn":44,"mn":"jul","thema":"Zomervakantie","les":"Zomervakantie","vac":true,"ln":0},
 ],
 "6":[
-{"wn":1,"mn":"sep","wk":1,"thema":"Geloofsleer","les":"Het leven nu en het hiernamaals1.1. Het leven is niet doelloos1.2. “Hayat” volgens de Koran","vac":false,"skip":false,"ln":1},
-{"wn":2,"mn":"sep","wk":2,"thema":"Geloofsleer","les":"1.3. Alles heeft een tegenwaarde1.4. Leven en in leven houden is een Islamitische verantwoordelijkheid1.5. De dood is een realiteit in het leven","vac":false,"skip":false,"ln":2},
-{"wn":3,"mn":"sep","wk":2,"thema":"Mohammed (s.a.w.)","les":"3. Het begrijpen van Mohammed (s.a.w.)3.1. Hadies en soenna3.2. De lokale en de universele dimensie van de handelingen van Mohammed (s.a.w.)","vac":false,"skip":false,"ln":3},
-{"wn":4,"mn":"sep","wk":3,"thema":"Geloofsleer","les":"1.6. De uitvaart naar het hiernamaals1.6.1. De rechten van een overledene1.6.2. Djanaza-gebed1.6.3. Begraven van de overledene1.6.4. Koran lezen en doe’a’s verrichten1.6.5. Goede daden verrichten","vac":false,"skip":false,"ln":4},
-{"wn":5,"mn":"sep","wk":3,"thema":"Mohammed (s.a.w.)","les":"3.3. De universele karakter van Mohammed (s.a.w.)3.4. Belang van soenna bij het begrijpen van de Islam","vac":false,"skip":false,"ln":5},
-{"wn":6,"mn":"sep","wk":4,"thema":"Geloofsleer","les":"1.7. Dag des Oordeels (yawma’l qiyama)1.8. Een nieuw leven, achira","vac":false,"skip":false,"ln":6},
-{"wn":7,"mn":"sep","wk":4,"thema":"Mohammed (s.a.w.)","les":"3.5. Hoe moeten we Mohammed (s.a.w.) begrijpen?3.6. De voornaamste hadiesbronnen","vac":false,"skip":false,"ln":7},
-{"wn":8,"mn":"nov","wk":1,"thema":"Herfsvakantie","les":"30 october – 5 november","vac":true,"skip":false,"ln":0},
-{"wn":9,"mn":"nov","wk":2,"thema":"De Koran","les":"4. De Koran4.1. Het belang van het verstand in de Islam4.2. De Koran wil dat wij ons verstand gebruiken","vac":false,"skip":false,"ln":8},
-{"wn":10,"mn":"nov","wk":3,"thema":"De Koran","les":"4.3. De Koran hecht belang aan de juiste kennis4.4. Manieren om kennis te verwerven binnen de Koran4.5. Kennis voorkomt extremisme","vac":false,"skip":false,"ln":9},
-{"wn":11,"mn":"nov","wk":4,"thema":"Achlak en waarden","les":"Berouw en vergiffenis5.1. Fouten begaan is menselijk5.2. Allah (s.w.t.) is Vergevensgezind en Hij (s.w.t.) houdt van degenen die vergeven","vac":false,"skip":false,"ln":10},
-{"wn":12,"mn":"dec","wk":1,"thema":"Achlak en waarden","les":"5.3. Vergeven verhoogt de positie van de mens5.4. Vergeven vormt de basis van de individuele en maatschappelijke tolerantie5.5. Het verrichten van goede daden wissen de slechte daden","vac":false,"skip":false,"ln":11},
-{"wn":13,"mn":"dec","wk":2,"thema":"Islamitische wetgeving","les":"6. De doelstellingen van de geboden en verboden in de Islam6.1. Inleiding6.2. De doelstellingen van de geboden en verboden binnen de Islam6.2.1. Het opvoeden van individu en hem laten rijpen op het vlak van moraal6.2.2. De totstandbrenging van rechtvaardigheid binnen een gemeenschap","vac":false,"skip":false,"ln":12},
-{"wn":14,"mn":"dec","wk":3,"thema":"Evaluatie & Herhaling","les":"Herhalen en evaluatie van de behandelde leerstof","vac":false,"skip":false,"ln":13},
-{"wn":15,"mn":"dec","wk":4,"thema":"Kerstvakantie","les":"25 december – 7 januari","vac":true,"skip":false,"ln":0},
-{"wn":16,"mn":"jan","wk":1,"thema":"Kerstvakantie","les":"25 december – 7 januari","vac":true,"skip":false,"ln":0},
-{"wn":17,"mn":"jan","wk":2,"thema":"Islamitische wetgeving","les":"6.2.3. Bescherming van het algemeen belanga) De algemene belangen die van kracht zijnb) De graden van de algemene belangenc) De verplichtingen binnen de hiërarchie van de algemene belangend) De hiërarchie van de plichten die van een mens verwacht worden6.3. Het overwinnen van moeilijkheden en het wegwerken van het schade","vac":false,"skip":false,"ln":14},
-{"wn":18,"mn":"jan","wk":3,"thema":"Openbaring en verstand","les":"Interpretaties binnen de Islamitische denkwijze7.1. Redenen van verschillende opvattingen in de Islamitische denkwijze7.1.1. Redenen ontstaan door de mens7.1.2. Sociale redenen","vac":false,"skip":false,"ln":15},
-{"wn":19,"mn":"jan","wk":4,"thema":"Openbaring en verstand","les":"7.1.3. Culturele redenen7.1.4. Geografische redenen7.1.5. Politieke redenen","vac":false,"skip":false,"ln":16},
-{"wn":20,"mn":"feb","wk":1,"thema":"Openbaring en verstand","les":"7.2. Politieke interpretaties en interpretaties aangaande de geloofsleer binnen de Islamitische denkwijze7.2.1. Charidjiyya7.2.2. Sjiisme","vac":false,"skip":false,"ln":17},
-{"wn":21,"mn":"feb","wk":2,"thema":"Openbaring en verstand","les":"7.2.3. Moetazila 7.2.4. Matoeridiyya7.2.5. Asjariyya","vac":false,"skip":false,"ln":18},
-{"wn":22,"mn":"feb","wk":3,"thema":"Krokusvakantie","les":"12 – 18 februari","vac":true,"skip":false,"ln":0},
-{"wn":23,"mn":"feb","wk":4,"thema":"Openbaring en verstand","les":"7.3. Interpretaties rond de Islamitische wetgeving (fiqh)7.3.1. Djafariyya7.3.2. Hanafisme","vac":false,"skip":false,"ln":19},
-{"wn":24,"mn":"maa","wk":1,"thema":"Openbaring en verstand","les":"7.3.3. Malikisme7.3.4. Sjafiisme7.3.5. Hanbelisme","vac":false,"skip":false,"ln":20},
-{"wn":25,"mn":"maa","wk":2,"thema":"Openbaring en verstand","les":"7.4. Gemeenschappelijke principes in de Islamitische denkwijzea) Tawhidb) Noeboewwa","vac":false,"skip":false,"ln":21},
-{"wn":26,"mn":"maa","wk":3,"thema":"Openbaring en verstand","les":"c) Korand) Achira","vac":false,"skip":false,"ln":22},
-{"wn":27,"mn":"maa","wk":4,"thema":"Wahiey en het verstand","les":"8. Mystieke opvattingen in het Islamitische denken8.1. Wat is tasawwoef, soefisme of Islamitisch mysticisme?","vac":false,"skip":false,"ln":23},
-{"wn":28,"mn":"apr","wk":1,"thema":"Paasvakantie","les":"1 – 15 april","vac":true,"skip":false,"ln":0},
-{"wn":29,"mn":"apr","wk":2,"thema":"Paasvakantie","les":"1 – 15 april","vac":true,"skip":false,"ln":0},
-{"wn":30,"mn":"apr","wk":3,"thema":"Wahiey en het verstand","les":"8.2. Onstaan van het mysticisme of tasawwoef8.3. Relatie Allah-schepping volgens het mysticisme","vac":false,"skip":false,"ln":24},
-{"wn":31,"mn":"apr","wk":4,"thema":"Wahiey en het verstand","les":"8.4. Etnische dimensie van het mysticisme8.4.1. Relatie iman en achlaq8.4.2. Enkele hoofdprincipes","vac":false,"skip":false,"ln":25},
-{"wn":32,"mn":"mei","wk":1,"thema":"Wahiey en het verstand","les":"8.4.3. Mewlana Djalaladdin Roemi8.5 Harmonie samenleven en tolerantie","vac":false,"skip":false,"ln":26},
-{"wn":33,"mn":"mei","wk":2,"thema":"Sociale relaties","les":"Het huwelijk in de Islam9.1. Belang van de huwelijk in de Islam","vac":false,"skip":false,"ln":27},
-{"wn":34,"mn":"mei","wk":3,"thema":"Sociale relaties","les":"9.2. Verschillende stadia van het huwelijk9.2.1. Het kiezen van het partner9.2.2. Het aanzoek en de acceptatie van het huwelijk","vac":false,"skip":false,"ln":28},
-{"wn":35,"mn":"mei","wk":4,"thema":"Sociale relaties","les":"9.2.3. Het huwelijkscontract 9.2.4. De verloving","vac":false,"skip":false,"ln":29},
-{"wn":36,"mn":"jun","wk":1,"thema":"Sociale relaties","les":"9.2.5. De huwelijkssluiting 9.2.6. De bruiloft","vac":false,"skip":false,"ln":30},
-{"wn":37,"mn":"jun","wk":2,"thema":"Sociale relaties","les":"9.3. Rechten en plichten9.3.1. Rechten van de echtgenote9.3.2. Rechten van de echtgenoot","vac":false,"skip":false,"ln":31},
-{"wn":38,"mn":"jun","wk":3,"thema":"Sociale relaties","les":"9.4. Rechten van het kind9.5. Echtscheiding","vac":false,"skip":false,"ln":32},
-{"wn":39,"mn":"jun","wk":4,"thema":"Evaluatie & Herhaling","les":"Herhalen en evaluatie van de behandelde leerstof","vac":false,"skip":false,"ln":33},
+{"wn":1,"mn":"sep","thema":"GELOOFSLEER","les":"1. Het leven nu en het hiernamaals — 1.1. Het leven is niet doelloos — 1.2. \"Hayat\" volgens de Koran","vac":false,"ln":1},
+{"wn":2,"mn":"sep","thema":"GELOOFSLEER","les":"1.3. Alles heeft een tegenwaarde — 1.4. Leven en in leven houden is een Islamitische verantwoordelijkheid — 1.5. De dood is een realiteit in het leven","vac":false,"ln":2},
+{"wn":3,"mn":"sep","thema":"GELOOFSLEER","les":"1.6. De uitvaart naar het hiernamaals — 1.6.1. De rechten van een overledene — 1.6.2. Djanaza-gebed — 1.6.3. Begraven van de overledene","vac":false,"ln":3},
+{"wn":4,"mn":"sep","thema":"GELOOFSLEER","les":"1.6.4. Koran lezen en doea's verrichten — 1.6.5. Goede daden verrichten","vac":false,"ln":4},
+{"wn":5,"mn":"okt","thema":"GELOOFSLEER","les":"1.7. Dag des Oordeels (yawm al qiyama) — 1.8. Een nieuw leven, achira","vac":false,"ln":5},
+{"wn":6,"mn":"okt","thema":"AANBIDDING","les":"2. Aanbiddingen in de verschillende religies — 2.1. Aanbidding in de verschillende religies — 2.1.1. Smeekbede (doea) in het dagelijks gebed — 2.2. Het belang van interreligieuze dialoog","vac":false,"ln":6},
+{"wn":7,"mn":"okt","thema":"AANBIDDING","les":"3. Het begrijpen van Mohammed (s.a.w.) — 3.1. Hadies en soenna — 3.2. De lokale en de universele dimensie van de handelingen van Mohammed (s.a.w.)","vac":false,"ln":7},
+{"wn":8,"mn":"okt","thema":"AANBIDDING","les":"3.3. De universele karakter van Mohammed (s.a.w.) — 3.4. Belang van soenna bij het begrijpen van de Islam","vac":false,"ln":8},
+{"wn":9,"mn":"nov","thema":"Herfstvakantie","les":"Herfstvakantie","vac":true,"ln":0},
+{"wn":10,"mn":"nov","thema":"AANBIDDING","les":"3.5. Hoe moeten we Mohammed (s.a.w.) begrijpen? — 3.6. De voornaamste hadies bronnen","vac":false,"ln":9},
+{"wn":11,"mn":"nov","thema":"DE KORAN","les":"4. De Koran — 4.1. Het belang van het verstand in de Islam — 4.2. De Koran wil dat wij ons verstand gebruiken","vac":false,"ln":10},
+{"wn":12,"mn":"nov","thema":"DE KORAN","les":"4.3. De Koran hecht belang aan de juiste kennis — 4.4. Manieren om kennis te verwerven binnen de Koran — 4.5. Kennis voorkomt extremisme","vac":false,"ln":11},
+{"wn":13,"mn":"dec","thema":"ZEDELIJKHEID","les":"5. Berouw en vergiffenis — 5.1. Fouten begaan is menselijk — 5.2. Allah (s.w.t.) is Vergevensgezind en houdt van degenen die vergeven","vac":false,"ln":12},
+{"wn":14,"mn":"dec","thema":"ZEDELIJKHEID","les":"5.3. Vergeven verhoogt de positie van de mens — 5.4. Vergeven vormt de basis van individuele en maatschappelijke tolerantie — 5.5. Het verrichten van goede daden wissen de slechte daden","vac":false,"ln":13},
+{"wn":15,"mn":"dec","thema":"ZEDELIJKHEID","les":"6. De doelstellingen van de geboden en verboden in de Islam — 6.1. Inleiding — 6.2. De doelstellingen van de geboden en verboden binnen de Islam","vac":false,"ln":14},
+{"wn":16,"mn":"dec","thema":"Kerstvakantie","les":"Kerstvakantie","vac":true,"ln":0},
+{"wn":17,"mn":"jan","thema":"Kerstvakantie","les":"Kerstvakantie","vac":true,"ln":0},
+{"wn":18,"mn":"jan","thema":"ZEDELIJKHEID","les":"6.2.1. Het opvoeden van individu en hem laten rijpen op het vlak van moraal — 6.2.2. De totstandbrenging van rechtvaardigheid binnen een gemeenschap","vac":false,"ln":15},
+{"wn":19,"mn":"jan","thema":"ZEDELIJKHEID","les":"6.2.3. Bescherming van het algemeen belang (De graden van de algemene belangen, de verplichtingen binnen de hiërarchie) — 6.3. Het overwinnen van moeilijkheden en het wegwerken van het schade","vac":false,"ln":16},
+{"wn":20,"mn":"jan","thema":"DE KORAN","les":"7. Interpretaties binnen de Islamitische denkwijze — 7.1. Redenen van verschillende opvattingen — 7.1.1. Redenen ontstaan door de mens","vac":false,"ln":17},
+{"wn":21,"mn":"feb","thema":"DE KORAN","les":"7.1.2. Sociale redenen — 7.1.3. Culturele redenen","vac":false,"ln":18},
+{"wn":22,"mn":"feb","thema":"DE KORAN","les":"7.1.4. Geografische redenen — 7.1.5. Politieke redenen","vac":false,"ln":19},
+{"wn":23,"mn":"feb","thema":"Krokusvakantie","les":"Krokusvakantie","vac":true,"ln":0},
+{"wn":24,"mn":"feb","thema":"DE KORAN","les":"7.2. Politieke interpretaties en interpretaties aangaande de geloofsleer — 7.2.1. Charidjiyya — 7.2.2. Sjiisme","vac":false,"ln":20},
+{"wn":25,"mn":"mrt","thema":"DE KORAN","les":"7.2.3. Moe'tazila — 7.2.4. Matoeridiyya — 7.2.5. Asjariyya","vac":false,"ln":21},
+{"wn":26,"mn":"mrt","thema":"DE KORAN","les":"7.3. Interpretaties rond de Islamitische wetgeving (fiqh) — 7.3.1. Djafariyya — 7.3.2. Hanafisme","vac":false,"ln":22},
+{"wn":27,"mn":"mrt","thema":"DE KORAN","les":"7.3.3. Malikisme — 7.3.4. Sjafiisme — 7.3.5. Hanbelisme","vac":false,"ln":23},
+{"wn":28,"mn":"mrt","thema":"DE KORAN","les":"7.4. Gemeenschappelijke principes in de Islamitische denkwijze — a) Tawhid — b) Noeboewwa","vac":false,"ln":24},
+{"wn":29,"mn":"apr","thema":"Paasvakantie","les":"Paasvakantie","vac":true,"ln":0},
+{"wn":30,"mn":"apr","thema":"Paasvakantie","les":"Paasvakantie","vac":true,"ln":0},
+{"wn":31,"mn":"apr","thema":"DE KORAN","les":"7.4. (vervolg) Gemeenschappelijke principes — c) Koran — d) Achira","vac":false,"ln":25},
+{"wn":32,"mn":"apr","thema":"GODSDIENST EN CULTUUR","les":"8. Mystieke opvattingen in het Islamitische denken — 8.1. Wat is tasawwoef, soefisme of Islamitisch mysticisme?","vac":false,"ln":26},
+{"wn":33,"mn":"mei","thema":"GODSDIENST EN CULTUUR","les":"8.2. Ontstaan van het mysticisme of tasawwoef — 8.3. Relatie Allah-schepping volgens het mysticisme","vac":false,"ln":27},
+{"wn":34,"mn":"mei","thema":"GODSDIENST EN CULTUUR","les":"8.4. Etnische dimensie van het mysticisme — 8.4.1. Relatie iman en achlaq — 8.4.2. Enkele hoofdprincipes","vac":false,"ln":28},
+{"wn":35,"mn":"mei","thema":"GODSDIENST EN CULTUUR","les":"8.4.3. Mewlana Djalaladdin Roemi — 8.5. Harmonie samenleven en tolerantie","vac":false,"ln":29},
+{"wn":36,"mn":"mei","thema":"GODSDIENST EN CULTUUR","les":"9. Het huwelijk in de Islam — 9.1. Belang van het huwelijk in de Islam — 9.2. Verschillende stadia van het huwelijk — 9.2.1. Het kiezen van de partner","vac":false,"ln":30},
+{"wn":37,"mn":"jun","thema":"GODSDIENST EN CULTUUR","les":"9.2.2. Het aanzoek en de acceptatie van het huwelijk — 9.2.3. Het huwelijkscontract — 9.2.4. De verloving","vac":false,"ln":31},
+{"wn":38,"mn":"jun","thema":"GODSDIENST EN CULTUUR","les":"9.2.5. De huwelijkssluiting — 9.2.6. De bruiloft","vac":false,"ln":32},
+{"wn":39,"mn":"jun","thema":"GODSDIENST EN CULTUUR","les":"9.3. Rechten en plichten — 9.3.1. Rechten van de echtgenote — 9.3.2. Rechten van de echtgenoot","vac":false,"ln":33},
+{"wn":40,"mn":"jun","thema":"GODSDIENST EN CULTUUR","les":"9.4. Rechten van het kind — 9.5. Echtscheiding","vac":false,"ln":34},
+{"wn":41,"mn":"jun","thema":"EVALUATIE","les":"Herhaling en evaluatie van Geloofsleer en Aanbidding","vac":false,"ln":35},
+{"wn":42,"mn":"jun","thema":"EVALUATIE","les":"Herhaling en evaluatie van Zedelijkheid en De Koran","vac":false,"ln":36},
+{"wn":43,"mn":"jun","thema":"EVALUATIE","les":"Herhaling en evaluatie van Godsdienst en Cultuur (Mysticisme en Huwelijk) — afsluiting schooljaar","vac":false,"ln":37},
+{"wn":44,"mn":"jul","thema":"Zomervakantie","les":"Zomervakantie","vac":true,"ln":0},
 ],
 };
 
-// Get jaarplan week for a class based on school week index
+// Get jaarplan week for a class based on school week number (1-44)
 function getJaarplanWeek(classJaar, weekIdx) {
   if (!classJaar || !JAARPLAN[classJaar]) return null;
   const plan = JAARPLAN[classJaar];
-  const e = plan[weekIdx];
+  // weekIdx is 0-based index in state.weeks → week number = weekIdx+1
+  const weekNum = weekIdx + 1;
+  // Find entry matching this week number
+  const e = plan.find(x => x.wn === weekNum) || plan[weekIdx];
   if (!e) return null;
-  // Normalize field names (compact format: wn/mn/wk/thema/les/vac/skip/ln)
   return {
-    week_num: e.wn ?? e.week_num,
-    month: e.mn ?? e.month,
+    week_num: e.wn ?? weekNum,
+    month: e.mn ?? '',
     thema: e.thema,
     les: e.les,
-    is_vacation: e.vac ?? e.is_vacation ?? false,
-    is_skip: e.skip ?? e.is_skip ?? false,
+    is_vacation: e.vac ?? false,
+    is_skip: false,
     les_num: e.ln ?? 0
   };
 }
@@ -1196,7 +1226,10 @@ function renderWeekView() {
   
   schoolNames.forEach(sch=>{
     // School block header
-    if(multiSchool) groupPanel += `<div style="font-size:14px;font-weight:900;color:var(--text);margin-bottom:8px;padding:6px 2px;border-bottom:2px solid var(--border)">🏫 ${esc(sch)}</div>`;
+    if(multiSchool) {
+      const schoolTotal = schoolMap[sch].reduce((tot,g)=>tot+g.classes.filter(c=>c.school===sch).reduce((s,c)=>s+c.students.length,0),0);
+      groupPanel += `<div style="display:flex;align-items:center;justify-content:space-between;font-size:14px;font-weight:900;color:var(--text);margin-bottom:8px;padding:6px 4px;border-bottom:2px solid var(--border)"><span>🏫 ${esc(sch)}</span><span style="font-size:12px;font-weight:600;color:var(--text3)">${schoolTotal} leerlingen</span></div>`;
+    }
     // Groups side by side (flex-wrap)
     groupPanel += `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:${multiSchool?'14':'0'}px">`;
     schoolMap[sch].forEach(g=>{
@@ -1221,11 +1254,12 @@ function renderWeekView() {
   });
   groupPanel += `</div>`;
 
+  const isVacWeek = w.isHoliday;
   let rows = '';
   if(students.length===0) {
     rows = `<tr><td colspan="99" style="text-align:center;color:var(--text3);padding:30px">Geen leerlingen in deze groep</td></tr>`;
   } else {
-    students.forEach(s=>{
+    students.forEach((s, rowIdx)=>{
       const ev = getEval(w.id, s.id);
       const aanw = ev.aanwezig || 'Aanwezig';
 
@@ -1245,7 +1279,8 @@ function renderWeekView() {
         }
       });
 
-      rows += `<tr>
+      const rowBg = isVacWeek ? 'background:#f0fdf4' : (rowIdx%2===0 ? 'background:#fff9f5' : 'background:var(--surface)');
+      rows += `<tr style="${rowBg}">
         <td><span class="student-link" onclick="openStudentProfile('${s.id}')">${esc(s.name)}</span></td>
         <td style="color:var(--text3);font-size:11px">${esc(s.className)}</td>
         <td><div class="aanw-group">
@@ -1743,9 +1778,13 @@ function renderSettings() {
           <div>
             <span style="font-weight:800;font-size:14px">${esc(c.name)}</span>
             <span style="color:var(--text3);font-size:11px;margin-left:8px">${esc(c.school)}</span>
+            ${c.jaar?`<span class="badge badge-purple" style="margin-left:4px">${c.jaar}e jr</span>`:''}
             <span class="badge badge-pink" style="margin-left:6px">${c.students.length} leerlingen</span>
           </div>
-          <button class="btn btn-primary btn-sm" onclick="modalAddStudent('${c.id}')">+ Leerling</button>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-secondary btn-sm btn-icon" onclick="modalEditClass('${c.id}')" title="Klas bewerken">✏️</button>
+            <button class="btn btn-primary btn-sm" onclick="modalAddStudent('${c.id}')">+ Leerling</button>
+          </div>
         </div>
         <div style="display:flex;flex-wrap:wrap;min-height:28px">${studentChips||'<span style="font-size:12px;color:var(--text3)">Nog geen leerlingen</span>'}</div>
       </div>`;
@@ -1958,10 +1997,15 @@ function doMoveStudent(sId) {
 }
 
 function modalAddClass(groupId) {
+  // Collect known schools for quick-select
+  const knownSchools = [...new Set(state.groups.flatMap(g=>g.classes.map(c=>c.school)).filter(Boolean))].sort();
+  const schoolBtns = knownSchools.map(s=>`<button type="button" onclick="document.getElementById('m-school').value='${s.replace(/'/g,"\'")}'" style="padding:4px 10px;border-radius:20px;border:1.5px solid var(--border);background:var(--cream);cursor:pointer;font-size:11px;font-weight:600;font-family:'Nunito',sans-serif;color:var(--text2)" onmouseover="this.style.background='var(--accent1)15';this.style.borderColor='var(--accent1)'" onmouseout="this.style.background='var(--cream)';this.style.borderColor='var(--border)'">${esc(s)}</button>`).join('');
+  
   openModal(`<div class="modal-title">Klas toevoegen</div>
     <div class="form-group"><label class="form-label">Klasnaam</label>
-      <input class="form-input" id="m-cls" placeholder="bijv. 2B1a" autofocus></div>
+      <input class="form-input" id="m-cls" placeholder="bijv. 3B2" autofocus></div>
     <div class="form-group"><label class="form-label">School</label>
+      ${knownSchools.length ? `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">${schoolBtns}</div>` : ''}
       <input class="form-input" id="m-school" placeholder="Schoolnaam"></div>
     <div class="form-group"><label class="form-label">Jaar (jaarplan)</label>
       <select class="form-select" id="m-jaar">
@@ -1986,6 +2030,41 @@ function doAddClass(groupId) {
   if(!name) return;
   state.groups=state.groups.map(g=>g.id===groupId?{...g,classes:[...g.classes,{id:uid(),name,school,jaar,students:[]}]}:g);
   closeModal(); saveState(); showToast("Klas toegevoegd"); render();
+}
+
+function modalEditClass(classId) {
+  let cls = null;
+  let groupId = null;
+  state.groups.forEach(g => g.classes.forEach(c => { if(c.id===classId){cls=c;groupId=g.id;} }));
+  if(!cls) return;
+  const knownSchools = [...new Set(state.groups.flatMap(g=>g.classes.map(c=>c.school)).filter(Boolean))].sort();
+  const schoolBtns = knownSchools.map(s=>`<button type="button" onclick="document.getElementById('me-school').value='${s.replace(/'/g,"\'")}'" style="padding:4px 10px;border-radius:20px;border:1.5px solid var(--border);background:var(--cream);cursor:pointer;font-size:11px;font-weight:600;font-family:'Nunito',sans-serif;color:var(--text2)" onmouseover="this.style.background='var(--accent1)15';this.style.borderColor='var(--accent1)'" onmouseout="this.style.background='var(--cream)';this.style.borderColor='var(--border)'">${esc(s)}</button>`).join('');
+  const jaarOpts = ['','1','2','3','4','5','6'].map(v=>`<option value="${v}" ${cls.jaar===v?'selected':''}>${v?v+'de/ste jaar':'— Geen jaarplan —'}</option>`).join('');
+  openModal(`<div class="modal-title">✏️ Klas bewerken</div>
+    <div class="form-group"><label class="form-label">Klasnaam</label>
+      <input class="form-input" id="me-cls" value="${esc(cls.name)}" autofocus></div>
+    <div class="form-group"><label class="form-label">School</label>
+      ${knownSchools.length ? `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">${schoolBtns}</div>` : ''}
+      <input class="form-input" id="me-school" value="${esc(cls.school||'')}"></div>
+    <div class="form-group"><label class="form-label">Jaar (jaarplan)</label>
+      <select class="form-select" id="me-jaar">${jaarOpts}</select></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:20px">
+      <button class="btn btn-danger" onclick="if(confirm('Klas verwijderen met alle leerlingen?')){deleteClass('${classId}');closeModal()}">🗑 Verwijderen</button>
+      <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
+      <button class="btn btn-primary" onclick="doEditClass('${classId}')">Opslaan</button>
+    </div>`);
+}
+function doEditClass(classId) {
+  const name = document.getElementById('me-cls')?.value?.trim();
+  const school = document.getElementById('me-school')?.value?.trim()||'';
+  const jaar = document.getElementById('me-jaar')?.value||'';
+  if(!name) return;
+  state.groups = state.groups.map(g=>({...g, classes:g.classes.map(c=>c.id===classId?{...c,name,school,jaar}:c)}));
+  closeModal(); saveState(); showToast("Klas bijgewerkt ✅"); render();
+}
+function deleteClass(classId) {
+  state.groups = state.groups.map(g=>({...g, classes:g.classes.filter(c=>c.id!==classId)}));
+  saveState(); showToast("Klas verwijderd"); render();
 }
 
 function modalAddGroup() {
