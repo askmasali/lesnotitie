@@ -202,6 +202,15 @@
   <div class="theme-swatch" style="background:linear-gradient(135deg,#ec4899,#f97316)" title="Coral" onclick="applyTheme('coral')"></div>
   <div class="theme-swatch" style="background:linear-gradient(135deg,#65a30d,#d97706)" title="Forest" onclick="applyTheme('forest')"></div>
   <div class="theme-swatch" style="background:linear-gradient(135deg,#c2855a,#d4a574)" title="Rose Gold" onclick="applyTheme('rosegold')"></div>
+  <div class="theme-swatch" style="background:linear-gradient(135deg,#1e2a45,#818cf8)" title="Midnight" onclick="applyTheme('midnight')"></div>
+  <div class="theme-swatch" style="background:linear-gradient(135deg,#f472b6,#fb7185)" title="Sakura" onclick="applyTheme('sakura')"></div>
+  <div class="theme-swatch" style="background:linear-gradient(135deg,#0d9488,#0891b2)" title="Teal" onclick="applyTheme('teal')"></div>
+  <div class="theme-swatch" style="background:linear-gradient(135deg,#d97706,#b45309)" title="Amber" onclick="applyTheme('amber')"></div>
+  <div class="theme-swatch" style="background:linear-gradient(135deg,#6366f1,#10b981)" title="Slate" onclick="applyTheme('slate')"></div>
+  <div class="theme-swatch" style="background:linear-gradient(135deg,#dc2626,#f97316)" title="Crimson" onclick="applyTheme('crimson')"></div>
+  <div class="theme-swatch" style="background:linear-gradient(135deg,#4d7c0f,#0369a1)" title="Moss" onclick="applyTheme('moss')"></div>
+  <div class="theme-swatch" style="background:linear-gradient(135deg,#7c3aed,#db2777)" title="Dusk" onclick="applyTheme('dusk')"></div>
+  <div class="theme-swatch" style="background:linear-gradient(135deg,#2563eb,#0ea5e9)" title="Nordic" onclick="applyTheme('nordic')"></div>
   <button onclick="resetToDefault()" style="margin-left:6px;background:none;border:1.5px solid var(--border);border-radius:20px;padding:2px 10px;font-size:10px;font-weight:700;color:var(--text2);cursor:pointer" title="Standaard kleur herstellen">↺ Default</button>
   <div class="custom-colors">
     <span class="theme-label" style="margin-left:8px">Eigen</span>
@@ -1066,7 +1075,7 @@ const LEERDOELEN = {
 const THEMA_COLORS = {
   'GELOOFSLEER':       '#8b5cf6',
   'AANBIDDING':        '#3b82f6',
-  'HET LEVEN VAN DE PROFEET': '#10b981',
+  'HET LEVEN VAN DE PROFEET': '#d97706',
   'DE KORAN':          '#f59e0b',
   'ZEDELIJKHEID':      '#ec4899',
   'GODSDIENST EN CULTUUR': '#06b6d4',
@@ -1314,6 +1323,15 @@ const themes = {
   coral:     { accent1:"#ec4899", accent2:"#f97316", accent3:"#f59e0b", bg:"#fff5f7", surface:"#ffffff", surface2:"#fdf2f8", border:"#fbcfe8", cream:"#fff5f0", text:"#500724", text2:"#be185d", text3:"#f9a8d4" },
   forest:    { accent1:"#65a30d", accent2:"#d97706", accent3:"#0d9488", bg:"#f7f9f3", surface:"#ffffff", surface2:"#f1f5e8", border:"#d9e8bb", cream:"#fafdf5", text:"#1a2e05", text2:"#3f6212", text3:"#a3c46a" },
   rosegold:  { accent1:"#c2855a", accent2:"#d4a574", accent3:"#9f6b8a", bg:"#fdf8f5", surface:"#ffffff", surface2:"#fdf0e8", border:"#f0d5c0", cream:"#fdfaf7", text:"#3d1f0f", text2:"#7c3d20", text3:"#d4a57a" },
+  midnight:  { accent1:"#818cf8", accent2:"#c084fc", accent3:"#34d399", bg:"#0f1729", surface:"#1e2a45", surface2:"#263352", border:"#334168", cream:"#1a2440", text:"#e2e8f0", text2:"#94a3b8", text3:"#475569" },
+  sakura:    { accent1:"#f472b6", accent2:"#fb7185", accent3:"#a78bfa", bg:"#fff1f5", surface:"#ffffff", surface2:"#fdf2f8", border:"#fce7f3", cream:"#fff5f7", text:"#4a1942", text2:"#be185d", text3:"#fbcfe8" },
+  teal:      { accent1:"#0d9488", accent2:"#0891b2", accent3:"#7c3aed", bg:"#f0fdfa", surface:"#ffffff", surface2:"#f0fdfd", border:"#99f6e4", cream:"#f0fdf9", text:"#042f2e", text2:"#0f766e", text3:"#5eead4" },
+  amber:     { accent1:"#d97706", accent2:"#b45309", accent3:"#059669", bg:"#fffbeb", surface:"#ffffff", surface2:"#fef9c3", border:"#fde68a", cream:"#fffdf5", text:"#292524", text2:"#78350f", text3:"#fbbf24" },
+  slate:     { accent1:"#6366f1", accent2:"#8b5cf6", accent3:"#10b981", bg:"#f8fafc", surface:"#ffffff", surface2:"#f1f5f9", border:"#e2e8f0", cream:"#f8fafc", text:"#1e293b", text2:"#475569", text3:"#94a3b8" },
+  crimson:   { accent1:"#dc2626", accent2:"#f97316", accent3:"#7c3aed", bg:"#fff5f5", surface:"#ffffff", surface2:"#fee2e2", border:"#fecaca", cream:"#fff7f7", text:"#1c0a0a", text2:"#991b1b", text3:"#fca5a5" },
+  moss:      { accent1:"#4d7c0f", accent2:"#15803d", accent3:"#0369a1", bg:"#f1f8f1", surface:"#ffffff", surface2:"#ecfdf5", border:"#bbf7d0", cream:"#f7fef7", text:"#14532d", text2:"#166534", text3:"#6ee7b7" },
+  dusk:      { accent1:"#7c3aed", accent2:"#db2777", accent3:"#0891b2", bg:"#faf7ff", surface:"#ffffff", surface2:"#f5f3ff", border:"#e9d5ff", cream:"#faf5ff", text:"#1e1b4b", text2:"#5b21b6", text3:"#c4b5fd" },
+  nordic:    { accent1:"#2563eb", accent2:"#0ea5e9", accent3:"#6366f1", bg:"#f0f4ff", surface:"#ffffff", surface2:"#eff6ff", border:"#bfdbfe", cream:"#f0f8ff", text:"#1e3a5f", text2:"#1e40af", text3:"#93c5fd" },
 };
 
 const THEME_KEY = "lesnotitie_theme";
@@ -1679,12 +1697,12 @@ function renderDashboard() {
   // Group cards
   const groupCards = groupStats.map((g,gi)=>`
     <div class="card" style="padding:16px">
-      <div style="font-weight:800;font-size:15px;color:var(--accent1);margin-bottom:10px">📚 ${esc(g.name)}</div>
+      <div style="font-weight:800;font-size:15px;color:var(--accent1);margin-bottom:10px;cursor:pointer" onclick="openGroepPopup('${g.id}')" title="Bekijk groepdetails">📚 ${esc(g.name)} <span style="font-size:10px;opacity:.6">↗</span></div>
       <div style="font-size:28px;font-weight:900;color:var(--text);margin-bottom:4px">${g.count}</div>
       <div style="font-size:11px;color:var(--text3);margin-bottom:10px">leerlingen</div>
       ${g.classes.map(c=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-top:1px solid var(--border)">
         <div>
-          <span style="font-size:12px;font-weight:700;color:var(--accent1);cursor:pointer" onclick="openKlasOverzicht('${c.id}')" title="Lesoverzicht bekijken">${esc(c.name)}</span>
+          <span style="font-size:12px;font-weight:700;color:var(--accent1);cursor:pointer" onclick="openKlasPopup('${c.id}')" title="Klas bekijken">${esc(c.name)}</span>
           <span style="font-size:10px;color:var(--text3);margin-left:6px">${esc(c.school)}</span>
           ${c.jaar?`<span style="font-size:9px;background:var(--accent1)22;color:var(--accent1);border-radius:6px;padding:1px 5px;font-weight:700;margin-left:4px">${c.jaar}e jr</span>`:''}
         </div>
@@ -1754,7 +1772,7 @@ function renderDashboard() {
         <div style="font-weight:800;font-size:14px;color:var(--text2);margin-bottom:12px">💬 Opmerkingen</div>
         ${(()=>{
           let total=0;
-          allStudents().forEach(s=>{state.weeks.forEach(w=>{const ev=state.evaluations?.[w.id]?.[s.id];if(ev?.opmerking?.trim())total++;});});
+          allStudents().forEach(s=>{state.weeks.forEach(w=>{const ev=state.evaluations?.[w.id+'_'+s.id];if(ev?.opmerking?.trim())total++;});});
           return total>0 ? `<div style="font-size:36px;font-weight:900;color:var(--accent1);cursor:pointer" onclick="openOpmerkingDetail()">${total}</div><div style="font-size:10px;color:var(--text3);margin-top:4px">opmerkingen in totaal</div><div style="font-size:11px;color:var(--accent1);margin-top:8px;cursor:pointer;font-weight:700" onclick="openOpmerkingDetail()">Bekijk per leerling →</div>` : '<div style="font-size:12px;color:var(--text3)">Nog geen opmerkingen</div>';
         })()}
       </div>
@@ -1890,7 +1908,7 @@ function openOpmerkingDetail() {
       [...c.students].sort((a,b)=>a.name.localeCompare(b.name,'nl')).forEach(s=>{
         const opmerkingen=[];
         state.weeks.forEach(w=>{
-          const ev=state.evaluations?.[w.id]?.[s.id];
+          const ev=state.evaluations?.[w.id+'_'+s.id];
           if(ev?.opmerking?.trim()) opmerkingen.push({week:w.label,text:ev.opmerking.trim()});
         });
         if(opmerkingen.length) entries.push({name:s.name,id:s.id,klas:c.name,groep:g.name,opmerkingen});
@@ -2095,37 +2113,30 @@ const DEFAULT_UURROOSTER = {
   // slot: {dag, uur} -> {type:'les'|'vrij'|'wacht'|'toezicht'|'custom', lokal, groepIds:[], label}
   // Stored per slot key: "ma-1", "di-2", etc.
   slots: {
-    "ma-1": {type:"les", lokal:"B005", label:"", groepIds:["1A"], klasIds:["1A1","1A1a","1A1b","1A2"]},
-    "ma-2": {type:"les", lokal:"B005", label:"", groepIds:["1A"], klasIds:["1A1","1A1a","1A1b","1A2"]},
-    "ma-3": {type:"les", lokal:"B005", label:"", groepIds:["2A"], klasIds:["2A ECOR","2A STTE"]},
-    "ma-4": {type:"les", lokal:"B005", label:"", groepIds:["2A"], klasIds:["2A ECOR","2A STTE"]},
-    "ma-5": {type:"les", lokal:"i3", label:"", groepIds:["3"], klasIds:["3 BO","3 ET","3 MW","3 TC","3 WL"]},
-    "ma-6": {type:"les", lokal:"i3", label:"", groepIds:["3"], klasIds:["3 BO","3 ET","3 MW","3 TC","3 WL"]},
-    "ma-7": {type:"les", lokal:"i3", label:"", groepIds:["3"], klasIds:["3 EL","3 HZ","3 ME","3 OL","3 ZW"]},
-    "ma-8": {type:"les", lokal:"i3", label:"", groepIds:["3"], klasIds:["3 EL","3 HZ","3 ME","3 OL","3 ZW"]},
-    "di-1": {type:"les", lokal:"B007", label:"", groepIds:["2A"], klasIds:["2A KLTA","2A MAWE1","2A STWE"]},
-    "di-2": {type:"les", lokal:"B007", label:"", groepIds:["2A"], klasIds:["2A KLTA","2A MAWE1","2A STWE"]},
-    "di-3": {type:"vrij", lokal:"", label:"VRIJ"},
-    "di-4": {type:"les", lokal:"B007", label:"", groepIds:["2B"], klasIds:["2B MAWE1","2B MAWE2"]},
-    "di-5": {type:"vrij", lokal:"", label:"VRIJ"},
-    "di-6": {type:"vrij", lokal:"", label:"VRIJ"},
-    "di-7": {type:"les", lokal:"D19", label:"", groepIds:["5"], klasIds:["5 BZ01","5 BZ02","5 HV","5 LC"]},
-    "di-8": {type:"les", lokal:"D19", label:"", groepIds:["5"], klasIds:["5 BZ01","5 BZ02","5 HV","5 LC"]},
-    "wo-1": {type:"les", lokal:"B007", label:"", groepIds:["2A"], klasIds:["2A MAWE2","2A MAWE3"]},
-    "wo-2": {type:"les", lokal:"B007", label:"", groepIds:["2A"], klasIds:["2A MAWE2","2A MAWE3"]},
-    "wo-3": {type:"wacht", lokal:"Tichelrij", label:"Wachtuur Tichelrij"},
-    "wo-4": {type:"les", lokal:"B101", label:"", groepIds:["1A"], klasIds:["1A3","1A4"]},
-    "wo-5": {type:"les", lokal:"B007", label:"", groepIds:["2B"], klasIds:["2B MAWE1","2B MAWE2"]},
-    "wo-6": {type:"les", lokal:"B007", label:"", groepIds:["1"], klasIds:["1 DOE1","1 DOE2","1 DOE3","1 DOE4"]},
-    "wo-7": {type:"les", lokal:"B007", label:"", groepIds:["1"], klasIds:["1 DOE1","1 DOE2","1 DOE3","1 DOE4"]},
-    "do-1": {type:"les", lokal:"B101", label:"", groepIds:["1A"], klasIds:["1A3","1A4"]},
-    "do-2": {type:"les", lokal:"B007", label:"", groepIds:["2A"], klasIds:["2A KLTA","2A MAWE1","2A STWE"]},
-    "do-4": {type:"les", lokal:"B101", label:"", groepIds:["2B"], klasIds:["2B STTE1","2B STTE2","2B ECORMAWE"]},
-    "do-5": {type:"les", lokal:"B101", label:"", groepIds:["1A"], klasIds:["1A3","1A4"]},
-    "do-6": {type:"les", lokal:"B101", label:"", groepIds:["2B"], klasIds:["2B STTE1","2B STTE2","2B ECORMAWE"]},
-    "do-7": {type:"les", lokal:"B101", label:"", groepIds:["2B"], klasIds:["2B STTE1","2B STTE2","2B ECORMAWE"]},
-    "vr-1": {type:"les", lokal:"B007", label:"", groepIds:["2A"], klasIds:["2A MAWE2","2A MAWE3"]},
-    "vr-2": {type:"les", lokal:"B007", label:"", groepIds:["2A"], klasIds:["2A MAWE2","2A MAWE3"]},
+    "ma-5": {type:"les", lokal:"Speelhof", label:"", groepIds:[], klasIds:[]},
+    "ma-6": {type:"les", lokal:"Speelhof", label:"", groepIds:[], klasIds:[]},
+    "ma-7": {type:"les", lokal:"Speelhof", label:"", groepIds:[], klasIds:[]},
+    "ma-8": {type:"les", lokal:"Speelhof", label:"", groepIds:[], klasIds:[]},
+    "di-1": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
+    "di-2": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
+    "di-3": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
+    "di-4": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
+    "di-7": {type:"les", lokal:"Speelhof", label:"", groepIds:[], klasIds:[]},
+    "di-8": {type:"les", lokal:"Speelhof", label:"", groepIds:[], klasIds:[]},
+    "do-1": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
+    "do-2": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
+    "do-3": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
+    "do-4": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
+    "do-5": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
+    "do-6": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
+    "do-7": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
+    "vr-1": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
+    "vr-2": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
+    "vr-3": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
+    "vr-4": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
+    "vr-5": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
+    "vr-6": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
+    "vr-7": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
   },
   // Toezicht labels (shown under pauze rows)
   toezicht: {
@@ -2163,9 +2174,13 @@ function renderUurrooster() {
   // Build grid
   const colW = 'minmax(110px,1fr)';
   let html = `
-  <div style="font-family:'Playfair Display',serif;font-size:22px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
+  <div style="font-family:'Playfair Display',serif;font-size:22px;margin-bottom:16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
     📅 Uurrooster
-    <button class="btn btn-secondary btn-sm" onclick="openUurroosterSettings()" style="margin-left:auto;font-size:11px">⚙️ Tijden & knoppen bewerken</button>
+    <div style="display:flex;gap:6px;margin-left:auto;flex-wrap:wrap">
+      <button class="btn btn-secondary btn-sm" onclick="exportUurroosterCSV()" style="font-size:11px">📥 CSV</button>
+      <button class="btn btn-secondary btn-sm" onclick="printUurrooster()" style="font-size:11px">🖨️ PDF</button>
+      <button class="btn btn-secondary btn-sm" onclick="openUurroosterSettings()" style="font-size:11px">⚙️ Tijden & knoppen bewerken</button>
+    </div>
   </div>
   <div style="overflow-x:auto">
   <div style="display:grid;grid-template-columns:64px ${DAGEN.map(()=>colW).join(' ')};gap:3px;min-width:620px">
@@ -2193,11 +2208,11 @@ function renderUurrooster() {
     const pauze = ur.pauzes.find(p=>p.na_uur===uurNr);
     if (pauze) {
       const toezicht = ur.toezicht?.[uurNr] || '';
-      html += `<div style="background:var(--cream);border-radius:6px;padding:4px;text-align:center;border:1px dashed var(--border2)">
-        <div style="font-size:9px;color:var(--text3);font-weight:600">—</div>
+      html += `<div style="background:#f0fdf4;border-radius:6px;padding:4px;text-align:center;border:1px dashed #86efac">
+        <div style="font-size:9px;color:#16a34a;font-weight:600">—</div>
       </div>`;
-      html += `<div style="grid-column:span 5;background:var(--cream);border-radius:6px;padding:5px 12px;border:1px dashed var(--border2);display:flex;align-items:center;justify-content:space-between">
-        <span style="font-size:11px;font-weight:700;color:var(--text2)">☕ ${esc(pauze.label)}</span>
+      html += `<div style="grid-column:span 5;background:#f0fdf4;border-radius:6px;padding:5px 12px;border:1px dashed #86efac;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:11px;font-weight:700;color:#16a34a">☕ ${esc(pauze.label)}</span>
         ${toezicht ? `<span style="font-size:10px;color:var(--text3);font-style:italic">${esc(toezicht)}</span>` : ''}
       </div>`;
     }
@@ -2219,13 +2234,14 @@ function renderUurSlotCell(key, slot) {
     custom: 'var(--accent2)',
   };
   const typeBgs = {
-    les: 'var(--surface2)',
-    vrij: 'var(--surface)',
+    les: '#ffffff',
+    vrij: '#f0fdf4',
     wacht: '#fff7ed',
     toezicht: '#fffbeb',
     vergadering: '#f5f3ff',
     vervanging: '#ecfeff',
     verlof: '#fef2f2',
+    pauze: '#f0fdf4',
     custom: '#fdf2f8',
   };
   const color = typeColors[slot.type] || 'var(--text2)';
@@ -2234,7 +2250,7 @@ function renderUurSlotCell(key, slot) {
   // Build content
   let content = '';
   if (slot.type === 'vrij') {
-    content = `<div style="font-size:10px;color:var(--text3);font-weight:700;text-align:center;padding:8px 0">VRIJ</div>`;
+    content = `<div style="font-size:10px;color:#16a34a;font-weight:800;text-align:center;padding:8px 0">✓ VRIJ</div>`;
   } else if (slot.type !== 'les') {
     content = `<div style="font-size:10px;font-weight:700;color:${color};text-align:center;padding:4px 2px">${esc(slot.label||slot.type.toUpperCase())}</div>`;
   } else {
@@ -2363,9 +2379,25 @@ function openUurSlotEdit(key) {
       </div>`:''}
       
       ${studentPreview ? `<div style="margin-bottom:12px">
-        <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Leerlingen</div>
-        <div style="max-height:200px;overflow-y:auto;background:var(--cream);border-radius:8px;padding:10px;border:1px solid var(--border)">${studentPreview}</div>
+        <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Leerlingen <span style="font-weight:400;text-transform:none;font-size:9px">(klik om profiel te zien)</span></div>
+        <div style="max-height:180px;overflow-y:auto;background:var(--cream);border-radius:8px;padding:10px;border:1px solid var(--border)">${studentPreview}</div>
       </div>` : ''}
+      
+      <div style="margin-bottom:12px;border:1.5px dashed var(--border);border-radius:10px;padding:12px;background:var(--surface2)">
+        <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">➕ Nieuwe leerling toevoegen aan klas</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px" id="uur-school-btns">
+          ${[...new Set(allClasses().map(c=>c.school).filter(Boolean))].map(sch=>`<button onclick="document.getElementById('uur-new-school').value='${esc(sch)}';this.style.background='var(--accent1)';this.style.color='#fff';document.querySelectorAll('#uur-school-btns button').forEach(b=>b!==this&&(b.style.background='var(--cream)',b.style.color='var(--text2)'))" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--border);background:var(--cream);color:var(--text2);cursor:pointer;font-size:10px;font-weight:700;font-family:'Nunito',sans-serif">${esc(sch)}</button>`).join('')}
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px" id="uur-klas-btns">
+          ${allCls.map(c=>`<button onclick="document.getElementById('uur-new-klas').value='${esc(c.id)}';document.getElementById('uur-new-school').value='${esc(c.school||'')}';this.style.background='var(--accent2)22';this.style.borderColor='var(--accent2)';document.querySelectorAll('#uur-klas-btns button').forEach(b=>b!==this&&(b.style.background='var(--cream)',b.style.borderColor='var(--border)'))" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--border);background:var(--cream);color:var(--text2);cursor:pointer;font-size:10px;font-weight:700;font-family:'Nunito',sans-serif">${esc(c.name)}</button>`).join('')}
+        </div>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+          <input id="uur-new-name" class="form-input" placeholder="Naam leerling" style="flex:1;min-width:120px;max-width:180px;font-size:11px;padding:5px 8px">
+          <input id="uur-new-klas" class="form-input" placeholder="Klas (bijv. 3B!)" style="width:90px;font-size:11px;padding:5px 8px">
+          <input id="uur-new-school" class="form-input" placeholder="School" style="width:100px;font-size:11px;padding:5px 8px">
+          <button onclick="addStudentFromSlot('${key}')" style="background:var(--accent1);color:#fff;border:none;border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;font-size:11px;font-family:'Nunito',sans-serif">➕ Voeg toe</button>
+        </div>
+      </div>
     </div>
     
     <div id="uur-custom-fields" style="display:${slot.type!=='les'&&slot.type!=='vrij'?'block':'none'}">
@@ -2404,6 +2436,56 @@ function setSlotType(key, type) {
     btn.style.color = btnType===type ? '#fff' : 'var(--text2)';
     btn.style.borderColor = btnType===type ? 'var(--accent1)' : 'var(--border)';
   });
+}
+
+function addStudentFromSlot(slotKey) {
+  const name = document.getElementById('uur-new-name')?.value?.trim();
+  const klasId = document.getElementById('uur-new-klas')?.value?.trim();
+  const school = document.getElementById('uur-new-school')?.value?.trim();
+  if(!name) { showToast('⚠️ Naam is verplicht'); return; }
+  if(!klasId) { showToast('⚠️ Klas is verplicht'); return; }
+
+  // Find or create the class in state.groups
+  let targetClass = null;
+  let targetGroup = null;
+  state.groups.forEach(g=>g.classes.forEach(c=>{ if(c.id===klasId||c.name===klasId){targetClass=c;targetGroup=g;} }));
+
+  if(!targetClass) {
+    // Create new class in first group (or new group)
+    let grp = state.groups[0];
+    if(!grp) { grp = {id:'g'+Date.now(),name:'Groep 1',classes:[]}; state.groups.push(grp); }
+    targetClass = {id:klasId, name:klasId, school:school||'', jaar:null, students:[]};
+    grp.classes.push(targetClass);
+    targetGroup = grp;
+  }
+
+  // Check for duplicate
+  if(targetClass.students.find(s=>s.name.toLowerCase()===name.toLowerCase())) {
+    showToast('⚠️ Leerling bestaat al in deze klas'); return;
+  }
+
+  const newStudent = {id:'s'+Date.now()+'_'+Math.random().toString(36).slice(2,6), name, school:school||targetClass.school||''};
+  targetClass.students.push(newStudent);
+
+  // Auto-link the slot to this group if not already
+  const ur = window._uurrooster;
+  if(!ur.slots[slotKey]) ur.slots[slotKey]={type:'les',lokal:'',label:'',groepIds:[],klasIds:[]};
+  if(targetGroup&&!ur.slots[slotKey].groepIds.includes(targetGroup.id)) {
+    ur.slots[slotKey].groepIds.push(targetGroup.id);
+  }
+  if(!ur.slots[slotKey].klasIds.includes(klasId)) {
+    ur.slots[slotKey].klasIds.push(klasId);
+  }
+
+  saveState();
+  saveUurrooster();
+  showToast(`✅ ${name} toegevoegd aan ${klasId}`);
+
+  // Clear inputs
+  ['uur-new-name','uur-new-klas'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+
+  // Refresh modal
+  openUurSlotEdit(slotKey);
 }
 
 function toggleSlotGroep(key, gId) {
@@ -2728,22 +2810,59 @@ function openStudentOpmerkingen(sId) {
 }
 
 function editWeekEvalInline(wId, sId) {
-  // If we're in uurrooster, open the student detail in modal instead of navigating
-  if (state.view === 'uurrooster') {
-    openSlotStudentDetail(sId);
-    return;
-  }
-  // Navigate to week view and open that week
-  state.selectedWeek = wId;
-  state.view = 'week';
-  // Find the group this student belongs to
-  state.groups.forEach(g=>{
-    g.classes.forEach(c=>{
-      if(c.students.find(st=>st.id===sId)) state.selectedGroup = g.id;
-    });
-  });
-  render();
-  showToast('📝 ' + state.weeks.find(w=>w.id===wId)?.label + ' — bewerk de gegevens hier');
+  // Always open a quick-edit popup — never navigate away
+  const w = state.weeks.find(x=>x.id===wId);
+  const s = allStudents().find(x=>x.id===sId);
+  if(!w||!s) return;
+  const ev = getEval(wId, sId);
+
+  const aanwOpts = ['Aanwezig','Afwezig','Te laat'].map(opt=>
+    `<button onclick="setEvalField('${wId}','${sId}','aanwezig','${opt}');document.getElementById('qe-aanw-${opt.replace(' ','-')}').classList.add('sel-${opt.replace(' ','-')}');document.querySelectorAll('.qe-aanw-btn').forEach(b=>b!==document.getElementById('qe-aanw-${opt.replace(' ','-')}')&&b.classList.remove('sel-Aanwezig','sel-Afwezig','sel-Te-laat'))"
+     id="qe-aanw-${opt.replace(' ','-')}" class="aanw-btn qe-aanw-btn ${(ev.aanwezig||'Aanwezig')===opt?'sel-'+opt.replace(' ','-'):''}"
+     style="font-size:11px;padding:4px 10px">${opt}</button>`).join('');
+
+  let catEdits = state.categories.map(cat=>{
+    const v = ev[cat.id];
+    if(cat.type==='rating') {
+      const opts = ['Uitstekend','Goed','Voldoende','Onvoldoende','Slecht'];
+      const btns = opts.map(r=>`<button onclick="setEvalField('${wId}','${sId}','${cat.id}','${r}');this.closest('.qe-cat-row').querySelectorAll('.r-btn').forEach(b=>b.classList.remove('sel-Uitstekend','sel-Goed','sel-Voldoende','sel-Onvoldoende','sel-Slecht'));this.classList.add('sel-${r}')"
+        class="r-btn ${v===r?'sel-'+r:''}" style="font-size:10px;padding:2px 7px">${r}</button>`).join('');
+      return `<div class="qe-cat-row" style="margin-bottom:8px"><div style="font-size:10px;font-weight:800;color:var(--text3);margin-bottom:4px">${esc(cat.label)}</div><div class="rating-group" style="flex-direction:row;flex-wrap:wrap;gap:3px">${btns}</div></div>`;
+    } else if(cat.type==='boolean') {
+      return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <span style="font-size:10px;font-weight:700;color:var(--text3);min-width:80px">${esc(cat.label)}</span>
+        <button onclick="setEvalField('${wId}','${sId}','${cat.id}',true);this.classList.add('sel-yes');this.nextElementSibling.classList.remove('sel-yes')" class="bool-btn ${v===true?'sel-yes':''}" style="font-size:10px">✓ Ja</button>
+        <button onclick="setEvalField('${wId}','${sId}','${cat.id}',false);this.classList.add('sel-no');this.previousElementSibling.classList.remove('sel-no')" class="bool-btn ${v===false?'sel-no':''}" style="font-size:10px">✗ Nee</button>
+      </div>`;
+    } else {
+      return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <span style="font-size:10px;font-weight:700;color:var(--text3);min-width:80px">${esc(cat.label)}</span>
+        <input type="number" value="${v??''}" onchange="setEvalField('${wId}','${sId}','${cat.id}',this.value)" style="width:70px;border:1.5px solid var(--border);border-radius:6px;padding:4px 8px;font-size:12px;font-family:'Nunito',sans-serif">
+      </div>`;
+    }
+  }).join('');
+
+  openModal(`
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:18px">✏️ ${esc(s.name)}</div>
+        <div style="font-size:11px;color:var(--text3)">${esc(w.label)} · ${esc(w.dateStr||'')}</div>
+      </div>
+      <button onclick="closeModal()" style="margin-left:auto;background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕</button>
+    </div>
+    <div style="margin-bottom:12px">
+      <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Aanwezigheid</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">${aanwOpts}</div>
+    </div>
+    <div style="margin-bottom:12px">${catEdits}</div>
+    <div style="margin-bottom:12px">
+      <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Opmerking</div>
+      <textarea onchange="setEvalField('${wId}','${sId}','opmerking',this.value)" style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:8px;font-family:'Nunito',sans-serif;font-size:12px;resize:vertical;min-height:60px" placeholder="Notitie...">${esc(ev.opmerking||'')}</textarea>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:8px">
+      <button class="btn btn-ghost" onclick="closeModal()">Sluiten</button>
+    </div>
+  `, '550px');
 }
 
 function renderStudentProfile() {
@@ -2903,8 +3022,12 @@ function renderJaarplannen() {
   }).join('');
   
   return `
-    <div style="font-family:'Playfair Display',serif;font-size:22px;margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+    <div style="font-family:'Playfair Display',serif;font-size:22px;margin-bottom:16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
       📖 Jaarplannen
+      <div style="display:flex;gap:6px;margin-left:auto">
+        <button class="btn btn-secondary btn-sm" onclick="exportJaarplanCSV()" style="font-size:11px">📥 CSV</button>
+        <button class="btn btn-secondary btn-sm" onclick="printJaarplan()" style="font-size:11px">🖨️ PDF</button>
+      </div>
     </div>
     
     <!-- Year selector -->
@@ -3333,6 +3456,77 @@ function doSaveCategory(id) {
   closeModal(); saveState(); showToast("Categorie opgeslagen"); render();
 }
 
+
+// ===================== GROEP/KLAS POPUPS (Dashboard) =====================
+function openGroepPopup(gId) {
+  const g = state.groups.find(x=>x.id===gId);
+  if(!g) return;
+  const sortedCls = [...g.classes].sort((a,b)=>a.name.localeCompare(b.name,'nl',{numeric:true}));
+  let html = sortedCls.map(c=>{
+    const sortedStudents = [...c.students].sort((a,b)=>a.name.localeCompare(b.name,'nl'));
+    return `<div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:10px">
+      <div style="background:var(--cream);padding:8px 12px;display:flex;align-items:center;gap:8px">
+        <span style="font-weight:800;font-size:13px;color:var(--text);cursor:pointer" onclick="closeModal();openKlasPopup('${c.id}')">${esc(c.name)}</span>
+        <span style="font-size:10px;color:var(--text3)">${esc(c.school||'')} ${c.jaar?'· '+c.jaar+'e jaar':''}</span>
+        <span class="badge badge-pink" style="margin-left:auto">${c.students.length}</span>
+      </div>
+      <div style="padding:8px 12px;display:flex;flex-wrap:wrap;gap:4px">
+        ${sortedStudents.map(s=>`<span onclick="closeModal();openStudentProfile('${s.id}')" style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:3px 10px;font-size:11px;font-weight:600;cursor:pointer;color:var(--text2)" onmouseover="this.style.borderColor='var(--accent1)';this.style.color='var(--accent1)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">${esc(s.name)}</span>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+  openModal(`
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:20px">📚 ${esc(g.name)}</div>
+        <div style="font-size:11px;color:var(--text3)">${g.classes.reduce((s,c)=>s+c.students.length,0)} leerlingen · ${g.classes.length} klassen</div>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:6px">
+        <button onclick="closeModal();switchView('settings')" style="padding:4px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--cream);cursor:pointer;font-size:11px;font-weight:700;color:var(--text3);font-family:'Nunito',sans-serif">✏️ Bewerken</button>
+        <button onclick="closeModal()" style="background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕</button>
+      </div>
+    </div>
+    <div style="max-height:65vh;overflow-y:auto">${html||'<div style="color:var(--text3);text-align:center;padding:20px">Geen klassen</div>'}</div>
+  `, '650px');
+}
+
+function openKlasPopup(classId) {
+  let found=null, foundGroup=null;
+  state.groups.forEach(g=>g.classes.forEach(c=>{ if(c.id===classId){found=c;foundGroup=g;} }));
+  if(!found) return;
+  const sortedStudents = [...found.students].sort((a,b)=>a.name.localeCompare(b.name,'nl'));
+  const currentWId = state.selectedWeek;
+  const currentWeekLabel = state.weeks.find(w=>w.id===currentWId)?.label||'';
+  const rating = state.categories.find(c=>c.type==='rating');
+  const studentRows = sortedStudents.map(s=>{
+    const ev = getEval(currentWId, s.id);
+    const aanw = ev.aanwezig||'Aanwezig';
+    const color = aanw==='Afwezig'?'#f87171':aanw==='Te laat'?'#fbbf24':'#34d399';
+    const ratingVal = rating ? (ev[rating.id]||'—') : '';
+    return `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+      <span style="width:8px;height:8px;border-radius:50%;background:${color};flex-shrink:0"></span>
+      <span onclick="closeModal();openStudentProfile('${s.id}')" style="font-size:13px;font-weight:700;color:var(--text);cursor:pointer;flex:1" onmouseover="this.style.color='var(--accent1)'" onmouseout="this.style.color='var(--text)'">${esc(s.name)}</span>
+      <span style="font-size:10px;color:var(--text3)">${esc(aanw)}</span>
+      ${ratingVal&&ratingVal!=='—'?`<span style="font-size:10px;background:var(--surface2);border-radius:6px;padding:2px 7px;font-weight:700;color:var(--text2)">${esc(ratingVal)}</span>`:''}
+      <button onclick="editWeekEvalInline('${currentWId}','${s.id}')" style="background:none;border:1px solid var(--border);border-radius:6px;padding:2px 7px;cursor:pointer;font-size:10px;color:var(--text3);font-family:'Nunito',sans-serif">✏️</button>
+    </div>`;
+  }).join('');
+  openModal(`
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:20px">🎓 ${esc(found.name)}</div>
+        <div style="font-size:11px;color:var(--text3)">${esc(found.school||'')} · ${foundGroup?esc(foundGroup.name):''} · ${found.students.length} leerlingen</div>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:6px">
+        <button onclick="closeModal();modalEditClass('${classId}')" style="padding:4px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--cream);cursor:pointer;font-size:11px;font-weight:700;color:var(--text3);font-family:'Nunito',sans-serif">✏️ Bewerken</button>
+        <button onclick="closeModal()" style="background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕</button>
+      </div>
+    </div>
+    <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:10px">📅 ${esc(currentWeekLabel)} — aanwezigheid & beoordeling</div>
+    <div style="max-height:60vh;overflow-y:auto">${studentRows||'<div style="color:var(--text3);text-align:center;padding:20px">Geen leerlingen</div>'}</div>
+  `, '600px');
+}
+
 // ===================== KLAS LESOVERZICHT =====================
 function openKlasOverzicht(classId) {
   const cls = allClasses().find(c => c.id === classId);
@@ -3486,9 +3680,13 @@ function modalYearSwitcher() {
     <div class="form-group">
       <input class="form-input" id="m-newyear" placeholder="bijv. 2026-2027" autofocus>
     </div>
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
       <input type="checkbox" id="m-copystudents" style="accent-color:var(--accent1);width:15px;height:15px">
       <label for="m-copystudents" style="font-size:12px;color:var(--text2);cursor:pointer">Leerlingen kopiëren naar nieuw jaar</label>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+      <input type="checkbox" id="m-copyuurrooster" style="accent-color:var(--accent1);width:15px;height:15px">
+      <label for="m-copyuurrooster" style="font-size:12px;color:var(--text2);cursor:pointer">Uurrooster meenemen naar nieuw jaar</label>
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end">
       <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
@@ -3531,6 +3729,72 @@ function setStartDate(val) {
   state.startDate = val;
   recalcWeekDates();
   saveState(); showToast("Datums herberekend!"); render();
+}
+
+function exportUurroosterCSV() {
+  const ur = window._uurrooster;
+  const DAGS = ['ma','di','wo','do','vr'];
+  const DAG_NL = {ma:'Maandag',di:'Dinsdag',wo:'Woensdag',do:'Donderdag',vr:'Vrijdag'};
+  let rows = [['Dag','Uur','Tijd','Type','Lokaal','Groepen','Klassen','Label']];
+  ur.tijden.forEach(t=>{
+    DAGS.forEach(dag=>{
+      const slot = ur.slots[`${dag}-${t.uur}`] || {type:'vrij'};
+      const groepNames = (slot.groepIds||[]).map(id=>{
+        const g=state.groups.find(x=>x.id===id||x.name===id); return g?g.name:id;
+      });
+      rows.push([DAG_NL[dag], t.uur, `${t.start}-${t.end}`, slot.type||'vrij', slot.lokal||'', groepNames.join('; '), (slot.klasIds||[]).join('; '), slot.label||'']);
+    });
+  });
+  const csv = rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob(['\ufeff'+csv], {type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=`uurrooster_${state.schoolYear}.csv`; a.click();
+  showToast('📥 Uurrooster CSV gedownload!');
+}
+
+function printUurrooster() {
+  const content = document.querySelector('.main')?.innerHTML || '';
+  const win = window.open('','_blank');
+  win.document.write(`<html><head><title>Uurrooster ${esc(state.schoolYear)}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>body{font-family:'Nunito',sans-serif;padding:20px;font-size:11px}
+    button,.btn,.nav-tabs{display:none!important}
+    @media print{@page{size:landscape}}</style></head>
+    <body>${content}</body></html>`);
+  setTimeout(()=>{win.print();}, 800);
+}
+
+function exportJaarplanCSV() {
+  const selectedJaar = state._jpSelectedJaar || '1';
+  const plan = JAARPLAN[selectedJaar] || [];
+  const base = new Date(state.startDate);
+  const bd = base.getDay(); base.setDate(base.getDate()+(bd===0?-6:1-bd));
+  let rows = [['Week','Datum','Thema','Lesinhoud']];
+  plan.forEach((e,idx)=>{
+    const ws = new Date(base); ws.setDate(base.getDate()+idx*7);
+    const we = new Date(ws); we.setDate(ws.getDate()+4);
+    const fmt = d=>`${d.getDate()}/${d.getMonth()+1}`;
+    const dateStr = `${fmt(ws)}-${fmt(we)}`;
+    rows.push([`W${idx+1}`, dateStr, e.vac?'Vakantie':(e.thema||''), e.vac?(e.naam||'Vakantie'):(e.les||'')]);
+  });
+  const csv = rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob(['\ufeff'+csv], {type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=`jaarplan_jaar${selectedJaar}_${state.schoolYear}.csv`; a.click();
+  showToast('📥 Jaarplan CSV gedownload!');
+}
+
+function printJaarplan() {
+  const content = document.querySelector('.main')?.innerHTML || '';
+  const win = window.open('','_blank');
+  win.document.write(`<html><head><title>Jaarplan ${esc(state.schoolYear)}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>body{font-family:'Nunito',sans-serif;padding:20px;font-size:11px}
+    button,.btn{display:none!important}table{border-collapse:collapse;width:100%}
+    th,td{border:1px solid #ddd;padding:6px 8px;text-align:left;font-size:10px}
+    @media print{@page{size:A4}}</style></head>
+    <body>${content}</body></html>`);
+  setTimeout(()=>{win.print();}, 800);
 }
 
 function exportData() {
