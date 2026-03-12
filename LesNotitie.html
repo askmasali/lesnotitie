@@ -1654,7 +1654,7 @@ function renderDashboard() {
   // Per group stats
   const groupStats = state.groups.map(g=>{
     const gStudents = g.classes.flatMap(c=>c.students);
-    return { name:g.name, count:gStudents.length, classes:g.classes.map(c=>({name:c.name,school:c.school,count:c.students.length})) };
+    return { id:g.id, name:g.name, count:gStudents.length, classes:g.classes.map(c=>({id:c.id,name:c.name,school:c.school,count:c.students.length,jaar:c.jaar})) };
   });
 
   // Attendance stats for past weeks
@@ -1695,19 +1695,35 @@ function renderDashboard() {
   }).join('') : '<div style="width:100%;height:100%;background:var(--border);border-radius:8px"></div>';
 
   // Group cards
+  // Pre-compute opmerkingen per class
+  const opmPerKlas = {};
+  state.groups.forEach(g=>g.classes.forEach(c=>{
+    let cnt=0;
+    c.students.forEach(s=>{
+      state.weeks.forEach(w=>{
+        const ev=state.evaluations?.[w.id+'_'+s.id];
+        if(ev?.opmerking?.trim()) cnt++;
+      });
+    });
+    opmPerKlas[c.id]=cnt;
+  }));
+
   const groupCards = groupStats.map((g,gi)=>`
     <div class="card" style="padding:16px">
       <div style="font-weight:800;font-size:15px;color:var(--accent1);margin-bottom:10px;cursor:pointer" onclick="openGroepPopup('${g.id}')" title="Bekijk groepdetails">📚 ${esc(g.name)} <span style="font-size:10px;opacity:.6">↗</span></div>
       <div style="font-size:28px;font-weight:900;color:var(--text);margin-bottom:4px">${g.count}</div>
       <div style="font-size:11px;color:var(--text3);margin-bottom:10px">leerlingen</div>
-      ${g.classes.map(c=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-top:1px solid var(--border)">
-        <div>
+      ${g.classes.map(c=>{
+        const opmCnt = opmPerKlas[c.id]||0;
+        return `<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-top:1px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">
           <span style="font-size:12px;font-weight:700;color:var(--accent1);cursor:pointer" onclick="openKlasPopup('${c.id}')" title="Klas bekijken">${esc(c.name)}</span>
-          <span style="font-size:10px;color:var(--text3);margin-left:6px">${esc(c.school)}</span>
-          ${c.jaar?`<span style="font-size:9px;background:var(--accent1)22;color:var(--accent1);border-radius:6px;padding:1px 5px;font-weight:700;margin-left:4px">${c.jaar}e jr</span>`:''}
+          <span style="font-size:10px;color:var(--text3)">${esc(c.school)}</span>
+          ${c.jaar?`<span style="font-size:9px;background:var(--accent1)22;color:var(--accent1);border-radius:6px;padding:1px 5px;font-weight:700">${c.jaar}e jr</span>`:''}
+          ${opmCnt?`<span style="font-size:9px;background:#fef3c722;color:#d97706;border-radius:6px;padding:1px 5px;font-weight:700">💬 ${opmCnt}</span>`:''}
         </div>
         <span class="badge badge-pink">${c.count}</span>
-      </div>`).join('')}
+      </div>`;}).join('')}
     </div>`).join('');
 
   // Quick search box
@@ -2112,32 +2128,8 @@ const DEFAULT_UURROOSTER = {
   ],
   // slot: {dag, uur} -> {type:'les'|'vrij'|'wacht'|'toezicht'|'custom', lokal, groepIds:[], label}
   // Stored per slot key: "ma-1", "di-2", etc.
-  slots: {
-    "ma-5": {type:"les", lokal:"Speelhof", label:"", groepIds:[], klasIds:[]},
-    "ma-6": {type:"les", lokal:"Speelhof", label:"", groepIds:[], klasIds:[]},
-    "ma-7": {type:"les", lokal:"Speelhof", label:"", groepIds:[], klasIds:[]},
-    "ma-8": {type:"les", lokal:"Speelhof", label:"", groepIds:[], klasIds:[]},
-    "di-1": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
-    "di-2": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
-    "di-3": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
-    "di-4": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
-    "di-7": {type:"les", lokal:"Speelhof", label:"", groepIds:[], klasIds:[]},
-    "di-8": {type:"les", lokal:"Speelhof", label:"", groepIds:[], klasIds:[]},
-    "do-1": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
-    "do-2": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
-    "do-3": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
-    "do-4": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
-    "do-5": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
-    "do-6": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
-    "do-7": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
-    "vr-1": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
-    "vr-2": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
-    "vr-3": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
-    "vr-4": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
-    "vr-5": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
-    "vr-6": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
-    "vr-7": {type:"les", lokal:"Tichelrij", label:"", groepIds:[], klasIds:[]},
-  },
+  slots: {},  // User fills in manually
+
   // Toezicht labels (shown under pauze rows)
   toezicht: {
     3: "Toezicht Tichelrij: 11:00–11:15 (Speelplaats)",
@@ -2254,20 +2246,35 @@ function renderUurSlotCell(key, slot) {
   } else if (slot.type !== 'les') {
     content = `<div style="font-size:10px;font-weight:700;color:${color};text-align:center;padding:4px 2px">${esc(slot.label||slot.type.toUpperCase())}</div>`;
   } else {
-    // Les slot
-    const lokal = slot.lokal ? `<div style="display:inline-block;background:${color}22;color:${color};border-radius:4px;padding:1px 5px;font-size:9px;font-weight:800;margin-bottom:3px">${esc(slot.lokal)}</div>` : '';
-    // Find matching groups from state
-    const groepNames = (slot.groepIds||[]).map(id=>{
-      const g = state.groups.find(x=>x.id===id || x.name===id);
-      return g ? g.name : id;
-    });
-    const klasNames = (slot.klasIds||[]);
-    const groepStr = groepNames.length ? groepNames.join(', ') : '';
-    const klasStr = klasNames.slice(0,3).join(', ') + (klasNames.length>3?` +${klasNames.length-3}`:'');
+    // Les slot — new layout: lokaal top, school top-left, groep, klassen (with count), leerlingen link
+    const lokalBadge = slot.lokal ? `<div style="display:inline-block;background:${color}22;color:${color};border-radius:4px;padding:1px 5px;font-size:9px;font-weight:800;margin-bottom:3px">${esc(slot.lokal)}</div>` : '';
     
-    content = `${lokal}
-      ${groepStr ? `<div style="font-size:9px;font-weight:800;color:${color};margin-bottom:1px;cursor:pointer" onclick="event.stopPropagation();openGroepDetailFromSlot('${(slot.groepIds||[]).join(',')}')">${esc(groepStr)}</div>` : ''}
-      <div style="font-size:9px;color:var(--text2);line-height:1.3">${esc(klasStr)}</div>`;
+    // Build groep detail: school > groep > klassen > leerlingen link
+    let groepBlocks = '';
+    const groepIds = slot.groepIds||[];
+    if(groepIds.length) {
+      groepIds.forEach(gId => {
+        const g = state.groups.find(x=>x.id===gId||x.name===gId);
+        if(!g) return;
+        // School name (from first class)
+        const school = g.classes[0]?.school||'';
+        // Count total students in this groep
+        const totalSt = g.classes.reduce((s,c)=>s+c.students.length,0);
+        groepBlocks += `<div style="margin-bottom:2px">`;
+        if(school) groepBlocks += `<div style="font-size:8px;color:var(--text3);font-weight:700;letter-spacing:.3px">${esc(school)}</div>`;
+        groepBlocks += `<div style="font-size:9px;font-weight:900;color:${color};cursor:pointer" onclick="event.stopPropagation();openGroepDetailFromSlot('${gId}')">📚 ${esc(g.name)} <span style="font-weight:600;opacity:.7">(${totalSt})</span></div>`;
+        // Klassen
+        const sortedCls = [...g.classes].sort((a,b)=>a.name.localeCompare(b.name,'nl',{numeric:true}));
+        sortedCls.forEach(c=>{
+          groepBlocks += `<div style="font-size:8px;color:var(--text2);padding-left:6px;cursor:pointer" onclick="event.stopPropagation();openKlasPopup('${c.id}')">— ${esc(c.name)} (${c.students.length}) <span style="color:var(--accent2);text-decoration:underline">👥</span></div>`;
+        });
+        groepBlocks += `</div>`;
+      });
+    } else {
+      groepBlocks = `<div style="font-size:8px;color:var(--text3);font-style:italic">Geen groep</div>`;
+    }
+    
+    content = `${lokalBadge}${groepBlocks}`;
   }
   
   // Count students in this slot
@@ -2568,53 +2575,8 @@ function saveTijd(idx) {
 }
 
 function openGroepDetailFromSlot(groepIdsStr) {
-  const groepIds = groepIdsStr.split(',').filter(Boolean);
-  // Show all groups with their classes and students, with stats
-  const currentWId = state.selectedWeek;
-  
-  let html = '';
-  groepIds.forEach(gId => {
-    const g = state.groups.find(x=>x.id===gId||x.name===gId);
-    if(!g) return;
-    
-    html += `<div style="margin-bottom:16px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-        <div style="font-size:16px;font-weight:900;color:var(--accent1)">📚 ${esc(g.name)}</div>
-        <button onclick="closeModal();switchView('settings')" style="padding:4px 12px;border-radius:8px;border:1px solid var(--border);background:var(--cream);cursor:pointer;font-size:11px;font-weight:700;color:var(--text3);font-family:'Nunito',sans-serif">✏️ Bewerken in Instellingen</button>
-      </div>`;
-    
-    const sortedCls = [...g.classes].sort((a,b)=>a.name.localeCompare(b.name,'nl',{numeric:true}));
-    sortedCls.forEach(c => {
-      const sortedStudents = [...c.students].sort((a,b)=>a.name.localeCompare(b.name,'nl'));
-      html += `<div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:8px">
-        <div style="background:var(--cream);padding:8px 12px;display:flex;align-items:center;gap:8px">
-          <span style="font-weight:800;font-size:13px;color:var(--text)">${esc(c.name)}</span>
-          <span style="font-size:10px;color:var(--text3)">${esc(c.school||'')} · ${c.students.length} leerlingen</span>
-          ${c.jaar?`<span style="font-size:10px;background:var(--accent1)22;color:var(--accent1);border-radius:8px;padding:1px 6px;font-weight:700">${c.jaar}e jaar</span>`:''}
-        </div>
-        <div style="padding:8px 12px;display:flex;flex-wrap:wrap;gap:4px">
-          ${sortedStudents.map(s => {
-            const ev = getEval(currentWId, s.id);
-            const aanw = ev.aanwezig || 'Aanwezig';
-            const aanwColor = aanw==='Afwezig'?'#f87171':aanw==='Te laat'?'#fbbf24':'#34d399';
-            return `<div onclick="closeModal();openStudentProfile('${s.id}')" style="display:flex;align-items:center;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:4px 10px;cursor:pointer;transition:all .12s" onmouseover="this.style.borderColor='var(--accent1)'" onmouseout="this.style.borderColor='var(--border)'">
-              <span style="width:7px;height:7px;border-radius:50%;background:${aanwColor};flex-shrink:0"></span>
-              <span style="font-size:11px;font-weight:700;color:var(--text)">${esc(s.name)}</span>
-            </div>`;
-          }).join('')}
-        </div>
-      </div>`;
-    });
-    html += `</div>`;
-  });
-  
-  openModal(`
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
-      <div style="font-family:'Playfair Display',serif;font-size:18px">Groep overzicht</div>
-      <button onclick="closeModal()" style="margin-left:auto;background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕</button>
-    </div>
-    <div style="max-height:70vh;overflow-y:auto">${html || '<div style="color:var(--text3);text-align:center;padding:20px">Geen groepen gevonden</div>'}</div>
-  `, '750px');
+  const gId = groepIdsStr.split(',')[0];
+  openGroepPopup(gId);
 }
 
 function openUurroosterSettings() {
@@ -2827,7 +2789,7 @@ function editWeekEvalInline(wId, sId) {
       const opts = ['Uitstekend','Goed','Voldoende','Onvoldoende','Slecht'];
       const btns = opts.map(r=>`<button onclick="setEvalField('${wId}','${sId}','${cat.id}','${r}');this.closest('.qe-cat-row').querySelectorAll('.r-btn').forEach(b=>b.classList.remove('sel-Uitstekend','sel-Goed','sel-Voldoende','sel-Onvoldoende','sel-Slecht'));this.classList.add('sel-${r}')"
         class="r-btn ${v===r?'sel-'+r:''}" style="font-size:10px;padding:2px 7px">${r}</button>`).join('');
-      return `<div class="qe-cat-row" style="margin-bottom:8px"><div style="font-size:10px;font-weight:800;color:var(--text3);margin-bottom:4px">${esc(cat.label)}</div><div class="rating-group" style="flex-direction:row;flex-wrap:wrap;gap:3px">${btns}</div></div>`;
+      return `<div class="qe-cat-row" style="display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap"><div style="font-size:10px;font-weight:800;color:var(--text3);min-width:80px;flex-shrink:0">${esc(cat.label)}</div><div style="display:flex;flex-wrap:wrap;gap:3px">${btns}</div></div>`;
     } else if(cat.type==='boolean') {
       return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
         <span style="font-size:10px;font-weight:700;color:var(--text3);min-width:80px">${esc(cat.label)}</span>
@@ -3464,22 +3426,34 @@ function openGroepPopup(gId) {
   const sortedCls = [...g.classes].sort((a,b)=>a.name.localeCompare(b.name,'nl',{numeric:true}));
   let html = sortedCls.map(c=>{
     const sortedStudents = [...c.students].sort((a,b)=>a.name.localeCompare(b.name,'nl'));
+    // Count opmerkingen per student
+    const studentItems = sortedStudents.map(s=>{
+      let opmCnt=0;
+      state.weeks.forEach(w=>{ const ev=state.evaluations?.[w.id+'_'+s.id]; if(ev?.opmerking?.trim()) opmCnt++; });
+      return `<div onclick="closeModal();openStudentProfile('${s.id}')" style="display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:4px 10px;cursor:pointer" onmouseover="this.style.borderColor='var(--accent1)'" onmouseout="this.style.borderColor='var(--border)'">
+        <span style="font-size:11px;font-weight:700;color:var(--text2)">${esc(s.name)}</span>
+        ${opmCnt?`<span style="font-size:9px;background:#fef3c7;color:#d97706;border-radius:6px;padding:1px 5px;font-weight:700">💬${opmCnt}</span>`:''}
+      </div>`;
+    }).join('');
+    // Total opmerkingen for the class
+    let clsOpm=0;
+    c.students.forEach(s=>{ state.weeks.forEach(w=>{ const ev=state.evaluations?.[w.id+'_'+s.id]; if(ev?.opmerking?.trim()) clsOpm++; }); });
     return `<div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:10px">
-      <div style="background:var(--cream);padding:8px 12px;display:flex;align-items:center;gap:8px">
-        <span style="font-weight:800;font-size:13px;color:var(--text);cursor:pointer" onclick="closeModal();openKlasPopup('${c.id}')">${esc(c.name)}</span>
-        <span style="font-size:10px;color:var(--text3)">${esc(c.school||'')} ${c.jaar?'· '+c.jaar+'e jaar':''}</span>
+      <div style="background:var(--cream);padding:8px 12px;display:flex;align-items:center;gap:8px;cursor:pointer" onclick="closeModal();openKlasPopup('${c.id}')">
+        <span style="font-weight:800;font-size:13px;color:var(--accent1)">${esc(c.name)}</span>
+        <span style="font-size:10px;color:var(--text3)">${esc(c.school||'')} ${c.jaar?'· '+c.jaar+'e jr':''}</span>
+        ${clsOpm?`<span style="font-size:9px;background:#fef3c7;color:#d97706;border-radius:6px;padding:1px 6px;font-weight:700">💬 ${clsOpm}</span>`:''}
         <span class="badge badge-pink" style="margin-left:auto">${c.students.length}</span>
       </div>
-      <div style="padding:8px 12px;display:flex;flex-wrap:wrap;gap:4px">
-        ${sortedStudents.map(s=>`<span onclick="closeModal();openStudentProfile('${s.id}')" style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:3px 10px;font-size:11px;font-weight:600;cursor:pointer;color:var(--text2)" onmouseover="this.style.borderColor='var(--accent1)';this.style.color='var(--accent1)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">${esc(s.name)}</span>`).join('')}
-      </div>
+      <div style="padding:8px 12px;display:flex;flex-wrap:wrap;gap:4px">${studentItems}</div>
     </div>`;
   }).join('');
+  const totalSt = g.classes.reduce((s,c)=>s+c.students.length,0);
   openModal(`
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
       <div>
         <div style="font-family:'Playfair Display',serif;font-size:20px">📚 ${esc(g.name)}</div>
-        <div style="font-size:11px;color:var(--text3)">${g.classes.reduce((s,c)=>s+c.students.length,0)} leerlingen · ${g.classes.length} klassen</div>
+        <div style="font-size:11px;color:var(--text3)">${totalSt} leerlingen · ${g.classes.length} klassen</div>
       </div>
       <div style="margin-left:auto;display:flex;gap:6px">
         <button onclick="closeModal();switchView('settings')" style="padding:4px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--cream);cursor:pointer;font-size:11px;font-weight:700;color:var(--text3);font-family:'Nunito',sans-serif">✏️ Bewerken</button>
