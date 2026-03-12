@@ -249,7 +249,9 @@
   <div class="nav-tabs">
     <button class="nav-tab" onclick="switchView('dashboard')">🏠 Ana Sayfa</button>
     <button class="nav-tab active" onclick="switchView('week')">Weekoverzicht</button>
+    <button class="nav-tab" onclick="switchView('uurrooster')">📅 Uurrooster</button>
     <button class="nav-tab" onclick="switchView('student-list')">Leerlingen</button>
+    <button class="nav-tab" onclick="switchView('jaarplannen')">📖 Jaarplannen</button>
     <button class="nav-tab" onclick="switchView('settings')">Instellingen</button>
   </div>
 </header>
@@ -823,7 +825,260 @@ const JAARPLAN = {
 ],
 };
 
-// Get jaarplan week for a class based on school week number (1-44)
+// ===================== LEERDOELEN PER JAAR =====================
+const LEERDOELEN = {
+"1": {
+  "GELOOFSLEER": [
+    "de waarde en betekenis van het geloof.",
+    "het bestaan van de Schepper vatten, uitgaande van de structurele orde van het universum.",
+    "de attributen van Allah oplijsten en verklaren.",
+    "met zorg goede daden verrichten omdat ze inzien dat de engelen te allen tijde met hen zijn.",
+    "de 4 heilige boeken van Allah opnoemen.",
+    "de liefde voor profeten voelen en de geloofsfundamenten kennen.",
+    "de kenmerken en taken van de engelen opnoemen.",
+    "inzien dat vals geloof zoals waarzeggerij en magie een slechte invloed heeft op de gemeenschap.",
+    "begrippen zoals hiernamaals, laatste dag, hisâb, mîzân, hemel en hel verklaren.",
+  ],
+  "AANBIDDING": [
+    "inzien dat de doea een aanbidding is en alleen aan Allah gericht kan zijn.",
+    "de waarde van het gebed verwoorden.",
+    "de rituele wassingen woedoe en ghoesl beschrijven en toepassen.",
+    "het gebed verrichten en de 5 zuilen van de Islam opsommen.",
+    "het belang van de maand Ramadan en wat haar zo belangrijk maakt.",
+    "omschrijven wat vasten is en waarom men vast.",
+    "de betekenis van de begrippen sahôer, imsâk, iftâr, moeqâbala, tarâwîh-gebeden en fitra.",
+    "de daden die het vasten breken specificeren.",
+    "soera al-Mâoen van buiten opzeggen.",
+  ],
+  "HET LEVEN VAN DE PROFEET": [
+    "inzien dat Mohammed net zoals wij een mens was, door voorbeelden te geven uit Koranverzen.",
+    "inzien dat het ontvangen van de openbaring Mohammed bijzonder maakte.",
+    "voorbeelden geven uit Koranverzen over de hoedanigheid van Mohammed als profeet.",
+    "inzien dat het één van de taken van Mohammed was om de Koran uit te leggen.",
+    "inzien waarom Mohammed voor de mensheid als genade is gestuurd.",
+  ],
+  "DE KORAN": [
+    "het belang inzien van het intellect in het begrijpen van de godsdienst.",
+    "voorbeelden geven dat de Koran belang hecht aan het gebruiken van het verstand.",
+    "de betekenis van fanatisme en het gevaar ervan uitleggen.",
+    "inzien dat juiste kennis fanatisme voorkomt.",
+  ],
+  "ZEDELIJKHEID": [
+    "de slechte gewoonten die door de Islam zijn verboden toelichten met Koranverzen en hadies.",
+    "de schade van gokken, alcohol en drugs op het individu en de gemeenschap toelichten.",
+    "oplossingen aanbieden om slechte gewoonten en gedragingen te ontvluchten.",
+    "de mensenrechten waarderen.",
+  ],
+  "GODSDIENST EN CULTUUR": [
+    "bepalen wat cultuur en haar aspecten inhouden.",
+    "inzien wat het verschil is tussen godsdienst en cultuur.",
+    "voorbeelden geven uit religieus geïnspireerde taal, gewoonten, muziek en architectuur.",
+  ],
+},
+"2": {
+  "GELOOFSLEER": [
+    "het begrip Lot en voorbeschikking verklaren.",
+    "de fysische, biologische en sociale wetten in het heelal begrijpen.",
+    "de relatie tussen het menselijk intellect en wil en de verantwoordelijkheid verklaren.",
+    "inzien dat het vertrouwen op God geen passief afwachten is.",
+    "Âyatoel-Koersî van buiten leren en de vertaling kennen.",
+  ],
+  "AANBIDDING": [
+    "het belang van delen en bijstand begrijpen bij individu en maatschappij.",
+    "uitleggen wat zakât en liefdadigheid inhouden op het gebied van de eredienst.",
+    "de bijdragen van zakât en liefdadigheid bij individu en maatschappij onderzoeken.",
+    "begrijpen dat de bedeutenis van de haddj en oemra verbonden zijn.",
+    "het belang van de betekenis van offeren op vlak van sociale solidariteit verklaren.",
+  ],
+  "HET LEVEN VAN DE PROFEET": [
+    "voorbeelden van goed gedrag geven uit het leven van Mohammed (vzmh).",
+    "het maatschappelijk belang van het voorbeeldgedrag van de Profeet vatten.",
+    "aantonen dat Mohammed met zijn wijze woorden de mensen naar het goede stuurde.",
+    "voorbeelden aanhalen over het milieuvriendelijk gedrag van Mohammed.",
+  ],
+  "ZEDELIJKHEID": [
+    "inzien wat de rol van religie is in de zedelijkheid van het individu.",
+    "voorbeelden van verheven karaktereigenschappen in de islam vinden.",
+    "het belang van zedelijkheid in het individuele en maatschappelijke leven begrijpen.",
+    "oplossingen tegen onethisch gedrag voorstellen.",
+  ],
+  "GODSDIENST EN CULTUUR": [
+    "de betekenis van universaliteit en de universele waarden begrijpen.",
+    "de redenen voor het ontstaan van verschillende godsdiensten bespreken.",
+    "de fundamentele kenmerken van de grote hedendaagse godsdiensten erkennen.",
+    "tolerant zijn ten opzichte van verschillende religies en overtuigingen.",
+  ],
+},
+"3": {
+  "GELOOFSLEER": [
+    "de positie van de mens in het heelal herkennen.",
+    "inzicht verwerven in de aangeboren behoefte van de mens om te geloven.",
+    "een onderscheid maken tussen monotheïsme, polytheïsme, agnosticisme en atheïsme.",
+    "de eigenschappen en opdrachten van de profeten opnoemen.",
+    "een vergelijking (gelijkenissen) maken tussen de profeten.",
+  ],
+  "AANBIDDING": [
+    "de verschillende categorieën van aanbidding illustreren met voorbeelden.",
+    "weten dat reinheid de basisvoorwaarde is bij aanbidding.",
+    "de verrichting van de kleine en grote rituele wassing leren.",
+    "de eenheid waarderen tussen lichamelijke reinheid en reinheid van het milieu.",
+  ],
+  "HET LEVEN VAN DE PROFEET": [
+    "de samenleving kennen waarin de profeet Mohammed is geboren.",
+    "het begin van de openbaring bestuderen.",
+    "de oorzaken en gevolgen uitleggen van de hidjra.",
+    "de activiteiten van de profeet gericht op een vredevolle samenleving interpreteren.",
+    "de universele principes van de afscheidspreek onderzoeken.",
+  ],
+  "DE KORAN": [
+    "de positie en het belang van de Koran in de Islam uitleggen.",
+    "begrippen ivm de structuur van de Koran kennen: âya, soera, djoez.",
+    "de basisonderwerpen van de Koran kennen (geloof, aanbidding, goed gedrag).",
+    "de positie van de Koran in onze cultuur vertellen met voorbeelden.",
+  ],
+  "ZEDELIJKHEID": [
+    "de stappen opsommen bij het tot stand komen van de waarden.",
+    "de invloed van de godsdienst op de maatschappij onderzoeken.",
+    "inzien dat het gezin de basis vormt van het individu en de maatschappij.",
+    "zich bewust worden van de rechten en plichten in het gezin.",
+  ],
+  "GODSDIENST EN CULTUUR": [
+    "de Hidjrîkalender kennen.",
+    "het verschil begrijpen tussen de Gregoriaanse en de Islamitische kalender.",
+    "inzien dat geluk en verdriet gedeeld worden tijdens feestdagen en heilige nachten.",
+    "de belangrijke dagen bij joden en christenen kennen.",
+  ],
+},
+"4": {
+  "GELOOFSLEER": [
+    "voorbeelden geven die de uniciteit van Allah bewijzen.",
+    "begrijpen dat Allah de mensen beschermt.",
+    "de relatie tussen Allah en de mens sterker maken dankzij smeekbeden en aanbidding.",
+    "de basisgeloofspunten van de Islam opsommen.",
+  ],
+  "AANBIDDING": [
+    "het verband opmerken tussen îmân en ibâda.",
+    "de soorten aanbiddingen opsommen en de basiskenmerken uitleggen.",
+    "het belang inzien van het gebed.",
+    "het individuele en maatschappelijk belang van de armenbelasting en het offer.",
+    "voorbeelden geven over de fundamentele aspecten bij een aanbidding.",
+  ],
+  "HET LEVEN VAN DE PROFEET": [
+    "zich bewust zijn dat Mohammed een mens is zoals de andere mensen.",
+    "begrijpen dat Mohammed een openbaring van Allah ontving.",
+    "met voorbeelden uitleggen dat Mohammed barmhartig is voor de hele mensheid.",
+  ],
+  "DE KORAN": [
+    "de fundamentele doelstellingen van de Koran omschrijven.",
+    "de kennis bezitten over het reciteren en begrijpen van de Koran.",
+    "de vertaling en interpretatie (tafsîr) opzoeken van een vers.",
+  ],
+  "ZEDELIJKHEID": [
+    "de terminologie verklaren over de rechten en de vrijheden.",
+    "de rechten en vrijheden opsommen en het belang op individu en maatschappij inzien.",
+    "respect opbrengen voor de privacy van een ander.",
+    "inzien dat het gebruik van schadelijke stoffen de vrijheden belemmert.",
+  ],
+  "GODSDIENST EN CULTUUR": [
+    "begrijpen dat de wetenschap een menselijk product is.",
+    "inzien dat Islam de wetenschap promoot.",
+    "de bijdrage van de moslims aan de wetenschap kennen.",
+    "inzien hoe slechte gewoontes beginnen en hoe men zich kan beschermen.",
+  ],
+},
+"5": {
+  "GELOOFSLEER": [
+    "de concepten van het lot kunnen uitleggen.",
+    "de relatie begrijpen tussen God en de wil van de mens.",
+    "verband kunnen leggen tussen goed en kwaad en het lot.",
+    "begrijpen dat het geloof in lot de mens niet belemmert maatregelen te nemen.",
+  ],
+  "AANBIDDING": [
+    "het doel van de eredienst begrijpen.",
+    "de voordelen van erediensten bij persoon en maatschappij proberen te begrijpen.",
+    "inzien dat aanbidding gemoedsrust geeft en het zelfvertrouwen versterkt.",
+    "inzien dat er voor problemen in de samenleving een oplossing bereikt wordt door het naleven van gebeden.",
+  ],
+  "HET LEVEN VAN DE PROFEET": [
+    "begrijpen dat Profeet Mohammed een voorbeeld is in het begrip van de Islam.",
+    "gevolgen trekken over de gebeurtenissen en de persoonlijkheid van Profeet Mohammed.",
+    "inzicht hebben in de nood aan kalifaatschap.",
+    "inzicht hebben in de gebeurtenissen van de 4 rechtgeleide kaliefen.",
+  ],
+  "DE KORAN": [
+    "inzien dat de Islam een dynamische religie is, te interpreteren in alle tijden.",
+    "begrijpen dat er bij het verkeerd interpreteren van religie problemen kunnen ontstaan.",
+    "de beginselen van de gemeenschappelijke en constante advies van de Islam.",
+  ],
+  "ZEDELIJKHEID": [
+    "het belang van vrede voor de mensheid.",
+    "ondersteunen dat de Islam een religie is van vrede met voorbeelden uit Koran en hadies.",
+    "de vredelievende persoonlijkheid van Profeet Mohammed illustreren.",
+  ],
+  "GODSDIENST EN CULTUUR": [
+    "samenhang en harmonie opmerken tussen de entiteiten in het universum.",
+    "de nadruk leggen op esthetische schoonheid in de Koran.",
+    "voorbeelden geven van de schoonheid weerspiegeld in de Islamitische beschaving.",
+  ],
+},
+"6": {
+  "GELOOFSLEER": [
+    "beseffen dat het leven een doel heeft.",
+    "beseffen dat bij het betekenis geven van het leven, het geloof in hiernamaals bijdraagt.",
+    "de onvermijdelijkheid van de dood kennen en werken voor blijvende werken.",
+    "de religieuze praktijken beschrijven die voor gestorven mensen uitgevoerd worden.",
+    "de betekenis van begrippen als het Laatste Oordeel en het hiernamaals kennen.",
+  ],
+  "AANBIDDING": [
+    "beseffen dat er aanbiddingen aanwezig zijn in religies en voorbeelden geven.",
+    "beseffen dat er gemeenschappelijke aanbiddingen zijn bij de religies.",
+    "de gelijkaardige en verschillende aspecten bij de religies vergelijken.",
+    "waardering opbrengen voor het aanbidding recht van verschillende religies.",
+  ],
+  "HET LEVEN VAN DE PROFEET": [
+    "de concepten van hadies en de soenna kennen met voorbeelden.",
+    "het belang van hadies en de soenna om de Koran en de Islam te begrijpen.",
+    "de fundamentele boeken van hadies in onze literatuur kennen.",
+  ],
+  "DE KORAN": [
+    "de redenen voor het ontstaan van verschillende mystieke interpretaties kennen.",
+    "bewust zijn van tolerantie en samenleven met voorbeelden over het Soefisme.",
+    "dat verschillende interpretaties rijkdom en veelheid betekenen.",
+    "de redenen van verschillende opvattingen in de Islamitische denkwijze kennen.",
+  ],
+  "ZEDELIJKHEID": [
+    "dat hij als wezen fouten kan maken en dat het een deugd is van zijn fouten te leren.",
+    "dat berouw en vergeving voor zijn daden, van zijn eigen innerlijke wereld komen.",
+    "de algemene doelstellingen van de geboden en verboden van de Islamitische godsdienst.",
+    "a.d.h.v. verzen evalueren dat het islamitische geloof gebaseerd is op gelijkheid en rechtvaardigheid.",
+  ],
+  "GODSDIENST EN CULTUUR": [
+    "de hedendaagse religies kennen en de landen aanwijzen op kaart.",
+    "de gemeenschappelijke kenmerken van de Indiase religies kennen.",
+    "de waarde van de vrouw in de Islam.",
+    "het belang van het huwelijk in de Islam en de procedures rond partnerkeuze.",
+    "rechten van kinderen t.o.v. hun ouders kennen.",
+  ],
+},
+};
+
+// Thema colors for jaarplan display
+const THEMA_COLORS = {
+  'GELOOFSLEER':       '#8b5cf6',
+  'AANBIDDING':        '#3b82f6',
+  'HET LEVEN VAN DE PROFEET': '#10b981',
+  'DE KORAN':          '#f59e0b',
+  'ZEDELIJKHEID':      '#ec4899',
+  'GODSDIENST EN CULTUUR': '#06b6d4',
+  'EVALUATIE':         '#94a3b8',
+  'Herfstvakantie':    '#22c55e',
+  'Kerstvakantie':     '#22c55e',
+  'Krokusvakantie':    '#22c55e',
+  'Paasvakantie':      '#22c55e',
+  'Zomervakantie':     '#22c55e',
+};
+
+
 function getJaarplanWeek(classJaar, weekIdx) {
   if (!classJaar || !JAARPLAN[classJaar]) return null;
   const plan = JAARPLAN[classJaar];
@@ -1019,17 +1274,16 @@ function isWeekInPast(wId) {
 
 function getEval(wId, sId) {
   const stored = state.evaluations[`${wId}_${sId}`] || {};
-  // If week is in the past and no data entered yet, auto-fill Goed defaults
-  if (isWeekInPast(wId)) {
-    const w = state.weeks.find(x => x.id === wId);
-    if (w && !w.isHoliday) {
-      const defaults = { aanwezig: "Aanwezig" };
-      state.categories.forEach(cat => {
-        if (cat.type === 'rating') defaults[cat.id] = "Goed";
-        else if (cat.type === 'boolean') defaults[cat.id] = true;
-      });
-      return { ...defaults, ...stored };
-    }
+  // For current week AND past weeks (not holidays), show Aanwezig + Goed defaults
+  const w = state.weeks.find(x => x.id === wId);
+  const isCurrentWeek = w && wId === state.selectedWeek;
+  if ((isWeekInPast(wId) || isCurrentWeek) && w && !w.isHoliday) {
+    const defaults = { aanwezig: "Aanwezig" };
+    state.categories.forEach(cat => {
+      if (cat.type === 'rating') defaults[cat.id] = "Goed";
+      else if (cat.type === 'boolean') defaults[cat.id] = true;
+    });
+    return { ...defaults, ...stored };
   }
   return stored;
 }
@@ -1134,8 +1388,11 @@ function showToast(msg) {
 }
 
 // ===================== MODAL =====================
-function openModal(html) {
-  document.getElementById('modal-box').innerHTML=html;
+function openModal(html, width) {
+  const box = document.getElementById('modal-box');
+  box.innerHTML=html;
+  if(width) box.style.maxWidth=width;
+  else box.style.maxWidth='';
   document.getElementById('modal').style.display='flex';
 }
 function closeModal() { document.getElementById('modal').style.display='none'; }
@@ -1149,7 +1406,7 @@ function render() {
 
 function renderNavTabs() {
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
-  const map = {'dashboard':0,'week':1,'student-list':2,'student-profile':2,'settings':3};
+  const map = {'dashboard':0,'week':1,'uurrooster':2,'student-list':3,'student-profile':3,'jaarplannen':4,'settings':5};
   const idx = map[state.view] ?? 1;
   document.querySelectorAll('.nav-tab')[idx]?.classList.add('active');
 }
@@ -1176,8 +1433,10 @@ function renderMain() {
   const m = document.getElementById('main-content');
   if(state.view==='dashboard')      { m.innerHTML = renderDashboard(); }
   else if(state.view==='week')      { m.innerHTML = renderWeekView(); }
+  else if(state.view==='uurrooster') { m.innerHTML = renderUurrooster(); }
   else if(state.view==='student-list') { m.innerHTML = renderStudentList(); }
   else if(state.view==='student-profile') { m.innerHTML = renderStudentProfile(); }
+  else if(state.view==='jaarplannen') { m.innerHTML = renderJaarplannen(); }
   else if(state.view==='settings')  { m.innerHTML = renderSettings(); }
 }
 
@@ -1279,7 +1538,7 @@ function renderWeekView() {
         }
       });
 
-      const rowBg = isVacWeek ? 'background:#f0fdf4' : (rowIdx%2===0 ? 'background:#fff9f5' : 'background:var(--surface)');
+      const rowBg = isVacWeek ? 'background:#f0fdf4' : (rowIdx%2===0 ? 'background:var(--surface)' : 'background:var(--cream)');
       rows += `<tr style="${rowBg}">
         <td><span class="student-link" onclick="openStudentProfile('${s.id}')">${esc(s.name)}</span></td>
         <td style="color:var(--text3);font-size:11px">${esc(s.className)}</td>
@@ -1470,7 +1729,7 @@ function renderDashboard() {
       </div>
     </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px">
       <div class="card" style="padding:16px">
         <div style="font-weight:800;font-size:14px;color:var(--text2);margin-bottom:12px">📊 Beoordeling verdeling (verleden)</div>
         ${totalRatings>0 ? `
@@ -1478,7 +1737,7 @@ function renderDashboard() {
           <div style="display:flex;flex-wrap:wrap;gap:6px">
             ${Object.entries(ratingCounts).map(([k,v])=>{
               const colors={Uitstekend:'#34d399',Goed:'#60a5fa',Voldoende:'#fbbf24',Onvoldoende:'#fb923c',Slecht:'#f87171'};
-              return `<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:${colors[k]}22;color:${colors[k]}">${k}: ${v}</span>`;
+              return `<span onclick="openBeoordelingDetail('${k}')" style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:${colors[k]}22;color:${colors[k]};cursor:pointer;transition:opacity .12s" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'">${k}: ${v}</span>`;
             }).join('')}
           </div>` : '<div style="font-size:12px;color:var(--text3)">Nog geen gegevens</div>'}
       </div>
@@ -1486,10 +1745,18 @@ function renderDashboard() {
         <div style="font-weight:800;font-size:14px;color:var(--text2);margin-bottom:8px">📅 Aanwezigheid (verleden)</div>
         ${pastWeeks.length>0 ? `
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center">
-            <div><div style="font-size:22px;font-weight:900;color:#34d399">${totalEntries-absentCount-lateCount}</div><div style="font-size:10px;color:var(--text3)">Aanwezig</div></div>
-            <div><div style="font-size:22px;font-weight:900;color:#fbbf24">${lateCount}</div><div style="font-size:10px;color:var(--text3)">Te laat</div></div>
-            <div><div style="font-size:22px;font-weight:900;color:#f87171">${absentCount}</div><div style="font-size:10px;color:var(--text3)">Afwezig</div></div>
+            <div style="cursor:pointer;padding:6px;border-radius:8px;transition:background .12s" onclick="openAanwezigheidDetail('aanwezig')" onmouseover="this.style.background='#34d39922'" onmouseout="this.style.background='transparent'"><div style="font-size:22px;font-weight:900;color:#34d399">${totalEntries-absentCount-lateCount}</div><div style="font-size:10px;color:var(--text3)">Aanwezig</div></div>
+            <div style="cursor:pointer;padding:6px;border-radius:8px;transition:background .12s" onclick="openAanwezigheidDetail('telaat')" onmouseover="this.style.background='#fbbf2422'" onmouseout="this.style.background='transparent'"><div style="font-size:22px;font-weight:900;color:#fbbf24">${lateCount}</div><div style="font-size:10px;color:var(--text3)">Te laat</div></div>
+            <div style="cursor:pointer;padding:6px;border-radius:8px;transition:background .12s" onclick="openAanwezigheidDetail('afwezig')" onmouseover="this.style.background='#f8717122'" onmouseout="this.style.background='transparent'"><div style="font-size:22px;font-weight:900;color:#f87171">${absentCount}</div><div style="font-size:10px;color:var(--text3)">Afwezig</div></div>
           </div>` : '<div style="font-size:12px;color:var(--text3)">Nog geen gegevens</div>'}
+      </div>
+      <div class="card" style="padding:16px">
+        <div style="font-weight:800;font-size:14px;color:var(--text2);margin-bottom:12px">💬 Opmerkingen</div>
+        ${(()=>{
+          let total=0;
+          allStudents().forEach(s=>{state.weeks.forEach(w=>{const ev=state.evaluations?.[w.id]?.[s.id];if(ev?.opmerking?.trim())total++;});});
+          return total>0 ? `<div style="font-size:36px;font-weight:900;color:var(--accent1);cursor:pointer" onclick="openOpmerkingDetail()">${total}</div><div style="font-size:10px;color:var(--text3);margin-top:4px">opmerkingen in totaal</div><div style="font-size:11px;color:var(--accent1);margin-top:8px;cursor:pointer;font-weight:700" onclick="openOpmerkingDetail()">Bekijk per leerling →</div>` : '<div style="font-size:12px;color:var(--text3)">Nog geen opmerkingen</div>';
+        })()}
       </div>
     </div>
 
@@ -1499,6 +1766,164 @@ function renderDashboard() {
       </div>
       ${searchBox}
     </div>`;
+}
+
+function openAanwezigheidDetail(filter) {
+  // Collect all students with aanwezigheid issues
+  const filterMap = {'afwezig':'Afwezig','telaat':'Te laat','aanwezig':'Aanwezig'};
+  const filterVal = filterMap[filter];
+  const filterLabel = {afwezig:'Afwezig',telaat:'Te laat',aanwezig:'Aanwezig'}[filter];
+  const filterColor = {afwezig:'#f87171',telaat:'#fbbf24',aanwezig:'#34d399'}[filter];
+  
+  const today = new Date(); today.setHours(0,0,0,0);
+  const base=new Date(state.startDate); const d=base.getDay(); base.setDate(base.getDate()+(d===0?-6:1-d));
+  const pastWeeks = state.weeks.filter((w,idx)=>{
+    const ws=new Date(base); ws.setDate(base.getDate()+idx*7); ws.setHours(0,0,0,0);
+    return ws<today && !w.isHoliday;
+  });
+  
+  // Collect per student per week
+  const entries = [];
+  const sortedGroups = [...state.groups].sort((a,b)=>a.name.localeCompare(b.name,'nl',{numeric:true}));
+  sortedGroups.forEach(g=>{
+    [...g.classes].sort((a,b)=>a.name.localeCompare(b.name,'nl',{numeric:true})).forEach(c=>{
+      [...c.students].sort((a,b)=>a.name.localeCompare(b.name,'nl')).forEach(s=>{
+        const sEntries=[];
+        pastWeeks.forEach(w=>{
+          const ev=getEval(w.id,s.id);
+          const aanw = ev.aanwezig || 'Aanwezig';
+          if(filter==='aanwezig'?aanw==='Aanwezig':aanw===filterVal) {
+            sEntries.push({week:w.label,date:w.dateStr});
+          }
+        });
+        if(sEntries.length) entries.push({name:s.name,id:s.id,klas:c.name,groep:g.name,entries:sEntries});
+      });
+    });
+  });
+  
+  if(!entries.length) { showToast(`Geen ${filterLabel.toLowerCase()} leerlingen gevonden`); return; }
+  
+  const rows = entries.map(e=>`
+    <div style="border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--cream);cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+        <div>
+          <span style="font-weight:800;font-size:13px;color:var(--text);cursor:pointer" onclick="event.stopPropagation();openStudentProfile('${e.id}')">${esc(e.name)}</span>
+          <span style="font-size:10px;color:var(--text3);margin-left:8px">${esc(e.klas)} · ${esc(e.groep)}</span>
+        </div>
+        <span style="background:${filterColor}22;color:${filterColor};border-radius:12px;padding:2px 10px;font-size:11px;font-weight:700">${e.entries.length}×</span>
+      </div>
+      <div style="display:none;padding:8px 12px">
+        ${e.entries.map(en=>`<div style="font-size:11px;color:var(--text2);padding:3px 0;border-bottom:1px solid var(--border)">${esc(en.week)} <span style="color:var(--text3)">${esc(en.date||'')}</span></div>`).join('')}
+      </div>
+    </div>`).join('');
+  
+  openModal(`
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <div style="font-family:'Playfair Display',serif;font-size:18px">📅 ${filterLabel} — detail</div>
+      <button onclick="closeModal()" style="margin-left:auto;background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕</button>
+    </div>
+    <div style="max-height:65vh;overflow-y:auto">${rows}</div>
+  `, '720px');
+}
+
+function openBeoordelingDetail(rating) {
+  const colors={Uitstekend:'#34d399',Goed:'#60a5fa',Voldoende:'#fbbf24',Onvoldoende:'#fb923c',Slecht:'#f87171'};
+  const color = colors[rating] || 'var(--accent1)';
+  const ratingCats = state.categories.filter(c=>c.type==='rating');
+  
+  const today = new Date(); today.setHours(0,0,0,0);
+  const base=new Date(state.startDate); const d=base.getDay(); base.setDate(base.getDate()+(d===0?-6:1-d));
+  const pastWeeks = state.weeks.filter((w,idx)=>{
+    const ws=new Date(base); ws.setDate(base.getDate()+idx*7); ws.setHours(0,0,0,0);
+    return ws<today && !w.isHoliday;
+  });
+  
+  const entries = [];
+  const sortedGroups = [...state.groups].sort((a,b)=>a.name.localeCompare(b.name,'nl',{numeric:true}));
+  sortedGroups.forEach(g=>{
+    [...g.classes].sort((a,b)=>a.name.localeCompare(b.name,'nl',{numeric:true})).forEach(c=>{
+      [...c.students].sort((a,b)=>a.name.localeCompare(b.name,'nl')).forEach(s=>{
+        const sEntries=[];
+        pastWeeks.forEach(w=>{
+          const ev=getEval(w.id,s.id);
+          ratingCats.forEach(cat=>{
+            if(ev[cat.id]===rating) sEntries.push({week:w.label,cat:cat.name});
+          });
+        });
+        if(sEntries.length) entries.push({name:s.name,id:s.id,klas:c.name,groep:g.name,entries:sEntries});
+      });
+    });
+  });
+  
+  if(!entries.length) { showToast(`Geen ${rating} beoordelingen gevonden`); return; }
+  
+  const rows = entries.map(e=>`
+    <div style="border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--cream);cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+        <div>
+          <span style="font-weight:800;font-size:13px;color:var(--text);cursor:pointer" onclick="event.stopPropagation();openStudentProfile('${e.id}')">${esc(e.name)}</span>
+          <span style="font-size:10px;color:var(--text3);margin-left:8px">${esc(e.klas)} · ${esc(e.groep)}</span>
+        </div>
+        <span style="background:${color}22;color:${color};border-radius:12px;padding:2px 10px;font-size:11px;font-weight:700">${e.entries.length}× ${rating}</span>
+      </div>
+      <div style="display:none;padding:8px 12px">
+        ${e.entries.map(en=>`<div style="font-size:11px;color:var(--text2);padding:3px 0;border-bottom:1px solid var(--border)">${esc(en.week)} — <span style="color:var(--text3)">${esc(en.cat)}</span></div>`).join('')}
+      </div>
+    </div>`).join('');
+  
+  openModal(`
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <span style="background:${color}22;color:${color};border-radius:12px;padding:4px 14px;font-weight:800;font-size:15px">${rating}</span>
+      <div style="font-family:'Playfair Display',serif;font-size:18px">Beoordeling detail</div>
+      <button onclick="closeModal()" style="margin-left:auto;background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕</button>
+    </div>
+    <div style="max-height:65vh;overflow-y:auto">${rows}</div>
+  `, '720px');
+}
+
+function openOpmerkingDetail() {
+  // Collect all students with opmerkingen, sorted by group > class > student
+  const entries = [];
+  const sortedGroups = [...state.groups].sort((a,b)=>a.name.localeCompare(b.name,'nl',{numeric:true}));
+  sortedGroups.forEach(g=>{
+    [...g.classes].sort((a,b)=>a.name.localeCompare(b.name,'nl',{numeric:true})).forEach(c=>{
+      [...c.students].sort((a,b)=>a.name.localeCompare(b.name,'nl')).forEach(s=>{
+        const opmerkingen=[];
+        state.weeks.forEach(w=>{
+          const ev=state.evaluations?.[w.id]?.[s.id];
+          if(ev?.opmerking?.trim()) opmerkingen.push({week:w.label,text:ev.opmerking.trim()});
+        });
+        if(opmerkingen.length) entries.push({name:s.name,id:s.id,klas:c.name,groep:g.name,opmerkingen});
+      });
+    });
+  });
+  
+  if(!entries.length) { showToast('Geen opmerkingen gevonden'); return; }
+  
+  const rows = entries.map(e=>`
+    <div style="border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--cream);cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+        <div>
+          <span style="font-weight:800;font-size:13px;color:var(--text);cursor:pointer" onclick="event.stopPropagation();openStudentProfile('${e.id}')">${esc(e.name)}</span>
+          <span style="font-size:10px;color:var(--text3);margin-left:8px">${esc(e.klas)} · ${esc(e.groep)}</span>
+        </div>
+        <span style="background:var(--accent1)22;color:var(--accent1);border-radius:12px;padding:2px 10px;font-size:11px;font-weight:700">💬 ${e.opmerkingen.length}</span>
+      </div>
+      <div style="display:none;padding:8px 12px">
+        ${e.opmerkingen.map(op=>`<div style="padding:5px 0;border-bottom:1px solid var(--border)">
+          <div style="font-size:10px;font-weight:700;color:var(--text3)">${esc(op.week)}</div>
+          <div style="font-size:12px;color:var(--text);margin-top:2px">${esc(op.text)}</div>
+        </div>`).join('')}
+      </div>
+    </div>`).join('');
+  
+  openModal(`
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <div style="font-family:'Playfair Display',serif;font-size:18px">💬 Opmerkingen — overzicht</div>
+      <button onclick="closeModal()" style="margin-left:auto;background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕</button>
+    </div>
+    <div style="max-height:65vh;overflow-y:auto">${rows}</div>
+  `, '720px');
 }
 
 function dashSearch(q) {
@@ -1650,6 +2075,625 @@ function doBulkDelete() {
   showToast("✅ Verwijderd!");
 }
 
+// ===================== UURROOSTER =====================
+// Default timetable data from ATHENEUM_UURROOSTER docx
+const DEFAULT_UURROOSTER = {
+  tijden: [
+    {uur:1, start:"08:30", end:"09:20"},
+    {uur:2, start:"09:20", end:"10:10"},
+    {uur:3, start:"10:10", end:"11:00"},
+    {uur:4, start:"11:15", end:"12:05"},
+    {uur:5, start:"12:05", end:"12:55"},
+    {uur:6, start:"13:45", end:"14:35"},
+    {uur:7, start:"14:35", end:"15:25"},
+    {uur:8, start:"15:25", end:"16:15"},
+  ],
+  pauzes: [
+    {na_uur:3, label:"Pauze 11:00–11:15"},
+    {na_uur:5, label:"Middagpauze 12:55–13:45"},
+  ],
+  // slot: {dag, uur} -> {type:'les'|'vrij'|'wacht'|'toezicht'|'custom', lokal, groepIds:[], label}
+  // Stored per slot key: "ma-1", "di-2", etc.
+  slots: {
+    "ma-1": {type:"les", lokal:"B005", label:"", groepIds:["1A"], klasIds:["1A1","1A1a","1A1b","1A2"]},
+    "ma-2": {type:"les", lokal:"B005", label:"", groepIds:["1A"], klasIds:["1A1","1A1a","1A1b","1A2"]},
+    "ma-3": {type:"les", lokal:"B005", label:"", groepIds:["2A"], klasIds:["2A ECOR","2A STTE"]},
+    "ma-4": {type:"les", lokal:"B005", label:"", groepIds:["2A"], klasIds:["2A ECOR","2A STTE"]},
+    "ma-5": {type:"les", lokal:"i3", label:"", groepIds:["3"], klasIds:["3 BO","3 ET","3 MW","3 TC","3 WL"]},
+    "ma-6": {type:"les", lokal:"i3", label:"", groepIds:["3"], klasIds:["3 BO","3 ET","3 MW","3 TC","3 WL"]},
+    "ma-7": {type:"les", lokal:"i3", label:"", groepIds:["3"], klasIds:["3 EL","3 HZ","3 ME","3 OL","3 ZW"]},
+    "ma-8": {type:"les", lokal:"i3", label:"", groepIds:["3"], klasIds:["3 EL","3 HZ","3 ME","3 OL","3 ZW"]},
+    "di-1": {type:"les", lokal:"B007", label:"", groepIds:["2A"], klasIds:["2A KLTA","2A MAWE1","2A STWE"]},
+    "di-2": {type:"les", lokal:"B007", label:"", groepIds:["2A"], klasIds:["2A KLTA","2A MAWE1","2A STWE"]},
+    "di-3": {type:"vrij", lokal:"", label:"VRIJ"},
+    "di-4": {type:"les", lokal:"B007", label:"", groepIds:["2B"], klasIds:["2B MAWE1","2B MAWE2"]},
+    "di-5": {type:"vrij", lokal:"", label:"VRIJ"},
+    "di-6": {type:"vrij", lokal:"", label:"VRIJ"},
+    "di-7": {type:"les", lokal:"D19", label:"", groepIds:["5"], klasIds:["5 BZ01","5 BZ02","5 HV","5 LC"]},
+    "di-8": {type:"les", lokal:"D19", label:"", groepIds:["5"], klasIds:["5 BZ01","5 BZ02","5 HV","5 LC"]},
+    "wo-1": {type:"les", lokal:"B007", label:"", groepIds:["2A"], klasIds:["2A MAWE2","2A MAWE3"]},
+    "wo-2": {type:"les", lokal:"B007", label:"", groepIds:["2A"], klasIds:["2A MAWE2","2A MAWE3"]},
+    "wo-3": {type:"wacht", lokal:"Tichelrij", label:"Wachtuur Tichelrij"},
+    "wo-4": {type:"les", lokal:"B101", label:"", groepIds:["1A"], klasIds:["1A3","1A4"]},
+    "wo-5": {type:"les", lokal:"B007", label:"", groepIds:["2B"], klasIds:["2B MAWE1","2B MAWE2"]},
+    "wo-6": {type:"les", lokal:"B007", label:"", groepIds:["1"], klasIds:["1 DOE1","1 DOE2","1 DOE3","1 DOE4"]},
+    "wo-7": {type:"les", lokal:"B007", label:"", groepIds:["1"], klasIds:["1 DOE1","1 DOE2","1 DOE3","1 DOE4"]},
+    "do-1": {type:"les", lokal:"B101", label:"", groepIds:["1A"], klasIds:["1A3","1A4"]},
+    "do-2": {type:"les", lokal:"B007", label:"", groepIds:["2A"], klasIds:["2A KLTA","2A MAWE1","2A STWE"]},
+    "do-4": {type:"les", lokal:"B101", label:"", groepIds:["2B"], klasIds:["2B STTE1","2B STTE2","2B ECORMAWE"]},
+    "do-5": {type:"les", lokal:"B101", label:"", groepIds:["1A"], klasIds:["1A3","1A4"]},
+    "do-6": {type:"les", lokal:"B101", label:"", groepIds:["2B"], klasIds:["2B STTE1","2B STTE2","2B ECORMAWE"]},
+    "do-7": {type:"les", lokal:"B101", label:"", groepIds:["2B"], klasIds:["2B STTE1","2B STTE2","2B ECORMAWE"]},
+    "vr-1": {type:"les", lokal:"B007", label:"", groepIds:["2A"], klasIds:["2A MAWE2","2A MAWE3"]},
+    "vr-2": {type:"les", lokal:"B007", label:"", groepIds:["2A"], klasIds:["2A MAWE2","2A MAWE3"]},
+  },
+  // Toezicht labels (shown under pauze rows)
+  toezicht: {
+    3: "Toezicht Tichelrij: 11:00–11:15 (Speelplaats)",
+    5: "Toezicht Tichelrij: 12:55–13:15 (Buiten refter)",
+  },
+  // Custom button labels user can add
+  buttonTypes: ["Les", "VRIJ", "Wachtuur", "Toezicht", "Vergadering", "Vervanging", "Verlof"],
+};
+
+// Load or init uurrooster state
+function loadUurrooster() {
+  try {
+    const s = localStorage.getItem('uurrooster_v1');
+    if (s) return JSON.parse(s);
+  } catch(e) {}
+  return JSON.parse(JSON.stringify(DEFAULT_UURROOSTER));
+}
+function saveUurrooster() {
+  try {
+    localStorage.setItem('uurrooster_v1', JSON.stringify(window._uurrooster));
+    if (window._saveUurroosterToFirebase) window._saveUurroosterToFirebase(window._uurrooster);
+  } catch(e) {}
+}
+window._uurrooster = loadUurrooster();
+
+const DAGEN = ['ma','di','wo','do','vr'];
+const DAG_LABELS = {ma:'Maandag',di:'Dinsdag',wo:'Woensdag',do:'Donderdag',vr:'Vrijdag'};
+
+function renderUurrooster() {
+  const ur = window._uurrooster;
+  const tijden = ur.tijden;
+  const slots = ur.slots;
+  
+  // Build grid
+  const colW = 'minmax(110px,1fr)';
+  let html = `
+  <div style="font-family:'Playfair Display',serif;font-size:22px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
+    📅 Uurrooster
+    <button class="btn btn-secondary btn-sm" onclick="openUurroosterSettings()" style="margin-left:auto;font-size:11px">⚙️ Tijden & knoppen bewerken</button>
+  </div>
+  <div style="overflow-x:auto">
+  <div style="display:grid;grid-template-columns:64px ${DAGEN.map(()=>colW).join(' ')};gap:3px;min-width:620px">
+    <!-- Header row -->
+    <div style="background:var(--surface);border-radius:6px;padding:8px 4px;text-align:center;font-size:10px;font-weight:700;color:var(--text3)">UUR</div>
+    ${DAGEN.map(d=>`<div style="background:linear-gradient(135deg,var(--accent1)22,var(--accent2)11);border-radius:6px;padding:8px 4px;text-align:center;font-size:12px;font-weight:900;color:var(--text)">${DAG_LABELS[d]}</div>`).join('')}
+  `;
+  
+  tijden.forEach((t,i) => {
+    const uurNr = t.uur;
+    // Time cell
+    html += `<div onclick="openEditTijd(${i})" style="background:var(--surface);border-radius:6px;padding:5px 4px;text-align:center;cursor:pointer;border:1.5px solid var(--border);transition:all .12s" onmouseover="this.style.borderColor='var(--accent1)'" onmouseout="this.style.borderColor='var(--border)'">
+      <div style="font-size:11px;font-weight:900;color:var(--accent1)">${uurNr}</div>
+      <div style="font-size:9px;color:var(--text3);line-height:1.3">${t.start}<br>${t.end}</div>
+    </div>`;
+    
+    // Slot cells per day
+    DAGEN.forEach(d => {
+      const key = `${d}-${uurNr}`;
+      const slot = slots[key] || {type:'vrij', lokal:'', label:'', groepIds:[], klasIds:[]};
+      html += renderUurSlotCell(key, slot);
+    });
+    
+    // Pauze row?
+    const pauze = ur.pauzes.find(p=>p.na_uur===uurNr);
+    if (pauze) {
+      const toezicht = ur.toezicht?.[uurNr] || '';
+      html += `<div style="background:var(--cream);border-radius:6px;padding:4px;text-align:center;border:1px dashed var(--border2)">
+        <div style="font-size:9px;color:var(--text3);font-weight:600">—</div>
+      </div>`;
+      html += `<div style="grid-column:span 5;background:var(--cream);border-radius:6px;padding:5px 12px;border:1px dashed var(--border2);display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:11px;font-weight:700;color:var(--text2)">☕ ${esc(pauze.label)}</span>
+        ${toezicht ? `<span style="font-size:10px;color:var(--text3);font-style:italic">${esc(toezicht)}</span>` : ''}
+      </div>`;
+    }
+  });
+  
+  html += `</div></div>`;
+  return html;
+}
+
+function renderUurSlotCell(key, slot) {
+  const typeColors = {
+    les: 'var(--accent1)',
+    vrij: 'var(--text3)',
+    wacht: 'var(--accent3)',
+    toezicht: '#f59e0b',
+    vergadering: '#8b5cf6',
+    vervanging: '#06b6d4',
+    verlof: '#ef4444',
+    custom: 'var(--accent2)',
+  };
+  const typeBgs = {
+    les: 'var(--surface2)',
+    vrij: 'var(--surface)',
+    wacht: '#fff7ed',
+    toezicht: '#fffbeb',
+    vergadering: '#f5f3ff',
+    vervanging: '#ecfeff',
+    verlof: '#fef2f2',
+    custom: '#fdf2f8',
+  };
+  const color = typeColors[slot.type] || 'var(--text2)';
+  const bg = typeBgs[slot.type] || 'var(--surface)';
+  
+  // Build content
+  let content = '';
+  if (slot.type === 'vrij') {
+    content = `<div style="font-size:10px;color:var(--text3);font-weight:700;text-align:center;padding:8px 0">VRIJ</div>`;
+  } else if (slot.type !== 'les') {
+    content = `<div style="font-size:10px;font-weight:700;color:${color};text-align:center;padding:4px 2px">${esc(slot.label||slot.type.toUpperCase())}</div>`;
+  } else {
+    // Les slot
+    const lokal = slot.lokal ? `<div style="display:inline-block;background:${color}22;color:${color};border-radius:4px;padding:1px 5px;font-size:9px;font-weight:800;margin-bottom:3px">${esc(slot.lokal)}</div>` : '';
+    // Find matching groups from state
+    const groepNames = (slot.groepIds||[]).map(id=>{
+      const g = state.groups.find(x=>x.id===id || x.name===id);
+      return g ? g.name : id;
+    });
+    const klasNames = (slot.klasIds||[]);
+    const groepStr = groepNames.length ? groepNames.join(', ') : '';
+    const klasStr = klasNames.slice(0,3).join(', ') + (klasNames.length>3?` +${klasNames.length-3}`:'');
+    
+    content = `${lokal}
+      ${groepStr ? `<div style="font-size:9px;font-weight:800;color:${color};margin-bottom:1px;cursor:pointer" onclick="event.stopPropagation();openGroepDetailFromSlot('${(slot.groepIds||[]).join(',')}')">${esc(groepStr)}</div>` : ''}
+      <div style="font-size:9px;color:var(--text2);line-height:1.3">${esc(klasStr)}</div>`;
+  }
+  
+  // Count students in this slot
+  let studentCount = 0;
+  if (slot.type==='les' && slot.groepIds?.length) {
+    slot.groepIds.forEach(gId=>{
+      const g = state.groups.find(x=>x.id===gId||x.name===gId);
+      if(g) studentCount += g.classes.reduce((s,c)=>s+c.students.length,0);
+    });
+  }
+  
+  const countBadge = studentCount > 0 ? `<span style="position:absolute;top:3px;right:3px;background:${color};color:#fff;border-radius:10px;font-size:8px;padding:1px 4px;font-weight:700">${studentCount}</span>` : '';
+  
+  return `<div onclick="openUurSlotEdit('${key}')" style="position:relative;background:${bg};border-radius:8px;padding:6px 7px;cursor:pointer;border:1.5px solid ${slot.type==='les'?color+'44':'var(--border)'};min-height:52px;transition:all .12s" onmouseover="this.style.boxShadow='0 2px 10px ${color}33';this.style.borderColor='${color}'" onmouseout="this.style.boxShadow='none';this.style.borderColor='${slot.type==='les'?color+'44':'var(--border)'}'">
+    ${content}
+    ${countBadge}
+  </div>`;
+}
+
+function openUurSlotEdit(key) {
+  const ur = window._uurrooster;
+  const slot = ur.slots[key] || {type:'vrij', lokal:'', label:'', groepIds:[], klasIds:[]};
+  const [dag, uurStr] = key.split('-');
+  const uurNr = parseInt(uurStr);
+  const tijd = ur.tijden.find(t=>t.uur===uurNr);
+  const dagLabel = DAG_LABELS[dag];
+  
+  // Button types
+  const btnTypes = ur.buttonTypes || DEFAULT_UURROOSTER.buttonTypes;
+  const typeMap = {'Les':'les','VRIJ':'vrij','Wachtuur':'wacht','Toezicht':'toezicht','Vergadering':'vergadering','Vervanging':'vervanging','Verlof':'verlof'};
+  
+  const typeBtns = btnTypes.map(b=>{
+    const t = typeMap[b] || b.toLowerCase();
+    const sel = slot.type===t;
+    return `<button onclick="setSlotType('${key}','${t}')" style="padding:5px 12px;border-radius:20px;border:1.5px solid ${sel?'var(--accent1)':'var(--border)'};background:${sel?'var(--accent1)':'var(--surface)'};color:${sel?'#fff':'var(--text2)'};cursor:pointer;font-size:11px;font-weight:700;font-family:'Nunito',sans-serif;transition:all .15s">${b}</button>`;
+  }).join('');
+  
+  // Group selectors
+  const sortedGroups = [...state.groups].sort((a,b)=>a.name.localeCompare(b.name,'nl',{numeric:true}));
+  const groepBtns = sortedGroups.map(g=>{
+    const sel = (slot.groepIds||[]).includes(g.id)||(slot.groepIds||[]).includes(g.name);
+    const cnt = g.classes.reduce((s,c)=>s+c.students.length,0);
+    return `<button onclick="toggleSlotGroep('${key}','${g.id}')" id="grpbtn-${g.id}" style="padding:4px 10px;border-radius:8px;border:1.5px solid ${sel?'var(--accent1)':'var(--border)'};background:${sel?'var(--accent1)15':'var(--surface)'};color:${sel?'var(--accent1)':'var(--text2)'};cursor:pointer;font-size:11px;font-weight:700;font-family:'Nunito',sans-serif;display:flex;align-items:center;gap:4px">
+      📚 ${esc(g.name)} <span style="font-size:9px;opacity:.7">(${cnt})</span>
+    </button>`;
+  }).join('');
+  
+  // Class selectors (all classes from state)
+  const allCls = allClasses();
+  const clsBtns = allCls.map(c=>{
+    const sel = (slot.klasIds||[]).includes(c.id)||(slot.klasIds||[]).includes(c.name);
+    return `<button onclick="toggleSlotKlas('${key}','${c.id}')" id="klsbtn-${c.id}" style="padding:3px 9px;border-radius:6px;border:1.5px solid ${sel?'var(--accent2)':'var(--border)'};background:${sel?'var(--accent2)22':'var(--surface)'};color:${sel?'var(--text)':'var(--text3)'};cursor:pointer;font-size:10px;font-weight:700;font-family:'Nunito',sans-serif">${esc(c.name)}</button>`;
+  }).join('');
+  
+  // Student viewer section (show group details if any group selected)
+  const selGroepIds = slot.groepIds||[];
+  let studentPreview = '';
+  if(selGroepIds.length && slot.type==='les') {
+    selGroepIds.forEach(gId=>{
+      const g = state.groups.find(x=>x.id===gId||x.name===gId);
+      if(!g) return;
+      const sortedCls = [...g.classes].sort((a,b)=>a.name.localeCompare(b.name,'nl',{numeric:true}));
+      studentPreview += `<div style="margin-bottom:8px">
+        <div style="font-size:11px;font-weight:800;color:var(--accent1);margin-bottom:4px">📚 ${esc(g.name)}</div>`;
+      sortedCls.forEach(c=>{
+        studentPreview += `<div style="margin-left:8px;margin-bottom:4px">
+          <span style="font-size:10px;font-weight:700;color:var(--text2)">${esc(c.name)}</span>
+          <span style="font-size:9px;color:var(--text3);margin-left:4px">(${c.students.length})</span>
+          <div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px">
+            ${c.students.map(s=>`<span onclick="openSlotStudentDetail('${s.id}')" style="background:var(--cream);border:1px solid var(--border);border-radius:12px;padding:2px 8px;font-size:10px;cursor:pointer;color:var(--text2)" onmouseover="this.style.background='var(--accent2)33'" onmouseout="this.style.background='var(--cream)'">${esc(s.name)}</span>`).join('')}
+          </div>
+        </div>`;
+      });
+      studentPreview += `</div>`;
+    });
+  }
+  
+  openModal(`
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:18px">✏️ Uur bewerken</div>
+        <div style="font-size:11px;color:var(--text3)">${dagLabel} · Uur ${uurNr} ${tijd ? `(${tijd.start}–${tijd.end})` : ''}</div>
+      </div>
+      <button onclick="closeModal()" style="margin-left:auto;background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕</button>
+    </div>
+    
+    <div style="margin-bottom:14px">
+      <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Type</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">${typeBtns}</div>
+    </div>
+    
+    <div id="uur-les-fields" style="display:${slot.type==='les'?'block':'none'}">
+      <div style="margin-bottom:12px">
+        <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Lokaal</div>
+        <input id="uur-lokal" class="form-input" value="${esc(slot.lokal||'')}" placeholder="bijv. B005, i3, D19" style="max-width:200px">
+      </div>
+      
+      <div style="margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px">Groep koppelen</div>
+          <button onclick="closeModal();switchView('settings')" style="padding:2px 8px;border-radius:8px;border:1px solid var(--border);background:var(--cream);cursor:pointer;font-size:10px;font-weight:700;color:var(--text3);font-family:'Nunito',sans-serif">+ Nieuwe groep/klas</button>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">${groepBtns||'<span style="font-size:11px;color:var(--text3)">Geen groepen — ga naar Instellingen</span>'}</div>
+      </div>
+      
+      ${allCls.length?`<div style="margin-bottom:12px">
+        <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Klassen</div>
+        <div style="display:flex;flex-wrap:wrap;gap:4px">${clsBtns}</div>
+      </div>`:''}
+      
+      ${studentPreview ? `<div style="margin-bottom:12px">
+        <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Leerlingen</div>
+        <div style="max-height:200px;overflow-y:auto;background:var(--cream);border-radius:8px;padding:10px;border:1px solid var(--border)">${studentPreview}</div>
+      </div>` : ''}
+    </div>
+    
+    <div id="uur-custom-fields" style="display:${slot.type!=='les'&&slot.type!=='vrij'?'block':'none'}">
+      <div style="margin-bottom:12px">
+        <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Label</div>
+        <input id="uur-label" class="form-input" value="${esc(slot.label||'')}" placeholder="bijv. Toezicht speelplaats">
+        <div style="margin-bottom:8px">
+        <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;margin-top:10px">Lokaal / Locatie</div>
+        <input id="uur-lokal-custom" class="form-input" value="${esc(slot.lokal||'')}" placeholder="bijv. Tichelrij, Speelplaats" style="max-width:200px">
+        </div>
+      </div>
+    </div>
+    
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+      <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
+      <button class="btn btn-primary" onclick="saveUurSlot('${key}')">💾 Opslaan</button>
+    </div>`);
+  
+  // Store current slot key for helpers
+  window._editingSlotKey = key;
+}
+
+function setSlotType(key, type) {
+  const ur = window._uurrooster;
+  if(!ur.slots[key]) ur.slots[key] = {type:'vrij',lokal:'',label:'',groepIds:[],klasIds:[]};
+  ur.slots[key].type = type;
+  // Update UI toggle
+  const lesFields = document.getElementById('uur-les-fields');
+  const customFields = document.getElementById('uur-custom-fields');
+  if(lesFields) lesFields.style.display = type==='les' ? 'block' : 'none';
+  if(customFields) customFields.style.display = (type!=='les'&&type!=='vrij') ? 'block' : 'none';
+  // Update button styles
+  document.querySelectorAll('[onclick^="setSlotType"]').forEach(btn=>{
+    const btnType = btn.getAttribute('onclick').match(/'([^']+)'\)$/)?.[1];
+    btn.style.background = btnType===type ? 'var(--accent1)' : 'var(--surface)';
+    btn.style.color = btnType===type ? '#fff' : 'var(--text2)';
+    btn.style.borderColor = btnType===type ? 'var(--accent1)' : 'var(--border)';
+  });
+}
+
+function toggleSlotGroep(key, gId) {
+  const ur = window._uurrooster;
+  if(!ur.slots[key]) ur.slots[key] = {type:'les',lokal:'',label:'',groepIds:[],klasIds:[]};
+  const ids = ur.slots[key].groepIds || [];
+  const has = ids.includes(gId);
+  ur.slots[key].groepIds = has ? ids.filter(x=>x!==gId) : [...ids, gId];
+  // Update button style
+  const btn = document.getElementById(`grpbtn-${gId}`);
+  if(btn) {
+    const sel = ur.slots[key].groepIds.includes(gId);
+    btn.style.borderColor = sel ? 'var(--accent1)' : 'var(--border)';
+    btn.style.background = sel ? 'var(--accent1)15' : 'var(--surface)';
+    btn.style.color = sel ? 'var(--accent1)' : 'var(--text2)';
+  }
+}
+
+function toggleSlotKlas(key, cId) {
+  const ur = window._uurrooster;
+  if(!ur.slots[key]) ur.slots[key] = {type:'les',lokal:'',label:'',groepIds:[],klasIds:[]};
+  const ids = ur.slots[key].klasIds || [];
+  const has = ids.includes(cId);
+  ur.slots[key].klasIds = has ? ids.filter(x=>x!==cId) : [...ids, cId];
+  const btn = document.getElementById(`klsbtn-${cId}`);
+  if(btn) {
+    const sel = ur.slots[key].klasIds.includes(cId);
+    btn.style.borderColor = sel ? 'var(--accent2)' : 'var(--border)';
+    btn.style.background = sel ? 'var(--accent2)22' : 'var(--surface)';
+    btn.style.color = sel ? 'var(--text)' : 'var(--text3)';
+  }
+}
+
+function saveUurSlot(key) {
+  const ur = window._uurrooster;
+  if(!ur.slots[key]) ur.slots[key] = {type:'vrij',lokal:'',label:'',groepIds:[],klasIds:[]};
+  const slot = ur.slots[key];
+  if(slot.type==='les') {
+    slot.lokal = document.getElementById('uur-lokal')?.value?.trim()||'';
+  } else if(slot.type!=='vrij') {
+    slot.label = document.getElementById('uur-label')?.value?.trim()||'';
+    slot.lokal = document.getElementById('uur-lokal-custom')?.value?.trim()||'';
+  }
+  saveUurrooster();
+  closeModal();
+  render();
+  showToast("✅ Uur opgeslagen");
+}
+
+function openEditTijd(idx) {
+  const ur = window._uurrooster;
+  const t = ur.tijden[idx];
+  openModal(`
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+      <div style="font-family:'Playfair Display',serif;font-size:18px">🕐 Uur ${t.uur} bewerken</div>
+      <button onclick="closeModal()" style="margin-left:auto;background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕</button>
+    </div>
+    <div style="display:flex;gap:12px;margin-bottom:16px">
+      <div class="form-group" style="flex:1">
+        <label class="form-label">Begintijd</label>
+        <input class="form-input" id="t-start" value="${t.start}" placeholder="08:30">
+      </div>
+      <div class="form-group" style="flex:1">
+        <label class="form-label">Eindtijd</label>
+        <input class="form-input" id="t-end" value="${t.end}" placeholder="09:20">
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
+      <button class="btn btn-primary" onclick="saveTijd(${idx})">💾 Opslaan</button>
+    </div>`);
+}
+
+function saveTijd(idx) {
+  const ur = window._uurrooster;
+  ur.tijden[idx].start = document.getElementById('t-start')?.value?.trim()||ur.tijden[idx].start;
+  ur.tijden[idx].end = document.getElementById('t-end')?.value?.trim()||ur.tijden[idx].end;
+  saveUurrooster(); closeModal(); render();
+  showToast("✅ Tijd bijgewerkt");
+}
+
+function openGroepDetailFromSlot(groepIdsStr) {
+  const groepIds = groepIdsStr.split(',').filter(Boolean);
+  // Show all groups with their classes and students, with stats
+  const currentWId = state.selectedWeek;
+  
+  let html = '';
+  groepIds.forEach(gId => {
+    const g = state.groups.find(x=>x.id===gId||x.name===gId);
+    if(!g) return;
+    
+    html += `<div style="margin-bottom:16px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="font-size:16px;font-weight:900;color:var(--accent1)">📚 ${esc(g.name)}</div>
+        <button onclick="closeModal();switchView('settings')" style="padding:4px 12px;border-radius:8px;border:1px solid var(--border);background:var(--cream);cursor:pointer;font-size:11px;font-weight:700;color:var(--text3);font-family:'Nunito',sans-serif">✏️ Bewerken in Instellingen</button>
+      </div>`;
+    
+    const sortedCls = [...g.classes].sort((a,b)=>a.name.localeCompare(b.name,'nl',{numeric:true}));
+    sortedCls.forEach(c => {
+      const sortedStudents = [...c.students].sort((a,b)=>a.name.localeCompare(b.name,'nl'));
+      html += `<div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:8px">
+        <div style="background:var(--cream);padding:8px 12px;display:flex;align-items:center;gap:8px">
+          <span style="font-weight:800;font-size:13px;color:var(--text)">${esc(c.name)}</span>
+          <span style="font-size:10px;color:var(--text3)">${esc(c.school||'')} · ${c.students.length} leerlingen</span>
+          ${c.jaar?`<span style="font-size:10px;background:var(--accent1)22;color:var(--accent1);border-radius:8px;padding:1px 6px;font-weight:700">${c.jaar}e jaar</span>`:''}
+        </div>
+        <div style="padding:8px 12px;display:flex;flex-wrap:wrap;gap:4px">
+          ${sortedStudents.map(s => {
+            const ev = getEval(currentWId, s.id);
+            const aanw = ev.aanwezig || 'Aanwezig';
+            const aanwColor = aanw==='Afwezig'?'#f87171':aanw==='Te laat'?'#fbbf24':'#34d399';
+            return `<div onclick="closeModal();openStudentProfile('${s.id}')" style="display:flex;align-items:center;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:4px 10px;cursor:pointer;transition:all .12s" onmouseover="this.style.borderColor='var(--accent1)'" onmouseout="this.style.borderColor='var(--border)'">
+              <span style="width:7px;height:7px;border-radius:50%;background:${aanwColor};flex-shrink:0"></span>
+              <span style="font-size:11px;font-weight:700;color:var(--text)">${esc(s.name)}</span>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+  
+  openModal(`
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <div style="font-family:'Playfair Display',serif;font-size:18px">Groep overzicht</div>
+      <button onclick="closeModal()" style="margin-left:auto;background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕</button>
+    </div>
+    <div style="max-height:70vh;overflow-y:auto">${html || '<div style="color:var(--text3);text-align:center;padding:20px">Geen groepen gevonden</div>'}</div>
+  `, '750px');
+}
+
+function openUurroosterSettings() {
+  const ur = window._uurrooster;
+  const btnTypes = ur.buttonTypes || DEFAULT_UURROOSTER.buttonTypes;
+  
+  let tijdRows = ur.tijden.map((t,i)=>`<tr>
+    <td style="padding:4px 8px;font-weight:700;color:var(--accent1)">Uur ${t.uur}</td>
+    <td style="padding:4px 8px"><input class="form-input" id="ts-${i}" value="${t.start}" style="width:80px;font-size:12px"></td>
+    <td style="padding:4px 8px"><input class="form-input" id="te-${i}" value="${t.end}" style="width:80px;font-size:12px"></td>
+  </tr>`).join('');
+  
+  const btnList = btnTypes.map((b,i)=>`<span style="display:inline-flex;align-items:center;gap:4px;background:var(--cream);border:1px solid var(--border);border-radius:16px;padding:3px 10px;font-size:11px;font-weight:600">
+    ${esc(b)}
+    <span onclick="removeUurBtn(${i})" style="cursor:pointer;color:var(--text3);font-size:10px" title="Verwijderen">✕</span>
+  </span>`).join('');
+  
+  openModal(`
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+      <div style="font-family:'Playfair Display',serif;font-size:18px">⚙️ Uurrooster instellingen</div>
+      <button onclick="closeModal()" style="margin-left:auto;background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕</button>
+    </div>
+    
+    <div style="margin-bottom:16px">
+      <div style="font-size:11px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Tijden per uur</div>
+      <table style="width:100%">
+        <thead><tr style="background:var(--cream)">
+          <th style="padding:4px 8px;font-size:10px;text-align:left">Uur</th>
+          <th style="padding:4px 8px;font-size:10px;text-align:left">Begin</th>
+          <th style="padding:4px 8px;font-size:10px;text-align:left">Einde</th>
+        </tr></thead>
+        <tbody>${tijdRows}</tbody>
+      </table>
+    </div>
+    
+    <div style="margin-bottom:16px">
+      <div style="font-size:11px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Knoppen / types</div>
+      <div id="btn-list" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">${btnList}</div>
+      <div style="display:flex;gap:6px">
+        <input class="form-input" id="new-btn-label" placeholder="Nieuwe knop toevoegen…" style="flex:1">
+        <button class="btn btn-secondary btn-sm" onclick="addUurBtn()">+ Toevoegen</button>
+      </div>
+    </div>
+    
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+      <button class="btn btn-danger btn-sm" onclick="if(confirm('Uurrooster resetten naar standaard?')){window._uurrooster=JSON.parse(JSON.stringify(DEFAULT_UURROOSTER));saveUurrooster();closeModal();render();}">Reset</button>
+      <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
+      <button class="btn btn-primary" onclick="saveUurroosterSettings()">💾 Opslaan</button>
+    </div>`);
+}
+
+function saveUurroosterSettings() {
+  const ur = window._uurrooster;
+  ur.tijden.forEach((t,i)=>{
+    const s = document.getElementById(`ts-${i}`)?.value?.trim();
+    const e = document.getElementById(`te-${i}`)?.value?.trim();
+    if(s) t.start = s;
+    if(e) t.end = e;
+  });
+  saveUurrooster(); closeModal(); render();
+  showToast("✅ Instellingen opgeslagen");
+}
+
+function addUurBtn() {
+  const ur = window._uurrooster;
+  const label = document.getElementById('new-btn-label')?.value?.trim();
+  if(!label) return;
+  if(!ur.buttonTypes) ur.buttonTypes = [...DEFAULT_UURROOSTER.buttonTypes];
+  if(!ur.buttonTypes.includes(label)) ur.buttonTypes.push(label);
+  document.getElementById('new-btn-label').value = '';
+  // Refresh modal content
+  openUurroosterSettings();
+}
+
+function removeUurBtn(idx) {
+  const ur = window._uurrooster;
+  if(!ur.buttonTypes) return;
+  ur.buttonTypes.splice(idx, 1);
+  openUurroosterSettings();
+}
+
+// Open student detail from uurrooster slot (in-place, no navigation away)
+function openSlotStudentDetail(sId) {
+  const s = allStudents().find(x=>x.id===sId);
+  if(!s) return;
+  const weeks = state.weeks.filter(w=>!w.isHoliday);
+  const ratingChipClass = {Uitstekend:'chip-green',Goed:'chip-blue',Voldoende:'chip-yellow',Onvoldoende:'chip-orange',Slecht:'chip-red'};
+  const currentWeekId = state.selectedWeek;
+  const currentWeekIdx = getCurrentWeekIdx();
+
+  let cards = '';
+  weeks.forEach((w,wi) => {
+    const ev = getEval(w.id, s.id);
+    const isCurrent = w.id === currentWeekId;
+    const isPast = wi <= currentWeekIdx;
+    const hasData = Object.keys(ev).some(k=>k!=='aanwezig'&&k!=='opmerking'&&ev[k]!==undefined&&ev[k]!==null&&ev[k]!=='');
+    
+    let chips = '';
+    if(isPast || hasData || ev.opmerking) {
+      state.categories.forEach(cat=>{
+        const v = ev[cat.id];
+        if(v===undefined||v===null||v==='') return;
+        const cls = ratingChipClass[v] || 'chip-gray';
+        chips += `<span class="cat-chip ${cls}"><b>${esc(cat.label)}:</b> ${cat.type==='boolean'?(v?'✓':'✗'):esc(String(v))}</span>`;
+      });
+      if(ev.opmerking) chips += `<div style="font-size:10px;background:#fef3c7;border:1px solid #fde68a;color:#92400e;border-radius:6px;padding:4px 8px;margin-top:4px;font-style:italic;width:100%">💬 ${esc(ev.opmerking)}</div>`;
+    }
+    const hasAny = chips.length>0 || (ev.aanwezig && ev.aanwezig!=='Aanwezig');
+    
+    // Current week: show inline edit controls
+    let editSection = '';
+    if(isCurrent && !w.isHoliday) {
+      const aanwOpts = ['Aanwezig','Afwezig','Te laat'].map(opt=>`<button onclick="setSlotEval('${w.id}','${s.id}','aanwezig','${opt}');event.stopPropagation()" style="padding:3px 8px;border-radius:12px;border:1.5px solid ${(ev.aanwezig||'Aanwezig')===opt?'var(--accent1)':'var(--border)'};background:${(ev.aanwezig||'Aanwezig')===opt?'var(--accent1)':'var(--surface)'};color:${(ev.aanwezig||'Aanwezig')===opt?'#fff':'var(--text2)'};cursor:pointer;font-size:10px;font-weight:700;font-family:'Nunito',sans-serif">${opt}</button>`).join('');
+      const ratingOpts = ['Uitstekend','Goed','Voldoende','Onvoldoende','Slecht'];
+      let catEdits = state.categories.filter(c=>c.type==='rating').map(cat=>{
+        const v = ev[cat.id]||'Goed';
+        const opts = ratingOpts.map(r=>`<button onclick="setSlotEval('${w.id}','${s.id}','${cat.id}','${r}');event.stopPropagation()" style="padding:2px 7px;border-radius:10px;border:1px solid ${v===r?'var(--accent1)':'var(--border)'};background:${v===r?'var(--accent1)':'var(--surface)'};color:${v===r?'#fff':'var(--text3)'};cursor:pointer;font-size:9px;font-family:'Nunito',sans-serif">${r}</button>`).join('');
+        return `<div style="margin-bottom:4px"><span style="font-size:9px;font-weight:700;color:var(--text3);margin-right:4px">${esc(cat.label)}:</span>${opts}</div>`;
+      }).join('');
+      const numCats = state.categories.filter(c=>c.type==='number').map(cat=>`<div style="display:inline-flex;align-items:center;gap:4px;margin-right:8px;margin-bottom:4px"><span style="font-size:9px;font-weight:700;color:var(--text3)">${esc(cat.label)}:</span><input type="number" value="${ev[cat.id]||''}" onchange="setSlotEval('${w.id}','${s.id}','${cat.id}',this.value)" style="width:52px;border:1px solid var(--border);border-radius:4px;padding:2px 4px;font-size:10px;font-family:'Nunito',sans-serif"></div>`).join('');
+      const boolCats = state.categories.filter(c=>c.type==='boolean').map(cat=>`<label style="display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:700;color:var(--text3);cursor:pointer;margin-right:8px;margin-bottom:4px"><input type="checkbox" ${ev[cat.id]?'checked':''} onchange="setSlotEval('${w.id}','${s.id}','${cat.id}',this.checked)"> ${esc(cat.label)}</label>`).join('');
+      
+      editSection = `<div style="border-top:1px solid var(--border);margin-top:8px;padding-top:8px">
+        <div style="font-size:9px;font-weight:800;color:var(--text3);margin-bottom:6px">AANWEZIGHEID</div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px">${aanwOpts}</div>
+        <div style="font-size:9px;font-weight:800;color:var(--text3);margin-bottom:4px">BEOORDELING</div>
+        ${catEdits}${numCats}${boolCats}
+        <div style="margin-top:6px">
+          <textarea placeholder="Opmerking…" onchange="setSlotEval('${w.id}','${s.id}','opmerking',this.value)" style="width:100%;border:1px solid var(--border);border-radius:6px;padding:6px;font-size:10px;font-family:'Nunito',sans-serif;resize:vertical;min-height:44px">${esc(ev.opmerking||'')}</textarea>
+        </div>
+      </div>`;
+    }
+
+    cards += `<div style="border:${isCurrent?'2px solid var(--accent1)':'1px solid var(--border)'};border-radius:10px;padding:10px 12px;margin-bottom:8px;background:${isCurrent?'var(--surface2)':'var(--surface)'}">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <span style="font-weight:800;color:var(--accent1);font-size:12px">${w.label}</span>
+        <span style="font-size:10px;color:var(--text3)">${w.dateStr||''}</span>
+        ${ev.aanwezig?`<span class="aanw-btn sel-${(ev.aanwezig||'Aanwezig').replace(' ','-')}" style="pointer-events:none;font-size:9px;padding:1px 5px">${ev.aanwezig}</span>`:''}
+      </div>
+      ${hasAny && !isCurrent ? `<div style="display:flex;flex-wrap:wrap">${chips}</div>` : ''}
+      ${editSection}
+    </div>`;
+  });
+
+  openModal(`
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:18px">${esc(s.name)}</div>
+        <div style="font-size:11px;color:var(--text3)">${esc(s.className||'')} · ${esc(s.school||'')}</div>
+      </div>
+      <button onclick="closeModal()" style="margin-left:auto;background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕</button>
+    </div>
+    <div style="max-height:72vh;overflow-y:auto;padding-right:4px">${cards}</div>`);
+}
+
+function setSlotEval(wId, sId, field, val) {
+  setEvalField(wId, sId, field, val);
+  // Update button styles inline without full modal refresh
+  // Re-render the specific field area
+}
+
 // ===================== STUDENT PROFILE =====================
 function openStudentOpmerkingen(sId) {
   const s = allStudents().find(x=>x.id===sId);
@@ -1684,6 +2728,11 @@ function openStudentOpmerkingen(sId) {
 }
 
 function editWeekEvalInline(wId, sId) {
+  // If we're in uurrooster, open the student detail in modal instead of navigating
+  if (state.view === 'uurrooster') {
+    openSlotStudentDetail(sId);
+    return;
+  }
   // Navigate to week view and open that week
   state.selectedWeek = wId;
   state.view = 'week';
@@ -1742,6 +2791,161 @@ function renderStudentProfile() {
     </div>
     <div class="profile-grid">${cards}</div>`;
 }
+
+// ===================== JAARPLANNEN =====================
+function renderJaarplannen() {
+  const selectedJaar = state._jpSelectedJaar || '1';
+  const selectedThema = state._jpSelectedThema || '';
+  
+  // Year tabs
+  const jaarTabs = ['1','2','3','4','5','6'].map(j => {
+    const sel = j === selectedJaar;
+    return `<button onclick="jpSelectJaar('${j}')" style="padding:7px 18px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:800;font-family:'Nunito',sans-serif;background:${sel?'var(--accent1)':'var(--surface)'};color:${sel?'#fff':'var(--text2)'};box-shadow:${sel?'0 2px 10px rgba(192,132,252,.3)':'none'};transition:all .15s">${j}e jaar</button>`;
+  }).join('');
+  
+  // Thema filter buttons
+  const plan = JAARPLAN[selectedJaar] || [];
+  const leerdoelen = LEERDOELEN[selectedJaar] || {};
+  const themas = [...new Set(plan.filter(e=>!e.vac&&e.thema!=='EVALUATIE').map(e=>e.thema))];
+  const themaFilters = ['', ...themas].map(t => {
+    const sel = t === selectedThema;
+    const color = THEMA_COLORS[t] || 'var(--accent1)';
+    return `<button onclick="jpSelectThema('${t}')" style="padding:5px 14px;border-radius:16px;border:1.5px solid ${sel?color:'var(--border)'};cursor:pointer;font-size:11px;font-weight:700;font-family:'Nunito',sans-serif;background:${sel?color+'22':'var(--surface)'};color:${sel?color:'var(--text2)'};transition:all .12s">${t || 'Alle thema\'s'}</button>`;
+  }).join('');
+  
+  // Determine which weeks to show
+  const filteredPlan = plan.filter(e => !selectedThema || e.thema === selectedThema);
+  
+  // Week number → date string calculation
+  const base = new Date(state.startDate);
+  const bd = base.getDay(); base.setDate(base.getDate() + (bd===0?-6:1-bd));
+  
+  function weekDateStr(wn) {
+    const d = new Date(base);
+    d.setDate(base.getDate() + (wn-1)*7);
+    const d2 = new Date(d); d2.setDate(d.getDate()+6);
+    const fmt = dt => `${dt.getDate()} ${['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'][dt.getMonth()]}`;
+    return `${fmt(d)} – ${fmt(d2)}`;
+  }
+  
+  // Build week rows
+  let prevThema = '';
+  let lessonCounter = 0; // for zebra (reset at each vacation)
+  let zebra = 0; // 0=white, 1=cream, stays through vacation which gets green
+  
+  const rows = filteredPlan.map((e, idx) => {
+    const isVac = e.vac;
+    const color = THEMA_COLORS[e.thema] || 'var(--accent1)';
+    const themaChanged = e.thema !== prevThema;
+    if(!isVac) prevThema = e.thema;
+    
+    // Zebra: vacation = green, non-vacation alternates white/cream  
+    // After vacation, reset counter to continue from 0
+    let rowBg;
+    if(isVac) {
+      rowBg = '#f0fdf4';
+      zebra = 0; // reset after vacation
+    } else {
+      rowBg = zebra % 2 === 0 ? 'var(--surface)' : 'var(--cream)';
+      zebra++;
+    }
+    
+    const dateStr = weekDateStr(e.wn);
+    
+    // Find matching leerdoelen for this thema
+    const themaLeerdoelen = leerdoelen[e.thema] || [];
+    
+    return `<tr style="background:${rowBg};transition:background .12s" ${!isVac?`onmouseover="this.style.background='var(--accent1)0a'" onmouseout="this.style.background='${rowBg}'"`:''}>
+      <td style="padding:10px 14px;font-size:12px;font-weight:800;color:${isVac?'#16a34a':color};white-space:nowrap">
+        Week ${e.wn}
+      </td>
+      <td style="padding:10px 10px;font-size:11px;color:var(--text3);white-space:nowrap">${dateStr}</td>
+      <td style="padding:10px 10px">
+        ${isVac 
+          ? `<span style="background:#dcfce7;color:#16a34a;border-radius:10px;padding:3px 10px;font-size:11px;font-weight:800">🎉 ${esc(e.thema)}</span>`
+          : `<span style="background:${color}22;color:${color};border-radius:10px;padding:3px 10px;font-size:11px;font-weight:800">${esc(e.thema)}</span>`
+        }
+      </td>
+      <td style="padding:10px 10px;font-size:12px;color:var(--text);line-height:1.5;max-width:520px">
+        ${isVac ? `<span style="color:#16a34a;font-style:italic">${esc(e.les)}</span>` : esc(e.les)}
+      </td>
+      <td style="padding:10px 10px;min-width:240px">
+        ${!isVac && themaLeerdoelen.length ? `
+          <div style="font-size:10px;color:var(--text3);cursor:pointer;display:flex;align-items:center;gap:4px" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+            <span style="background:${color}22;color:${color};border-radius:8px;padding:2px 7px;font-weight:700">${themaLeerdoelen.length} leerdoelen</span>
+            <span>▾</span>
+          </div>
+          <div style="display:none;margin-top:5px">
+            ${themaLeerdoelen.map(l=>`<div style="font-size:10px;color:var(--text2);padding:2px 0;padding-left:8px;border-left:2px solid ${color}44;margin-bottom:3px">✓ ${esc(l)}</div>`).join('')}
+          </div>` : ''}
+      </td>
+    </tr>`;
+  }).join('');
+  
+  // Leerdoelen accordion section at bottom
+  const leerdoelenAccordion = Object.entries(leerdoelen).map(([thema, doelen]) => {
+    const color = THEMA_COLORS[thema] || 'var(--accent1)';
+    return `
+      <div style="border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--cream);cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="background:${color}22;color:${color};border-radius:10px;padding:4px 12px;font-size:12px;font-weight:800">${esc(thema)}</span>
+            <span style="font-size:11px;color:var(--text3)">${doelen.length} leerdoelen</span>
+          </div>
+          <span style="font-size:12px;color:var(--text3)">▾</span>
+        </div>
+        <div style="display:none;padding:12px 16px">
+          <ol style="margin:0;padding-left:20px">
+            ${doelen.map(d=>`<li style="font-size:12px;color:var(--text);padding:4px 0;border-bottom:1px solid var(--border);line-height:1.5">${esc(d)}</li>`).join('')}
+          </ol>
+        </div>
+      </div>`;
+  }).join('');
+  
+  return `
+    <div style="font-family:'Playfair Display',serif;font-size:22px;margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      📖 Jaarplannen
+    </div>
+    
+    <!-- Year selector -->
+    <div class="card" style="padding:14px;margin-bottom:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <span style="font-size:11px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-right:4px">Jaar</span>
+      ${jaarTabs}
+    </div>
+    
+    <!-- Thema filter -->
+    <div class="card" style="padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+      <span style="font-size:11px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-right:4px">Thema</span>
+      ${themaFilters}
+    </div>
+    
+    <!-- Weeks table -->
+    <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px">
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse">
+          <thead>
+            <tr style="background:var(--cream);border-bottom:2px solid var(--border)">
+              <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:800;color:var(--text2)">Week</th>
+              <th style="padding:10px 10px;text-align:left;font-size:11px;font-weight:800;color:var(--text2)">Datum</th>
+              <th style="padding:10px 10px;text-align:left;font-size:11px;font-weight:800;color:var(--text2)">Thema</th>
+              <th style="padding:10px 10px;text-align:left;font-size:11px;font-weight:800;color:var(--text2)">Lesinhoud</th>
+              <th style="padding:10px 10px;text-align:left;font-size:11px;font-weight:800;color:var(--text2)">Leerdoelen</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- Leerdoelen accordion (all per thema) -->
+    <div class="card" style="padding:16px">
+      <div style="font-size:14px;font-weight:800;color:var(--text2);margin-bottom:14px">📚 Alle leerdoelen — ${selectedJaar}e jaar</div>
+      ${leerdoelenAccordion || '<div style="font-size:12px;color:var(--text3)">Geen leerdoelen beschikbaar</div>'}
+    </div>`;
+}
+
+function jpSelectJaar(j) { state._jpSelectedJaar = j; state._jpSelectedThema = ''; renderMain(); }
+function jpSelectThema(t) { state._jpSelectedThema = t; renderMain(); }
 
 // ===================== SETTINGS =====================
 function renderSettings() {
@@ -2040,7 +3244,10 @@ function modalEditClass(classId) {
   const knownSchools = [...new Set(state.groups.flatMap(g=>g.classes.map(c=>c.school)).filter(Boolean))].sort();
   const schoolBtns = knownSchools.map(s=>`<button type="button" onclick="document.getElementById('me-school').value='${s.replace(/'/g,"\'")}'" style="padding:4px 10px;border-radius:20px;border:1.5px solid var(--border);background:var(--cream);cursor:pointer;font-size:11px;font-weight:600;font-family:'Nunito',sans-serif;color:var(--text2)" onmouseover="this.style.background='var(--accent1)15';this.style.borderColor='var(--accent1)'" onmouseout="this.style.background='var(--cream)';this.style.borderColor='var(--border)'">${esc(s)}</button>`).join('');
   const jaarOpts = ['','1','2','3','4','5','6'].map(v=>`<option value="${v}" ${cls.jaar===v?'selected':''}>${v?v+'de/ste jaar':'— Geen jaarplan —'}</option>`).join('');
+  // Group selector for moving klas to another group
+  const groepBtns = state.groups.map(g=>`<button type="button" onclick="document.querySelectorAll('[data-groep-btn]').forEach(b=>b.style.borderColor='var(--border)');this.style.borderColor='var(--accent1)';this.style.background='var(--accent1)15';document.getElementById('me-groep').value='${g.id}'" data-groep-btn style="padding:4px 12px;border-radius:20px;border:1.5px solid ${g.id===groupId?'var(--accent1)':'var(--border)'};background:${g.id===groupId?'var(--accent1)15':'var(--cream)'};cursor:pointer;font-size:11px;font-weight:700;font-family:'Nunito',sans-serif;color:var(--text2)">${esc(g.name)}</button>`).join('');
   openModal(`<div class="modal-title">✏️ Klas bewerken</div>
+    <input type="hidden" id="me-groep" value="${groupId}">
     <div class="form-group"><label class="form-label">Klasnaam</label>
       <input class="form-input" id="me-cls" value="${esc(cls.name)}" autofocus></div>
     <div class="form-group"><label class="form-label">School</label>
@@ -2048,18 +3255,31 @@ function modalEditClass(classId) {
       <input class="form-input" id="me-school" value="${esc(cls.school||'')}"></div>
     <div class="form-group"><label class="form-label">Jaar (jaarplan)</label>
       <select class="form-select" id="me-jaar">${jaarOpts}</select></div>
+    <div class="form-group"><label class="form-label">Groep (verplaatsen)</label>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">${groepBtns||'<span style="font-size:11px;color:var(--text3)">Geen andere groepen</span>'}</div>
+    </div>
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:20px">
       <button class="btn btn-danger" onclick="if(confirm('Klas verwijderen met alle leerlingen?')){deleteClass('${classId}');closeModal()}">🗑 Verwijderen</button>
       <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
-      <button class="btn btn-primary" onclick="doEditClass('${classId}')">Opslaan</button>
+      <button class="btn btn-primary" onclick="doEditClass('${classId}','${groupId}')">Opslaan</button>
     </div>`);
 }
-function doEditClass(classId) {
+function doEditClass(classId, origGroupId) {
   const name = document.getElementById('me-cls')?.value?.trim();
   const school = document.getElementById('me-school')?.value?.trim()||'';
   const jaar = document.getElementById('me-jaar')?.value||'';
+  const newGroupId = document.getElementById('me-groep')?.value || origGroupId;
   if(!name) return;
-  state.groups = state.groups.map(g=>({...g, classes:g.classes.map(c=>c.id===classId?{...c,name,school,jaar}:c)}));
+  // Find the class object
+  let clsObj = null;
+  state.groups = state.groups.map(g=>({...g, classes:g.classes.filter(c=>{
+    if(c.id===classId){clsObj={...c,name,school,jaar};return false;}
+    return true;
+  })}));
+  // Add to new group (or same)
+  if(clsObj) {
+    state.groups = state.groups.map(g=>g.id===newGroupId?{...g,classes:[...g.classes,clsObj]}:g);
+  }
   closeModal(); saveState(); showToast("Klas bijgewerkt ✅"); render();
 }
 function deleteClass(classId) {
