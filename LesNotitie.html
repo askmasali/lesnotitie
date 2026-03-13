@@ -15,6 +15,7 @@
     --text:      #3d2c3e;
     --text2:     #7a5c7e;
     --text3:     #b89abc;
+    --text4:     #d4b8da;
     --accent1:   #c084fc; /* lavender purple */
     --accent2:   #f9a8d4; /* pink */
     --accent3:   #fb923c; /* orange */
@@ -241,6 +242,18 @@
     <div class="color-pick-wrap">
       <label>Rand</label>
       <input type="color" id="pick-border" value="#f0dff5" onchange="setCustomColor('border',this.value)">
+    </div>
+    <div class="color-pick-wrap">
+      <label>Tekst 2</label>
+      <input type="color" id="pick-text2" value="#7a5c7e" onchange="setCustomColor('text2',this.value)">
+    </div>
+    <div class="color-pick-wrap">
+      <label>Tekst 3</label>
+      <input type="color" id="pick-text3" value="#b89abc" onchange="setCustomColor('text3',this.value)">
+    </div>
+    <div class="color-pick-wrap">
+      <label>Tekst 4</label>
+      <input type="color" id="pick-text4" value="#d4b8da" onchange="setCustomColor('text4',this.value)">
     </div>
   </div>
 </div>
@@ -2172,6 +2185,7 @@ function renderUurrooster() {
       <button class="btn btn-secondary btn-sm" onclick="exportUurroosterCSV()" style="font-size:11px">📥 CSV</button>
       <button class="btn btn-secondary btn-sm" onclick="printUurrooster()" style="font-size:11px">🖨️ PDF</button>
       <button class="btn btn-secondary btn-sm" onclick="openUurroosterSettings()" style="font-size:11px">⚙️ Tijden & knoppen bewerken</button>
+      <button class="btn btn-danger btn-sm" onclick="if(confirm('Alle slots leegmaken?')){window._uurrooster.slots={};saveUurrooster();render();showToast('✅ Uurrooster geleegd')}" style="font-size:11px">🗑 Alles wissen</button>
     </div>
   </div>
   <div style="overflow-x:auto">
@@ -2247,27 +2261,28 @@ function renderUurSlotCell(key, slot) {
     content = `<div style="font-size:12px;font-weight:800;color:${color};text-align:center;padding:12px 4px">${esc(slot.label||slot.type.toUpperCase())}</div>`;
   } else {
     // Les slot — new layout: lokaal top, school top-left, groep, klassen (with count), leerlingen link
-    const lokalBadge = slot.lokal ? `<div style="display:inline-block;background:${color}22;color:${color};border-radius:5px;padding:2px 7px;font-size:11px;font-weight:800;margin-bottom:5px">${esc(slot.lokal)}</div>` : '';
+    const lokalBadge = ''; // Lokaal hidden from cell view (shown in edit modal)
     
     // Build groep detail: school > groep > klassen > leerlingen link
     let groepBlocks = '';
     const groepIds = slot.groepIds||[];
     if(groepIds.length) {
-      groepIds.forEach(gId => {
+      [...groepIds].forEach(gId => {
         const g = state.groups.find(x=>x.id===gId||x.name===gId);
         if(!g) return;
         // School name (from first class)
         const school = g.classes[0]?.school||'';
         // Count total students in this groep
         const totalSt = g.classes.reduce((s,c)=>s+c.students.length,0);
-        groepBlocks += `<div style="margin-bottom:2px">`;
-        if(school) groepBlocks += `<div style="font-size:10px;color:var(--text3);font-weight:700;letter-spacing:.3px">${esc(school)}</div>`;
-        groepBlocks += `<div style="font-size:12px;font-weight:900;color:${color};cursor:pointer;margin-bottom:2px" onclick="event.stopPropagation();openGroepDetailFromSlot('${gId}')">📚 ${esc(g.name)} <span style="font-size:10px;font-weight:600;opacity:.7">(${totalSt})</span></div>`;
-        // Klassen
+        groepBlocks += `<div style="margin-bottom:3px">`;
+        if(school) groepBlocks += `<div style="font-size:10px;color:var(--text3);font-weight:700;letter-spacing:.3px;margin-bottom:1px">${esc(school)}</div>`;
+        // Groep name + klassen inline (horizontal)
         const sortedCls = [...g.classes].sort((a,b)=>a.name.localeCompare(b.name,'nl',{numeric:true}));
-        sortedCls.forEach(c=>{
-          groepBlocks += `<div style="font-size:10px;color:var(--text2);padding-left:8px;cursor:pointer;margin-bottom:1px" onclick="event.stopPropagation();openKlasPopup('${c.id}')">— ${esc(c.name)} <span style="opacity:.7">(${c.students.length})</span> <span style="color:var(--accent2)">👥</span></div>`;
-        });
+        const klasTags = sortedCls.map(c=>`<span onclick="event.stopPropagation();openKlasPopup('${c.id}')" style="display:inline-block;background:${color}18;color:${color};border-radius:5px;padding:1px 7px;font-size:12px;font-weight:800;cursor:pointer;margin-right:3px">${esc(c.name)} <span style="font-weight:500;opacity:.75">(${c.students.length})</span></span>`).join('');
+        groepBlocks += `<div style="display:flex;align-items:center;flex-wrap:wrap;gap:3px;cursor:pointer;margin-bottom:2px" onclick="event.stopPropagation();openGroepDetailFromSlot('${gId}')">
+          <span style="font-size:13px;font-weight:900;color:${color}">📚 ${esc(g.name)}</span>
+          ${klasTags}
+        </div>`;
         groepBlocks += `</div>`;
       });
     } else {
@@ -2286,7 +2301,7 @@ function renderUurSlotCell(key, slot) {
     });
   }
   
-  const countBadge = studentCount > 0 ? `<span style="position:absolute;top:3px;right:3px;background:${color};color:#fff;border-radius:10px;font-size:8px;padding:1px 4px;font-weight:700">${studentCount}</span>` : '';
+  const countBadge = ''; // Count shown inline per klas tag
   
   return `<div onclick="openUurSlotEdit('${key}')" style="position:relative;background:${bg};border-radius:8px;padding:8px 9px;cursor:pointer;border:1.5px solid ${slot.type==='les'?color+'44':'var(--border)'};min-height:80px;transition:all .12s" onmouseover="this.style.boxShadow='0 2px 10px ${color}33';this.style.borderColor='${color}'" onmouseout="this.style.boxShadow='none';this.style.borderColor='${slot.type==='les'?color+'44':'var(--border)'}'">
     ${content}
@@ -2367,11 +2382,17 @@ function openUurSlotEdit(key) {
     </div>
     
     <div id="uur-les-fields" style="display:${slot.type==='les'?'block':'none'}">
+      
+      <!-- LOKAAL with quick buttons for existing lokaals -->
       <div style="margin-bottom:12px">
         <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Lokaal</div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px">
+          ${[...new Set(Object.values(ur.slots||{}).map(s=>s.lokal).filter(Boolean))].sort().map(lk=>`<button onclick="document.getElementById('uur-lokal').value='${esc(lk)}'" style="padding:2px 10px;border-radius:20px;border:1.5px solid ${(slot.lokal||''===lk)?'var(--accent1)':'var(--border)'};background:var(--surface);cursor:pointer;font-size:11px;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">${esc(lk)}</button>`).join('')}
+        </div>
         <input id="uur-lokal" class="form-input" value="${esc(slot.lokal||'')}" placeholder="bijv. B005, i3, D19" style="max-width:200px">
       </div>
       
+      <!-- GROEPEN -->
       <div style="margin-bottom:12px">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
           <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px">Groep koppelen</div>
@@ -2380,30 +2401,41 @@ function openUurSlotEdit(key) {
         <div style="display:flex;flex-wrap:wrap;gap:6px">${groepBtns||'<span style="font-size:11px;color:var(--text3)">Geen groepen — ga naar Instellingen</span>'}</div>
       </div>
       
+      <!-- KLASSEN (filtered by selected groepen) -->
       ${allCls.length?`<div style="margin-bottom:12px">
         <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Klassen</div>
         <div style="display:flex;flex-wrap:wrap;gap:4px">${clsBtns}</div>
       </div>`:''}
       
+      <!-- LEERLINGEN PREVIEW -->
       ${studentPreview ? `<div style="margin-bottom:12px">
         <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Leerlingen <span style="font-weight:400;text-transform:none;font-size:9px">(klik om profiel te zien)</span></div>
-        <div style="max-height:180px;overflow-y:auto;background:var(--cream);border-radius:8px;padding:10px;border:1px solid var(--border)">${studentPreview}</div>
+        <div style="max-height:160px;overflow-y:auto;background:var(--cream);border-radius:8px;padding:10px;border:1px solid var(--border)">${studentPreview}</div>
       </div>` : ''}
       
+      <!-- NIEUWE LEERLING TOEVOEGEN - simplified: name only, links to selected groep/klas -->
       <div style="margin-bottom:12px;border:1.5px dashed var(--border);border-radius:10px;padding:12px;background:var(--surface2)">
-        <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">➕ Nieuwe leerling toevoegen aan klas</div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px" id="uur-school-btns">
-          ${[...new Set(allClasses().map(c=>c.school).filter(Boolean))].map(sch=>`<button onclick="document.getElementById('uur-new-school').value='${esc(sch)}';this.style.background='var(--accent1)';this.style.color='#fff';document.querySelectorAll('#uur-school-btns button').forEach(b=>b!==this&&(b.style.background='var(--cream)',b.style.color='var(--text2)'))" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--border);background:var(--cream);color:var(--text2);cursor:pointer;font-size:10px;font-weight:700;font-family:'Nunito',sans-serif">${esc(sch)}</button>`).join('')}
+        <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">➕ Nieuwe leerling toevoegen</div>
+        
+        <!-- School buttons -->
+        <div style="font-size:10px;color:var(--text3);font-weight:700;margin-bottom:4px">School</div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px" id="uur-school-btns">
+          ${[...new Set(allClasses().map(c=>c.school).filter(Boolean))].sort().map(sch=>`<button onclick="document.getElementById('uur-new-school').value='${esc(sch)}';document.querySelectorAll('#uur-school-btns button').forEach(b=>{b.style.background='var(--cream)';b.style.color='var(--text2)';b.style.borderColor='var(--border)'});this.style.background='var(--accent1)';this.style.color='#fff';this.style.borderColor='var(--accent1)'" style="padding:3px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--cream);color:var(--text2);cursor:pointer;font-size:11px;font-weight:700;font-family:'Nunito',sans-serif;transition:all .1s">${esc(sch)}</button>`).join('')}
         </div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px" id="uur-klas-btns">
-          ${allCls.map(c=>`<button onclick="document.getElementById('uur-new-klas').value='${esc(c.id)}';document.getElementById('uur-new-school').value='${esc(c.school||'')}';this.style.background='var(--accent2)22';this.style.borderColor='var(--accent2)';document.querySelectorAll('#uur-klas-btns button').forEach(b=>b!==this&&(b.style.background='var(--cream)',b.style.borderColor='var(--border)'))" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--border);background:var(--cream);color:var(--text2);cursor:pointer;font-size:10px;font-weight:700;font-family:'Nunito',sans-serif">${esc(c.name)}</button>`).join('')}
+        
+        <!-- Klas buttons (same as groep/klas section above for clarity) -->
+        <div style="font-size:10px;color:var(--text3);font-weight:700;margin-bottom:4px">Klas</div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px" id="uur-klas-btns2">
+          ${allCls.map(c=>`<button onclick="window._uurNewKlasId='${esc(c.id)}';window._uurNewKlasName='${esc(c.name)}';document.getElementById('uur-new-school').value='${esc(c.school||'')}';document.querySelectorAll('#uur-klas-btns2 button').forEach(b=>{b.style.background='var(--cream)';b.style.borderColor='var(--border)';b.style.color='var(--text2)'});this.style.background='var(--accent2)22';this.style.borderColor='var(--accent2)';this.style.color='var(--accent2)'" style="padding:3px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--cream);color:var(--text2);cursor:pointer;font-size:11px;font-weight:700;font-family:'Nunito',sans-serif;transition:all .1s">${esc(c.name)}</button>`).join('')}
         </div>
-        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-          <input id="uur-new-name" class="form-input" placeholder="Naam leerling" style="flex:1;min-width:120px;max-width:180px;font-size:11px;padding:5px 8px">
-          <input id="uur-new-klas" class="form-input" placeholder="Klas (bijv. 3B!)" style="width:90px;font-size:11px;padding:5px 8px">
-          <input id="uur-new-school" class="form-input" placeholder="School" style="width:100px;font-size:11px;padding:5px 8px">
-          <button onclick="addStudentFromSlot('${key}')" style="background:var(--accent1);color:#fff;border:none;border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;font-size:11px;font-family:'Nunito',sans-serif">➕ Voeg toe</button>
+        
+        <!-- Student name + add button -->
+        <div style="display:flex;gap:8px;align-items:center">
+          <input id="uur-new-name" class="form-input" placeholder="Naam leerling" style="flex:1;font-size:12px;padding:6px 10px" onkeydown="if(event.key==='Enter')addStudentFromSlot('${key}')">
+          <button onclick="addStudentFromSlot('${key}')" style="background:var(--accent1);color:#fff;border:none;border-radius:8px;padding:7px 16px;cursor:pointer;font-weight:700;font-size:12px;font-family:'Nunito',sans-serif;white-space:nowrap">➕ Voeg toe</button>
         </div>
+        <input type="hidden" id="uur-new-klas" value="">
+        <input type="hidden" id="uur-new-school" value="">
       </div>
     </div>
     
@@ -2447,10 +2479,11 @@ function setSlotType(key, type) {
 
 function addStudentFromSlot(slotKey) {
   const name = document.getElementById('uur-new-name')?.value?.trim();
-  const klasId = document.getElementById('uur-new-klas')?.value?.trim();
+  // Try window variable first (set by klas button click), fallback to hidden input
+  const klasId = window._uurNewKlasId || document.getElementById('uur-new-klas')?.value?.trim();
   const school = document.getElementById('uur-new-school')?.value?.trim();
   if(!name) { showToast('⚠️ Naam is verplicht'); return; }
-  if(!klasId) { showToast('⚠️ Klas is verplicht'); return; }
+  if(!klasId) { showToast('⚠️ Selecteer eerst een klas hierboven'); return; }
 
   // Find or create the class in state.groups
   let targetClass = null;
@@ -2490,6 +2523,7 @@ function addStudentFromSlot(slotKey) {
 
   // Clear inputs
   ['uur-new-name','uur-new-klas'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  window._uurNewKlasId = null; window._uurNewKlasName = null;
 
   // Refresh modal
   openUurSlotEdit(slotKey);
