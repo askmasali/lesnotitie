@@ -1419,14 +1419,41 @@ function showToast(msg) {
 }
 
 // ===================== MODAL =====================
-function openModal(html, width) {
+// Modal history stack
+window._modalHistory = [];
+
+function openModal(html, width, backFn) {
   const box = document.getElementById('modal-box');
-  box.innerHTML=html;
+  // Build back button if there's history
+  const hasBack = window._modalHistory.length > 0;
+  const backBtn = hasBack
+    ? `<div style="margin-bottom:12px"><button onclick="_modalGoBack()" style="background:none;border:none;cursor:pointer;font-size:12px;font-weight:700;color:var(--accent1);font-family:'Nunito',sans-serif;padding:0;display:flex;align-items:center;gap:4px">← Terug</button></div>`
+    : '';
+  box.innerHTML = backBtn + html;
   if(width) box.style.maxWidth=width;
-  else box.style.maxWidth='';
+  else box.style.maxWidth='560px';
   document.getElementById('modal').style.display='flex';
 }
-function closeModal() { document.getElementById('modal').style.display='none'; }
+
+function pushModal(html, width) {
+  // Push current content to history, then open new
+  const box = document.getElementById('modal-box');
+  window._modalHistory.push({html: box.innerHTML, width: box.style.maxWidth});
+  openModal(html, width);
+}
+
+function _modalGoBack() {
+  if(!window._modalHistory.length) { closeModal(); return; }
+  const prev = window._modalHistory.pop();
+  const box = document.getElementById('modal-box');
+  box.innerHTML = prev.html;
+  box.style.maxWidth = prev.width;
+}
+
+function closeModal() {
+  document.getElementById('modal').style.display='none';
+  window._modalHistory = [];
+}
 
 // ===================== RENDER =====================
 function render() {
@@ -2303,9 +2330,9 @@ function renderUurSlotCell(key, slot) {
   
   const countBadge = ''; // Count shown inline per klas tag
   
-  return `<div onclick="openUurSlotEdit('${key}')" style="position:relative;background:${bg};border-radius:8px;padding:8px 9px;cursor:pointer;border:1.5px solid ${slot.type==='les'?color+'44':'var(--border)'};min-height:80px;transition:all .12s" onmouseover="this.style.boxShadow='0 2px 10px ${color}33';this.style.borderColor='${color}'" onmouseout="this.style.boxShadow='none';this.style.borderColor='${slot.type==='les'?color+'44':'var(--border)'}'">
-    ${content}
-    ${countBadge}
+  return `<div style="position:relative;background:${bg};border-radius:8px;padding:8px 9px;border:1.5px solid ${slot.type==='les'?color+'44':'var(--border)'};min-height:80px;transition:all .12s" onmouseover="this.style.boxShadow='0 2px 10px ${color}33';this.style.borderColor='${color}';this.querySelector('.uur-edit-btn').style.opacity='1'" onmouseout="this.style.boxShadow='none';this.style.borderColor='${slot.type==='les'?color+'44':'var(--border)'}';this.querySelector('.uur-edit-btn').style.opacity='0'">
+    <div onclick="openUurSlotEdit('${key}')" style="cursor:pointer;min-height:60px">${content}</div>
+    <button class="uur-edit-btn" onclick="event.stopPropagation();openUurSlotEdit('${key}')" style="position:absolute;top:4px;right:4px;opacity:0;background:${color}22;border:1px solid ${color}44;border-radius:6px;padding:2px 7px;cursor:pointer;font-size:11px;color:${color};font-family:'Nunito',sans-serif;font-weight:700;transition:opacity .15s">✏️</button>
   </div>`;
 }
 
@@ -2332,9 +2359,12 @@ function openUurSlotEdit(key) {
   const groepBtns = sortedGroups.map(g=>{
     const sel = (slot.groepIds||[]).includes(g.id)||(slot.groepIds||[]).includes(g.name);
     const cnt = g.classes.reduce((s,c)=>s+c.students.length,0);
-    return `<button onclick="toggleSlotGroep('${key}','${g.id}')" id="grpbtn-${g.id}" style="padding:4px 10px;border-radius:8px;border:1.5px solid ${sel?'var(--accent1)':'var(--border)'};background:${sel?'var(--accent1)15':'var(--surface)'};color:${sel?'var(--accent1)':'var(--text2)'};cursor:pointer;font-size:11px;font-weight:700;font-family:'Nunito',sans-serif;display:flex;align-items:center;gap:4px">
-      📚 ${esc(g.name)} <span style="font-size:9px;opacity:.7">(${cnt})</span>
-    </button>`;
+    return `<div id="grpbtn-wrap-${g.id}" style="display:flex;align-items:center;border-radius:8px;border:1.5px solid ${sel?'var(--accent1)':'var(--border)'};background:${sel?'var(--accent1)15':'var(--surface)'};overflow:hidden">
+      <button onclick="toggleSlotGroep('${key}','${g.id}')" id="grpbtn-${g.id}" style="padding:4px 10px;border:none;background:transparent;color:${sel?'var(--accent1)':'var(--text2)'};cursor:pointer;font-size:11px;font-weight:700;font-family:'Nunito',sans-serif;display:flex;align-items:center;gap:4px">
+        📚 ${esc(g.name)} <span style="font-size:9px;opacity:.7">(${cnt})</span>
+      </button>
+      ${sel?`<button onclick="toggleSlotGroep('${key}','${g.id}')" style="border:none;background:transparent;color:var(--accent1);cursor:pointer;padding:4px 6px;font-size:11px;font-weight:700;font-family:'Nunito',sans-serif" title="Verwijderen">×</button>`:''}
+    </div>`;
   }).join('');
   
   // Class selectors (all classes from state)
@@ -2386,10 +2416,14 @@ function openUurSlotEdit(key) {
       <!-- LOKAAL with quick buttons for existing lokaals -->
       <div style="margin-bottom:12px">
         <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Lokaal</div>
-        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px">
-          ${[...new Set(Object.values(ur.slots||{}).map(s=>s.lokal).filter(Boolean))].sort().map(lk=>`<button onclick="document.getElementById('uur-lokal').value='${esc(lk)}'" style="padding:2px 10px;border-radius:20px;border:1.5px solid ${(slot.lokal||''===lk)?'var(--accent1)':'var(--border)'};background:var(--surface);cursor:pointer;font-size:11px;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">${esc(lk)}</button>`).join('')}
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px" id="uur-lokaal-btns">
+          ${[...new Set(Object.values(ur.slots||{}).map(s=>s.lokal).filter(Boolean))].sort().map(lk=>`<div style="display:flex;align-items:center;border:1.5px solid var(--border);border-radius:20px;overflow:hidden;background:var(--surface)">
+            <button onclick="document.getElementById('uur-lokal').value='${esc(lk)}';this.closest('div').style.borderColor='var(--accent1)'" style="padding:2px 10px;border:none;background:transparent;cursor:pointer;font-size:11px;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">${esc(lk)}</button>
+            <button onclick="renameUurLokaal('${key}','${esc(lk)}')" style="border:none;background:transparent;cursor:pointer;font-size:10px;color:var(--text3);padding:2px 4px" title="Hernoemen">✏️</button>
+            <button onclick="deleteUurLokaal('${key}','${esc(lk)}')" style="border:none;background:transparent;cursor:pointer;font-size:10px;color:#f87171;padding:2px 4px" title="Verwijderen uit alle slots">🗑</button>
+          </div>`).join('')}
         </div>
-        <input id="uur-lokal" class="form-input" value="${esc(slot.lokal||'')}" placeholder="bijv. B005, i3, D19" style="max-width:200px">
+        <input id="uur-lokal" class="form-input" value="${esc(slot.lokal||'')}" placeholder="bijv. B005, i3, D19" style="max-width:220px" onchange="saveUurSlotField('${key}','lokal',this.value)">
       </div>
       
       <!-- GROEPEN -->
@@ -2423,10 +2457,16 @@ function openUurSlotEdit(key) {
           ${[...new Set(allClasses().map(c=>c.school).filter(Boolean))].sort().map(sch=>`<button onclick="document.getElementById('uur-new-school').value='${esc(sch)}';document.querySelectorAll('#uur-school-btns button').forEach(b=>{b.style.background='var(--cream)';b.style.color='var(--text2)';b.style.borderColor='var(--border)'});this.style.background='var(--accent1)';this.style.color='#fff';this.style.borderColor='var(--accent1)'" style="padding:3px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--cream);color:var(--text2);cursor:pointer;font-size:11px;font-weight:700;font-family:'Nunito',sans-serif;transition:all .1s">${esc(sch)}</button>`).join('')}
         </div>
         
+        <!-- Klassengroep selector -->
+        <div style="font-size:10px;color:var(--text3);font-weight:700;margin-bottom:4px">Klassengroep <span style="font-weight:400;font-size:9px">(optioneel filter)</span></div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px" id="uur-grp-btns2">
+          ${[...state.groups].sort((a,b)=>a.name.localeCompare(b.name,'nl',{numeric:true})).map(g=>`<button onclick="window._uurFilterGroepId='${esc(g.id)}';document.querySelectorAll('#uur-grp-btns2 button').forEach(b=>{b.style.background='var(--cream)';b.style.borderColor='var(--border)';b.style.color='var(--text2)'});this.style.background='var(--accent1)22';this.style.borderColor='var(--accent1)';this.style.color='var(--accent1)';filterKlasBtns2('${esc(g.id)}')" style="padding:3px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--cream);color:var(--text2);cursor:pointer;font-size:11px;font-weight:700;font-family:'Nunito',sans-serif;transition:all .1s">📚 ${esc(g.name)}</button>`).join('')}
+        </div>
+        
         <!-- Klas buttons (same as groep/klas section above for clarity) -->
         <div style="font-size:10px;color:var(--text3);font-weight:700;margin-bottom:4px">Klas</div>
         <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px" id="uur-klas-btns2">
-          ${allCls.map(c=>`<button onclick="window._uurNewKlasId='${esc(c.id)}';window._uurNewKlasName='${esc(c.name)}';document.getElementById('uur-new-school').value='${esc(c.school||'')}';document.querySelectorAll('#uur-klas-btns2 button').forEach(b=>{b.style.background='var(--cream)';b.style.borderColor='var(--border)';b.style.color='var(--text2)'});this.style.background='var(--accent2)22';this.style.borderColor='var(--accent2)';this.style.color='var(--accent2)'" style="padding:3px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--cream);color:var(--text2);cursor:pointer;font-size:11px;font-weight:700;font-family:'Nunito',sans-serif;transition:all .1s">${esc(c.name)}</button>`).join('')}
+          ${[...allCls].sort((a,b)=>a.name.localeCompare(b.name,'nl',{numeric:true})).map(c=>`<button data-cls-id="${esc(c.id)}" onclick="window._uurNewKlasId='${esc(c.id)}';window._uurNewKlasName='${esc(c.name)}';document.getElementById('uur-new-school').value='${esc(c.school||'')}';document.querySelectorAll('#uur-klas-btns2 button').forEach(b=>{b.style.background='var(--cream)';b.style.borderColor='var(--border)';b.style.color='var(--text2)'});this.style.background='var(--accent2)22';this.style.borderColor='var(--accent2)';this.style.color='var(--accent2)'" style="padding:3px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--cream);color:var(--text2);cursor:pointer;font-size:11px;font-weight:700;font-family:'Nunito',sans-serif;transition:all .1s">${esc(c.name)}</button>`).join('')}
         </div>
         
         <!-- Student name + add button -->
@@ -2451,8 +2491,7 @@ function openUurSlotEdit(key) {
     </div>
     
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
-      <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
-      <button class="btn btn-primary" onclick="saveUurSlot('${key}')">💾 Opslaan</button>
+      <button class="btn btn-ghost" onclick="saveUurSlot('${key}');closeModal()">✕ Sluiten</button>
     </div>`);
   
   // Store current slot key for helpers
@@ -2477,6 +2516,33 @@ function setSlotType(key, type) {
   });
 }
 
+function renameUurLokaal(slotKey, oldName) {
+  const newName = prompt(`Lokaal hernoemen (was: ${oldName}):`, oldName);
+  if(!newName || newName===oldName) return;
+  const ur = window._uurrooster;
+  Object.keys(ur.slots||{}).forEach(k=>{
+    if(ur.slots[k].lokal===oldName) ur.slots[k].lokal=newName;
+  });
+  if(document.getElementById('uur-lokal')?.value===oldName) document.getElementById('uur-lokal').value=newName;
+  saveUurrooster(); openUurSlotEdit(slotKey); showToast(`✅ ${oldName} → ${newName}`);
+}
+function deleteUurLokaal(slotKey, name) {
+  if(!confirm(`"${name}" alle slots'tan kaldırılsın mı?`)) return;
+  const ur = window._uurrooster;
+  Object.keys(ur.slots||{}).forEach(k=>{
+    if(ur.slots[k].lokal===name) ur.slots[k].lokal='';
+  });
+  saveUurrooster(); openUurSlotEdit(slotKey); showToast(`✅ ${name} kaldırıldı`);
+}
+function filterKlasBtns2(groepId) {
+  const g = state.groups.find(x=>x.id===groepId);
+  if(!g) return;
+  const cls = g.classes.map(c=>c.id);
+  document.querySelectorAll('#uur-klas-btns2 button').forEach(btn=>{
+    const kid = btn.getAttribute('data-cls-id');
+    btn.style.display = cls.includes(kid) ? '' : 'none';
+  });
+}
 function addStudentFromSlot(slotKey) {
   const name = document.getElementById('uur-new-name')?.value?.trim();
   // Try window variable first (set by klas button click), fallback to hidden input
@@ -2535,14 +2601,9 @@ function toggleSlotGroep(key, gId) {
   const ids = ur.slots[key].groepIds || [];
   const has = ids.includes(gId);
   ur.slots[key].groepIds = has ? ids.filter(x=>x!==gId) : [...ids, gId];
-  // Update button style
-  const btn = document.getElementById(`grpbtn-${gId}`);
-  if(btn) {
-    const sel = ur.slots[key].groepIds.includes(gId);
-    btn.style.borderColor = sel ? 'var(--accent1)' : 'var(--border)';
-    btn.style.background = sel ? 'var(--accent1)15' : 'var(--surface)';
-    btn.style.color = sel ? 'var(--accent1)' : 'var(--text2)';
-  }
+  saveUurrooster();
+  // Refresh the slot edit modal to reflect changes
+  openUurSlotEdit(key);
 }
 
 function toggleSlotKlas(key, cId) {
@@ -2560,6 +2621,12 @@ function toggleSlotKlas(key, cId) {
   }
 }
 
+function saveUurSlotField(key, field, val) {
+  const ur = window._uurrooster;
+  if(!ur.slots[key]) ur.slots[key] = {type:'les',lokal:'',label:'',groepIds:[],klasIds:[]};
+  ur.slots[key][field] = val;
+  saveUurrooster();
+}
 function saveUurSlot(key) {
   const ur = window._uurrooster;
   if(!ur.slots[key]) ur.slots[key] = {type:'vrij',lokal:'',label:'',groepIds:[],klasIds:[]};
@@ -2571,7 +2638,6 @@ function saveUurSlot(key) {
     slot.lokal = document.getElementById('uur-lokal-custom')?.value?.trim()||'';
   }
   saveUurrooster();
-  closeModal();
   render();
   showToast("✅ Uur opgeslagen");
 }
@@ -2655,6 +2721,23 @@ function openUurroosterSettings() {
       </div>
     </div>
     
+    <!-- PAUZES -->
+    <div style="margin-bottom:16px">
+      <div style="font-size:11px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Pauzes & Toezicht</div>
+      <div id="pauze-list">
+        ${(ur.pauzes||[]).map((p,pi)=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;background:var(--cream);padding:8px;border-radius:8px;border:1px solid var(--border)">
+          <span style="font-size:11px;font-weight:700;color:var(--text3);white-space:nowrap">Na uur</span>
+          <select id="pz-uur-${pi}" class="form-select" style="width:70px;font-size:11px">
+            ${ur.tijden.map(t=>`<option value="${t.uur}" ${t.uur===p.na_uur?'selected':''}>${t.uur}</option>`).join('')}
+          </select>
+          <input id="pz-lbl-${pi}" class="form-input" value="${esc(p.label)}" placeholder="Pauze label" style="flex:1;font-size:11px">
+          <input id="pz-tz-${pi}" class="form-input" value="${esc((ur.toezicht||{})[p.na_uur]||'')}" placeholder="Toezicht omschrijving (optioneel)" style="flex:2;font-size:11px">
+          <button onclick="removePauze(${pi})" style="background:#fee2e2;color:#dc2626;border:1px solid #fca5a5;border-radius:6px;padding:3px 8px;cursor:pointer;font-size:11px;font-family:'Nunito',sans-serif">🗑</button>
+        </div>`).join('')}
+      </div>
+      <button onclick="addPauze()" style="background:var(--accent1);color:#fff;border:none;border-radius:8px;padding:5px 14px;cursor:pointer;font-weight:700;font-size:11px;font-family:'Nunito',sans-serif">➕ Pauze toevoegen</button>
+    </div>
+    
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
       <button class="btn btn-danger btn-sm" onclick="if(confirm('Uurrooster resetten naar standaard?')){window._uurrooster=JSON.parse(JSON.stringify(DEFAULT_UURROOSTER));saveUurrooster();closeModal();render();}">Reset</button>
       <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
@@ -2670,8 +2753,44 @@ function saveUurroosterSettings() {
     if(s) t.start = s;
     if(e) t.end = e;
   });
+  // Save pauzes
+  const newPauzes = [];
+  const newToezicht = {};
+  (ur.pauzes||[]).forEach((p,pi)=>{
+    const uur = parseInt(document.getElementById(`pz-uur-${pi}`)?.value||p.na_uur);
+    const lbl = document.getElementById(`pz-lbl-${pi}`)?.value?.trim()||p.label;
+    const tz = document.getElementById(`pz-tz-${pi}`)?.value?.trim()||'';
+    newPauzes.push({na_uur:uur,label:lbl});
+    if(tz) newToezicht[uur]=tz;
+  });
+  ur.pauzes = newPauzes;
+  ur.toezicht = newToezicht;
   saveUurrooster(); closeModal(); render();
   showToast("✅ Instellingen opgeslagen");
+}
+function addPauze() {
+  const ur = window._uurrooster;
+  if(!ur.pauzes) ur.pauzes = [];
+  ur.pauzes.push({na_uur:3, label:'Pauze'});
+  openUurroosterSettings();
+}
+function removePauze(idx) {
+  const ur = window._uurrooster;
+  // Save current form state before removing
+  const newPauzes = [];
+  const newToezicht = {};
+  ur.pauzes.forEach((p,pi)=>{
+    if(pi===idx) return;
+    const uur = parseInt(document.getElementById(`pz-uur-${pi}`)?.value||p.na_uur);
+    const lbl = document.getElementById(`pz-lbl-${pi}`)?.value?.trim()||p.label;
+    const tz = document.getElementById(`pz-tz-${pi}`)?.value?.trim()||'';
+    newPauzes.push({na_uur:uur,label:lbl});
+    if(tz) newToezicht[uur]=tz;
+  });
+  ur.pauzes = newPauzes;
+  ur.toezicht = newToezicht;
+  saveUurrooster();
+  openUurroosterSettings();
 }
 
 function addUurBtn() {
@@ -2693,6 +2812,72 @@ function removeUurBtn(idx) {
 }
 
 // Open student detail from uurrooster slot (in-place, no navigation away)
+function openKlasPopupPush(classId) {
+  // Open klas popup with back button (uses pushModal)
+  let found=null, foundGroup=null;
+  state.groups.forEach(g=>g.classes.forEach(c=>{ if(c.id===classId){found=c;foundGroup=g;} }));
+  if(!found) return;
+  const sortedStudents = [...found.students].sort((a,b)=>a.name.localeCompare(b.name,'nl'));
+  const currentWId = state.selectedWeek;
+  const currentWeekLabel = state.weeks.find(w=>w.id===currentWId)?.label||'';
+  const rating = state.categories.find(c=>c.type==='rating');
+  const studentRows = sortedStudents.map(s=>{
+    const ev = getEval(currentWId, s.id);
+    const aanw = ev.aanwezig||'Aanwezig';
+    const color = aanw==='Afwezig'?'#f87171':aanw==='Te laat'?'#fbbf24':'#34d399';
+    const ratingVal = rating ? (ev[rating.id]||'—') : '';
+    return `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+      <span style="width:8px;height:8px;border-radius:50%;background:${color};flex-shrink:0"></span>
+      <span onclick="pushStudentProfile('${s.id}')" style="font-size:13px;font-weight:700;color:var(--text);cursor:pointer;flex:1" onmouseover="this.style.color='var(--accent1)'" onmouseout="this.style.color='var(--text)'">${esc(s.name)}</span>
+      <span style="font-size:10px;color:var(--text3)">${esc(aanw)}</span>
+      ${ratingVal&&ratingVal!=='—'?`<span style="font-size:10px;background:var(--surface2);border-radius:6px;padding:2px 7px;font-weight:700;color:var(--text2)">${esc(ratingVal)}</span>`:''}
+      <button onclick="editWeekEvalInline('${currentWId}','${s.id}')" style="background:none;border:1px solid var(--border);border-radius:6px;padding:2px 7px;cursor:pointer;font-size:10px;color:var(--text3);font-family:'Nunito',sans-serif">✏️</button>
+    </div>`;
+  }).join('');
+  pushModal(`
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:20px">🎓 ${esc(found.name)}</div>
+        <div style="font-size:11px;color:var(--text3)">${esc(found.school||'')} · ${foundGroup?esc(foundGroup.name):''} · ${found.students.length} leerlingen</div>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:6px">
+        <button onclick="openInlineGroepEdit('${foundGroup?.id||''}')" style="padding:4px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--cream);cursor:pointer;font-size:11px;font-weight:700;color:var(--text3);font-family:'Nunito',sans-serif">✏️ Bewerken</button>
+        <button onclick="closeModal()" style="background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕</button>
+      </div>
+    </div>
+    <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:10px">📅 ${esc(currentWeekLabel)} — aanwezigheid & beoordeling</div>
+    <div style="max-height:60vh;overflow-y:auto">${studentRows||'<div style="color:var(--text3);text-align:center;padding:20px">Geen leerlingen</div>'}</div>
+  `, '600px');
+}
+
+function pushStudentProfile(sId) {
+  // Navigate to student profile FROM a modal (not full page switch)
+  const s = allStudents().find(x=>x.id===sId);
+  if(!s) return;
+  // Build a compact student profile in the modal
+  const weeks = state.weeks.filter(w=>!w.isHoliday);
+  let rows = '';
+  weeks.forEach(w=>{
+    const ev = getEval(w.id, s.id);
+    const aanw = ev.aanwezig||'Aanwezig';
+    const col = aanw==='Afwezig'?'#f87171':aanw==='Te laat'?'#fbbf24':'#34d399';
+    rows += `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
+      <span style="font-size:11px;color:var(--text3);width:60px;flex-shrink:0">${esc(w.label)}</span>
+      <span style="width:7px;height:7px;border-radius:50%;background:${col}"></span>
+      <span style="font-size:11px;color:var(--text2)">${esc(aanw)}</span>
+      <button onclick="editWeekEvalInline('${w.id}','${s.id}')" style="margin-left:auto;background:none;border:1px solid var(--border);border-radius:5px;padding:1px 6px;cursor:pointer;font-size:10px;color:var(--text3);font-family:'Nunito',sans-serif">✏️</button>
+    </div>`;
+  });
+  pushModal(`
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <div style="font-family:'Playfair Display',serif;font-size:20px">👤 ${esc(s.name)}</div>
+      <button onclick="closeModal();openStudentProfile('${s.id}')" style="margin-left:auto;padding:4px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--cream);cursor:pointer;font-size:11px;font-weight:700;color:var(--text3);font-family:'Nunito',sans-serif">📄 Volledig profiel</button>
+      <button onclick="closeModal()" style="background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕</button>
+    </div>
+    <div style="max-height:65vh;overflow-y:auto">${rows}</div>
+  `, '580px');
+}
+
 function openSlotStudentDetail(sId) {
   const s = allStudents().find(x=>x.id===sId);
   if(!s) return;
@@ -3454,6 +3639,119 @@ function doSaveCategory(id) {
 
 
 // ===================== GROEP/KLAS POPUPS (Dashboard) =====================
+function openInlineGroepEdit(gId) {
+  const g = state.groups.find(x=>x.id===gId);
+  if(!g) return;
+
+  function buildHtml() {
+    const knownSchools = [...new Set(state.groups.flatMap(gr=>gr.classes.map(c=>c.school)).filter(Boolean))].sort();
+    const sortedCls = [...g.classes].sort((a,b)=>a.name.localeCompare(b.name,'nl',{numeric:true}));
+    
+    // Groep name editor
+    let h = `<div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:20px">✏️ ${esc(g.name)} bewerken</div>
+        <div style="font-size:11px;color:var(--text3)">${g.classes.length} klassen · ${g.classes.reduce((s,c)=>s+c.students.length,0)} leerlingen</div>
+      </div>
+      <button onclick="closeModal()" style="margin-left:auto;background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕</button>
+    </div>`;
+
+    // Edit groep name
+    h += `<div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;background:var(--cream);padding:10px;border-radius:8px;border:1px solid var(--border)">
+      <div style="font-size:11px;font-weight:800;color:var(--text3);white-space:nowrap">Groepnaam:</div>
+      <input id="ige-grpname" class="form-input" value="${esc(g.name)}" style="flex:1;font-size:13px;font-weight:700">
+      <button onclick="doInlineEditGroepName('${gId}')" style="background:var(--accent1);color:#fff;border:none;border-radius:8px;padding:5px 14px;cursor:pointer;font-weight:700;font-size:11px;font-family:'Nunito',sans-serif">✓ Opslaan</button>
+      <button onclick="if(confirm('Hele groep verwijderen?')){deleteGroup('${gId}');closeModal()}" style="background:#fee2e2;color:#dc2626;border:1px solid #fca5a5;border-radius:8px;padding:5px 10px;cursor:pointer;font-weight:700;font-size:11px;font-family:'Nunito',sans-serif">🗑</button>
+    </div>`;
+
+    // Klassen
+    h += `<div style="font-size:11px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Klassen</div>`;
+    
+    sortedCls.forEach(c => {
+      const schoolBtns = knownSchools.map(s=>`<button onclick="document.getElementById('ige-sch-${c.id}').value='${esc(s)}'" style="padding:2px 8px;border-radius:20px;border:1px solid var(--border);background:var(--cream);cursor:pointer;font-size:10px;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">${esc(s)}</button>`).join('');
+      const jaarOpts = ['','1','2','3','4','5','6'].map(v=>`<option value="${v}" ${c.jaar===v?'selected':''}>${v?v+'e jaar':'— geen jaarplan —'}</option>`).join('');
+      
+      h += `<div style="border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;background:var(--surface)">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <input id="ige-cls-${c.id}" class="form-input" value="${esc(c.name)}" style="width:80px;font-size:13px;font-weight:800">
+          <div style="display:flex;gap:4px;flex-wrap:wrap">${schoolBtns}</div>
+          <input id="ige-sch-${c.id}" class="form-input" value="${esc(c.school||'')}" placeholder="School" style="flex:1;font-size:11px">
+          <select id="ige-jr-${c.id}" class="form-select" style="font-size:11px;width:100px">${jaarOpts}</select>
+          <button onclick="doInlineEditKlas('${gId}','${c.id}')" style="background:var(--accent1);color:#fff;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-weight:700;font-size:10px;font-family:'Nunito',sans-serif">✓</button>
+          <button onclick="if(confirm('Klas verwijderen?')){deleteClass('${c.id}');openInlineGroepEdit('${gId}')}" style="background:#fee2e2;color:#dc2626;border:1px solid #fca5a5;border-radius:6px;padding:4px 8px;cursor:pointer;font-weight:700;font-size:10px;font-family:'Nunito',sans-serif">🗑</button>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:3px;padding-left:4px">
+          ${[...c.students].sort((a,b)=>a.name.localeCompare(b.name,'nl')).map(s=>{
+            return `<div style="display:flex;align-items:center;gap:2px;background:var(--cream);border:1px solid var(--border);border-radius:10px;padding:2px 6px 2px 10px">
+              <span onclick="closeModal();openStudentProfile('${s.id}')" style="font-size:11px;font-weight:700;color:var(--text2);cursor:pointer">${esc(s.name)}</span>
+              <button onclick="if(confirm('${esc(s.name)} verwijderen?')){deleteStudent('${s.id}');openInlineGroepEdit('${gId}')}" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--text3);padding:0 2px;line-height:1">×</button>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>`;
+    });
+
+    // + Nieuwe klas
+    h += `<div style="margin-top:12px;padding:10px;border:1.5px dashed var(--border);border-radius:10px;background:var(--surface2)">
+      <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">➕ Nieuwe klas toevoegen</div>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <input id="ige-new-cls" class="form-input" placeholder="Klasnaam (bijv. 2B1)" style="width:120px;font-size:12px">
+        <input id="ige-new-sch" class="form-input" placeholder="School" style="width:120px;font-size:12px">
+        <select id="ige-new-jr" class="form-select" style="font-size:11px;width:110px">
+          ${['','1','2','3','4','5','6'].map(v=>`<option value="${v}">${v?v+'e jaar':'— geen jaarplan —'}</option>`).join('')}
+        </select>
+        <button onclick="doInlineAddKlas('${gId}')" style="background:var(--accent1);color:#fff;border:none;border-radius:8px;padding:6px 14px;cursor:pointer;font-weight:700;font-size:11px;font-family:'Nunito',sans-serif">➕ Voeg toe</button>
+      </div>
+    </div>`;
+
+    return h;
+  }
+
+  openModal(`<div style="max-height:80vh;overflow-y:auto">${buildHtml()}</div>`, '750px');
+}
+
+function doInlineEditGroepName(gId) {
+  const g = state.groups.find(x=>x.id===gId);
+  if(!g) return;
+  const nm = document.getElementById('ige-grpname')?.value?.trim();
+  if(!nm) return;
+  g.name = nm;
+  saveState(); render(); openInlineGroepEdit(gId);
+  showToast('✅ Groepnaam bijgewerkt');
+}
+
+function doInlineEditKlas(gId, cId) {
+  const g = state.groups.find(x=>x.id===gId);
+  if(!g) return;
+  const c = g.classes.find(x=>x.id===cId);
+  if(!c) return;
+  const nm = document.getElementById(`ige-cls-${cId}`)?.value?.trim();
+  const sch = document.getElementById(`ige-sch-${cId}`)?.value?.trim()||'';
+  const jr = document.getElementById(`ige-jr-${cId}`)?.value||'';
+  if(!nm) return;
+  c.name = nm; c.school = sch; c.jaar = jr;
+  saveState(); render(); openInlineGroepEdit(gId);
+  showToast('✅ Klas bijgewerkt');
+}
+
+function doInlineAddKlas(gId) {
+  const g = state.groups.find(x=>x.id===gId);
+  if(!g) return;
+  const nm = document.getElementById('ige-new-cls')?.value?.trim();
+  const sch = document.getElementById('ige-new-sch')?.value?.trim()||'';
+  const jr = document.getElementById('ige-new-jr')?.value||'';
+  if(!nm) { showToast('⚠️ Klasnaam verplicht'); return; }
+  if(g.classes.find(c=>c.name.toLowerCase()===nm.toLowerCase())) { showToast('⚠️ Klas bestaat al'); return; }
+  g.classes.push({id:'c'+Date.now(),name:nm,school:sch,jaar:jr,students:[]});
+  saveState(); render(); openInlineGroepEdit(gId);
+  showToast('✅ Klas toegevoegd');
+}
+
+function deleteGroup(gId) {
+  state.groups = state.groups.filter(g=>g.id!==gId);
+  saveState(); render(); showToast('✅ Groep verwijderd');
+}
+
 function openGroepPopup(gId) {
   const g = state.groups.find(x=>x.id===gId);
   if(!g) return;
@@ -3473,7 +3771,7 @@ function openGroepPopup(gId) {
     let clsOpm=0;
     c.students.forEach(s=>{ state.weeks.forEach(w=>{ const ev=state.evaluations?.[w.id+'_'+s.id]; if(ev?.opmerking?.trim()) clsOpm++; }); });
     return `<div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:10px">
-      <div style="background:var(--cream);padding:8px 12px;display:flex;align-items:center;gap:8px;cursor:pointer" onclick="closeModal();openKlasPopup('${c.id}')">
+      <div style="background:var(--cream);padding:8px 12px;display:flex;align-items:center;gap:8px;cursor:pointer" onclick="openKlasPopupPush('${c.id}')">
         <span style="font-weight:800;font-size:13px;color:var(--accent1)">${esc(c.name)}</span>
         <span style="font-size:10px;color:var(--text3)">${esc(c.school||'')} ${c.jaar?'· '+c.jaar+'e jr':''}</span>
         ${clsOpm?`<span style="font-size:9px;background:#fef3c7;color:#d97706;border-radius:6px;padding:1px 6px;font-weight:700">💬 ${clsOpm}</span>`:''}
@@ -3490,7 +3788,7 @@ function openGroepPopup(gId) {
         <div style="font-size:11px;color:var(--text3)">${totalSt} leerlingen · ${g.classes.length} klassen</div>
       </div>
       <div style="margin-left:auto;display:flex;gap:6px">
-        <button onclick="closeModal();switchView('settings')" style="padding:4px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--cream);cursor:pointer;font-size:11px;font-weight:700;color:var(--text3);font-family:'Nunito',sans-serif">✏️ Bewerken</button>
+        <button onclick="openInlineGroepEdit('${esc(g.id)}')" style="padding:4px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--cream);cursor:pointer;font-size:11px;font-weight:700;color:var(--text3);font-family:'Nunito',sans-serif">✏️ Bewerken</button>
         <button onclick="closeModal()" style="background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕</button>
       </div>
     </div>
@@ -3526,7 +3824,7 @@ function openKlasPopup(classId) {
         <div style="font-size:11px;color:var(--text3)">${esc(found.school||'')} · ${foundGroup?esc(foundGroup.name):''} · ${found.students.length} leerlingen</div>
       </div>
       <div style="margin-left:auto;display:flex;gap:6px">
-        <button onclick="closeModal();modalEditClass('${classId}')" style="padding:4px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--cream);cursor:pointer;font-size:11px;font-weight:700;color:var(--text3);font-family:'Nunito',sans-serif">✏️ Bewerken</button>
+        <button onclick="closeModal();openInlineGroepEdit(foundGroup.id)" style="padding:4px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--cream);cursor:pointer;font-size:11px;font-weight:700;color:var(--text3);font-family:'Nunito',sans-serif">✏️ Bewerken</button>
         <button onclick="closeModal()" style="background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕</button>
       </div>
     </div>
