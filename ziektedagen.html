@@ -223,19 +223,44 @@ window._saveToFirebase=async(entries)=>{
   try{
     await setDoc(doc(db,'ziektedagen',window._currentUser.uid),{
       entries:JSON.stringify(entries),
+      loopbaan:JSON.stringify(typeof lbState!=='undefined'?lbState:[]),
       updatedAt:new Date().toISOString()
-    });
+    },{merge:true});
     hideSync();
   }catch(e){console.error(e);hideSync();}
+};
+
+window._saveLoopbaanToFirebase=async()=>{
+  if(!window._currentUser)return;
+  try{
+    await setDoc(doc(db,'ziektedagen',window._currentUser.uid),{
+      loopbaan:JSON.stringify(lbState),
+      updatedAt:new Date().toISOString()
+    },{merge:true});
+  }catch(e){console.error(e);}
 };
 
 window._loadFromFirebase=async(uid)=>{
   showSync('Laden…');
   try{
     const snap=await getDoc(doc(db,'ziektedagen',uid));
-    if(snap.exists()&&snap.data().entries){
-      const entries=JSON.parse(snap.data().entries);
-      window._onFirebaseData(entries);
+    if(snap.exists()){
+      const data=snap.data();
+      if(data.entries){
+        const entries=JSON.parse(data.entries);
+        window._onFirebaseData(entries);
+      }
+      // Load loopbaan from Firebase
+      if(data.loopbaan){
+        try{
+          const lb=JSON.parse(data.loopbaan);
+          if(Array.isArray(lb)&&lb.length>0){
+            lbState=lb;
+            localStorage.setItem(LB_KEY,JSON.stringify(lbState));
+            if(typeof renderLoopbaan==='function')renderLoopbaan();
+          }
+        }catch(e){}
+      }
     }
     hideSync();
   }catch(e){console.error(e);hideSync();}
@@ -666,7 +691,10 @@ function loadLoopbaan(){
   try{const s=localStorage.getItem(LB_KEY);if(s)return JSON.parse(s);}catch(e){}
   return JSON.parse(JSON.stringify(LOOPBAAN_DEFAULT));
 }
-function saveLoopbaan(){localStorage.setItem(LB_KEY,JSON.stringify(lbState));}
+function saveLoopbaan(){
+  localStorage.setItem(LB_KEY,JSON.stringify(lbState));
+  if(window._saveLoopbaanToFirebase)window._saveLoopbaanToFirebase();
+}
 let lbState=loadLoopbaan();
 
 const TYPE_COLORS={BuSO:'pill-rose',SO:'pill-muted',BO:'pill-amber',Tijdelijk:'pill-green'};

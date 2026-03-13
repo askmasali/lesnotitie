@@ -364,6 +364,14 @@ async function loadFromFirebase(uid) {
           if (t.custom) Object.entries(t.custom).forEach(([k,v])=>document.documentElement.style.setProperty(`--${k}`,v));
         } catch(e) {}
       }
+      // Load uurrooster from Firebase (overrides localStorage)
+      if (meta.uurrooster) {
+        try {
+          const ur = JSON.parse(meta.uurrooster);
+          window._uurrooster = ur;
+          localStorage.setItem('uurrooster_v1', meta.uurrooster);
+        } catch(e) {}
+      }
       // Load list of years
       window.state.availableYears = meta.availableYears || [window.state.schoolYear];
       // Load active year data
@@ -454,6 +462,17 @@ async function saveYearToFirebase(uid, yearKey, yearData) {
 window._saveToFirebase = async function(stateData) {
   if (!window._currentUser) return;
   await saveYearToFirebase(window._currentUser.uid, window.state.schoolYear, stateData);
+};
+
+// Uurrooster Firebase sync
+window._saveUurroosterToFirebase = async function(urData) {
+  if (!window._currentUser) return;
+  try {
+    await setDoc(doc(db, "users", window._currentUser.uid), {
+      uurrooster: JSON.stringify(urData),
+      updatedAt: new Date().toISOString(),
+    }, { merge: true });
+  } catch(e) { console.warn("Uurrooster save error:", e); }
 };
 
 window._switchYear = async function(yearKey) {
