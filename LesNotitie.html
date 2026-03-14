@@ -2510,7 +2510,8 @@ function openUurSlotEdit(key) {
     </div>
     
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
-      <button class="btn btn-ghost" onclick="saveUurSlot('${key}');closeModal()">✕ Sluiten</button>
+      <button class="btn btn-ghost" onclick="closeModal()">✕ Sluiten</button>
+      <button class="btn btn-primary" onclick="saveUurSlot('${key}');closeModal()">💾 Opslaan</button>
     </div>`);
   
   // Store current slot key for helpers
@@ -2650,11 +2651,15 @@ function saveUurSlot(key) {
   const ur = window._uurrooster;
   if(!ur.slots[key]) ur.slots[key] = {type:'vrij',lokal:'',label:'',groepIds:[],klasIds:[]};
   const slot = ur.slots[key];
-  if(slot.type==='les') {
-    slot.lokal = document.getElementById('uur-lokal')?.value?.trim()||'';
-  } else if(slot.type!=='vrij') {
-    slot.label = document.getElementById('uur-label')?.value?.trim()||'';
-    slot.lokal = document.getElementById('uur-lokal-custom')?.value?.trim()||'';
+  // Always save lokaal — whichever input is visible
+  const lokal1 = document.getElementById('uur-lokal')?.value?.trim();
+  const lokal2 = document.getElementById('uur-lokal-custom')?.value?.trim();
+  if(lokal1 !== undefined) slot.lokal = lokal1;
+  else if(lokal2 !== undefined) slot.lokal = lokal2;
+  // Save label for non-les/vrij types
+  if(slot.type!=='les' && slot.type!=='vrij') {
+    const lbl = document.getElementById('uur-label')?.value?.trim();
+    if(lbl !== undefined) slot.label = lbl;
   }
   saveUurrooster();
   render();
@@ -3021,21 +3026,22 @@ function editWeekEvalInline(wId, sId) {
      id="qe-aanw-${opt.replace(' ','-')}" class="aanw-btn qe-aanw-btn ${(ev.aanwezig||'Aanwezig')===opt?'sel-'+opt.replace(' ','-'):''}"
      style="font-size:11px;padding:4px 10px">${opt}</button>`).join('');
 
-  let catEdits = state.categories.map(cat=>{
+  let catEdits = state.categories.map((cat, _catIdx)=>{
     const v = ev[cat.id];
+    const _zebra = _catIdx%2===0 ? 'background:var(--cream)' : 'background:var(--surface)';
     if(cat.type==='rating') {
       const opts = ['Uitstekend','Goed','Voldoende','Onvoldoende','Slecht'];
       const btns = opts.map(r=>`<button onclick="setEvalField('${wId}','${sId}','${cat.id}','${r}');this.closest('.qe-cat-row').querySelectorAll('.r-btn').forEach(b=>b.classList.remove('sel-Uitstekend','sel-Goed','sel-Voldoende','sel-Onvoldoende','sel-Slecht'));this.classList.add('sel-${r}')"
         class="r-btn ${v===r?'sel-'+r:''}" style="font-size:10px;padding:2px 7px">${r}</button>`).join('');
-      return `<div class="qe-cat-row" style="display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap"><div style="font-size:10px;font-weight:800;color:var(--text3);min-width:80px;flex-shrink:0">${esc(cat.label)}</div><div style="display:flex;flex-wrap:wrap;gap:3px">${btns}</div></div>`;
+      return `<div class="qe-cat-row" style="display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;flex-wrap:wrap;${_zebra}"><div style="font-size:10px;font-weight:800;color:var(--text3);min-width:80px;flex-shrink:0">${esc(cat.label)}</div><div style="display:flex;flex-wrap:wrap;gap:3px">${btns}</div></div>`;
     } else if(cat.type==='boolean') {
-      return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+      return `<div style="display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;flex-wrap:wrap;${_zebra}">
         <span style="font-size:10px;font-weight:700;color:var(--text3);min-width:80px">${esc(cat.label)}</span>
         <button onclick="setEvalField('${wId}','${sId}','${cat.id}',true);this.classList.add('sel-yes');this.nextElementSibling.classList.remove('sel-yes')" class="bool-btn ${v===true?'sel-yes':''}" style="font-size:10px">✓ Ja</button>
         <button onclick="setEvalField('${wId}','${sId}','${cat.id}',false);this.classList.add('sel-no');this.previousElementSibling.classList.remove('sel-no')" class="bool-btn ${v===false?'sel-no':''}" style="font-size:10px">✗ Nee</button>
       </div>`;
     } else {
-      return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+      return `<div style="display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;flex-wrap:wrap;${_zebra}">
         <span style="font-size:10px;font-weight:700;color:var(--text3);min-width:80px">${esc(cat.label)}</span>
         <input type="number" value="${v??''}" onchange="setEvalField('${wId}','${sId}','${cat.id}',this.value)" style="width:70px;border:1.5px solid var(--border);border-radius:6px;padding:4px 8px;font-size:12px;font-family:'Nunito',sans-serif">
       </div>`;
