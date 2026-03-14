@@ -408,7 +408,8 @@ async function loadYearFromFirebase(uid, yearKey) {
         window.state.weeks = parsed.weeks;
         window.state.selectedWeek = parsed.selectedWeek || window.state.weeks[0]?.id;
         window.state.selectedGroup = parsed.selectedGroup || null;
-        window.state.view = "week";
+        // Restore saved view, but not student-profile (needs selectedStudent object)
+        window.state.view = (parsed.view && parsed.view !== 'student-profile') ? parsed.view : 'week';
         window.state.selectedStudent = null;
         const badge = document.getElementById('year-badge');
         if (badge) badge.textContent = yearKey + ' ▾';
@@ -422,6 +423,7 @@ async function loadYearFromFirebase(uid, yearKey) {
       window.state.evaluations = {};
       window.state.weeks = window.generateWeeks(window.state.startDate);
       window.state.selectedWeek = window.state.weeks[0]?.id;
+      // New year — always start on week view
       window.state.view = "week";
       const badge2 = document.getElementById('year-badge');
       if (badge2) badge2.textContent = yearKey + ' ▾';
@@ -1204,7 +1206,9 @@ function loadState() {
           return { ...w, dateStr: formatDateRange(ws, we) };
         });
       }
-      parsed.view = "week";
+      // Keep saved view, but student-profile needs selectedStudent so fall back to week
+      if(parsed.view === "student-profile") parsed.view = "week";
+      // else keep whatever view was last open
       parsed.selectedStudent = null;
       return parsed;
     }
@@ -1223,6 +1227,7 @@ function saveState() {
       evaluations: state.evaluations,
       categories: state.categories,
       weeks: state.weeks,
+      view: state.view,
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
     // Also save to Firebase if logged in
