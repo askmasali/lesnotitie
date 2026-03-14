@@ -2510,8 +2510,8 @@ function openUurSlotEdit(key) {
     </div>
     
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
-      <button class="btn btn-ghost" onclick="closeModal()">✕ Sluiten</button>
-      <button class="btn btn-primary" onclick="saveUurSlot('${key}');closeModal()">💾 Opslaan</button>
+      <button class="btn btn-ghost" onclick="closeModal();render()">✕ Sluiten</button>
+      <button class="btn btn-primary" onclick="saveUurSlot('${key}')">💾 Opslaan</button>
     </div>`);
   
   // Store current slot key for helpers
@@ -2764,7 +2764,7 @@ function openUurroosterSettings() {
     
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
       <button class="btn btn-danger btn-sm" onclick="if(confirm('Uurrooster resetten naar standaard?')){window._uurrooster=JSON.parse(JSON.stringify(DEFAULT_UURROOSTER));saveUurrooster();closeModal();render();}">Reset</button>
-      <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
+      <button class="btn btn-ghost" onclick="closeModal()">✕ Sluiten</button>
       <button class="btn btn-primary" onclick="saveUurroosterSettings()">💾 Opslaan</button>
     </div>`);
 }
@@ -3065,8 +3065,9 @@ function editWeekEvalInline(wId, sId) {
       <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Opmerking</div>
       <textarea onchange="setEvalField('${wId}','${sId}','opmerking',this.value)" style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:8px;font-family:'Nunito',sans-serif;font-size:12px;resize:vertical;min-height:60px" placeholder="Notitie...">${esc(ev.opmerking||'')}</textarea>
     </div>
-    <div style="display:flex;justify-content:flex-end;gap:8px;padding-top:4px;border-top:1px solid var(--border);margin-top:4px">
-      <button class="btn btn-primary" onclick="closeModal()">✅ Opslaan & Sluiten</button>
+    <div style="display:flex;justify-content:flex-end;gap:8px;padding-top:8px;border-top:1px solid var(--border);margin-top:8px">
+      <button class="btn btn-ghost" onclick="closeModal();renderMain()">✕ Sluiten</button>
+      <button class="btn btn-primary" onclick="closeModal();renderMain()">✅ Opslaan</button>
     </div>
   `, '550px');
 }
@@ -3107,7 +3108,7 @@ function renderStudentProfile() {
 
   return `
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap">
-      <button class="btn btn-secondary" onclick="switchView('student-list')">← Terug</button>
+      <button class="btn btn-secondary" onclick="goBack()">← Terug</button>
       <div>
         <div style="font-family:'Playfair Display',serif;font-size:22px">${esc(s.name)}</div>
         <div style="font-size:12px;color:var(--text3)">${esc(s.className||'')} · ${esc(s.school||'')}</div>
@@ -3432,6 +3433,7 @@ function getCurrentWeekId() {
 }
 
 function switchView(v) {
+  state._prevView = state.view; // track where we came from
   state.view=v;
   if(v==='week') {
     const cur = getCurrentWeekId();
@@ -3442,7 +3444,18 @@ function switchView(v) {
 }
 function openStudentProfile(id) {
   const s = allStudents().find(x=>x.id===id);
-  if(s) { state.selectedStudent=s; state.view='student-profile'; render(); }
+  if(s) {
+    state._prevView = state.view; // remember where we came from
+    state.selectedStudent=s;
+    state.view='student-profile';
+    render();
+  }
+}
+function goBack() {
+  // Go back to previous view, defaulting to week
+  const prev = state._prevView || 'week';
+  state._prevView = null;
+  switchView(prev);
 }
 
 function setEv(wId,sId,catId,val) { setEvalField(wId,sId,catId,val); renderMain(); }
