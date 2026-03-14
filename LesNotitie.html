@@ -131,7 +131,7 @@
 
   /* MODAL */
   .modal-overlay { position:fixed; inset:0; background:rgba(61,44,62,.45); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; z-index:1000; }
-  .modal-box { background:var(--surface); border-radius:20px; border:2px solid var(--border); padding:28px; min-width:320px; max-width:460px; width:90%; box-shadow:var(--shadow2); animation:pop .2s ease; transition: max-width .15s, width .15s; }
+  .modal-box { background:var(--surface); border-radius:20px; border:2px solid var(--border); padding:28px; min-width:320px; max-width:460px; width:90%; box-shadow:var(--shadow2); animation:pop .2s ease; transition: max-width .15s, width .15s; max-height:88vh; overflow-y:auto; overflow-x:hidden; }
   @keyframes pop { from { transform:scale(.9); opacity:0; } to { transform:scale(1); opacity:1; } }
   .modal-title { font-size:17px; font-weight:800; margin-bottom:20px; color:var(--text); }
   .form-group { margin-bottom:14px; }
@@ -1915,7 +1915,7 @@ function openAanwezigheidDetail(filter) {
       <div style="font-family:'Playfair Display',serif;font-size:18px">📅 ${filterLabel} — detail</div>
       <button onclick="closeModal()" style="margin-left:auto;background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕</button>
     </div>
-    <div style="max-height:65vh;overflow-y:auto">${rows}</div>
+    <div style="overflow-y:visible">${rows}</div>
   `, '720px');
 }
 
@@ -1970,7 +1970,7 @@ function openBeoordelingDetail(rating) {
       <div style="font-family:'Playfair Display',serif;font-size:18px">Beoordeling detail</div>
       <button onclick="closeModal()" style="margin-left:auto;background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕</button>
     </div>
-    <div style="max-height:65vh;overflow-y:auto">${rows}</div>
+    <div style="overflow-y:visible">${rows}</div>
   `, '720px');
 }
 
@@ -2015,7 +2015,7 @@ function openOpmerkingDetail() {
       <div style="font-family:'Playfair Display',serif;font-size:18px">💬 Opmerkingen — overzicht</div>
       <button onclick="closeModal()" style="margin-left:auto;background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕</button>
     </div>
-    <div style="max-height:65vh;overflow-y:auto">${rows}</div>
+    <div style="overflow-y:visible">${rows}</div>
   `, '720px');
 }
 
@@ -2870,7 +2870,7 @@ function openKlasPopupPush(classId) {
       </div>
     </div>
     <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:10px">📅 ${esc(currentWeekLabel)} — aanwezigheid & beoordeling</div>
-    <div style="max-height:60vh;overflow-y:auto">${studentRows||'<div style="color:var(--text3);text-align:center;padding:20px">Geen leerlingen</div>'}</div>
+    <div style="overflow-y:visible">${studentRows||'<div style="color:var(--text3);text-align:center;padding:20px">Geen leerlingen</div>'}</div>
   `, '600px');
 }
 
@@ -2898,7 +2898,7 @@ function pushStudentProfile(sId) {
       <button onclick="closeModal();openStudentProfile('${s.id}')" style="margin-left:auto;padding:4px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--cream);cursor:pointer;font-size:11px;font-weight:700;color:var(--text3);font-family:'Nunito',sans-serif">📄 Volledig profiel</button>
       <button onclick="closeModal()" style="background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕</button>
     </div>
-    <div style="max-height:65vh;overflow-y:auto">${rows}</div>
+    <div style="overflow-y:visible">${rows}</div>
   `, '580px');
 }
 
@@ -2972,7 +2972,7 @@ function openSlotStudentDetail(sId) {
       </div>
       <button onclick="closeModal()" style="margin-left:auto;background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕</button>
     </div>
-    <div style="max-height:72vh;overflow-y:auto;padding-right:4px">${cards}</div>`);
+    <div style="overflow-y:visible;padding-right:4px">${cards}</div>`);
 }
 
 function setSlotEval(wId, sId, field, val) {
@@ -3065,8 +3065,8 @@ function editWeekEvalInline(wId, sId) {
       <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Opmerking</div>
       <textarea onchange="setEvalField('${wId}','${sId}','opmerking',this.value)" style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:8px;font-family:'Nunito',sans-serif;font-size:12px;resize:vertical;min-height:60px" placeholder="Notitie...">${esc(ev.opmerking||'')}</textarea>
     </div>
-    <div style="display:flex;justify-content:flex-end;gap:8px">
-      <button class="btn btn-ghost" onclick="closeModal()">Sluiten</button>
+    <div style="display:flex;justify-content:flex-end;gap:8px;padding-top:4px;border-top:1px solid var(--border);margin-top:4px">
+      <button class="btn btn-primary" onclick="closeModal()">✅ Opslaan & Sluiten</button>
     </div>
   `, '550px');
 }
@@ -3817,7 +3817,7 @@ function openGroepPopup(gId) {
         <button onclick="closeModal()" style="background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕</button>
       </div>
     </div>
-    <div style="max-height:65vh;overflow-y:auto">${html||'<div style="color:var(--text3);text-align:center;padding:20px">Geen klassen</div>'}</div>
+    <div style="overflow-y:visible">${html||'<div style="color:var(--text3);text-align:center;padding:20px">Geen klassen</div>'}</div>
   `, '650px');
 }
 
@@ -3854,7 +3854,7 @@ function openKlasPopup(classId) {
       </div>
     </div>
     <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:10px">📅 ${esc(currentWeekLabel)} — aanwezigheid & beoordeling</div>
-    <div style="max-height:60vh;overflow-y:auto">${studentRows||'<div style="color:var(--text3);text-align:center;padding:20px">Geen leerlingen</div>'}</div>
+    <div style="overflow-y:visible">${studentRows||'<div style="color:var(--text3);text-align:center;padding:20px">Geen leerlingen</div>'}</div>
   `, '600px');
 }
 
@@ -3909,7 +3909,7 @@ function openKlasOverzicht(classId) {
       </div>
       <button onclick="closeModal()" style="margin-left:auto;background:none;border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕ Sluiten</button>
     </div>
-    <div style="overflow-x:auto;max-height:72vh;overflow-y:auto;border-radius:10px;border:1.5px solid var(--border)">
+    <div style="overflow-x:auto;border-radius:10px;border:1.5px solid var(--border)">
       <table style="width:100%;border-collapse:collapse;font-size:13px">
         <thead style="position:sticky;top:0;z-index:1">
           <tr style="background:var(--cream)">
