@@ -2171,6 +2171,33 @@ function countOpmerkingen(sId) {
   return count;
 }
 
+function getStudentInitials(name) {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length >= 2) return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
+  return name.substring(0,2).toUpperCase();
+}
+
+function getAvatarColor(name) {
+  const colors = ['#8b5cf6','#3b82f6','#ec4899','#f97316','#10b981','#06b6d4','#d97706','#6366f1','#ef4444','#14b8a6'];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return colors[Math.abs(hash) % colors.length];
+}
+
+function getStudentQuickStats(sId) {
+  let present=0, absent=0, late=0, totalWeeks=0;
+  state.weeks.forEach(w => {
+    if (w.isHoliday) return;
+    const ev = state.evaluations?.[w.id+'_'+sId];
+    if (!ev?.aanwezig) return;
+    totalWeeks++;
+    if (ev.aanwezig === 'Aanwezig') present++;
+    else if (ev.aanwezig === 'Afwezig') absent++;
+    else if (ev.aanwezig === 'Te laat') late++;
+  });
+  return { present, absent, late, totalWeeks };
+}
+
 function renderStudentList() {
   if(state.groups.length===0) return `<div class="card" style="text-align:center;padding:60px">
     <div style="font-size:48px;margin-bottom:12px">👤</div>
@@ -2180,16 +2207,26 @@ function renderStudentList() {
 
   const q = studentSearchQuery.toLowerCase();
 
-  // Group by school > group > class > student (all sorted)
   const allSchoolNames = [...new Set(allStudents().map(s=>s.school||'—'))].sort();
   let content = '';
+  let totalStudentCount = 0;
 
   allSchoolNames.forEach(schoolName => {
     const schoolGroups = state.groups.filter(g => g.classes.some(c => c.school === schoolName));
     if (!schoolGroups.length) return;
+
+    // Count total students in this school
+    let schoolStudentCount = 0;
+    schoolGroups.forEach(g => g.classes.filter(c=>c.school===schoolName).forEach(c => { schoolStudentCount += c.students.length; }));
     
-    content += `<div class="card" style="margin-bottom:16px">
-      <div style="font-size:16px;font-weight:900;color:var(--text);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--border)">🏫 ${esc(schoolName)}</div>`;
+    content += `<div class="card" style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:22px">🏫</span>
+          <span style="font-size:17px;font-weight:900;color:var(--text)">${esc(schoolName)}</span>
+        </div>
+        <span style="background:var(--surface2);color:var(--text2);border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700">${schoolStudentCount} leerling${schoolStudentCount!==1?'en':''}</span>
+      </div>`;
     
     const sortedGroups = [...schoolGroups].sort((a,b)=>a.name.localeCompare(b.name,'nl',{numeric:true}));
     sortedGroups.forEach(g => {
@@ -2198,25 +2235,52 @@ function renderStudentList() {
         const sortedStudents = [...c.students].sort((a,b)=>a.name.localeCompare(b.name,'nl'));
         const filteredStudents = sortedStudents.filter(s=>!q||s.name.toLowerCase().includes(q));
         if (!filteredStudents.length) return;
+        totalStudentCount += filteredStudents.length;
         
-        content += `<div style="margin-bottom:12px">
-          <div style="font-size:12px;font-weight:800;color:var(--accent1);margin-bottom:6px;display:flex;align-items:center;gap:8px">
-            <span>📚 ${esc(g.name)} &rsaquo; ${esc(c.name)}</span>
-            ${c.jaar?`<span style="font-size:10px;background:var(--accent1)22;color:var(--accent1);border-radius:6px;padding:1px 6px">${c.jaar}e jaar</span>`:''}
+        content += `<div style="margin-bottom:16px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+            <span style="font-size:12px;font-weight:800;color:var(--accent1)">📚 ${esc(g.name)} · ${esc(c.name)}</span>
+            ${c.jaar?`<span style="font-size:10px;background:var(--accent1)18;color:var(--accent1);border-radius:6px;padding:2px 8px;font-weight:700">${c.jaar}e jaar</span>`:''}
+            <span style="font-size:10px;color:var(--text3)">${filteredStudents.length} leerling${filteredStudents.length!==1?'en':''}</span>
           </div>
-          <div class="tbl-wrap"><table>
-            <thead><tr><th>Naam</th><th style="text-align:center">Opmerking</th><th></th></tr></thead>
+          <div class="tbl-wrap"><table style="table-layout:fixed;width:100%">
+            <colgroup>
+              <col style="width:auto">
+              <col style="width:180px">
+              <col style="width:100px">
+            </colgroup>
+            <thead><tr>
+              <th style="padding-left:14px">Naam</th>
+              <th style="text-align:center">Opmerking</th>
+              <th style="text-align:right;padding-right:14px"></th>
+            </tr></thead>
             <tbody>
               ${filteredStudents.map(s => {
                 const opCount = countOpmerkingen(s.id);
-                return `<tr>
-                  <td><span class="student-link" onclick="openStudentProfile('${s.id}')">${esc(s.name)}</span></td>
-                  <td style="width:140px;text-align:center">
-                    ${opCount > 0 
-                      ? `<span style="background:#fef3c7;color:#92400e;border:1px solid #fde68a;border-radius:12px;padding:2px 10px;font-size:11px;font-weight:700;cursor:pointer" onclick="openStudentOpmerkingen('${s.id}')">💬 ${opCount} opmerking${opCount>1?'en':''}</span>`
-                      : `<span style="font-size:11px;color:var(--text3)">—</span>`}
+                const initials = getStudentInitials(s.name);
+                const avatarBg = getAvatarColor(s.name);
+                const stats = getStudentQuickStats(s.id);
+                return `<tr style="transition:background .1s" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background=''">
+                  <td style="padding:8px 10px 8px 14px">
+                    <div style="display:flex;align-items:center;gap:10px">
+                      <div style="width:32px;height:32px;border-radius:50%;background:${avatarBg}18;color:${avatarBg};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;border:2px solid ${avatarBg}30">${initials}</div>
+                      <div>
+                        <span class="student-link" onclick="openStudentProfile('${s.id}')" style="font-size:13px">${esc(s.name)}</span>
+                        ${stats.totalWeeks > 0 ? `<div style="display:flex;gap:6px;margin-top:2px">
+                          ${stats.absent > 0 ? `<span style="font-size:9px;color:#dc2626;font-weight:700">${stats.absent}× afwezig</span>` : ''}
+                          ${stats.late > 0 ? `<span style="font-size:9px;color:#d97706;font-weight:700">${stats.late}× te laat</span>` : ''}
+                        </div>` : ''}
+                      </div>
+                    </div>
                   </td>
-                  <td style="text-align:right"><button class="btn btn-secondary btn-sm" onclick="openStudentProfile('${s.id}')">Profiel →</button></td>
+                  <td style="text-align:center;padding:8px 10px">
+                    ${opCount > 0 
+                      ? `<span style="background:#fef3c7;color:#92400e;border:1px solid #fde68a;border-radius:12px;padding:3px 12px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap" onclick="openStudentOpmerkingen('${s.id}')">💬 ${opCount}</span>`
+                      : `<span style="font-size:11px;color:var(--text4)">—</span>`}
+                  </td>
+                  <td style="text-align:right;padding:8px 14px 8px 10px">
+                    <button class="btn btn-secondary btn-sm" onclick="openStudentProfile('${s.id}')" style="white-space:nowrap">Profiel →</button>
+                  </td>
                 </tr>`;
               }).join('')}
             </tbody>
@@ -2227,14 +2291,18 @@ function renderStudentList() {
     content += `</div>`;
   });
 
-  if (!content) content = `<div class="card" style="text-align:center;padding:30px;color:var(--text3)">Geen resultaten</div>`;
+  if (!content) content = `<div class="card" style="text-align:center;padding:30px;color:var(--text3)">Geen resultaten voor "${esc(studentSearchQuery)}"</div>`;
 
   return `<div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-      <div style="font-family:'Playfair Display',serif;font-size:22px">Alle leerlingen <span class="badge badge-purple">${allStudents().length}</span></div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="font-family:'Playfair Display',serif;font-size:22px">Leerlingen</div>
+        <span class="badge badge-purple">${allStudents().length}</span>
+        <span style="font-size:11px;color:var(--text3)">${allSchoolNames.length} school${allSchoolNames.length!==1?'en':''} · ${state.groups.reduce((a,g)=>a+g.classes.length,0)} klassen</span>
+      </div>
       <div style="display:flex;gap:8px;align-items:center">
-        <input class="form-input" id="student-search-inp" placeholder="🔍 Zoeken..." value="${esc(studentSearchQuery)}" oninput="studentSearchQuery=this.value;render()" style="width:180px;padding:6px 12px;font-size:12px">
-        <button class="btn btn-danger btn-sm" onclick="modalBulkDelete()">🗑 Toplu sil</button>
+        <input class="form-input" id="student-search-inp" placeholder="🔍 Zoeken..." value="${esc(studentSearchQuery)}" oninput="studentSearchQuery=this.value;render()" style="width:200px;padding:7px 14px;font-size:12px;border-radius:20px">
+        <button class="btn btn-danger btn-sm" onclick="modalBulkDelete()" style="border-radius:20px">🗑 Toplu sil</button>
       </div>
     </div>
     ${content}
