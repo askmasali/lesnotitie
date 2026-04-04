@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Smart Skills Education VZW — Financieel beheer">
+<meta name="theme-color" content="#c084fc">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💰</text></svg>">
 <title>SSE Financiën</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css">
@@ -18,6 +21,30 @@
   --shadow:0 2px 16px rgba(192,132,252,.10);
   --shadow2:0 4px 24px rgba(192,132,252,.20);
 }
+[data-theme="dark"] {
+  --bg:#1a1025; --surface:#241835; --surface2:#2d1f40; --border:#3d2c55;
+  --text:#e8ddf0; --text2:#b89abc; --text3:#7a5c7e;
+  --cream:#2a1c3a;
+  --shadow:0 2px 16px rgba(0,0,0,.3);
+  --shadow2:0 4px 24px rgba(0,0,0,.4);
+}
+[data-theme="dark"] .s-in{background:linear-gradient(135deg,#052e16,#14532d);border-color:#166534;}
+[data-theme="dark"] .s-out{background:linear-gradient(135deg,#450a0a,#7f1d1d);border-color:#991b1b;}
+[data-theme="dark"] .s-debt{background:linear-gradient(135deg,#431407,#7c2d12);border-color:#9a3412;}
+[data-theme="dark"] .s-pos{background:linear-gradient(135deg,var(--accent1),var(--accent2));}
+[data-theme="dark"] .s-neg{background:linear-gradient(135deg,#450a0a,#7f1d1d);border-color:#991b1b;}
+[data-theme="dark"] td,[data-theme="dark"] .tbl-wrap{background:var(--surface);}
+[data-theme="dark"] tr:hover td{background:var(--surface2) !important;}
+[data-theme="dark"] th{background:var(--surface2);}
+[data-theme="dark"] .chart-box{background:var(--surface);border-color:var(--border);}
+[data-theme="dark"] .flatpickr-calendar{background:var(--surface);border-color:var(--border);}
+[data-theme="dark"] .flatpickr-day{color:var(--text);}
+[data-theme="dark"] .flatpickr-weekdays{background:var(--surface2);}
+[data-theme="dark"] .cat-badge{opacity:.9;}
+[data-theme="dark"] .form-input,[data-theme="dark"] .form-select,[data-theme="dark"] .form-textarea{background:var(--surface2);border-color:var(--border);color:var(--text);}
+[data-theme="dark"] .modal-box{background:var(--surface);border-color:var(--border);}
+[data-theme="dark"] .confirm-box{background:var(--surface);border-color:var(--border);}
+[data-theme="dark"] footer{background:var(--surface);border-color:var(--border);}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
 header{background:var(--surface);border-bottom:2px solid var(--border);padding:0 28px;display:flex;align-items:center;gap:14px;height:66px;box-shadow:var(--shadow);flex-wrap:nowrap;}
@@ -113,23 +140,77 @@ span.flatpickr-weekday{color:var(--text2);font-weight:800;font-size:11px;}
 .flatpickr-day.today.selected{color:#fff;}
 .flatpickr-day.flatpickr-disabled{color:var(--text3);}
 ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+.hamburger{display:none;background:none;border:none;cursor:pointer;padding:4px;}
+.hamburger span{display:block;width:20px;height:2px;background:var(--text2);margin:4px 0;border-radius:2px;transition:all .2s;}
+.search-box{position:relative;margin-bottom:12px;}
+.search-input{width:100%;border:1.5px solid var(--border);border-radius:24px;padding:9px 14px 9px 36px;font-size:13px;font-family:'Nunito',sans-serif;color:var(--text);background:var(--cream);outline:none;transition:border .15s;}
+.search-input:focus{border-color:var(--accent1);box-shadow:0 0 0 3px rgba(192,132,252,.15);}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:14px;pointer-events:none;}
+.overdue{border-color:#ef4444 !important;background:linear-gradient(135deg,#fef2f2,#fee2e2) !important;animation:pulse-red 2s infinite;}
+@keyframes pulse-red{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.2)}50%{box-shadow:0 0 0 6px rgba(239,68,68,0)}}
+.overdue-badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:9px;font-weight:800;background:#ef4444;color:#fff;animation:pulse-red 2s infinite;margin-left:6px;}
+.theme-toggle{background:none;border:1.5px solid var(--border);border-radius:50%;width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .2s;flex-shrink:0;}
+.theme-toggle:hover{background:var(--surface2);transform:scale(1.1);}
+footer{background:var(--surface);border-top:2px solid var(--border);padding:20px 28px;margin-top:30px;text-align:center;}
+.footer-inner{max-width:1200px;margin:0 auto;}
+.footer-org{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;background:linear-gradient(135deg,var(--accent1),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;}
+.footer-info{font-size:10px;color:var(--text3);line-height:1.7;}
+.data-actions{display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+.badge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:10px;font-size:10px;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--accent1),var(--accent2));}
+.sort-th{cursor:pointer;user-select:none;position:relative;}
+.sort-th:hover{color:var(--accent1);}
+.sort-th::after{content:'⇅';margin-left:4px;font-size:10px;opacity:.4;}
+.sort-th.asc::after{content:'↑';opacity:1;color:var(--accent1);}
+.sort-th.desc::after{content:'↓';opacity:1;color:var(--accent1);}
+.confirm-overlay{position:fixed;inset:0;background:rgba(61,44,62,.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:2000;}
+.confirm-box{background:var(--surface);border-radius:18px;border:2px solid var(--border);padding:28px;text-align:center;max-width:340px;box-shadow:var(--shadow2);animation:pop .18s ease;}
+.confirm-box .confirm-icon{font-size:36px;margin-bottom:12px;}
+.confirm-box .confirm-msg{font-size:14px;font-weight:700;color:var(--text);margin-bottom:18px;}
+.confirm-box .confirm-btns{display:flex;gap:8px;justify-content:center;}
+.fade-in{animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:768px){
+  .hamburger{display:flex;flex-direction:column;justify-content:center;}
+  .nav-tabs{display:none;position:fixed;top:66px;left:0;right:0;background:var(--surface);flex-direction:column;padding:12px;gap:4px;border-bottom:2px solid var(--border);box-shadow:var(--shadow2);z-index:900;}
+  .nav-tabs.open{display:flex;}
+  .nav-tab{text-align:left;border-radius:10px;padding:10px 14px;}
+}
+@media(max-width:640px){.form-row{grid-template-columns:1fr;}.chart-grid{grid-template-columns:1fr;}}
+@media print{header,.btn,.filter-bar,#auth-area,.theme-toggle,.hamburger,footer,.search-box,.data-actions{display:none!important;}.main{padding:8px;}.print-header{display:block!important;text-align:center;padding:16px 0;border-bottom:2px solid #333;margin-bottom:16px;}.print-header h1{font-size:20px;margin-bottom:4px;}.print-header p{font-size:11px;color:#666;}}
 </style>
 </head>
 <body>
+<div class="print-header" style="display:none"><h1>Smart Skills Education VZW — Financieel Overzicht</h1><p>IBAN: BE68 7390 3074 2634 · BIC: KREDBEBB · KBO: 1032.423.557 · Zavelputstraat 18, 3600 Genk</p></div>
 <header>
   <span class="logo">💰 SSE Financiën</span>
   <select class="year-sel" id="year-sel" onchange="setYear(this.value)"></select>
   <div id="auth-area"></div>
-  <div class="nav-tabs">
+  <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="Donker/licht modus">🌙</button>
+  <button class="hamburger" id="hamburger-btn" onclick="document.getElementById('nav-tabs').classList.toggle('open')"><span></span><span></span><span></span></button>
+  <div class="nav-tabs" id="nav-tabs">
     <button class="nav-tab" onclick="go('overzicht')">📊 Overzicht</button>
-    <button class="nav-tab" onclick="go('inkomsten')">💚 Inkomsten</button>
-    <button class="nav-tab" onclick="go('uitgaven')">💸 Uitgaven</button>
-    <button class="nav-tab" onclick="go('schulden')">🔴 Schulden</button>
-    <button class="nav-tab" onclick="go('grafieken')">📈 Grafieken</button>
+    <button class="nav-tab" onclick="go('inkomsten')">💚 Gelirler</button>
+    <button class="nav-tab" onclick="go('uitgaven')">💸 Giderler</button>
+    <button class="nav-tab" onclick="go('schulden')">🔴 Borçlar</button>
+    <button class="nav-tab" onclick="go('kasboek')">📒 Kasboek</button>
+    <button class="nav-tab" onclick="go('leden')">👥 Üyeler</button>
+    <button class="nav-tab" onclick="go('begroting')">💰 Bütçe</button>
+    <button class="nav-tab" onclick="go('grafieken')">📈 Grafikler</button>
   </div>
 </header>
 <div class="main" id="app"></div>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-org">Smart Skills Education VZW</div>
+    <div class="footer-info">
+      IBAN: BE68 7390 3074 2634 · BIC: KREDBEBB · KBC Bank · KBO: 1032.423.557<br>
+      Zavelputstraat 18, 3600 Genk, België · 📞 +32 485 46 27 96 · ✉️ info@smartskillseducation.be<br>
+      Vereniging zonder winstoogmerk · Opgericht 2026
+    </div>
+  </div>
+</footer>
 <div id="modal-root"></div>
+<div id="confirm-root"></div>
 <div id="toast-el" style="display:none" class="toast"></div>
 
 <script type="module">
@@ -164,6 +245,8 @@ async function fbLoad(uid) {
       if (p.incomes)  S.incomes  = p.incomes;
       if (p.expenses) S.expenses = p.expenses;
       if (p.debts)    S.debts    = p.debts;
+      if (p.leden)    S.leden    = p.leden;
+      if (p.budgets)  S.budgets  = p.budgets;
       if (p.years)    S.years    = p.years;
       if (p.year)     S.year     = p.year;
       ensureAutoDebts(); buildYearSel(); render(); toast('☁️ Cloud data geladen!');
@@ -188,7 +271,7 @@ function renderAuthUI() {
   }
 }
 window._in  = () => signInWithPopup(auth, prov).catch(()=>{});
-window._out = async () => { if(!confirm('Uitloggen?'))return; await signOut(auth); currentUser=null; renderAuthUI(); };
+window._out = async () => { if(!await sseConfirm('Uitloggen?','👋'))return; await signOut(auth); currentUser=null; renderAuthUI(); };
 window.fbSave = fbSave;
 </script>
 
@@ -197,6 +280,38 @@ const IBAN_DERNEK  = 'BE68 7390 3074 2634';
 const IBAN_MUSTAFA = 'BE10 7350 7584 5904';
 const MAANDEN = ['Januari','Februari','Maart','April','Mei','Juni','Juli','Augustus','September','Oktober','November','December'];
 const MSHORT  = ['Jan','Feb','Maa','Apr','Mei','Jun','Jul','Aug','Sep','Okt','Nov','Dec'];
+
+/* --- Theme toggle --- */
+window.toggleTheme=()=>{const html=document.documentElement;const isDark=html.getAttribute('data-theme')==='dark';html.setAttribute('data-theme',isDark?'light':'dark');document.getElementById('theme-btn').textContent=isDark?'🌙':'☀️';try{localStorage.setItem('sse_theme',isDark?'light':'dark');}catch(e){}};
+(function(){try{const t=localStorage.getItem('sse_theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');setTimeout(()=>{const b=document.getElementById('theme-btn');if(b)b.textContent='☀️';},0);}}catch(e){}})();
+
+/* --- Custom confirm --- */
+function sseConfirm(msg,icon='⚠️'){return new Promise(resolve=>{const root=document.getElementById('confirm-root');root.innerHTML=`<div class="confirm-overlay"><div class="confirm-box"><div class="confirm-icon">${icon}</div><div class="confirm-msg">${msg}</div><div class="confirm-btns"><button class="btn btn-ghost" id="cfm-no">Annuleren</button><button class="btn btn-danger" id="cfm-yes">Verwijderen</button></div></div></div>`;document.getElementById('cfm-yes').onclick=()=>{root.innerHTML='';resolve(true);};document.getElementById('cfm-no').onclick=()=>{root.innerHTML='';resolve(false);};});}
+
+/* --- Search state --- */
+let searchTerm = '';
+
+/* --- Sort state --- */
+let sortCol = 'date', sortDir = 'desc';
+function toggleSort(col){if(sortCol===col)sortDir=sortDir==='asc'?'desc':'asc';else{sortCol=col;sortDir='desc';}render();}
+window.toggleSort=toggleSort;
+
+/* --- Data backup/restore --- */
+window.doBackup=()=>{const data=JSON.stringify(S,null,2);const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));a.download=`SSE_Backup_${new Date().toISOString().slice(0,10)}.json`;a.click();toast('💾 Backup gedownload!');};
+window.doRestore=()=>{const inp=document.createElement('input');inp.type='file';inp.accept='.json';inp.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{const p=JSON.parse(ev.target.result);if(p.incomes&&p.expenses&&p.debts){S.incomes=p.incomes;S.expenses=p.expenses;S.debts=p.debts;if(p.years)S.years=p.years;if(p.year)S.year=p.year;save();buildYearSel();render();toast('✅ Backup hersteld!');}else{toast('⚠️ Ongeldig backup bestand');}}catch(err){toast('⚠️ Fout bij lezen bestand');}};r.readAsText(f);};inp.click();};
+
+/* --- Overdue helper --- */
+function isOverdue(dateStr){if(!dateStr)return false;return new Date(dateStr)<new Date()&&new Date(dateStr).toDateString()!==new Date().toDateString();}
+function daysUntil(dateStr){if(!dateStr)return Infinity;const d=Math.ceil((new Date(dateStr)-new Date())/(1000*60*60*24));return d;}
+
+/* --- Search filter for tables --- */
+function searchBar(){return `<div class="search-box"><span class="search-icon">🔍</span><input class="search-input" type="text" placeholder="Zoeken in transacties..." value="${esc(searchTerm)}" oninput="searchTerm=this.value;render()"></div>`;}
+function matchSearch(item){if(!searchTerm)return true;const s=searchTerm.toLowerCase();return (item.description||'').toLowerCase().includes(s)||(item.category||'').toLowerCase().includes(s)||(item.name||'').toLowerCase().includes(s)||(item.note||'').toLowerCase().includes(s)||(item.ibanVan||'').toLowerCase().includes(s)||(item.ibanAan||'').toLowerCase().includes(s);}
+
+/* --- Sort helper for table items --- */
+function sortItems(items){return items.sort((a,b)=>{let va,vb;if(sortCol==='date'){va=a.date||'';vb=b.date||'';}else if(sortCol==='amount'){va=parseFloat(a.amount||0);vb=parseFloat(b.amount||0);}else if(sortCol==='category'){va=a.category||'';vb=b.category||'';}else if(sortCol==='description'){va=(a.description||'').toLowerCase();vb=(b.description||'').toLowerCase();}else{va=a.date||'';vb=b.date||'';}if(va<vb)return sortDir==='asc'?-1:1;if(va>vb)return sortDir==='asc'?1:-1;return 0;});}
+function thClass(col){return `sort-th ${sortCol===col?sortDir:''}`;}
+
 const ICAT = [
   {id:'erasmus',  label:'Erasmus+',      icon:'🇪🇺'},
   {id:'donatie',  label:'Donatie/Bağış', icon:'🎁'},
@@ -215,7 +330,7 @@ const ECAT = [
   {id:'overig_uit',    label:'Overig',             icon:'➖'},
 ];
 
-let S = { year: new Date().getFullYear(), years:[new Date().getFullYear()], incomes:[], expenses:[], debts:[] };
+let S = { year: new Date().getFullYear(), years:[new Date().getFullYear()], incomes:[], expenses:[], debts:[], leden:[], budgets:[] };
 let view = 'overzicht';
 let fMonth = 'all', fCat = 'all';
 
@@ -232,6 +347,8 @@ function loadLocal() {
     if (p.incomes)  S.incomes  = p.incomes;
     if (p.expenses) S.expenses = p.expenses;
     if (p.debts)    S.debts    = p.debts;
+    if (p.leden)    S.leden    = p.leden;
+    if (p.budgets)  S.budgets  = p.budgets;
     if (p.years)    S.years    = p.years;
     if (p.year)     S.year     = p.year;
   } catch(e){}
@@ -284,16 +401,19 @@ window.addYear = () => {
   S.year=y; save(); buildYearSel(); render(); toast(`✅ ${y} toegevoegd`);
 };
 
-window.go = (v) => { view=v; fMonth='all'; fCat='all'; try{localStorage.setItem('sse_view',v);}catch(e){} render(); };
+window.go = (v) => { view=v; fMonth='all'; fCat='all'; searchTerm=''; sortCol='date'; sortDir='desc'; try{localStorage.setItem('sse_view',v);}catch(e){} try{document.getElementById('nav-tabs').classList.remove('open');}catch(e){} render(); };
 
 function render() {
-  document.querySelectorAll('.nav-tab').forEach((t,i)=>{ t.classList.toggle('active',['overzicht','inkomsten','uitgaven','schulden','grafieken'][i]===view); });
+  document.querySelectorAll('.nav-tab').forEach((t,i)=>{ t.classList.toggle('active',['overzicht','inkomsten','uitgaven','schulden','kasboek','leden','begroting','grafieken'][i]===view); });
   if(typeof Chart!=='undefined') Object.values(Chart.instances||{}).forEach(c=>{try{c.destroy();}catch(e){}});
   const app = document.getElementById('app');
   if (view==='overzicht') app.innerHTML = vOverzicht();
   else if(view==='inkomsten') app.innerHTML = vInkomsten();
   else if(view==='uitgaven')  app.innerHTML = vUitgaven();
   else if(view==='schulden')  app.innerHTML = vSchulden();
+  else if(view==='kasboek')   app.innerHTML = vKasboek();
+  else if(view==='leden')     app.innerHTML = vLeden();
+  else if(view==='begroting') app.innerHTML = vBegroting();
   else if(view==='grafieken'){ app.innerHTML = vGrafieken(); setTimeout(drawCharts,60); }
 }
 
@@ -331,8 +451,10 @@ function vOverzicht() {
     <div style="font-family:'Playfair Display',serif;font-size:22px">📊 Overzicht ${yr}</div>
     <div style="display:flex;gap:6px;flex-wrap:wrap">
       <button class="btn btn-secondary btn-sm" onclick="addYear()">+ Jaar</button>
-      <button class="btn btn-secondary btn-sm" onclick="window.print()">📄 PDF</button>
+      <button class="btn btn-secondary btn-sm" onclick="window.print()">🖨️ Afdrukken</button>
       <button class="btn btn-secondary btn-sm" onclick="doCSV()">📊 CSV</button>
+      <button class="btn btn-secondary btn-sm" onclick="doBackup()">💾 Backup</button>
+      <button class="btn btn-secondary btn-sm" onclick="doRestore()">📂 Herstel</button>
     </div>
   </div>
   <div class="stats-grid">
@@ -357,7 +479,7 @@ function vOverzicht() {
         <div class="sec-label">🕐 Recente transacties</div>
         ${recent.length===0?'<p style="color:var(--text3);font-size:12px">Nog geen transacties</p>':recent.map(x=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border)"><div style="flex:1;min-width:0"><div style="font-size:11px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(x.description||catL(x.category,x.t==='in'))}</div><div style="font-size:9px;color:var(--text3)">${fmtD(x.date)} · ${catI(x.category,x.t==='in')} ${catL(x.category,x.t==='in')}</div></div><span class="${x.t==='in'?'ain':'aout'}" style="font-size:12px;font-weight:800;margin-left:8px;white-space:nowrap">${x.t==='in'?'+':'-'}${fmt(x.amount)}</span></div>`).join('')}
       </div>
-      ${openDebts.length>0?`<div class="card" style="margin-bottom:0;background:linear-gradient(135deg,#fff7ed,#ffedd5);border-color:#fdba74"><div class="sec-label" style="color:#9a3412">🔴 Open schulden</div>${openDebts.slice(0,4).map(d=>{const r=Math.max(0,parseFloat(d.total||0)-parseFloat(d.paid||0));return`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #fde68a;font-size:11px"><span style="font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:170px">${esc(d.name)}</span><span style="color:#ea580c;font-weight:800;white-space:nowrap;margin-left:6px">${fmt(r)}</span></div>`;}).join('')}${openDebts.length>4?`<div style="font-size:10px;color:#9a3412;margin-top:5px">+${openDebts.length-4} meer</div>`:''}</div>`:''}
+      ${openDebts.length>0?`<div class="card" style="margin-bottom:0;background:linear-gradient(135deg,#fff7ed,#ffedd5);border-color:#fdba74"><div class="sec-label" style="color:#9a3412">🔴 Open schulden</div>${openDebts.slice(0,5).map(d=>{const r=Math.max(0,parseFloat(d.total||0)-parseFloat(d.paid||0));const od=isOverdue(d.dueDate);return`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #fde68a;font-size:11px"><span style="font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:170px">${esc(d.name)}${od?'<span class="overdue-badge">VERLOPEN</span>':''}</span><span style="color:${od?'#ef4444':'#ea580c'};font-weight:800;white-space:nowrap;margin-left:6px">${fmt(r)}</span></div>`;}).join('')}${openDebts.length>5?`<div style="font-size:10px;color:#9a3412;margin-top:5px">+${openDebts.length-5} meer</div>`:''}</div>`:''}
     </div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
@@ -375,72 +497,82 @@ function vOverzicht() {
 }
 
 function vInkomsten() {
-  const items=filtered(S.incomes).sort((a,b)=>new Date(b.date)-new Date(a.date)), total=sumOf(items);
+  const allItems=filtered(S.incomes).filter(matchSearch);
+  const items=sortItems([...allItems]), total=sumOf(items);
   return `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
-    <div style="font-family:'Playfair Display',serif;font-size:22px">💚 Inkomsten ${S.year}</div>
+    <div style="font-family:'Playfair Display',serif;font-size:22px">💚 Inkomsten ${S.year} <span class="badge">${items.length}</span></div>
     <div style="display:flex;gap:6px;flex-wrap:wrap">
-      <button class="btn btn-secondary btn-sm" onclick="window.print()">📄 PDF</button>
+      <button class="btn btn-secondary btn-sm" onclick="window.print()">🖨️ Afdrukken</button>
       <button class="btn btn-secondary btn-sm" onclick="doCSV('income')">📊 CSV</button>
       <button class="btn btn-primary" onclick="mAddIncome()">+ Inkomst toevoegen</button>
     </div>
   </div>
   ${filterBar('income')}
+  ${searchBar()}
   <div class="card" style="margin-bottom:14px;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-color:#86efac">
     <div style="font-size:26px;font-weight:900;color:#16a34a">${fmt(total)}</div>
     <div style="font-size:10px;font-weight:700;color:#16a34a;text-transform:uppercase">Totaal inkomsten (gefilterd)</div>
   </div>
   <div class="tbl-wrap"><table>
-    <thead><tr><th>Datum</th><th>Categorie</th><th>Beschrijving</th><th>IBAN info</th><th>Bedrag</th><th></th></tr></thead>
-    <tbody>${items.length===0?`<tr><td colspan="6" style="text-align:center;color:var(--text3);padding:28px">Geen inkomsten gevonden</td></tr>`:items.map(x=>`<tr><td style="color:#555;font-weight:600;white-space:nowrap">${fmtD(x.date)}</td><td><span class="cat-badge cat-${x.category}">${catI(x.category,true)} ${catL(x.category,true)}</span></td><td style="max-width:180px">${esc(x.description)}</td><td style="font-size:11px;color:#444;font-weight:600;">${x.ibanVan?`<span style="color:#888">Van:</span> ${esc(x.ibanVan)}<br>`:''} ${x.ibanAan?`<span style="color:#888">Naar:</span> ${esc(x.ibanAan)}`:''}</td><td class="ain" style="white-space:nowrap">${fmt(x.amount)}</td><td><div style="display:flex;gap:3px"><button class="btn btn-secondary btn-sm btn-icon" onclick="mEditIncome('${x.id}')">✏️</button><button class="btn btn-danger btn-sm btn-icon" onclick="delIncome('${x.id}')">🗑</button></div></td></tr>`).join('')}</tbody>
+    <thead><tr><th class="${thClass('date')}" onclick="toggleSort('date')">Datum</th><th class="${thClass('category')}" onclick="toggleSort('category')">Categorie</th><th class="${thClass('description')}" onclick="toggleSort('description')">Beschrijving</th><th>IBAN info</th><th class="${thClass('amount')}" onclick="toggleSort('amount')">Bedrag</th><th></th></tr></thead>
+    <tbody>${items.length===0?`<tr><td colspan="6" style="text-align:center;color:var(--text3);padding:28px">${searchTerm?'🔍 Geen resultaten voor "'+esc(searchTerm)+'"':'Geen inkomsten gevonden'}</td></tr>`:items.map(x=>`<tr class="fade-in"><td style="color:var(--text2);font-weight:600;white-space:nowrap">${fmtD(x.date)}</td><td><span class="cat-badge cat-${x.category}">${catI(x.category,true)} ${catL(x.category,true)}</span></td><td style="max-width:180px">${esc(x.description)}${x.note?`<div style="font-size:9px;color:var(--text3);margin-top:2px">📝 ${esc(x.note)}</div>`:''}</td><td style="font-size:11px;color:var(--text2);font-weight:600;">${x.ibanVan?`<span style="color:var(--text3)">Van:</span> ${esc(x.ibanVan)}<br>`:''} ${x.ibanAan?`<span style="color:var(--text3)">Naar:</span> ${esc(x.ibanAan)}`:''}</td><td class="ain" style="white-space:nowrap">${fmt(x.amount)}</td><td><div style="display:flex;gap:3px"><button class="btn btn-secondary btn-sm btn-icon" onclick="mEditIncome('${x.id}')">✏️</button><button class="btn btn-danger btn-sm btn-icon" onclick="delIncome('${x.id}')">🗑</button></div></td></tr>`).join('')}${items.length>0?`<tr style="background:var(--cream);font-weight:900"><td colspan="4" style="text-align:right">TOTAAL</td><td class="ain" style="white-space:nowrap">${fmt(total)}</td><td></td></tr>`:''}</tbody>
   </table></div>`;
 }
 
 function vUitgaven() {
-  const items=filtered(S.expenses).sort((a,b)=>new Date(b.date)-new Date(a.date)), total=sumOf(items);
+  const allItems=filtered(S.expenses).filter(matchSearch);
+  const items=sortItems([...allItems]), total=sumOf(items);
   return `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
-    <div style="font-family:'Playfair Display',serif;font-size:22px">💸 Uitgaven ${S.year}</div>
+    <div style="font-family:'Playfair Display',serif;font-size:22px">💸 Uitgaven ${S.year} <span class="badge">${items.length}</span></div>
     <div style="display:flex;gap:6px;flex-wrap:wrap">
-      <button class="btn btn-secondary btn-sm" onclick="window.print()">📄 PDF</button>
+      <button class="btn btn-secondary btn-sm" onclick="window.print()">🖨️ Afdrukken</button>
       <button class="btn btn-secondary btn-sm" onclick="doCSV('expense')">📊 CSV</button>
       <button class="btn btn-primary" onclick="mAddExpense()">+ Uitgave toevoegen</button>
     </div>
   </div>
   ${filterBar('expense')}
+  ${searchBar()}
   <div class="card" style="margin-bottom:14px;background:linear-gradient(135deg,#fef2f2,#fee2e2);border-color:#fca5a5">
     <div style="font-size:26px;font-weight:900;color:#dc2626">${fmt(total)}</div>
     <div style="font-size:10px;font-weight:700;color:#dc2626;text-transform:uppercase">Totaal uitgaven (gefilterd)</div>
   </div>
   <div class="tbl-wrap"><table>
-    <thead><tr><th>Datum</th><th>Categorie</th><th>Beschrijving</th><th>IBAN info</th><th>Bedrag</th><th></th></tr></thead>
-    <tbody>${items.length===0?`<tr><td colspan="6" style="text-align:center;color:var(--text3);padding:28px">Geen uitgaven gevonden</td></tr>`:items.map(x=>`<tr><td style="color:#555;font-weight:600;white-space:nowrap">${fmtD(x.date)}</td><td><span class="cat-badge cat-${x.category}">${catI(x.category,false)} ${catL(x.category,false)}</span></td><td style="max-width:180px">${esc(x.description)}</td><td style="font-size:11px;color:#444;font-weight:600;">${x.ibanVan?`<span style="color:#888">Van:</span> ${esc(x.ibanVan)}<br>`:''} ${x.ibanAan?`<span style="color:#888">Aan:</span> ${esc(x.ibanAan)}`:''}</td><td class="aout" style="white-space:nowrap">${fmt(x.amount)}</td><td><div style="display:flex;gap:3px"><button class="btn btn-secondary btn-sm btn-icon" onclick="mEditExpense('${x.id}')">✏️</button><button class="btn btn-danger btn-sm btn-icon" onclick="delExpense('${x.id}')">🗑</button></div></td></tr>`).join('')}</tbody>
+    <thead><tr><th class="${thClass('date')}" onclick="toggleSort('date')">Datum</th><th class="${thClass('category')}" onclick="toggleSort('category')">Categorie</th><th class="${thClass('description')}" onclick="toggleSort('description')">Beschrijving</th><th>IBAN info</th><th class="${thClass('amount')}" onclick="toggleSort('amount')">Bedrag</th><th></th></tr></thead>
+    <tbody>${items.length===0?`<tr><td colspan="6" style="text-align:center;color:var(--text3);padding:28px">${searchTerm?'🔍 Geen resultaten voor "'+esc(searchTerm)+'"':'Geen uitgaven gevonden'}</td></tr>`:items.map(x=>`<tr class="fade-in"><td style="color:var(--text2);font-weight:600;white-space:nowrap">${fmtD(x.date)}</td><td><span class="cat-badge cat-${x.category}">${catI(x.category,false)} ${catL(x.category,false)}</span></td><td style="max-width:180px">${esc(x.description)}${x.note?`<div style="font-size:9px;color:var(--text3);margin-top:2px">📝 ${esc(x.note)}</div>`:''}</td><td style="font-size:11px;color:var(--text2);font-weight:600;">${x.ibanVan?`<span style="color:var(--text3)">Van:</span> ${esc(x.ibanVan)}<br>`:''} ${x.ibanAan?`<span style="color:var(--text3)">Aan:</span> ${esc(x.ibanAan)}`:''}</td><td class="aout" style="white-space:nowrap">${fmt(x.amount)}</td><td><div style="display:flex;gap:3px"><button class="btn btn-secondary btn-sm btn-icon" onclick="mEditExpense('${x.id}')">✏️</button><button class="btn btn-danger btn-sm btn-icon" onclick="delExpense('${x.id}')">🗑</button></div></td></tr>`).join('')}${items.length>0?`<tr style="background:var(--cream);font-weight:900"><td colspan="4" style="text-align:right">TOTAAL</td><td class="aout" style="white-space:nowrap">${fmt(total)}</td><td></td></tr>`:''}</tbody>
   </table></div>`;
 }
 
 function vSchulden() {
-  const all=[...S.debts].sort((a,b)=>new Date(b.dueDate||'2099')-new Date(a.dueDate||'2099'));
+  const all=[...S.debts].filter(matchSearch).sort((a,b)=>new Date(a.dueDate||'2099')-new Date(b.dueDate||'2099'));
   const open=all.filter(d=>parseFloat(d.paid||0)<parseFloat(d.total||0));
   const paid=all.filter(d=>parseFloat(d.paid||0)>=parseFloat(d.total||0));
   const tDebt=open.reduce((s,d)=>s+Math.max(0,parseFloat(d.total||0)-parseFloat(d.paid||0)),0);
+  const overdueCount=open.filter(d=>isOverdue(d.dueDate)).length;
+  // Sort overdue first
+  open.sort((a,b)=>{const oa=isOverdue(a.dueDate)?0:1,ob=isOverdue(b.dueDate)?0:1;if(oa!==ob)return oa-ob;return new Date(a.dueDate||'2099')-new Date(b.dueDate||'2099');});
   function debtCard(d){
     const tot=parseFloat(d.total||0),p=parseFloat(d.paid||0),rem=Math.max(0,tot-p),pct=tot>0?Math.min(100,p/tot*100):0,done=rem<=0;
-    return `<div style="padding:13px;border:1.5px solid var(--border);border-radius:10px;margin-bottom:9px;background:${done?'#f0fdf4':'#fff'}">
+    const od=!done&&isOverdue(d.dueDate);
+    const days=daysUntil(d.dueDate);
+    const urgency=od?'VERLOPEN':(days<=7&&days>=0?`⏰ ${days} dagen`:null);
+    return `<div class="fade-in ${od?'overdue':''}" style="padding:13px;border:1.5px solid ${od?'#ef4444':done?'#86efac':'var(--border)'};border-radius:10px;margin-bottom:9px;background:${done?'#f0fdf4':od?'linear-gradient(135deg,#fef2f2,#fee2e2)':'var(--surface)'}">
       <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:7px">
-        <div style="flex:1"><div style="font-weight:800;font-size:13px">${esc(d.name)}</div>
+        <div style="flex:1"><div style="font-weight:800;font-size:13px">${esc(d.name)}${od?'<span class="overdue-badge">VERLOPEN</span>':urgency?`<span style="font-size:9px;background:#fef3c7;color:#92400e;padding:2px 7px;border-radius:10px;font-weight:800;margin-left:6px">${urgency}</span>`:''}</div>
           ${d.note?`<div style="font-size:10px;color:var(--text2);margin-top:2px">📝 ${esc(d.note)}</div>`:''}
           <div style="display:flex;gap:10px;margin-top:4px;flex-wrap:wrap">
             <span style="font-size:10px;color:var(--text3)">💰 Totaal: <b>${fmt(tot)}</b></span>
             <span style="font-size:10px;color:#16a34a">✅ Betaald: <b>${fmt(p)}</b></span>
-            <span style="font-size:10px;color:#ea580c">🔴 Resterend: <b>${fmt(rem)}</b></span>
-            ${d.dueDate?`<span style="font-size:10px;color:var(--text3)">📅 Vervaldag: <b>${fmtD(d.dueDate)}</b></span>`:''}
+            <span style="font-size:10px;color:${od?'#ef4444':'#ea580c'}">🔴 Resterend: <b>${fmt(rem)}</b></span>
+            ${d.dueDate?`<span style="font-size:10px;color:${od?'#ef4444':'var(--text3)'}">📅 Vervaldag: <b>${fmtD(d.dueDate)}</b></span>`:''}
           </div>
         </div>
-        <div style="text-align:right;margin-left:10px"><div style="font-size:20px;font-weight:900;color:${done?'#16a34a':'#ea580c'}">${fmt(rem)}</div><div style="font-size:9px;color:var(--text3)">nog te betalen</div></div>
+        <div style="text-align:right;margin-left:10px"><div style="font-size:20px;font-weight:900;color:${done?'#16a34a':od?'#ef4444':'#ea580c'}">${fmt(rem)}</div><div style="font-size:9px;color:var(--text3)">nog te betalen</div></div>
       </div>
-      <div class="dprog"><div class="dprog-fill" style="width:${pct}%"></div></div>
+      <div class="dprog"><div class="dprog-fill" style="width:${pct}%;${od?'background:linear-gradient(90deg,#ef4444,#fca5a5)':''}"></div></div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:7px">
         <span style="font-size:10px;color:var(--text3);font-weight:700">${pct.toFixed(0)}% betaald</span>
         <div style="display:flex;gap:5px">
-          ${!done?`<button class="btn btn-success btn-sm" onclick="mPayDebt('${d.id}')">💳 Betaling registreren</button>`:'<span style="font-size:11px;color:#16a34a;font-weight:700">✅ Volledig betaald</span>'}
+          ${!done?`<button class="btn btn-success btn-sm" onclick="mPayDebt('${d.id}')">💳 Betaling</button>`:'<span style="font-size:11px;color:#16a34a;font-weight:700">✅ Volledig betaald</span>'}
           <button class="btn btn-secondary btn-sm btn-icon" onclick="mEditDebt('${d.id}')">✏️</button>
           <button class="btn btn-danger btn-sm btn-icon" onclick="delDebt('${d.id}')">🗑</button>
         </div>
@@ -448,16 +580,18 @@ function vSchulden() {
     </div>`;
   }
   return `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
-    <div style="font-family:'Playfair Display',serif;font-size:22px">🔴 Schulden & Te betalen</div>
+    <div style="font-family:'Playfair Display',serif;font-size:22px">🔴 Schulden & Te betalen <span class="badge">${open.length}</span></div>
     <div style="display:flex;gap:6px;flex-wrap:wrap">
-      <button class="btn btn-secondary btn-sm" onclick="window.print()">📄 PDF</button>
+      <button class="btn btn-secondary btn-sm" onclick="window.print()">🖨️ Afdrukken</button>
       <button class="btn btn-secondary btn-sm" onclick="doCSV('debt')">📊 CSV</button>
       <button class="btn btn-primary" onclick="mAddDebt()">+ Schuld toevoegen</button>
     </div>
   </div>
-  <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+  ${searchBar()}
+  <div class="stats-grid" style="grid-template-columns:repeat(${overdueCount>0?'4':'3'},1fr)">
     <div class="stat s-debt"><div class="stat-val" style="color:#ea580c">${fmt(tDebt)}</div><div class="stat-label">🔴 Nog te betalen</div></div>
     <div class="stat s-out"><div class="stat-val" style="color:#dc2626">${open.length}</div><div class="stat-label">⚠️ Open schulden</div></div>
+    ${overdueCount>0?`<div class="stat overdue" style="background:#fef2f2"><div class="stat-val" style="color:#ef4444">${overdueCount}</div><div class="stat-label">🚨 Verlopen!</div></div>`:''}
     <div class="stat s-in"><div class="stat-val" style="color:#16a34a">${paid.length}</div><div class="stat-label">✅ Afbetaald</div></div>
   </div>
   ${open.length>0?`<div class="card"><div class="sec-label">⚠️ Openstaande schulden</div>${open.map(debtCard).join('')}</div>`:''}
@@ -502,24 +636,24 @@ function drawCharts() {
 function showModal(html) {
   const root=document.getElementById('modal-root');
   root.innerHTML=`<div class="modal-overlay"><div class="modal-box">${html}</div></div>`;
-  setTimeout(()=>{root.querySelectorAll('input[type="date"]').forEach(el=>{if(el._flatpickr)return;flatpickr(el,{dateFormat:'Y-m-d',locale:{firstDayOfWeek:1,weekdays:{shorthand:['Zo','Ma','Di','Wo','Do','Vr','Za'],longhand:['Zondag','Maandag','Dinsdag','Woensdag','Donderdag','Vrijdag','Zaterdag']},months:{shorthand:['Jan','Feb','Maa','Apr','Mei','Jun','Jul','Aug','Sep','Okt','Nov','Dec'],longhand:['Januari','Februari','Maart','April','Mei','Juni','Juli','Augustus','September','Oktober','November','December']}},allowInput:true});});},50);
+  setTimeout(()=>{root.querySelectorAll('input[type="date"]').forEach(el=>{if(el._flatpickr)return;flatpickr(el,{dateFormat:'Y-m-d',altInput:true,altFormat:'d/m/Y',locale:{firstDayOfWeek:1,weekdays:{shorthand:['Zo','Ma','Di','Wo','Do','Vr','Za'],longhand:['Zondag','Maandag','Dinsdag','Woensdag','Donderdag','Vrijdag','Zaterdag']},months:{shorthand:['Jan','Feb','Maa','Apr','Mei','Jun','Jul','Aug','Sep','Okt','Nov','Dec'],longhand:['Januari','Februari','Maart','April','Mei','Juni','Juli','Augustus','September','Oktober','November','December']}},allowInput:true});});},50);
 }
 function closeModal(){ document.getElementById('modal-root').innerHTML=''; }
 window.closeModal=closeModal;
 
 function ibanBtns(inputId){return`<div class="iban-btns"><button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('${inputId}').value='${IBAN_MUSTAFA}'">👤 Mustafa</button><button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('${inputId}').value='${IBAN_DERNEK}'">🏢 Dernek</button><button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('${inputId}').value=''">✕</button></div>`;}
 
-window.mAddIncome=()=>showModal(`<div class="modal-title">💚 Inkomst toevoegen</div><div class="form-row"><div class="form-group"><label class="form-label">Datum</label><input class="form-input" type="date" id="fi-date" value="${todayISO()}"></div><div class="form-group"><label class="form-label">Bedrag (€)</label><input class="form-input" type="number" id="fi-amount" placeholder="0.00" min="0" step="0.01"></div></div><div class="form-group"><label class="form-label">Categorie</label><select class="form-select" id="fi-cat">${ICAT.map(c=>`<option value="${c.id}">${c.icon} ${c.label}</option>`).join('')}</select></div><div class="form-group"><label class="form-label">Beschrijving</label><input class="form-input" id="fi-desc" placeholder="Omschrijving..."></div><div class="form-group"><label class="form-label">Van IBAN (betaler)</label><input class="form-input" id="fi-van" placeholder="IBAN van betaler">${ibanBtns('fi-van')}</div><div class="form-group"><label class="form-label">Naar IBAN (ontvanger)</label><input class="form-input" id="fi-aan" value="${IBAN_DERNEK}">${ibanBtns('fi-aan')}</div><div class="form-group"><label class="form-label">Notitie</label><textarea class="form-textarea" id="fi-note" placeholder="Extra info..."></textarea></div><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px"><button class="btn btn-ghost" onclick="closeModal()">Annuleren</button><button class="btn btn-primary" onclick="doAddIncome()">✅ Toevoegen</button></div>`);
-window.doAddIncome=()=>{const amount=parseFloat(document.getElementById('fi-amount').value);if(!amount||amount<=0){toast('⚠️ Bedrag invullen!');return;}S.incomes.push({id:uid(),date:document.getElementById('fi-date').value||todayISO(),amount,category:document.getElementById('fi-cat').value,description:document.getElementById('fi-desc').value.trim(),ibanVan:document.getElementById('fi-van').value.trim(),ibanAan:document.getElementById('fi-aan').value.trim(),note:document.getElementById('fi-note').value.trim(),year:S.year});save();closeModal();render();toast('✅ Inkomst toegevoegd!');};
+window.mAddIncome=()=>showModal(`<div class="modal-title">💚 Gelir ekle / Inkomst toevoegen</div><div class="form-row"><div class="form-group"><label class="form-label">Datum / Tarih</label><input class="form-input" type="date" id="fi-date" value="${todayISO()}"></div><div class="form-group"><label class="form-label">Bedrag / Tutar (€)</label><input class="form-input" type="number" id="fi-amount" placeholder="0.00" min="0" step="0.01"></div></div><div class="form-group"><label class="form-label">Categorie / Kategori</label><select class="form-select" id="fi-cat">${ICAT.map(c=>`<option value="${c.id}">${c.icon} ${c.label}</option>`).join('')}</select></div><div class="form-group"><label class="form-label">Beschrijving / Açıklama</label><input class="form-input" id="fi-desc" placeholder="Omschrijving..."></div><div class="form-group"><label class="form-label">Van IBAN (gönderen)</label><input class="form-input" id="fi-van" placeholder="IBAN van betaler">${ibanBtns('fi-van')}</div><div class="form-group"><label class="form-label">Naar IBAN (alıcı)</label><input class="form-input" id="fi-aan" value="${IBAN_DERNEK}">${ibanBtns('fi-aan')}</div><div class="form-group"><label class="form-label">🧾 Kwitantie / Fiş</label><input type="file" accept="image/*,application/pdf" id="fi-receipt" class="form-input" onchange="previewReceipt(this,'fi-preview')"><div id="fi-preview" style="margin-top:6px"></div></div><div class="form-group"><label class="form-label">Notitie / Not</label><textarea class="form-textarea" id="fi-note" placeholder="Extra info..."></textarea></div><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px"><button class="btn btn-ghost" onclick="closeModal()">İptal</button><button class="btn btn-primary" onclick="doAddIncome()">✅ Ekle</button></div>`);
+window.doAddIncome=()=>{const amount=parseFloat(document.getElementById('fi-amount').value);if(!amount||amount<=0){toast('⚠️ Bedrag invullen!');return;}const receipt=window._pendingReceipt||null;S.incomes.push({id:uid(),date:document.getElementById('fi-date').value||todayISO(),amount,category:document.getElementById('fi-cat').value,description:document.getElementById('fi-desc').value.trim(),ibanVan:document.getElementById('fi-van').value.trim(),ibanAan:document.getElementById('fi-aan').value.trim(),note:document.getElementById('fi-note').value.trim(),receipt,year:S.year});window._pendingReceipt=null;save();closeModal();render();toast('✅ Gelir eklendi!');};
 window.mEditIncome=(id)=>{const x=S.incomes.find(i=>i.id===id);if(!x)return;showModal(`<div class="modal-title">✏️ Inkomst bewerken</div><div class="form-row"><div class="form-group"><label class="form-label">Datum</label><input class="form-input" type="date" id="fi-date" value="${x.date}"></div><div class="form-group"><label class="form-label">Bedrag (€)</label><input class="form-input" type="number" id="fi-amount" value="${x.amount}" min="0" step="0.01"></div></div><div class="form-group"><label class="form-label">Categorie</label><select class="form-select" id="fi-cat">${ICAT.map(c=>`<option value="${c.id}" ${c.id===x.category?'selected':''}>${c.icon} ${c.label}</option>`).join('')}</select></div><div class="form-group"><label class="form-label">Beschrijving</label><input class="form-input" id="fi-desc" value="${esc(x.description)}"></div><div class="form-group"><label class="form-label">Van IBAN</label><input class="form-input" id="fi-van" value="${esc(x.ibanVan||'')}">${ibanBtns('fi-van')}</div><div class="form-group"><label class="form-label">Naar IBAN</label><input class="form-input" id="fi-aan" value="${esc(x.ibanAan||IBAN_DERNEK)}">${ibanBtns('fi-aan')}</div><div class="form-group"><label class="form-label">Notitie</label><textarea class="form-textarea" id="fi-note">${esc(x.note||'')}</textarea></div><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px"><button class="btn btn-danger" onclick="delIncome('${id}')">🗑 Verwijderen</button><button class="btn btn-ghost" onclick="closeModal()">Annuleren</button><button class="btn btn-primary" onclick="doEditIncome('${id}')">Opslaan</button></div>`);};
 window.doEditIncome=(id)=>{const idx=S.incomes.findIndex(i=>i.id===id);if(idx<0)return;S.incomes[idx]={...S.incomes[idx],date:document.getElementById('fi-date').value||todayISO(),amount:parseFloat(document.getElementById('fi-amount').value),category:document.getElementById('fi-cat').value,description:document.getElementById('fi-desc').value.trim(),ibanVan:document.getElementById('fi-van').value.trim(),ibanAan:document.getElementById('fi-aan').value.trim(),note:document.getElementById('fi-note').value.trim()};save();closeModal();render();toast('✅ Bijgewerkt!');};
-window.delIncome=(id)=>{if(!confirm('Verwijderen?'))return;S.incomes=S.incomes.filter(i=>i.id!==id);save();render();toast('🗑 Verwijderd');};
+window.delIncome=async(id)=>{if(!await sseConfirm('Deze inkomst verwijderen?','🗑'))return;S.incomes=S.incomes.filter(i=>i.id!==id);save();render();toast('🗑 Verwijderd');};
 
-window.mAddExpense=()=>showModal(`<div class="modal-title">💸 Uitgave toevoegen</div><div class="form-row"><div class="form-group"><label class="form-label">Datum</label><input class="form-input" type="date" id="fe-date" value="${todayISO()}"></div><div class="form-group"><label class="form-label">Bedrag (€)</label><input class="form-input" type="number" id="fe-amount" placeholder="0.00" min="0" step="0.01"></div></div><div class="form-group"><label class="form-label">Categorie</label><select class="form-select" id="fe-cat">${ECAT.map(c=>`<option value="${c.id}">${c.icon} ${c.label}</option>`).join('')}</select></div><div class="form-group"><label class="form-label">Beschrijving</label><input class="form-input" id="fe-desc" placeholder="Omschrijving..."></div><div class="form-group"><label class="form-label">Van IBAN (betaler)</label><input class="form-input" id="fe-van" value="${IBAN_DERNEK}">${ibanBtns('fe-van')}</div><div class="form-group"><label class="form-label">Aan / Naam ontvanger</label><input class="form-input" id="fe-aan" placeholder="Naam of IBAN ontvanger">${ibanBtns('fe-aan')}</div><div class="form-group"><label class="form-label">Notitie</label><textarea class="form-textarea" id="fe-note" placeholder="Extra info..."></textarea></div><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px"><button class="btn btn-ghost" onclick="closeModal()">Annuleren</button><button class="btn btn-primary" onclick="doAddExpense()">✅ Toevoegen</button></div>`);
-window.doAddExpense=()=>{const amount=parseFloat(document.getElementById('fe-amount').value);if(!amount||amount<=0){toast('⚠️ Bedrag invullen!');return;}S.expenses.push({id:uid(),date:document.getElementById('fe-date').value||todayISO(),amount,category:document.getElementById('fe-cat').value,description:document.getElementById('fe-desc').value.trim(),ibanVan:document.getElementById('fe-van').value.trim(),ibanAan:document.getElementById('fe-aan').value.trim(),note:document.getElementById('fe-note').value.trim(),year:S.year});save();closeModal();render();toast('✅ Uitgave toegevoegd!');};
+window.mAddExpense=()=>showModal(`<div class="modal-title">💸 Gider ekle / Uitgave toevoegen</div><div class="form-row"><div class="form-group"><label class="form-label">Datum / Tarih</label><input class="form-input" type="date" id="fe-date" value="${todayISO()}"></div><div class="form-group"><label class="form-label">Bedrag / Tutar (€)</label><input class="form-input" type="number" id="fe-amount" placeholder="0.00" min="0" step="0.01"></div></div><div class="form-group"><label class="form-label">Categorie / Kategori</label><select class="form-select" id="fe-cat">${ECAT.map(c=>`<option value="${c.id}">${c.icon} ${c.label}</option>`).join('')}</select></div><div class="form-group"><label class="form-label">Beschrijving / Açıklama</label><input class="form-input" id="fe-desc" placeholder="Omschrijving..."></div><div class="form-group"><label class="form-label">Van IBAN (gönderen)</label><input class="form-input" id="fe-van" value="${IBAN_DERNEK}">${ibanBtns('fe-van')}</div><div class="form-group"><label class="form-label">Aan / Alıcı</label><input class="form-input" id="fe-aan" placeholder="Naam of IBAN ontvanger">${ibanBtns('fe-aan')}</div><div class="form-group"><label class="form-label">🧾 Kwitantie / Fiş</label><input type="file" accept="image/*,application/pdf" id="fe-receipt" class="form-input" onchange="previewReceipt(this,'fe-preview')"><div id="fe-preview" style="margin-top:6px"></div></div><div class="form-group"><label class="form-label">Notitie / Not</label><textarea class="form-textarea" id="fe-note" placeholder="Extra info..."></textarea></div><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px"><button class="btn btn-ghost" onclick="closeModal()">İptal</button><button class="btn btn-primary" onclick="doAddExpense()">✅ Ekle</button></div>`);
+window.doAddExpense=()=>{const amount=parseFloat(document.getElementById('fe-amount').value);if(!amount||amount<=0){toast('⚠️ Bedrag invullen!');return;}const receipt=window._pendingReceipt||null;S.expenses.push({id:uid(),date:document.getElementById('fe-date').value||todayISO(),amount,category:document.getElementById('fe-cat').value,description:document.getElementById('fe-desc').value.trim(),ibanVan:document.getElementById('fe-van').value.trim(),ibanAan:document.getElementById('fe-aan').value.trim(),note:document.getElementById('fe-note').value.trim(),receipt,year:S.year});window._pendingReceipt=null;save();closeModal();render();toast('✅ Gider eklendi!');};
 window.mEditExpense=(id)=>{const x=S.expenses.find(i=>i.id===id);if(!x)return;showModal(`<div class="modal-title">✏️ Uitgave bewerken</div><div class="form-row"><div class="form-group"><label class="form-label">Datum</label><input class="form-input" type="date" id="fe-date" value="${x.date}"></div><div class="form-group"><label class="form-label">Bedrag (€)</label><input class="form-input" type="number" id="fe-amount" value="${x.amount}" min="0" step="0.01"></div></div><div class="form-group"><label class="form-label">Categorie</label><select class="form-select" id="fe-cat">${ECAT.map(c=>`<option value="${c.id}" ${c.id===x.category?'selected':''}>${c.icon} ${c.label}</option>`).join('')}</select></div><div class="form-group"><label class="form-label">Beschrijving</label><input class="form-input" id="fe-desc" value="${esc(x.description)}"></div><div class="form-group"><label class="form-label">Van IBAN</label><input class="form-input" id="fe-van" value="${esc(x.ibanVan||IBAN_DERNEK)}">${ibanBtns('fe-van')}</div><div class="form-group"><label class="form-label">Aan / Naam ontvanger</label><input class="form-input" id="fe-aan" value="${esc(x.ibanAan||'')}">${ibanBtns('fe-aan')}</div><div class="form-group"><label class="form-label">Notitie</label><textarea class="form-textarea" id="fe-note">${esc(x.note||'')}</textarea></div><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px"><button class="btn btn-danger" onclick="delExpense('${id}')">🗑 Verwijderen</button><button class="btn btn-ghost" onclick="closeModal()">Annuleren</button><button class="btn btn-primary" onclick="doEditExpense('${id}')">Opslaan</button></div>`);};
 window.doEditExpense=(id)=>{const idx=S.expenses.findIndex(i=>i.id===id);if(idx<0)return;S.expenses[idx]={...S.expenses[idx],date:document.getElementById('fe-date').value||todayISO(),amount:parseFloat(document.getElementById('fe-amount').value),category:document.getElementById('fe-cat').value,description:document.getElementById('fe-desc').value.trim(),ibanVan:document.getElementById('fe-van').value.trim(),ibanAan:document.getElementById('fe-aan').value.trim(),note:document.getElementById('fe-note').value.trim()};save();closeModal();render();toast('✅ Bijgewerkt!');};
-window.delExpense=(id)=>{if(!confirm('Verwijderen?'))return;S.expenses=S.expenses.filter(i=>i.id!==id);save();render();toast('🗑 Verwijderd');};
+window.delExpense=async(id)=>{if(!await sseConfirm('Deze uitgave verwijderen?','🗑'))return;S.expenses=S.expenses.filter(i=>i.id!==id);save();render();toast('🗑 Verwijderd');};
 
 window.mAddDebt=()=>showModal(`<div class="modal-title">🔴 Schuld toevoegen</div><div class="form-group"><label class="form-label">Naam / Omschrijving</label><input class="form-input" id="fd-name" placeholder="bijv. KBC jaarlijkse kost"></div><div class="form-row"><div class="form-group"><label class="form-label">Totaal bedrag (€)</label><input class="form-input" type="number" id="fd-total" placeholder="0.00" min="0" step="0.01"></div><div class="form-group"><label class="form-label">Al betaald (€)</label><input class="form-input" type="number" id="fd-paid" value="0" min="0" step="0.01"></div></div><div class="form-group"><label class="form-label">Vervaldag (optioneel)</label><input class="form-input" type="date" id="fd-due"></div><div class="form-group"><label class="form-label">Notitie</label><textarea class="form-textarea" id="fd-note" placeholder="Extra info..."></textarea></div><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px"><button class="btn btn-ghost" onclick="closeModal()">Annuleren</button><button class="btn btn-primary" onclick="doAddDebt()">✅ Toevoegen</button></div>`);
 window.doAddDebt=()=>{const name=document.getElementById('fd-name').value.trim(),total=parseFloat(document.getElementById('fd-total').value)||0;if(!name||total<=0){toast('⚠️ Naam en bedrag invullen!');return;}S.debts.push({id:uid(),name,total,paid:parseFloat(document.getElementById('fd-paid').value)||0,dueDate:document.getElementById('fd-due').value,note:document.getElementById('fd-note').value.trim(),year:S.year});save();closeModal();render();toast('✅ Schuld toegevoegd!');};
@@ -527,7 +661,140 @@ window.mPayDebt=(id)=>{const d=S.debts.find(x=>x.id===id);if(!d)return;const rem
 window.doPayDebt=(id)=>{const amount=parseFloat(document.getElementById('fp-amount').value)||0,date=document.getElementById('fp-date').value||todayISO();if(amount<=0)return;const idx=S.debts.findIndex(x=>x.id===id);if(idx<0)return;S.debts[idx].paid=(parseFloat(S.debts[idx].paid||0)+amount);S.expenses.push({id:uid(),date,amount,category:'terugbetaling',description:'Betaling: '+S.debts[idx].name,ibanVan:IBAN_DERNEK,ibanAan:'',note:'',year:S.year});save();closeModal();render();toast(`✅ ${fmt(amount)} betaling geregistreerd!`);};
 window.mEditDebt=(id)=>{const d=S.debts.find(x=>x.id===id);if(!d)return;showModal(`<div class="modal-title">✏️ Schuld bewerken</div><div class="form-group"><label class="form-label">Naam</label><input class="form-input" id="fd-name" value="${esc(d.name)}"></div><div class="form-row"><div class="form-group"><label class="form-label">Totaal (€)</label><input class="form-input" type="number" id="fd-total" value="${d.total}" min="0" step="0.01"></div><div class="form-group"><label class="form-label">Al betaald (€)</label><input class="form-input" type="number" id="fd-paid" value="${d.paid||0}" min="0" step="0.01"></div></div><div class="form-group"><label class="form-label">Vervaldag</label><input class="form-input" type="date" id="fd-due" value="${d.dueDate||''}"></div><div class="form-group"><label class="form-label">Notitie</label><textarea class="form-textarea" id="fd-note">${esc(d.note||'')}</textarea></div><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px"><button class="btn btn-danger" onclick="delDebt('${id}')">🗑</button><button class="btn btn-ghost" onclick="closeModal()">Annuleren</button><button class="btn btn-primary" onclick="doEditDebt('${id}')">Opslaan</button></div>`);};
 window.doEditDebt=(id)=>{const idx=S.debts.findIndex(x=>x.id===id);if(idx<0)return;S.debts[idx]={...S.debts[idx],name:document.getElementById('fd-name').value.trim(),total:parseFloat(document.getElementById('fd-total').value)||0,paid:parseFloat(document.getElementById('fd-paid').value)||0,dueDate:document.getElementById('fd-due').value,note:document.getElementById('fd-note').value.trim()};save();closeModal();render();toast('✅ Bijgewerkt!');};
-window.delDebt=(id)=>{if(!confirm('Verwijderen?'))return;S.debts=S.debts.filter(x=>x.id!==id);save();render();toast('🗑 Verwijderd');};
+window.delDebt=async(id)=>{if(!await sseConfirm('Deze schuld verwijderen?','🗑'))return;S.debts=S.debts.filter(x=>x.id!==id);save();render();toast('🗑 Verwijderd');};
+
+/* === RECEIPT UPLOAD === */
+window._pendingReceipt=null;
+window.previewReceipt=function(input,previewId){const file=input.files[0];if(!file)return;if(file.size>5*1024*1024){toast('⚠️ Max 5MB!');input.value='';return;}const reader=new FileReader();reader.onload=e=>{window._pendingReceipt=e.target.result;document.getElementById(previewId).innerHTML=`<img src="${e.target.result}" style="max-width:100%;max-height:120px;border-radius:8px;border:1.5px solid var(--border)"><br><span style="font-size:9px;color:var(--text3)">✅ ${file.name}</span>`;};reader.readAsDataURL(file);};
+window.viewReceipt=(id)=>{const item=[...S.incomes,...S.expenses].find(x=>x.id===id);if(!item||!item.receipt)return;showModal(`<div class="modal-title">🧾 Kwitantie / Fiş</div><div style="text-align:center"><img src="${item.receipt}" style="max-width:100%;max-height:70vh;border-radius:8px;border:2px solid var(--border)"></div><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px"><a href="${item.receipt}" download="kwitantie.png" class="btn btn-secondary btn-sm">📥 İndir</a><button class="btn btn-ghost" onclick="closeModal()">Kapat</button></div>`);};
+
+/* === KASBOEK VIEW === */
+function vKasboek(){
+  const yr=S.year;
+  let all=[...S.incomes.filter(x=>getYr(x)==yr).map(x=>({...x,type:'in'})),...S.expenses.filter(x=>getYr(x)==yr).map(x=>({...x,type:'out'}))].filter(matchSearch).sort((a,b)=>a.date.localeCompare(b.date));
+  let running=0;all=all.map(x=>{running+=(x.type==='in'?1:-1)*parseFloat(x.amount||0);return{...x,balance:running};});
+  const tIn=all.filter(x=>x.type==='in').reduce((s,x)=>s+parseFloat(x.amount||0),0);
+  const tOut=all.filter(x=>x.type==='out').reduce((s,x)=>s+parseFloat(x.amount||0),0);
+  return `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+    <div style="font-family:'Playfair Display',serif;font-size:22px">📒 Kasboek ${yr} <span class="badge">${all.length}</span></div>
+    <div style="display:flex;gap:6px"><button class="btn btn-secondary btn-sm" onclick="window.print()">🖨️</button><button class="btn btn-secondary btn-sm" onclick="doCSV()">📊 CSV</button></div></div>
+  ${searchBar()}
+  <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:14px">
+    <div class="stat s-in"><div class="stat-val" style="color:#16a34a">${fmt(tIn)}</div><div class="stat-label">💚 Toplam Gelir</div></div>
+    <div class="stat s-out"><div class="stat-val" style="color:#dc2626">${fmt(tOut)}</div><div class="stat-label">💸 Toplam Gider</div></div>
+    <div class="stat ${running>=0?'s-pos':'s-neg'}"><div class="stat-val">${fmt(running)}</div><div class="stat-label">${running>=0?'✅':'⚠️'} Kasa Bakiye</div></div>
+  </div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>#</th><th>Tarih</th><th>Tür</th><th>Kategori</th><th>Açıklama</th><th>Gelir</th><th>Gider</th><th>Bakiye</th><th></th></tr></thead>
+    <tbody>${all.length===0?'<tr><td colspan="9" style="text-align:center;color:var(--text3);padding:28px">Henüz kayıt yok</td></tr>':all.map((x,i)=>`<tr class="fade-in">
+      <td style="color:var(--text3);font-size:10px;font-weight:700">${i+1}</td>
+      <td style="color:var(--text2);font-weight:600;white-space:nowrap">${fmtD(x.date)}</td>
+      <td>${x.type==='in'?'<span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:800">GELİR</span>':'<span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:800">GİDER</span>'}</td>
+      <td><span class="cat-badge cat-${x.category}">${catI(x.category,x.type==='in')} ${catL(x.category,x.type==='in')}</span></td>
+      <td style="max-width:160px;font-size:12px">${esc(x.description||'-')}</td>
+      <td class="ain" style="white-space:nowrap">${x.type==='in'?fmt(x.amount):''}</td>
+      <td class="aout" style="white-space:nowrap">${x.type==='out'?fmt(x.amount):''}</td>
+      <td style="font-weight:800;color:${x.balance>=0?'#16a34a':'#dc2626'};white-space:nowrap">${fmt(x.balance)}</td>
+      <td>${x.receipt?`<button class="btn btn-secondary btn-sm btn-icon" onclick="viewReceipt('${x.id}')">🧾</button>`:''}</td>
+    </tr>`).join('')}
+    ${all.length>0?`<tr style="background:var(--cream);font-weight:900"><td></td><td colspan="4" style="text-align:right">TOTAAL</td><td class="ain">${fmt(tIn)}</td><td class="aout">${fmt(tOut)}</td><td style="color:${running>=0?'#16a34a':'#dc2626'}">${fmt(running)}</td><td></td></tr>`:''}
+    </tbody></table></div>`;
+}
+
+/* === LEDEN / ÜYE YÖNETİMİ === */
+const LID_STATUS=[{id:'actief',label:'Aktif',icon:'✅'},{id:'inactief',label:'İnaktif',icon:'⏸️'},{id:'ereleden',label:'Onursal',icon:'⭐'}];
+window.mAddLid=()=>showModal(`<div class="modal-title">👥 Üye ekle</div>
+  <div class="form-row"><div class="form-group"><label class="form-label">İsim / Naam</label><input class="form-input" id="fl-name" placeholder="Tam isim"></div><div class="form-group"><label class="form-label">E-mail</label><input class="form-input" type="email" id="fl-email" placeholder="email@..."></div></div>
+  <div class="form-row"><div class="form-group"><label class="form-label">Telefon</label><input class="form-input" id="fl-phone" placeholder="+32 ..."></div><div class="form-group"><label class="form-label">Üyelik tarihi</label><input class="form-input" type="date" id="fl-since" value="${todayISO()}"></div></div>
+  <div class="form-row"><div class="form-group"><label class="form-label">Durum / Status</label><select class="form-select" id="fl-status">${LID_STATUS.map(s=>`<option value="${s.id}">${s.icon} ${s.label}</option>`).join('')}</select></div><div class="form-group"><label class="form-label">Aidat / Lidgeld (€/yıl)</label><input class="form-input" type="number" id="fl-fee" value="0" min="0" step="0.01"></div></div>
+  <div class="form-group"><label class="form-label">Not</label><textarea class="form-textarea" id="fl-note" placeholder="Extra info..."></textarea></div>
+  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px"><button class="btn btn-ghost" onclick="closeModal()">İptal</button><button class="btn btn-primary" onclick="doAddLid()">✅ Ekle</button></div>`);
+window.doAddLid=()=>{const name=document.getElementById('fl-name').value.trim();if(!name){toast('⚠️ İsim gerekli!');return;}S.leden.push({id:uid(),name,email:document.getElementById('fl-email').value.trim(),phone:document.getElementById('fl-phone').value.trim(),since:document.getElementById('fl-since').value||todayISO(),status:document.getElementById('fl-status').value,fee:parseFloat(document.getElementById('fl-fee').value)||0,feePaid:false,note:document.getElementById('fl-note').value.trim()});save();closeModal();render();toast('✅ Üye eklendi!');};
+window.mEditLid=(id)=>{const l=S.leden.find(x=>x.id===id);if(!l)return;showModal(`<div class="modal-title">✏️ Üye düzenle</div>
+  <div class="form-row"><div class="form-group"><label class="form-label">İsim</label><input class="form-input" id="fl-name" value="${esc(l.name)}"></div><div class="form-group"><label class="form-label">E-mail</label><input class="form-input" type="email" id="fl-email" value="${esc(l.email||'')}"></div></div>
+  <div class="form-row"><div class="form-group"><label class="form-label">Telefon</label><input class="form-input" id="fl-phone" value="${esc(l.phone||'')}"></div><div class="form-group"><label class="form-label">Üyelik tarihi</label><input class="form-input" type="date" id="fl-since" value="${l.since||''}"></div></div>
+  <div class="form-row"><div class="form-group"><label class="form-label">Durum</label><select class="form-select" id="fl-status">${LID_STATUS.map(s=>`<option value="${s.id}" ${s.id===l.status?'selected':''}>${s.icon} ${s.label}</option>`).join('')}</select></div><div class="form-group"><label class="form-label">Aidat (€/yıl)</label><input class="form-input" type="number" id="fl-fee" value="${l.fee||0}" min="0" step="0.01"></div></div>
+  <div class="form-group"><label class="form-label">Aidat durumu</label><select class="form-select" id="fl-paid"><option value="false" ${!l.feePaid?'selected':''}>❌ Ödenmedi</option><option value="true" ${l.feePaid?'selected':''}>✅ Ödendi</option></select></div>
+  <div class="form-group"><label class="form-label">Not</label><textarea class="form-textarea" id="fl-note">${esc(l.note||'')}</textarea></div>
+  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px"><button class="btn btn-danger" onclick="delLid('${id}')">🗑</button><button class="btn btn-ghost" onclick="closeModal()">İptal</button><button class="btn btn-primary" onclick="doEditLid('${id}')">Kaydet</button></div>`);};
+window.doEditLid=(id)=>{const idx=S.leden.findIndex(x=>x.id===id);if(idx<0)return;S.leden[idx]={...S.leden[idx],name:document.getElementById('fl-name').value.trim(),email:document.getElementById('fl-email').value.trim(),phone:document.getElementById('fl-phone').value.trim(),since:document.getElementById('fl-since').value,status:document.getElementById('fl-status').value,fee:parseFloat(document.getElementById('fl-fee').value)||0,feePaid:document.getElementById('fl-paid').value==='true',note:document.getElementById('fl-note').value.trim()};save();closeModal();render();toast('✅ Güncellendi!');};
+window.delLid=async(id)=>{if(!await sseConfirm('Bu üyeyi silmek istediğinize emin misiniz?','🗑'))return;S.leden=S.leden.filter(x=>x.id!==id);save();render();toast('🗑 Silindi');};
+
+function vLeden(){
+  const active=S.leden.filter(l=>l.status==='actief'),inactive=S.leden.filter(l=>l.status==='inactief'),ere=S.leden.filter(l=>l.status==='ereleden');
+  const totalFee=active.reduce((s,l)=>s+parseFloat(l.fee||0),0),paidFee=active.filter(l=>l.feePaid).reduce((s,l)=>s+parseFloat(l.fee||0),0);
+  const allF=S.leden.filter(matchSearch);
+  return `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+    <div style="font-family:'Playfair Display',serif;font-size:22px">👥 Üyeler / Leden <span class="badge">${S.leden.length}</span></div>
+    <button class="btn btn-primary" onclick="mAddLid()">+ Üye ekle</button></div>
+  ${searchBar()}
+  <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px">
+    <div class="stat s-in"><div class="stat-val" style="color:#16a34a">${active.length}</div><div class="stat-label">✅ Aktif</div></div>
+    <div class="stat" style="background:linear-gradient(135deg,#fef9c3,#fef3c7);border-color:#fde68a"><div class="stat-val" style="color:#854d0e">${ere.length}</div><div class="stat-label">⭐ Onursal</div></div>
+    <div class="stat" style="background:var(--surface2)"><div class="stat-val" style="color:var(--text2)">${inactive.length}</div><div class="stat-label">⏸️ İnaktif</div></div>
+    <div class="stat ${paidFee>=totalFee&&totalFee>0?'s-in':'s-out'}"><div class="stat-val" style="color:${paidFee>=totalFee?'#16a34a':'#dc2626'}">${fmt(paidFee)}/${fmt(totalFee)}</div><div class="stat-label">💰 Aidat</div></div>
+  </div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>İsim</th><th>E-mail</th><th>Telefon</th><th>Durum</th><th>Üyelik</th><th>Aidat</th><th>Ödeme</th><th></th></tr></thead>
+    <tbody>${allF.length===0?'<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:28px">Henüz üye yok</td></tr>':allF.map(l=>{const st=LID_STATUS.find(s=>s.id===l.status);return`<tr class="fade-in">
+      <td style="font-weight:700">${esc(l.name)}</td><td style="font-size:11px">${esc(l.email||'-')}</td><td style="font-size:11px">${esc(l.phone||'-')}</td>
+      <td><span style="padding:2px 8px;border-radius:10px;font-size:10px;font-weight:800;background:${l.status==='actief'?'#dcfce7;color:#166534':l.status==='ereleden'?'#fef9c3;color:#854d0e':'#f1f5f9;color:#64748b'}">${st?st.icon+' '+st.label:l.status}</span></td>
+      <td style="font-size:11px">${fmtD(l.since)}</td><td style="font-weight:700">${fmt(l.fee||0)}</td>
+      <td>${l.fee>0?(l.feePaid?'<span style="color:#16a34a;font-weight:800">✅</span>':'<span style="color:#dc2626;font-weight:800">❌</span>'):'—'}</td>
+      <td><div style="display:flex;gap:3px"><button class="btn btn-secondary btn-sm btn-icon" onclick="mEditLid('${l.id}')">✏️</button><button class="btn btn-danger btn-sm btn-icon" onclick="delLid('${l.id}')">🗑</button></div></td></tr>`;}).join('')}</tbody>
+  </table></div>`;
+}
+
+/* === BEGROTİNG / BÜTÇE === */
+window.mAddBudget=()=>{const cats=[...ICAT.map(c=>({...c,tp:'in'})),...ECAT.map(c=>({...c,tp:'out'}))];showModal(`<div class="modal-title">💰 Bütçe ekle</div>
+  <div class="form-group"><label class="form-label">Kategori</label><select class="form-select" id="fb-cat">${cats.map(c=>`<option value="${c.tp}_${c.id}">${c.icon} ${c.label} (${c.tp==='in'?'Gelir':'Gider'})</option>`).join('')}</select></div>
+  <div class="form-row"><div class="form-group"><label class="form-label">Planlanan tutar (€)</label><input class="form-input" type="number" id="fb-planned" placeholder="0.00" min="0" step="0.01"></div><div class="form-group"><label class="form-label">Dönem</label><select class="form-select" id="fb-period"><option value="yearly">📅 Yıllık</option><option value="monthly">📆 Aylık</option></select></div></div>
+  <div class="form-group"><label class="form-label">Not</label><textarea class="form-textarea" id="fb-note" placeholder="Extra info..."></textarea></div>
+  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px"><button class="btn btn-ghost" onclick="closeModal()">İptal</button><button class="btn btn-primary" onclick="doAddBudget()">✅ Ekle</button></div>`);};
+window.doAddBudget=()=>{const cv=document.getElementById('fb-cat').value,planned=parseFloat(document.getElementById('fb-planned').value)||0;if(!planned){toast('⚠️ Tutar gerekli!');return;}const[tp,catId]=cv.split('_');S.budgets.push({id:uid(),type:tp,category:catId,planned,period:document.getElementById('fb-period').value,note:document.getElementById('fb-note').value.trim(),year:S.year});save();closeModal();render();toast('✅ Bütçe eklendi!');};
+window.delBudget=async(id)=>{if(!await sseConfirm('Bu bütçeyi silmek istiyor musunuz?','🗑'))return;S.budgets=S.budgets.filter(x=>x.id!==id);save();render();toast('🗑 Silindi');};
+
+function vBegroting(){
+  const yr=S.year,inc=S.incomes.filter(x=>getYr(x)==yr),exp=S.expenses.filter(x=>getYr(x)==yr);
+  const budgets=S.budgets.filter(b=>b.year==yr);
+  function getActual(b){const src=b.type==='in'?inc:exp;return src.filter(x=>x.category===b.category).reduce((s,x)=>s+parseFloat(x.amount||0),0);}
+  return `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+    <div style="font-family:'Playfair Display',serif;font-size:22px">💰 Bütçe / Begroting ${yr} <span class="badge">${budgets.length}</span></div>
+    <button class="btn btn-primary" onclick="mAddBudget()">+ Bütçe ekle</button></div>
+  ${budgets.length===0?`<div class="card" style="text-align:center;padding:36px;color:var(--text3)"><div style="font-size:36px;margin-bottom:8px">💰</div>Henüz bütçe planı eklenmemiş<br><span style="font-size:11px">Kategori bazlı gelir ve gider bütçesi belirleyin</span></div>`:`
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <div class="card"><div class="sec-label">💚 Gelir bütçeleri</div>
+      ${budgets.filter(b=>b.type==='in').length===0?'<p style="color:var(--text3);font-size:12px">Gelir bütçesi yok</p>':budgets.filter(b=>b.type==='in').map(b=>{
+        const act=getActual(b),pct=b.planned>0?Math.min(150,act/b.planned*100):0,cat=ICAT.find(c=>c.id===b.category);
+        const ok=act>=b.planned;
+        return`<div class="fade-in" style="padding:10px;border:1.5px solid ${ok?'#86efac':'var(--border)'};border-radius:10px;margin-bottom:8px;background:${ok?'#f0fdf4':'var(--surface)'}">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <span class="cat-badge cat-${b.category}">${cat?cat.icon:'📌'} ${cat?cat.label:b.category}</span>
+            <div style="display:flex;gap:4px;align-items:center"><span style="font-size:9px;color:var(--text3)">${b.period==='monthly'?'Aylık':'Yıllık'}</span><button class="btn btn-danger btn-sm btn-icon" onclick="delBudget('${b.id}')">🗑</button></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px">
+            <span>Hedef: <b>${fmt(b.planned)}</b></span><span>Gerçekleşen: <b style="color:${ok?'#16a34a':'#ea580c'}">${fmt(act)}</b></span><span style="font-weight:800;color:${ok?'#16a34a':'#ea580c'}">${pct.toFixed(0)}%</span>
+          </div>
+          <div class="dprog"><div class="dprog-fill" style="width:${Math.min(100,pct)}%"></div></div>
+        </div>`;}).join('')}
+    </div>
+    <div class="card"><div class="sec-label">💸 Gider bütçeleri</div>
+      ${budgets.filter(b=>b.type==='out').length===0?'<p style="color:var(--text3);font-size:12px">Gider bütçesi yok</p>':budgets.filter(b=>b.type==='out').map(b=>{
+        const act=getActual(b),pct=b.planned>0?Math.min(150,act/b.planned*100):0,cat=ECAT.find(c=>c.id===b.category);
+        const over=act>b.planned;
+        return`<div class="fade-in" style="padding:10px;border:1.5px solid ${over?'#fca5a5':'var(--border)'};border-radius:10px;margin-bottom:8px;background:${over?'linear-gradient(135deg,#fef2f2,#fee2e2)':'var(--surface)'}">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <span class="cat-badge cat-${b.category}">${cat?cat.icon:'📌'} ${cat?cat.label:b.category}</span>
+            <div style="display:flex;gap:4px;align-items:center"><span style="font-size:9px;color:var(--text3)">${b.period==='monthly'?'Aylık':'Yıllık'}</span><button class="btn btn-danger btn-sm btn-icon" onclick="delBudget('${b.id}')">🗑</button></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px">
+            <span>Limit: <b>${fmt(b.planned)}</b></span><span>Harcanan: <b style="color:${over?'#dc2626':'#16a34a'}">${fmt(act)}</b></span><span style="font-weight:800;color:${over?'#dc2626':'#16a34a'}">${pct.toFixed(0)}%</span>
+          </div>
+          <div class="dprog"><div class="dprog-fill" style="width:${Math.min(100,pct)}%;${over?'background:linear-gradient(90deg,#ef4444,#fca5a5)':''}"></div></div>
+        </div>`;}).join('')}
+    </div>
+  </div>`}`;
+}
 
 window.doCSV=(type)=>{
   const yr=S.year;let rows,filename;
