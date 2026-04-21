@@ -364,12 +364,19 @@ async function loadFromFirebase(uid) {
           if (t.custom) Object.entries(t.custom).forEach(([k,v])=>document.documentElement.style.setProperty(`--${k}`,v));
         } catch(e) {}
       }
-      // Load uurrooster from Firebase (overrides localStorage)
+      // Load uurrooster from Firebase — ONLY if seedTag matches (else keep local default + push back)
       if (meta.uurrooster) {
         try {
           const ur = JSON.parse(meta.uurrooster);
-          window._uurrooster = ur;
-          localStorage.setItem('uurrooster_v1', meta.uurrooster);
+          if (ur.seedTag === "seed_2025_tichelrij_v1") {
+            window._uurrooster = ur;
+            localStorage.setItem('uurrooster_v1', meta.uurrooster);
+          } else {
+            console.log("[LesNotitie] Firebase uurrooster stale — keeping seeded local version and pushing to cloud");
+            if (window._saveUurroosterToFirebase && window._uurrooster) {
+              window._saveUurroosterToFirebase(window._uurrooster);
+            }
+          }
         } catch(e) {}
       }
       // Load list of years
@@ -399,10 +406,22 @@ async function loadYearFromFirebase(uid, yearKey) {
           const day = base.getDay(); const diff = day===0?-6:1-day; base.setDate(base.getDate()+diff);
           parsed.weeks = parsed.weeks.map((w,i)=>{ const ws=new Date(base); ws.setDate(base.getDate()+i*7); const we=new Date(ws); we.setDate(ws.getDate()+6); return{...w,dateStr:window.formatDateRange(ws,we)}; });
         }
-        // Merge into state
+        // Merge into state — with seed migration check
         window.state.schoolYear = yearKey;
         window.state.startDate = parsed.startDate;
-        window.state.groups = parsed.groups || [];
+        // SEED MIGRATION for Firebase data
+        if (parsed.seedTag !== "seed_2025_tichelrij_v1") {
+          console.log("[LesNotitie] Firebase year data stale — applying seed migration (replacing groups with Tichelrij/Speelhof)");
+          window.state.groups = JSON.parse(JSON.stringify(DEFAULT_STATE.groups));
+          window.state.seedTag = "seed_2025_tichelrij_v1";
+          // Push migrated year back to Firebase after render
+          setTimeout(() => {
+            if (window._currentUser) saveYearToFirebase(window._currentUser.uid, yearKey);
+          }, 2000);
+        } else {
+          window.state.groups = parsed.groups || [];
+          window.state.seedTag = parsed.seedTag;
+        }
         window.state.evaluations = parsed.evaluations || {};
         window.state.categories = parsed.categories || window.state.categories;
         window.state.weeks = parsed.weeks;
@@ -440,6 +459,7 @@ async function saveYearToFirebase(uid, yearKey, yearData) {
       startDate: window.state.startDate,
       selectedWeek: window.state.selectedWeek,
       selectedGroup: window.state.selectedGroup,
+      seedTag: window.state.seedTag || "seed_2025_tichelrij_v1",
       groups: window.state.groups,
       evaluations: window.state.evaluations,
       categories: window.state.categories,
@@ -1079,6 +1099,7 @@ function saveState() {
       startDate: state.startDate,
       selectedWeek: state.selectedWeek,
       selectedGroup: state.selectedGroup,
+      seedTag: state.seedTag || "seed_2025_tichelrij_v1",
       groups: state.groups,
       evaluations: state.evaluations,
       categories: state.categories,
@@ -2137,6 +2158,7 @@ const DEFAULT_UURROOSTER = {
   },
   // Custom button labels user can add
   buttonTypes: ["Les", "VRIJ", "Wachtuur", "Toezicht", "Vergadering", "Vervanging", "Verlof"],
+  seedTag: "seed_2025_tichelrij_v1",
 };
 
 // Load or init uurrooster state
