@@ -364,6 +364,13 @@ async function loadFromFirebase(uid) {
           if (t.custom) Object.entries(t.custom).forEach(([k,v])=>document.documentElement.style.setProperty(`--${k}`,v));
         } catch(e) {}
       }
+      // Load custom leerplandoelen from Firebase
+      if (meta.leerplandoelenCustom) {
+        try {
+          window._lpdCustom = JSON.parse(meta.leerplandoelenCustom);
+          localStorage.setItem('lpdcustom_v1', meta.leerplandoelenCustom);
+        } catch(e) {}
+      }
       // Load custom lesvoorbereidings from Firebase
       if (meta.lesvoorbereidingCustom) {
         try {
@@ -3500,12 +3507,12 @@ function renderLesvoorbereiding(year, entry, curriculum) {
       <div style="font-size:11px;font-weight:900;color:${borderColor};text-transform:uppercase;letter-spacing:1.2px;margin-bottom:6px;display:flex;align-items:center;gap:6px">
         <span style="font-size:14px">${icon}</span> ${title}
       </div>
-      <div style="font-size:12px;color:var(--text);line-height:1.7"><p style="margin:0">${lvToHtml(body)}</p></div>
+      <div style="font-size:13px;color:var(--text);line-height:1.7"><p style="margin:0">${lvToHtml(body)}</p></div>
     </div>`;
 
   const wvArr = Array.isArray(lv.werkvormen) ? lv.werkvormen : [];
   const wvHtml = wvArr.map(w =>
-    `<li style="font-size:12px;color:var(--text);padding:3px 0;line-height:1.5">${String(w).replace(/</g,'&lt;')}</li>`).join('');
+    `<li style="font-size:13px;color:var(--text);padding:4px 0;line-height:1.6">${String(w).replace(/</g,'&lt;')}</li>`).join('');
 
   const editBtnOnClick = `event.stopPropagation();openEditLvModal('${year}', ${entry.wn}, '${curriculum}')`;
 
@@ -3521,11 +3528,12 @@ function renderLesvoorbereiding(year, entry, curriculum) {
           <div style="font-size:10px;color:var(--text3)">${meta.estimatedDuration || '50 minuten'} · ${meta.bookRef || lvBookRef(String(year), entry.thema, curriculum)}</div>
         </div>
         <button onclick="${editBtnOnClick}" style="background:${c}18;color:${c};border:1px solid ${c}40;border-radius:14px;padding:4px 12px;font-size:11px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .15s" onmouseover="this.style.background='${c}';this.style.color='#fff'" onmouseout="this.style.background='${c}18';this.style.color='${c}'">✏️ Bewerken</button>
+        <button onclick="event.stopPropagation();printLvAsPdf('${year}', ${entry.wn}, '${curriculum}')" style="background:#06b6d418;color:#06b6d4;border:1px solid #06b6d440;border-radius:14px;padding:4px 12px;font-size:11px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .15s" onmouseover="this.style.background='#06b6d4';this.style.color='#fff'" onmouseout="this.style.background='#06b6d418';this.style.color='#06b6d4'">🖨️ PDF</button>
         ${!isCustom ? '<span style="background:' + c + '18;color:' + c + ';border-radius:12px;padding:3px 10px;font-size:10px;font-weight:800">inspectie-klaar</span>' : ''}
       </div>
       ${section('🎯', 'Inleiding', lv.inleiding, '#8b5cf6')}
-      ${section('📚', 'Kern / Gelişme', lv.kern, '#3b82f6')}
-      ${section('✨', 'Slot / Sonuç', lv.slot, '#d97706')}
+      ${section('📚', 'Kern', lv.kern, '#3b82f6')}
+      ${section('✨', 'Slot', lv.slot, '#d97706')}
       ${section('📊', 'Evaluatie', lv.evaluatie, '#ec4899')}
       <div style="border-left:3px solid #06b6d4;padding:10px 14px;margin:10px 0;background:#06b6d408;border-radius:0 8px 8px 0">
         <div style="font-size:11px;font-weight:900;color:#06b6d4;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:6px;display:flex;align-items:center;gap:6px">
@@ -3618,11 +3626,11 @@ function openEditLvModal(year, weekNum, curriculum) {
         <textarea id="lv_edit_inleiding" class="lv-edit-ta">${escHtml(source.inleiding)}</textarea>
       </div>
       <div>
-        <label style="font-size:12px;font-weight:800;color:#3b82f6;margin-bottom:5px;display:block">📚 KERN / GELİŞME <span style="font-weight:500;color:var(--text3)">(±30-35 min)</span></label>
+        <label style="font-size:12px;font-weight:800;color:#3b82f6;margin-bottom:5px;display:block">📚 KERN <span style="font-weight:500;color:var(--text3)">(±30-35 min)</span></label>
         <textarea id="lv_edit_kern" class="lv-edit-ta" style="min-height:200px">${escHtml(source.kern)}</textarea>
       </div>
       <div>
-        <label style="font-size:12px;font-weight:800;color:#d97706;margin-bottom:5px;display:block">✨ SLOT / SONUÇ <span style="font-weight:500;color:var(--text3)">(±5-10 min)</span></label>
+        <label style="font-size:12px;font-weight:800;color:#d97706;margin-bottom:5px;display:block">✨ SLOT <span style="font-weight:500;color:var(--text3)">(±5-10 min)</span></label>
         <textarea id="lv_edit_slot" class="lv-edit-ta">${escHtml(source.slot)}</textarea>
       </div>
       <div>
@@ -3703,6 +3711,204 @@ window._saveLvCustomToFirebase = async function(lvData) {
       updatedAt: new Date().toISOString(),
     }, { merge: true });
   } catch(e) { console.warn('lvCustom save error:', e); }
+};
+
+
+// ═══ PRINT / PDF EXPORT FOR LESVOORBEREIDING ═══
+function printLvAsPdf(year, weekNum, curriculum) {
+  const plan = JAARPLAN[String(year)] || [];
+  const entry = plan.find(e => e.wn === Number(weekNum));
+  if (!entry) return;
+  const custom = (typeof getCustomLv === 'function') ? getCustomLv(year, weekNum, curriculum) : null;
+  const lv = custom || generateLesvoorbereiding(String(year), entry, curriculum);
+  if (!lv) return;
+
+  const escH = (s) => String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const md = (text) => String(text||'')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/\n/g, '<br>');
+
+  const base = new Date(state.startDate);
+  const d = base.getDay(); base.setDate(base.getDate()+(d===0?-6:1-d));
+  const ws = new Date(base); ws.setDate(base.getDate() + (Number(weekNum)-1)*7);
+  const we = new Date(ws); we.setDate(ws.getDate()+6);
+  const mn = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+  const dateStr = ws.getDate() + ' ' + mn[ws.getMonth()] + ' – ' + we.getDate() + ' ' + mn[we.getMonth()] + ' ' + we.getFullYear();
+
+  const bookRef = (curriculum === 'sira' && ['1','2','3','4'].includes(String(year))) 
+    ? 'Sīra-boek ' + year : 'Noer-boek ' + year;
+
+  const wv = Array.isArray(lv.werkvormen) ? lv.werkvormen : [];
+  const wvHtml = wv.map(w => '<li>' + escH(w) + '</li>').join('');
+
+  const html = `<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<title>Lesvoorbereiding Week ${weekNum} — ${escH(entry.thema)}</title>
+<style>
+  @page { size: A4; margin: 1.6cm; }
+  * { box-sizing: border-box; }
+  body { font-family: 'Helvetica', 'Arial', sans-serif; color: #1e293b; max-width: 800px; margin: 0 auto; padding: 0; line-height: 1.6; font-size: 12pt; }
+  .header { border-bottom: 3px solid #8b5cf6; padding-bottom: 12px; margin-bottom: 20px; }
+  .header h1 { font-size: 22pt; color: #1e293b; margin: 0 0 6px 0; }
+  .header .subtitle { color: #64748b; font-size: 11pt; }
+  .header .subtitle strong { color: #1e293b; }
+  .les-title { background: #faf5ff; border-left: 4px solid #8b5cf6; padding: 10px 14px; margin: 14px 0 24px; border-radius: 0 6px 6px 0; }
+  .les-title .label { font-size: 9pt; text-transform: uppercase; letter-spacing: 1.2px; color: #8b5cf6; font-weight: 800; margin-bottom: 3px; }
+  .les-title .content { font-size: 12pt; color: #1e293b; }
+  h2 { font-size: 12pt; text-transform: uppercase; letter-spacing: 1.2px; padding: 6px 10px; border-radius: 4px; color: #fff; margin-top: 22px; margin-bottom: 8px; }
+  h2.inleiding { background: #8b5cf6; }
+  h2.kern { background: #3b82f6; }
+  h2.slot { background: #d97706; }
+  h2.evaluatie { background: #ec4899; }
+  h2.werkvormen { background: #06b6d4; }
+  .section { padding: 6px 0 12px; page-break-inside: avoid; }
+  .section p { margin: 0 0 10px; }
+  .section strong { color: #334155; }
+  .werkvormen-list { background: #ecfeff; padding: 10px 20px; border-radius: 6px; }
+  .werkvormen-list li { padding: 4px 0; }
+  hr { border: none; border-top: 1px dashed #cbd5e1; margin: 24px 0; }
+  .footer { color: #94a3b8; font-size: 9pt; text-align: center; margin-top: 30px; padding-top: 12px; border-top: 1px solid #e2e8f0; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 14px; font-size: 10pt; color: #64748b; margin-top: 6px; }
+  .meta-row span { background: #f1f5f9; padding: 3px 10px; border-radius: 12px; }
+  @media print {
+    body { padding: 0; }
+    .no-print { display: none !important; }
+    h2 { page-break-after: avoid; }
+  }
+  .no-print { position: fixed; top: 10px; right: 10px; z-index: 99; }
+  .no-print button { padding: 8px 16px; background: #8b5cf6; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; box-shadow: 0 2px 10px rgba(139,92,246,.3); }
+</style>
+</head>
+<body>
+  <div class="no-print"><button onclick="window.print()">🖨️ Afdrukken</button></div>
+  <div class="header">
+    <h1>Lesvoorbereiding</h1>
+    <div class="subtitle">
+      <strong>Islamitische Godsdienst</strong> · Mustafa Türk · Schooljaar 2025–2026
+    </div>
+    <div class="meta-row">
+      <span>📅 Week ${weekNum} · ${escH(dateStr)}</span>
+      <span>🎓 ${escH(year)}e jaar</span>
+      <span>📘 ${escH(bookRef)}</span>
+      <span>🏷️ ${escH(entry.thema || '')}</span>
+      <span>⏱️ ± ${escH((lv.meta && lv.meta.estimatedDuration) || '50 minuten')}</span>
+    </div>
+  </div>
+  <div class="les-title">
+    <div class="label">Lesonderwerp</div>
+    <div class="content">${escH(entry.les)}</div>
+  </div>
+  <h2 class="inleiding">🎯 Inleiding</h2>
+  <div class="section"><p>${md(lv.inleiding)}</p></div>
+  <h2 class="kern">📚 Kern</h2>
+  <div class="section"><p>${md(lv.kern)}</p></div>
+  <h2 class="slot">✨ Slot</h2>
+  <div class="section"><p>${md(lv.slot)}</p></div>
+  <h2 class="evaluatie">📊 Evaluatie</h2>
+  <div class="section"><p>${md(lv.evaluatie)}</p></div>
+  <h2 class="werkvormen">🛠 Didactische werkvormen</h2>
+  <ul class="werkvormen-list">${wvHtml}</ul>
+  <div class="footer">
+    Gegenereerd door LesNotitie op ${new Date().toLocaleString('nl-BE')}
+    ${custom ? ' · <strong>Aangepaste versie</strong>' : ''}
+  </div>
+</body>
+</html>`;
+
+  const w = window.open('', '_blank');
+  if (!w) { alert('⚠️ Popup geblokkeerd. Sta popups toe voor deze site en probeer opnieuw.'); return; }
+  w.document.open();
+  w.document.write(html);
+  w.document.close();
+  // Print from parent scope to avoid inline script in popup (breaks HTML parsing)
+  setTimeout(function() {
+    try { w.focus(); w.print(); } catch(e) {}
+  }, 700);
+}
+
+// ═══ LEERPLANDOEL CUSTOM STORAGE + EDITOR ═══
+window._lpdCustom = (function() {
+  try { const s = localStorage.getItem('lpdcustom_v1'); return s ? JSON.parse(s) : {}; }
+  catch(e) { return {}; }
+})();
+
+function saveLpdCustom() {
+  try {
+    localStorage.setItem('lpdcustom_v1', JSON.stringify(window._lpdCustom));
+    if (window._saveLpdCustomToFirebase) window._saveLpdCustomToFirebase(window._lpdCustom);
+  } catch(e) {}
+}
+
+function getCustomLpd(year, domain) {
+  return window._lpdCustom[`y${year}_${domain}`] || null;
+}
+
+function getEffectiveLpd(year, domain) {
+  const c = getCustomLpd(year, domain);
+  if (c) return c;
+  return (LEERDOELEN[year] && LEERDOELEN[year][domain]) || [];
+}
+
+function openEditLpdModal(year, domain) {
+  const current = getEffectiveLpd(year, domain);
+  const isCustom = !!getCustomLpd(year, domain);
+  const color = (typeof THEMA_COLORS !== 'undefined' && THEMA_COLORS[domain]) || 'var(--accent1)';
+  const escH = (s) => String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  openModal(`
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+      <div style="flex:1">
+        <div style="font-family:'Playfair Display',serif;font-size:20px">✏️ Leerplandoelen bewerken</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="background:${color}22;color:${color};border-radius:10px;padding:3px 10px;font-weight:800;font-size:11px">${escH(domain)}</span>
+          <span>${escH(year)}e jaar</span>
+          ${isCustom ? '<span style="background:#fed7aa;color:#9a3412;border-radius:10px;padding:3px 10px;font-weight:700;font-size:10px">📝 Aangepast</span>' : ''}
+        </div>
+      </div>
+      <button onclick="closeModal()" style="background:none;border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif">✕ Sluiten</button>
+    </div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:12px;background:var(--cream);padding:10px 12px;border-radius:8px;line-height:1.5;border-left:3px solid ${color}">
+      💡 Eén leerplandoel per regel. Lege regels worden genegeerd. Deze aanpassing overschrijft de standaard voor dit domein in dit leerjaar.
+    </div>
+    <textarea id="lpd_edit_ta" style="width:100%;min-height:400px;padding:14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Nunito',sans-serif;font-size:13px;line-height:1.7;resize:vertical;background:var(--surface);color:var(--text);outline:none" onfocus="this.style.borderColor='${color}'" onblur="this.style.borderColor='var(--border)'">${escH(current.join('\n'))}</textarea>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px;padding-top:12px;border-top:1.5px solid var(--border);flex-wrap:wrap">
+      ${isCustom ? `<button class="btn btn-danger btn-sm" onclick="resetLpdEdit('${escH(year)}','${escH(domain)}')">🔄 Reset naar standaard</button>` : ''}
+      <button class="btn btn-ghost btn-sm" onclick="closeModal()">Annuleren</button>
+      <button class="btn btn-primary" onclick="saveLpdEdit('${escH(year)}','${escH(domain)}')">💾 Opslaan</button>
+    </div>
+  `, '780px');
+}
+
+function saveLpdEdit(year, domain) {
+  const lines = document.getElementById('lpd_edit_ta').value.split('\n').map(l=>l.trim()).filter(Boolean);
+  window._lpdCustom[`y${year}_${domain}`] = lines;
+  saveLpdCustom();
+  closeModal();
+  if (typeof showToast === 'function') showToast('✅ Leerplandoelen opgeslagen');
+  if (typeof render === 'function') render();
+}
+
+function resetLpdEdit(year, domain) {
+  if (!confirm('Aangepaste leerplandoelen verwijderen? De standaardversie wordt weer gebruikt.')) return;
+  delete window._lpdCustom[`y${year}_${domain}`];
+  saveLpdCustom();
+  closeModal();
+  if (typeof showToast === 'function') showToast('🔄 Gereset');
+  if (typeof render === 'function') render();
+}
+
+window._saveLpdCustomToFirebase = async function(data) {
+  if (!window._currentUser || !window._firebaseRefs) return;
+  try {
+    const { setDoc } = window._firebaseRefs;
+    await setDoc(window._firebaseRefs.userDocRef, {
+      leerplandoelenCustom: JSON.stringify(data),
+      updatedAt: new Date().toISOString(),
+    }, { merge: true });
+  } catch(e) { console.warn('lpdCustom save:', e); }
 };
 
 // ═══ END LESVOORBEREIDING GENERATOR ═══
@@ -3921,7 +4127,7 @@ function renderJaarplannen() {
     else { rowBg = zebra % 2 === 0 ? 'var(--surface)' : 'var(--cream)'; zebra++; }
     
     const dateStr = weekDateStr(e.wn);
-    const themaLeerdoelen = leerdoelen[e.thema] || [];
+    const themaLeerdoelen = (typeof getEffectiveLpd === 'function') ? getEffectiveLpd(selectedJaar, e.thema) : (leerdoelen[e.thema] || []);
     const rowId = `lv_${selectedJaar}_w${e.wn}_${idx}`;
     const lvHtml = !isVac ? renderLesvoorbereiding(selectedJaar, e, curriculum) : '';
     
@@ -3958,16 +4164,22 @@ function renderJaarplannen() {
     return mainRow;
   }).join('');
   
-  const leerdoelenAccordion = Object.entries(leerdoelen).map(([thema, doelen]) => {
+  const leerdoelenAccordion = Object.keys(leerdoelen).map(thema => {
+    const doelen = (typeof getEffectiveLpd === 'function') ? getEffectiveLpd(selectedJaar, thema) : (leerdoelen[thema] || []);
+    const isCustomLpd = (typeof getCustomLpd === 'function') && !!getCustomLpd(selectedJaar, thema);
     const color = THEMA_COLORS[thema] || 'var(--accent1)';
     return `
       <div style="border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden">
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--cream);cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
-          <div style="display:flex;align-items:center;gap:8px">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--cream);cursor:pointer" onclick="if(event.target.tagName==='BUTTON')return;this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
             <span style="background:${color}22;color:${color};border-radius:10px;padding:4px 12px;font-size:12px;font-weight:800">${esc(thema)}</span>
-            <span style="font-size:11px;color:var(--text3)">${doelen.length} leerdoelen</span>
+            <span style="font-size:12px;color:var(--text3)">${doelen.length} leerdoelen</span>
+            ${isCustomLpd ? '<span style="background:#fed7aa;color:#9a3412;border-radius:8px;padding:2px 8px;font-size:10px;font-weight:800">📝 Aangepast</span>' : ''}
           </div>
-          <span style="font-size:12px;color:var(--text3)">▾</span>
+          <div style="display:flex;align-items:center;gap:6px">
+            <button onclick="event.stopPropagation();openEditLpdModal('${selectedJaar}','${esc(thema).replace(/'/g,"\'")}')" style="background:${color}18;color:${color};border:1px solid ${color}40;border-radius:12px;padding:3px 10px;font-size:11px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif" onmouseover="this.style.background='${color}';this.style.color='#fff'" onmouseout="this.style.background='${color}18';this.style.color='${color}'">✏️ Bewerken</button>
+            <span style="font-size:12px;color:var(--text3)">▾</span>
+          </div>
         </div>
         <div style="display:none;padding:12px 16px">
           <ol style="margin:0;padding-left:20px">
