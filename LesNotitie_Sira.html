@@ -1415,6 +1415,11 @@ function renderMain() {
 function renderWeekView() {
   const w = state.weeks.find(x=>x.id===state.selectedWeek);
   if(!w) return '';
+  // Auto-highlight current active class (runs async after DOM renders)
+  if (!state._wkAutoHighlighted) {
+    state._wkAutoHighlighted = true;
+    wkAutoHighlightActiveClass();
+  }
   if(w.isHoliday) return `
     <div class="card holiday-screen">
       <span class="holiday-emoji">🎉</span>
@@ -3703,6 +3708,111 @@ window._saveLvCustomToFirebase = async function(lvData) {
 // ═══ END LESVOORBEREIDING GENERATOR ═══
 
 
+
+// Determine which class the teacher is actively teaching right now (based on uurrooster + current time)
+function getActiveTeachingInfo() {
+  try {
+    const ur = window._uurrooster;
+    if (!ur || !state.groups || !state.groups.length) return null;
+    const now = new Date();
+    const dayIdx = now.getDay(); // 0=Sun, 1=Mon ...
+    const dayMap = {1:'ma', 2:'di', 3:'wo', 4:'do', 5:'vr'};
+    const timeMin = now.getHours()*60 + now.getMinutes();
+
+    function slotInfo(slotKey) {
+      const slot = ur.slots && ur.slots[slotKey];
+      if (!slot || slot.type !== 'les') return null;
+      const classes = [];
+      (slot.klasIds || []).forEach(cid => {
+        const c = allClasses().find(x => x.id === cid);
+        if (c) classes.push(c);
+      });
+      if (!classes.length && slot.groepIds) {
+        slot.groepIds.forEach(gid => {
+          const g = state.groups.find(x => x.id === gid);
+          if (g) g.classes.forEach(c => classes.push(c));
+        });
+      }
+      if (!classes.length) return null;
+      const first = classes.find(c => c.jaar) || classes[0];
+      const grp = state.groups.find(g => g.classes.some(c => c.id === first.id));
+      return {
+        jaar: String(first.jaar || '1'),
+        classId: first.id,
+        className: first.name,
+        groupId: grp ? grp.id : null,
+        allClassIds: classes.map(c => c.id),
+      };
+    }
+
+    const dag = dayMap[dayIdx];
+    if (dag) {
+      let cur = null, lastToday = null, firstToday = null;
+      (ur.tijden || []).forEach(t => {
+        const parts = t.start.split(':'), pe = t.end.split(':');
+        const sMin = (+parts[0])*60 + (+parts[1]);
+        const eMin = (+pe[0])*60 + (+pe[1]);
+        const info = slotInfo(dag + '-' + t.uur);
+        if (info) {
+          if (!firstToday) firstToday = info;
+          if (timeMin >= sMin && timeMin < eMin) cur = info;
+          if (timeMin >= sMin) lastToday = info;
+        }
+      });
+      if (cur) return Object.assign({}, cur, {status:'active'});
+      if (lastToday) return Object.assign({}, lastToday, {status:'last_today'});
+      if (firstToday) return Object.assign({}, firstToday, {status:'upcoming_today'});
+    }
+    // Look ahead
+    for (let offset = 1; offset <= 7; offset++) {
+      const fi = (dayIdx + offset) % 7;
+      const fd = dayMap[fi];
+      if (!fd) continue;
+      const ts = ur.tijden || [];
+      for (const t of ts) {
+        const info = slotInfo(fd + '-' + t.uur);
+        if (info) return Object.assign({}, info, {status:'next_day'});
+      }
+    }
+    return null;
+  } catch(e) { console.warn('[getActiveTeachingInfo]', e); return null; }
+}
+
+// Auto-highlight the active class card in weekoverzicht
+function wkAutoHighlightActiveClass() {
+  setTimeout(() => {
+    try {
+      const info = getActiveTeachingInfo();
+      if (!info) return;
+      // Also select the right group if we're not already on it
+      if (info.groupId && state.selectedGroup !== info.groupId) {
+        state.selectedGroup = info.groupId;
+        render();
+        setTimeout(wkAutoHighlightActiveClass, 300);
+        return;
+      }
+      // Find class card that contains the active class name
+      const cards = document.querySelectorAll('div[onclick*="openKlasOverzicht"]');
+      // Use allClassIds to find matching card
+      for (const el of cards) {
+        const onclickStr = el.getAttribute('onclick') || '';
+        if (info.allClassIds.some(cid => onclickStr.includes(cid))) {
+          const card = el.closest('div[style*="min-width:260px"]') || el.parentElement.parentElement;
+          if (card) {
+            card.scrollIntoView({behavior:'smooth', block:'center'});
+            const origBg = card.style.background;
+            card.style.transition = 'background .3s, box-shadow .3s';
+            card.style.background = '#fef08a';
+            card.style.boxShadow = '0 0 0 3px #facc15';
+            setTimeout(() => { card.style.background = origBg; card.style.boxShadow = ''; }, 2500);
+            break;
+          }
+        }
+      }
+    } catch(e) { console.warn('[wkAutoHighlight]', e); }
+  }, 300);
+}
+
 // Auto-select current week when Jaarplannen view opens
 function jpGetCurrentWeekNum() {
   const today = new Date(); today.setHours(0,0,0,0);
@@ -3751,7 +3861,11 @@ function jpAutoJumpToCurrentWeek() {
 }
 
 function renderJaarplannen() {
-  const selectedJaar = state._jpSelectedJaar || '1';
+  let selectedJaar = state._jpSelectedJaar;
+  if (!selectedJaar) {
+    const active = getActiveTeachingInfo();
+    selectedJaar = (active && active.jaar) || '1';
+  }
   const selectedThema = state._jpSelectedThema || '';
   const curriculum = window.LESBOEK_NAME === 'Sira' ? 'sira' : 'noer';
   // Auto-jump to current week on first render
@@ -3831,12 +3945,12 @@ function renderJaarplannen() {
       </td>
       <td style="padding:10px 10px;min-width:200px;vertical-align:top">
         ${!isVac && themaLeerdoelen.length ? `
-          <div style="font-size:10px;color:var(--text3);cursor:pointer;display:flex;align-items:center;gap:4px" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
-            <span style="background:${color}22;color:${color};border-radius:8px;padding:2px 7px;font-weight:700">${themaLeerdoelen.length} leerdoelen</span>
+          <div style="font-size:12px;color:var(--text3);cursor:pointer;display:flex;align-items:center;gap:6px" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+            <span style="background:${color}22;color:${color};border-radius:10px;padding:4px 12px;font-weight:700;font-size:12px">${themaLeerdoelen.length} leerdoelen</span>
             <span>▾</span>
           </div>
           <div style="display:none;margin-top:5px">
-            ${themaLeerdoelen.map(l=>`<div style="font-size:10px;color:var(--text2);padding:2px 0;padding-left:8px;border-left:2px solid ${color}44;margin-bottom:3px">✓ ${esc(l)}</div>`).join('')}
+            ${themaLeerdoelen.map(l=>`<div style="font-size:13px;color:var(--text);padding:5px 0;padding-left:10px;border-left:3px solid ${color}66;margin-bottom:5px;line-height:1.5">✓ ${esc(l)}</div>`).join('')}
           </div>` : ''}
       </td>
     </tr>`;
@@ -3857,7 +3971,7 @@ function renderJaarplannen() {
         </div>
         <div style="display:none;padding:12px 16px">
           <ol style="margin:0;padding-left:20px">
-            ${doelen.map(d=>`<li style="font-size:12px;color:var(--text);padding:4px 0;border-bottom:1px solid var(--border);line-height:1.5">${esc(d)}</li>`).join('')}
+            ${doelen.map(d=>`<li style="font-size:14px;color:var(--text);padding:7px 0;border-bottom:1px solid var(--border);line-height:1.6">${esc(d)}</li>`).join('')}
           </ol>
         </div>
       </div>`;
@@ -4071,7 +4185,7 @@ function getCurrentWeekId() {
 }
 
 function switchView(v) {
-  if (state.view !== v) state._jpAutoJumped = false;
+  if (state.view !== v) { state._jpAutoJumped = false; state._wkAutoHighlighted = false; }
   
   state._prevView = state.view; // track where we came from
   state.view=v;
