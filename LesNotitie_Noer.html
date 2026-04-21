@@ -364,11 +364,23 @@ async function loadFromFirebase(uid) {
           if (t.custom) Object.entries(t.custom).forEach(([k,v])=>document.documentElement.style.setProperty(`--${k}`,v));
         } catch(e) {}
       }
+      // Load custom lesvoorbereidings from Firebase
+      if (meta.lesvoorbereidingCustom) {
+        try {
+          const lvc = JSON.parse(meta.lesvoorbereidingCustom);
+          window._lvCustom = lvc;
+          localStorage.setItem('lvcustom_v1', meta.lesvoorbereidingCustom);
+        } catch(e) {}
+      }
+      // Expose firebase refs for the custom lv save hook
+      try {
+        window._firebaseRefs = { userDocRef: doc(db, "users", uid), doc: doc, setDoc: setDoc };
+      } catch(e) {}
       // Load uurrooster from Firebase — ONLY if seedTag matches (else keep local default + push back)
       if (meta.uurrooster) {
         try {
           const ur = JSON.parse(meta.uurrooster);
-          if (ur.seedTag === "seed_2025_tichelrij_v1") {
+          if (ur.seedTag === "seed_2025_tichelrij_v2") {
             window._uurrooster = ur;
             localStorage.setItem('uurrooster_v1', meta.uurrooster);
           } else {
@@ -410,10 +422,10 @@ async function loadYearFromFirebase(uid, yearKey) {
         window.state.schoolYear = yearKey;
         window.state.startDate = parsed.startDate;
         // SEED MIGRATION for Firebase data
-        if (parsed.seedTag !== "seed_2025_tichelrij_v1") {
+        if (parsed.seedTag !== "seed_2025_tichelrij_v2") {
           console.log("[LesNotitie] Firebase year data stale — applying seed migration (replacing groups with Tichelrij/Speelhof)");
           window.state.groups = JSON.parse(JSON.stringify(DEFAULT_STATE.groups));
-          window.state.seedTag = "seed_2025_tichelrij_v1";
+          window.state.seedTag = "seed_2025_tichelrij_v2";
           // Push migrated year back to Firebase after render
           setTimeout(() => {
             if (window._currentUser) saveYearToFirebase(window._currentUser.uid, yearKey);
@@ -459,7 +471,7 @@ async function saveYearToFirebase(uid, yearKey, yearData) {
       startDate: window.state.startDate,
       selectedWeek: window.state.selectedWeek,
       selectedGroup: window.state.selectedGroup,
-      seedTag: window.state.seedTag || "seed_2025_tichelrij_v1",
+      seedTag: window.state.seedTag || "seed_2025_tichelrij_v2",
       groups: window.state.groups,
       evaluations: window.state.evaluations,
       categories: window.state.categories,
@@ -1313,7 +1325,7 @@ const DEFAULT_STATE = {
   selectedWeek: "w1",
   selectedGroup: null,
   selectedStudent: null,
-  seedTag: "seed_2025_tichelrij_v1",
+  seedTag: "seed_2025_tichelrij_v2",
   groups: [{"id":"g_0723dfd1","name":"1A","classes":[{"id":"c_19f43d61","name":"1A1a","jaar":1,"school":"Tichelrij","students":[{"id":"s_c85fc2a7","name":"Hanadi Al Kawas"},{"id":"s_77cdaa02","name":"Latifah Beelmeon"},{"id":"s_9e1dd9f0","name":"Hadda Hamdach"},{"id":"s_bada0068","name":"Najia Noori"},{"id":"s_0b71c125","name":"Hosna Shafahi"},{"id":"s_b030e289","name":"Kisha Sow"}]},{"id":"c_1528aa2f","name":"1A1b","jaar":1,"school":"Tichelrij","students":[{"id":"s_a380333c","name":"Malak Abumusameh"},{"id":"s_8e784977","name":"Gentian Bytyqi"},{"id":"s_a8f34f98","name":"Zayd Jaylani"}]},{"id":"c_6e3f7597","name":"1A2","jaar":1,"school":"Tichelrij","students":[{"id":"s_9bb432a8","name":"Mehdi El Ouardani"},{"id":"s_575a132d","name":"Hala Fazal"},{"id":"s_6fba2435","name":"Selmedin Hasimi"},{"id":"s_8bbffb4d","name":"Rinesa Saraqi"},{"id":"s_6b6e87f7","name":"Ndiaye Sow"},{"id":"s_406dbf50","name":"Florian Trepca"},{"id":"s_261bd6d5","name":"Sami Mohammed"}]},{"id":"c_1f4c3caa","name":"1A3","jaar":1,"school":"Tichelrij","students":[{"id":"s_f18dc5b6","name":"Siham Alabas"},{"id":"s_241e13d2","name":"Ambarin Sarwary"},{"id":"s_1eda6cd2","name":"Mehmet Tosun"}]},{"id":"c_ab570918","name":"1A4","jaar":1,"school":"Tichelrij","students":[{"id":"s_f90eff48","name":"Abdishakur Ahmed Mohamed"},{"id":"s_b2ac1274","name":"Asiya Askhabov"},{"id":"s_1d7f6167","name":"Mohammed Bouzouf"},{"id":"s_546a2a90","name":"Aya El Khyami"},{"id":"s_dce1084d","name":"Omar Jaylani"},{"id":"s_a0565a2e","name":"Mohammad Joesupov"},{"id":"s_9bfb7b2d","name":"Maryam Yaseen"}]}]},{"id":"g_9e37fa72","name":"1 DOE","classes":[{"id":"c_f9a749df","name":"1 DOE1","jaar":1,"school":"Tichelrij","students":[{"id":"s_6a6347de","name":"Eva Achmadov"},{"id":"s_7bd451e2","name":"Erfanullah Amiri"},{"id":"s_925e5e1b","name":"Nazirullah Popalzai"},{"id":"s_d2145a0d","name":"Muhammad Sardalov"}]},{"id":"c_62f72461","name":"1 DOE2","jaar":1,"school":"Tichelrij","students":[]},{"id":"c_fd29d93b","name":"1 DOE3","jaar":1,"school":"Tichelrij","students":[{"id":"s_eae1d567","name":"Farah Azeez"},{"id":"s_017da564","name":"Salim Dardour"},{"id":"s_13c12c3f","name":"Mohamed Hamdach"},{"id":"s_59d83da7","name":"Ermal Saraqi"},{"id":"s_d44b76a7","name":"Abdullah Ensar Koyuncu"}]},{"id":"c_5aa57747","name":"1 DOE4","jaar":1,"school":"Tichelrij","students":[{"id":"s_6725b1b6","name":"Salma Haji Jassem"},{"id":"s_52e540fb","name":"Muhammed Abdi Farah"}]}]},{"id":"g_5f5468d5","name":"2A","classes":[{"id":"c_94fc84bb","name":"2A KLTA","jaar":2,"school":"Tichelrij","students":[{"id":"s_6a41f0cf","name":"Dinata Bangura"},{"id":"s_5a01f4eb","name":"Mohamed Soulaymane El Youssoufi"}]},{"id":"c_efe193a7","name":"2A MAWE1","jaar":2,"school":"Tichelrij","students":[{"id":"s_3ab48470","name":"Aisha Deysumova"},{"id":"s_b406693b","name":"Maryam Gaysumov"}]},{"id":"c_8b5b9aca","name":"2A MAWE2","jaar":2,"school":"Tichelrij","students":[{"id":"s_d14792fb","name":"Fatima Al-Ameen"},{"id":"s_6dc63ce4","name":"Rouguyata Diallo"},{"id":"s_bbec1d49","name":"Sara Kacaniku"},{"id":"s_a20e8c92","name":"Amina Selmurzayev"}]},{"id":"c_b4942eb1","name":"2A MAWE3","jaar":2,"school":"Tichelrij","students":[{"id":"s_bd61e614","name":"Awa-Lo Beye"},{"id":"s_5cb71454","name":"Zaina Mansoor"},{"id":"s_0bd1c907","name":"Soumaya Tiembe"},{"id":"s_e0806484","name":"Nimo Yasim Yusuf"}]},{"id":"c_38d2a62f","name":"2A STWE","jaar":2,"school":"Tichelrij","students":[{"id":"s_d7dd8d2a","name":"Malik Abumusameh"},{"id":"s_38c85c30","name":"Moehamad Achmadov"},{"id":"s_7fa81ccd","name":"Mariem Ahmed"},{"id":"s_f9c92308","name":"Farah Dardour"},{"id":"s_ed5d8a8d","name":"Iqra Noori"},{"id":"s_71f571a2","name":"Elif Onur"},{"id":"s_eeaab4b3","name":"Salematou Sow"}]},{"id":"c_fd901e4b","name":"2A ECOR","jaar":2,"school":"Tichelrij","students":[{"id":"s_5411ac09","name":"Ali Kassem"}]},{"id":"c_21a3215e","name":"2A STTE","jaar":2,"school":"Tichelrij","students":[{"id":"s_5c307913","name":"Sammy Mejadli"}]}]},{"id":"g_49ba7582","name":"2B","classes":[{"id":"c_163d7ff0","name":"2B MAWE1","jaar":2,"school":"Tichelrij","students":[{"id":"s_8bd874f2","name":"Khaista Lala Amiri"},{"id":"s_c40eabce","name":"Elmedina Berisa"},{"id":"s_dcca0111","name":"Nasra Cana"},{"id":"s_a28736e8","name":"Fatima Dibrani"},{"id":"s_5df6f09f","name":"Leila Dibrani"},{"id":"s_3a8438d5","name":"Halil Mehmeti"}]},{"id":"c_c10840ac","name":"2B MAWE2","jaar":2,"school":"Tichelrij","students":[{"id":"s_2a1eaaba","name":"Mona Ashalem"},{"id":"s_16b11dd1","name":"Nousrat Cana"},{"id":"s_107c2ba7","name":"Leylana Dibrani"}]},{"id":"c_092536bf","name":"2B STTE1","jaar":2,"school":"Tichelrij","students":[{"id":"s_767ca408","name":"Ahmed Magomadov"},{"id":"s_42d48a83","name":"Abdinasir Yusuf"},{"id":"s_7644d219","name":"Mohamed Jaylani"},{"id":"s_4561f228","name":"Amadou Bah"}]},{"id":"c_c3225355","name":"2B STTE2","jaar":2,"school":"Tichelrij","students":[{"id":"s_bec363b2","name":"Abderrahman El Mensifi"},{"id":"s_6472ecae","name":"Anas Ait Hafid"},{"id":"s_d7ab096b","name":"Rida Gouraich"},{"id":"s_94c001d6","name":"Mohammed Kajtazi"},{"id":"s_51bbf9ae","name":"Shah Oma"},{"id":"s_82e4e143","name":"Ahmad Murid Shafiqzai"}]},{"id":"c_f33d68d5","name":"2B ECORMAWE","jaar":2,"school":"Tichelrij","students":[{"id":"s_4f4e2593","name":"Shahang (Lina) Omar"},{"id":"s_5653df2b","name":"Arian Aslami"},{"id":"s_7f2067b1","name":"Mimoun Alyou"},{"id":"s_a9281466","name":"Nabil Aweys"},{"id":"s_f4e6e9b1","name":"Anouar Dardour"},{"id":"s_1caaee83","name":"Rania Köse"},{"id":"s_f44a24e2","name":"Diana Sadulaev"},{"id":"s_f89e5a6f","name":"Sami Ullah Sherzad"},{"id":"s_6ad57c93","name":"Medina Kajtazi"}]}]},{"id":"g_147632be","name":"3 Dubbele finaliteit","classes":[{"id":"c_140fbdcd","name":"3 BO","jaar":3,"school":"Speelhof","students":[{"id":"s_4727fc62","name":"Salmana Ahmed"},{"id":"s_2983872d","name":"Alae El Mensifi"},{"id":"s_ed985e68","name":"Emir Hajrizi"},{"id":"s_492aeb85","name":"Vanessa Kovaçi"},{"id":"s_41112e1a","name":"Fahim Shafahi"},{"id":"s_41117d8d","name":"Rabia Shaker"}]},{"id":"c_1e3b7cec","name":"3 ET","jaar":3,"school":"Speelhof","students":[{"id":"s_7f82d8e5","name":"Sami El Gazzari"},{"id":"s_a05b9831","name":"Badr-Eddine El Ouali"}]},{"id":"c_a14c840d","name":"3 MW1","jaar":3,"school":"Speelhof","students":[]},{"id":"c_a07eca21","name":"3 MW2","jaar":3,"school":"Speelhof","students":[{"id":"s_3f41f21e","name":"Arzu Yigit"}]},{"id":"c_d8f1a802","name":"3 TC","jaar":3,"school":"Speelhof","students":[{"id":"s_87f59e0c","name":"Yasmien Askhabov"}]},{"id":"c_53e59932","name":"3 WL","jaar":3,"school":"Speelhof","students":[]}]},{"id":"g_c35c2895","name":"3 Arbeidsmarkt","classes":[{"id":"c_83c39b99","name":"3 EL","jaar":3,"school":"Speelhof","students":[{"id":"s_88ecb8e9","name":"Deni Djabrailova"}]},{"id":"c_2d5c7033","name":"3 HZ","jaar":3,"school":"Speelhof","students":[{"id":"s_e24e9403","name":"Aya Bouzouf"},{"id":"s_dfe42899","name":"Dinara Djabrailova"},{"id":"s_6e97977d","name":"Mohamad Hbayo"}]},{"id":"c_060a4f98","name":"3 ME","jaar":3,"school":"Speelhof","students":[{"id":"s_3333e4e3","name":"Harith Yaseen"}]},{"id":"c_e69a173b","name":"3 OL","jaar":3,"school":"Speelhof","students":[{"id":"s_777824dc","name":"Abdullahi Abdirizak Ahmed"},{"id":"s_cb66c529","name":"Ali Amiri"},{"id":"s_333ddc79","name":"Mamadou Lamine Diallo"},{"id":"s_7a9c6bb5","name":"Haleen Hawar Adulrahman Dino"},{"id":"s_d2712e9f","name":"Pelin Khader"},{"id":"s_488d2cee","name":"Zakaria El Ouardani"},{"id":"s_71fd36b3","name":"Walid Shafiqzai"},{"id":"s_67501729","name":"Ahmad Shafiqzai"}]},{"id":"c_c9c5b437","name":"3 ZW","jaar":3,"school":"Speelhof","students":[]}]},{"id":"g_42375fbe","name":"5 B","classes":[{"id":"c_65160417","name":"5 BZ01","jaar":5,"school":"Speelhof","students":[{"id":"s_759b3b04","name":"Anabela Krasniqi"},{"id":"s_627e2c41","name":"Dagmara Zarmayev"},{"id":"s_fbb91757","name":"Ihsanullah Sherzad"}]},{"id":"c_6256ab1e","name":"5 BZ02","jaar":5,"school":"Speelhof","students":[]},{"id":"c_355f7ae0","name":"5 HV","jaar":5,"school":"Speelhof","students":[]},{"id":"c_c49e409b","name":"5 LC","jaar":5,"school":"Speelhof","students":[{"id":"s_e0b07bbb","name":"Samir El Herbouti"}]}]}],
   weeks: null, // generated after load
   evaluations: {},
@@ -1335,10 +1347,10 @@ function loadState() {
     if (saved) {
       const parsed = JSON.parse(saved);
       // ─── SEED MIGRATION: wipe old demo data and seed with Tichelrij/Speelhof data ───
-      if (parsed.seedTag !== "seed_2025_tichelrij_v1") {
-        console.log("[LesNotitie] Migrating to seed " + "seed_2025_tichelrij_v1" + " — replacing classes/students/uurrooster with Tichelrij+Speelhof data");
+      if (parsed.seedTag !== "seed_2025_tichelrij_v2") {
+        console.log("[LesNotitie] Migrating to seed " + "seed_2025_tichelrij_v2" + " — replacing classes/students/uurrooster with Tichelrij+Speelhof data");
         // Reset groups to the new default, keep evaluations/weeks
-        parsed.seedTag = "seed_2025_tichelrij_v1";
+        parsed.seedTag = "seed_2025_tichelrij_v2";
         parsed.groups = JSON.parse(JSON.stringify(DEFAULT_STATE.groups));
         parsed.selectedGroup = parsed.groups[0]?.id || null;
         // Clear uurrooster localStorage so loadUurrooster() below reloads from the new DEFAULT_UURROOSTER
@@ -1376,7 +1388,7 @@ function saveState() {
       startDate: state.startDate,
       selectedWeek: state.selectedWeek,
       selectedGroup: state.selectedGroup,
-      seedTag: state.seedTag || "seed_2025_tichelrij_v1",
+      seedTag: state.seedTag || "seed_2025_tichelrij_v2",
       groups: state.groups,
       evaluations: state.evaluations,
       categories: state.categories,
@@ -2442,7 +2454,7 @@ const DEFAULT_UURROOSTER = {
   },
   // Custom button labels user can add
   buttonTypes: ["Les", "VRIJ", "Wachtuur", "Toezicht", "Vergadering", "Vervanging", "Verlof"],
-  seedTag: "seed_2025_tichelrij_v1",
+  seedTag: "seed_2025_tichelrij_v2",
 };
 
 // Load or init uurrooster state
@@ -3738,13 +3750,22 @@ function lvToHtml(text) {
     .replace(/\n/g, '<br>');
 }
 
+
 // Render a full lesvoorbereiding as HTML (for the expandable panel)
+// Updated to check custom override and provide edit button
 function renderLesvoorbereiding(year, entry, curriculum) {
-  const lv = generateLesvoorbereiding(year, entry, curriculum);
-  if (!lv) return '';
+  // Custom override?
+  let lv, isCustom = false;
+  const customLv = (typeof getCustomLv === 'function') ? getCustomLv(year, entry.wn, curriculum) : null;
+  if (customLv) { lv = customLv; isCustom = true; }
+  else {
+    lv = generateLesvoorbereiding(year, entry, curriculum);
+    if (!lv) return '';
+  }
 
   const tpl = LV_TEMPLATES[entry.thema] || LV_TEMPLATES['GELOOFSPERSPECTIEVEN'];
   const c = tpl.color;
+  const meta = lv.meta || { estimatedDuration: '50 minuten', bookRef: lvBookRef(String(year), entry.thema, curriculum) };
 
   const section = (icon, title, body, borderColor) => `
     <div style="border-left:3px solid ${borderColor};padding:10px 14px;margin:10px 0;background:${borderColor}08;border-radius:0 8px 8px 0">
@@ -3754,18 +3775,25 @@ function renderLesvoorbereiding(year, entry, curriculum) {
       <div style="font-size:12px;color:var(--text);line-height:1.7"><p style="margin:0">${lvToHtml(body)}</p></div>
     </div>`;
 
-  const wvHtml = lv.werkvormen.map(w =>
-    `<li style="font-size:12px;color:var(--text);padding:3px 0;line-height:1.5">${w}</li>`).join('');
+  const wvArr = Array.isArray(lv.werkvormen) ? lv.werkvormen : [];
+  const wvHtml = wvArr.map(w =>
+    `<li style="font-size:12px;color:var(--text);padding:3px 0;line-height:1.5">${String(w).replace(/</g,'&lt;')}</li>`).join('');
+
+  const editBtnOnClick = `event.stopPropagation();openEditLvModal('${year}', ${entry.wn}, '${curriculum}')`;
 
   return `
     <div style="background:linear-gradient(135deg, ${c}06, transparent);border:1.5px solid ${c}30;border-radius:10px;padding:14px;margin-top:8px">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid ${c}20">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid ${c}20;flex-wrap:wrap">
         <span style="font-size:18px">${tpl.icon}</span>
-        <div style="flex:1">
-          <div style="font-size:13px;font-weight:900;color:${c}">Lesvoorbereiding</div>
-          <div style="font-size:10px;color:var(--text3)">${lv.meta.estimatedDuration} · ${lv.meta.bookRef}</div>
+        <div style="flex:1;min-width:180px">
+          <div style="font-size:13px;font-weight:900;color:${c};display:flex;align-items:center;gap:6px">
+            Lesvoorbereiding
+            ${isCustom ? '<span style="background:#fed7aa;color:#9a3412;border-radius:10px;padding:1px 8px;font-size:10px;font-weight:800">✏️ Aangepast</span>' : ''}
+          </div>
+          <div style="font-size:10px;color:var(--text3)">${meta.estimatedDuration || '50 minuten'} · ${meta.bookRef || lvBookRef(String(year), entry.thema, curriculum)}</div>
         </div>
-        <span style="background:${c}18;color:${c};border-radius:12px;padding:3px 10px;font-size:10px;font-weight:800">inspectie-klaar</span>
+        <button onclick="${editBtnOnClick}" style="background:${c}18;color:${c};border:1px solid ${c}40;border-radius:14px;padding:4px 12px;font-size:11px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .15s" onmouseover="this.style.background='${c}';this.style.color='#fff'" onmouseout="this.style.background='${c}18';this.style.color='${c}'">✏️ Bewerken</button>
+        ${!isCustom ? '<span style="background:' + c + '18;color:' + c + ';border-radius:12px;padding:3px 10px;font-size:10px;font-weight:800">inspectie-klaar</span>' : ''}
       </div>
       ${section('🎯', 'Inleiding', lv.inleiding, '#8b5cf6')}
       ${section('📚', 'Kern / Gelişme', lv.kern, '#3b82f6')}
@@ -3780,6 +3808,7 @@ function renderLesvoorbereiding(year, entry, curriculum) {
     </div>`;
 }
 
+
 // Toggle expansion for a specific row
 function toggleLesvoorbereiding(rowId) {
   const el = document.getElementById(rowId);
@@ -3789,6 +3818,164 @@ function toggleLesvoorbereiding(rowId) {
   const arrow = document.getElementById(rowId + '_arrow');
   if (arrow) arrow.textContent = el.style.display === 'none' ? '▾ Lesvoorbereiding' : '▴ Lesvoorbereiding verbergen';
 }
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CUSTOM LESVOORBEREIDING STORAGE + EDITOR
+// Allows user to override auto-generated lesvoorbereidings per lesson.
+// Stored in localStorage + synced to Firebase. Keyed by curriculum+year+week.
+// ═══════════════════════════════════════════════════════════════════════════
+
+window._lvCustom = (function() {
+  try {
+    const s = localStorage.getItem('lvcustom_v1');
+    return s ? JSON.parse(s) : {};
+  } catch(e) { return {}; }
+})();
+
+function _lvKey(year, weekNum, curriculum) {
+  return `${curriculum}_y${year}_w${weekNum}`;
+}
+
+function saveLvCustom() {
+  try {
+    localStorage.setItem('lvcustom_v1', JSON.stringify(window._lvCustom));
+    if (window._saveLvCustomToFirebase) window._saveLvCustomToFirebase(window._lvCustom);
+  } catch(e) {}
+}
+
+function getCustomLv(year, weekNum, curriculum) {
+  return window._lvCustom[_lvKey(year, weekNum, curriculum)] || null;
+}
+
+function setCustomLv(year, weekNum, curriculum, data) {
+  const key = _lvKey(year, weekNum, curriculum);
+  if (data === null) delete window._lvCustom[key];
+  else window._lvCustom[key] = data;
+  saveLvCustom();
+}
+
+function openEditLvModal(year, weekNum, curriculum) {
+  // Look up entry from JAARPLAN
+  const plan = JAARPLAN[String(year)] || [];
+  const entry = plan.find(e => e.wn === Number(weekNum));
+  if (!entry) { showToast('Les niet gevonden'); return; }
+
+  const custom = getCustomLv(year, weekNum, curriculum);
+  const source = custom || generateLesvoorbereiding(String(year), entry, curriculum);
+  if (!source) { showToast('Kan geen lesvoorbereiding genereren'); return; }
+
+  const isCustom = !!custom;
+  const wvText = Array.isArray(source.werkvormen) ? source.werkvormen.join('\n') : (source.werkvormen || '');
+  const escHtml = (s) => String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+  openModal(`
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:20px">✏️ Lesvoorbereiding bewerken</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:2px">Week ${weekNum} · ${year}e jaar · <strong>${escHtml(entry.thema)}</strong></div>
+        <div style="font-size:11px;color:var(--text2);margin-top:4px;max-width:600px;line-height:1.4">${escHtml(entry.les)}</div>
+        ${isCustom 
+          ? '<div style="font-size:11px;color:#ea580c;font-weight:700;margin-top:6px">📝 Aangepast · Laatst gewijzigd: ' + (custom.modifiedAt ? new Date(custom.modifiedAt).toLocaleString('nl-BE') : '') + '</div>'
+          : '<div style="font-size:11px;color:var(--text3);margin-top:6px">🤖 Automatisch gegenereerd (nog niet aangepast)</div>'}
+      </div>
+      <button onclick="closeModal()" style="margin-left:auto;background:none;border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;cursor:pointer;font-weight:700;color:var(--text2);font-family:'Nunito',sans-serif;align-self:flex-start">✕ Sluiten</button>
+    </div>
+    <div style="font-size:11px;color:var(--text2);margin-bottom:14px;background:var(--cream);padding:10px 12px;border-radius:8px;border-left:3px solid var(--accent1);line-height:1.5">
+      💡 Bewerk elk onderdeel vrij. Gebruik <code>**vet**</code> voor vette tekst en laat een lege regel voor een nieuwe alinea. Werkvormen: één per regel.
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div>
+        <label style="font-size:12px;font-weight:800;color:#8b5cf6;margin-bottom:5px;display:block">🎯 INLEIDING <span style="font-weight:500;color:var(--text3)">(±10 min)</span></label>
+        <textarea id="lv_edit_inleiding" class="lv-edit-ta">${escHtml(source.inleiding)}</textarea>
+      </div>
+      <div>
+        <label style="font-size:12px;font-weight:800;color:#3b82f6;margin-bottom:5px;display:block">📚 KERN / GELİŞME <span style="font-weight:500;color:var(--text3)">(±30-35 min)</span></label>
+        <textarea id="lv_edit_kern" class="lv-edit-ta" style="min-height:200px">${escHtml(source.kern)}</textarea>
+      </div>
+      <div>
+        <label style="font-size:12px;font-weight:800;color:#d97706;margin-bottom:5px;display:block">✨ SLOT / SONUÇ <span style="font-weight:500;color:var(--text3)">(±5-10 min)</span></label>
+        <textarea id="lv_edit_slot" class="lv-edit-ta">${escHtml(source.slot)}</textarea>
+      </div>
+      <div>
+        <label style="font-size:12px;font-weight:800;color:#ec4899;margin-bottom:5px;display:block">📊 EVALUATIE</label>
+        <textarea id="lv_edit_evaluatie" class="lv-edit-ta">${escHtml(source.evaluatie)}</textarea>
+      </div>
+      <div>
+        <label style="font-size:12px;font-weight:800;color:#06b6d4;margin-bottom:5px;display:block">🛠 DIDACTISCHE WERKVORMEN <span style="font-weight:500;color:var(--text3)">(1 per regel)</span></label>
+        <textarea id="lv_edit_werkvormen" class="lv-edit-ta" style="min-height:90px">${escHtml(wvText)}</textarea>
+      </div>
+    </div>
+
+    <style>
+      .lv-edit-ta {
+        width: 100%;
+        min-height: 130px;
+        padding: 10px 12px;
+        border: 1.5px solid var(--border);
+        border-radius: 8px;
+        font-family: 'Nunito', sans-serif;
+        font-size: 13px;
+        line-height: 1.6;
+        resize: vertical;
+        background: var(--surface);
+        color: var(--text);
+        outline: none;
+        transition: border-color .15s;
+      }
+      .lv-edit-ta:focus { border-color: var(--accent1); }
+    </style>
+
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;padding-top:14px;border-top:1.5px solid var(--border);flex-wrap:wrap">
+      ${isCustom ? `<button class="btn btn-danger btn-sm" onclick="resetLvEdit('${year}', ${weekNum}, '${curriculum}')">🔄 Reset naar automatisch</button>` : ''}
+      <button class="btn btn-ghost btn-sm" onclick="closeModal()">Annuleren</button>
+      <button class="btn btn-primary" onclick="saveLvEdit('${year}', ${weekNum}, '${curriculum}', '${escHtml(entry.thema)}')">💾 Opslaan</button>
+    </div>
+  `, '880px');
+}
+
+function saveLvEdit(year, weekNum, curriculum, thema) {
+  const data = {
+    inleiding: document.getElementById('lv_edit_inleiding').value,
+    kern: document.getElementById('lv_edit_kern').value,
+    slot: document.getElementById('lv_edit_slot').value,
+    evaluatie: document.getElementById('lv_edit_evaluatie').value,
+    werkvormen: document.getElementById('lv_edit_werkvormen').value.split('\n').map(l=>l.trim()).filter(Boolean),
+    customized: true,
+    modifiedAt: new Date().toISOString(),
+    meta: {
+      estimatedDuration: '50 minuten',
+      domain: thema || '',
+      bookRef: lvBookRef(String(year), thema || '', curriculum),
+      mainTopic: '',
+    }
+  };
+  setCustomLv(year, Number(weekNum), curriculum, data);
+  closeModal();
+  if (typeof showToast === 'function') showToast('✅ Lesvoorbereiding opgeslagen');
+  if (typeof render === 'function') render();
+}
+
+function resetLvEdit(year, weekNum, curriculum) {
+  if (!confirm('Deze aangepaste lesvoorbereiding verwijderen en terug naar de automatisch gegenereerde versie?')) return;
+  setCustomLv(year, Number(weekNum), curriculum, null);
+  closeModal();
+  if (typeof showToast === 'function') showToast('🔄 Gereset naar automatisch');
+  if (typeof render === 'function') render();
+}
+
+// Firebase sync hook for custom lesvoorbereidings
+window._saveLvCustomToFirebase = async function(lvData) {
+  if (!window._currentUser) return;
+  try {
+    const { doc, setDoc } = window._firebaseRefs || {};
+    if (!doc || !setDoc) return;
+    await setDoc(window._firebaseRefs.userDocRef, {
+      lesvoorbereidingCustom: JSON.stringify(lvData),
+      updatedAt: new Date().toISOString(),
+    }, { merge: true });
+  } catch(e) { console.warn('lvCustom save error:', e); }
+};
 
 // ═══ END LESVOORBEREIDING GENERATOR ═══
 
@@ -4551,7 +4738,12 @@ function openKlasOverzicht(classId) {
   try {
     console.log('[openKlasOverzicht] Opening for classId:', classId);
   const cls = allClasses().find(c => c.id === classId);
-  if (!cls) { console.warn('[openKlasOverzicht] class not found:', classId); return; }
+  if (!cls) {
+    const availIds = allClasses().map(c => c.id + ' (' + c.name + ')').slice(0, 10).join(', ');
+    console.error('[openKlasOverzicht] Class not found! classId=' + classId + ' | Available: ' + availIds);
+    alert('⚠️ Klas niet gevonden! classId=' + classId + '\n\nBeschikbare klassen: ' + availIds + '\n\nMogelijk moet je F5 drukken om migratie te laten draaien.');
+    return;
+  }
   const jaar = cls.jaar;
   const plan = jaar ? JAARPLAN[jaar] : null;
   
